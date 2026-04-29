@@ -1,0 +1,98 @@
+{
+  "TRANSACTIONS": {
+    "TITLE": "Transactions",
+    "TITLE_A": "Journal des",
+    "TITLE_EM": "transactions.",
+    "SUBTITLE": "Suivez vos entrées et sorties de trésorerie.",
+    "ACTIONS": {
+      "ADD": "Nouvelle transaction",
+      "EXPORT": "Exporter",
+      "EXPORT_CSV": "Exporter CSV",
+      "EXPORT_PDF": "Exporter PDF",
+      "BULK": {
+        "CATEGORIZE": "Catégoriser",
+        "DELETE": "Supprimer",
+        "EXPORT": "Exporter",
+        "JUSTIFY": "Justifier"
+      }
+    },
+    "FILTERS": {
+      "ALL": "Toutes",
+      "IN": "Entrées",
+      "OUT": "Sorties",
+      "MONTH": "Ce mois",
+      "QUARTER": "Ce trimestre",
+      "YEAR": "Cette année",
+      "CUSTOM": "Personnalisé",
+      "SEARCH_PLACEHOLDER": "Rechercher une transaction…"
+    },
+    "TAB": {
+      "ALL": "Toutes les transactions",
+      "BY_CATEGORY": "Par catégorie"
+    },
+    "TABLE": {
+      "DATE": "Date",
+      "LABEL": "Libellé",
+      "TIER": "Tiers",
+      "CATEGORY": "Catégorie",
+      "AMOUNT": "Montant",
+      "TYPE": "Type",
+      "STATUS": "Statut",
+      "DOC": "Justificatif",
+      "EMPTY": "Aucune transaction trouvée."
+    },
+    "TYPE": {
+      "ENTREE": "Entrée",
+      "SORTIE": "Sortie",
+      "": ""
+    },
+    "STATUS": {
+      "NONJUSTIFIEE": "Non justifiée",
+      "ENATTENTE": "En attente",
+      "JUSTIFIEE": "Justifiée",
+      "": ""
+    },
+    "COUNTERS": {
+      "JUSTIFIED": "Justifiées",
+      "PENDING": "En attente",
+      "UNJUSTIFIED": "Non justifiées"
+    },
+    "CATEGORY_ANALYSIS": {
+      "TITLE": "Analyse par catégorie",
+      "EMPTY": "Aucune donnée disponible."
+    },
+    "DETAIL": {
+      "TITLE": "Détail de la transaction",
+      "TAB": {
+        "RECEIPT": "Justificatif",
+        "ANALYTICS": "Analytique",
+        "COMMENTS": "Commentaires"
+      },
+      "RECEIPT": {
+        "STATUS_LABEL": "Statut du justificatif",
+        "STATUS_MISSING": "Perdu",
+        "STATUS_OPTIONAL": "Facultatif",
+        "STATUS_PRESENT": "Présent",
+        "UPLOAD": "Téléverser un justificatif",
+        "DRAG_DROP": "Glisser-déposer ou cliquer pour choisir",
+        "LINK_INVOICE": "Lier à une facture",
+        "AUTO_TRANSMIT": "Transmission automatique"
+      },
+      "ANALYTICS": {
+        "CATEGORY": "Catégorie",
+        "EDIT_CATEGORY": "Modifier la catégorie",
+        "SPLIT": "Ventiler"
+      },
+      "COMMENTS": {
+        "HISTORY": "Historique des notes",
+        "ADD_NOTE": "Ajouter une note",
+        "PLACEHOLDER": "Votre commentaire…"
+      },
+      "SIDE": {
+        "GLOBAL_STATUS": "Statut global",
+        "ACCOUNT": "Compte",
+        "EDIT_ALL": "Tout modifier"
+      }
+    }
+  }
+}

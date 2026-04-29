@@ -1,0 +1,18 @@
+{
+  "DASHBOARD": {
+    "TITLE": "لوحة القيادة",
+    "WELCOME": "مرحباً",
+    "KPI": {
+      "INVOICES_MONTH": "فواتير هذا الشهر",
+      "REVENUE_MONTH": "رقم الأعمال",
+      "PENDING": "في الانتظار",
+      "OVERDUE": "متأخرة",
+      "COMPLIANCE": "امتثال TEIF"
+    },
+    "SECTIONS": {
+      "RECENT_INVOICES": "الفواتير الأخيرة",
+      "QUICK_ACTIONS": "إجراءات سريعة",
+      "STATS": "الإحصائيات"
+    }
+  }
+}

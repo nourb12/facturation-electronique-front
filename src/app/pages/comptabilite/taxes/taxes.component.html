@@ -1,0 +1,252 @@
+<div class="page-wrap" [@pageIn]>
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">
+        {{ 'ACCOUNTING.TAXES.TITLE_A' | translate }} <em>{{ 'ACCOUNTING.TAXES.TITLE_EM' | translate }}</em>
+      </h1>
+      <p class="page-desc">{{ 'ACCOUNTING.TAXES.SUBTITLE' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="taxes-layout">
+
+    <!-- -- TABLE -- -->
+    <section class="card taxes-list">
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <div class="cols-wrap">
+            <button class="cols-btn" type="button" (click)="showColumns = !showColumns">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="1.5" y="2" width="3.5" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="2" width="4.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              {{ 'COMMON.TABLE.COLUMNS' | translate }}
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            @if (showColumns) {
+              <div class="cols-panel">
+                <div class="cols-panel-title">{{ 'COMMON.TABLE.VISIBLE_COLUMNS' | translate }}</div>
+                @for (c of columns; track c.key) {
+                  <label class="cols-item">
+                    <input type="checkbox" [(ngModel)]="visibleColumns[c.key]" />
+                    <span>{{ c.labelKey | translate }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="toolbar-right">
+          <div class="search-box">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="text" [placeholder]="'COMMON.TABLE.SEARCH' | translate" [(ngModel)]="searchQuery" (ngModelChange)="page = 1" />
+            @if (searchQuery) {
+              <button class="search-clear" type="button" (click)="searchQuery = ''; page = 1">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="table-box">
+        @if (loading()) {
+          <div class="table-skeleton">
+            @for (i of [1,2,3,4,5]; track i) {
+              <div class="skeleton-row">
+                <div class="skel skel-lg"></div>
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-md"></div>
+                <div class="skel skel-sm"></div>
+              </div>
+            }
+          </div>
+        } @else {
+          <table class="taxe-table">
+            <thead>
+              <tr>
+                @if (visibleColumns['titre'])  { <th>{{ 'ACCOUNTING.TAXES.COLUMNS.TITLE' | translate }}</th> }
+                @if (visibleColumns['taux'])   { <th>{{ 'ACCOUNTING.TAXES.COLUMNS.RATE' | translate }}</th> }
+                @if (visibleColumns['type'])   { <th class="type-col">{{ 'ACCOUNTING.TAXES.COLUMNS.TYPE' | translate }}</th> }
+                @if (visibleColumns['action']) { <th class="act-col"></th> }
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of pagedRows(); track t.id) {
+                <tr>
+                  @if (visibleColumns['titre'])  { <td class="title-cell">{{ t.titre }}</td> }
+                  @if (visibleColumns['taux'])   { <td><span class="rate-badge">{{ t.taux }}%</span></td> }
+                  @if (visibleColumns['type']) {
+                    <td class="type-col">
+                      <span class="type-badge" [ngClass]="typeClass(t.type)">
+                        {{ typeLabelKey(t.type) | translate }}
+                      </span>
+                    </td>
+                  }
+                  @if (visibleColumns['action']) {
+                    <td class="act-col">
+                      <button class="row-action" type="button" (click)="edit(t)" [title]="'COMMON.ACTIONS.EDIT' | translate">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                          <path d="M8.5 2.5l2 2L4 11H2v-2L8.5 2.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (pagedRows().length === 0) {
+            <div class="empty-state">
+              <div class="empty-icon">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 4v14M4 11h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <rect x="3" y="3" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.4"/>
+                </svg>
+              </div>
+              <p class="empty-title">
+                @if (searchQuery) {
+                  <ng-container>{{ 'ACCOUNTING.TAXES.EMPTY.SEARCH_TITLE' | translate:{ query: searchQuery } }}</ng-container>
+                } @else {
+                  <ng-container>{{ 'ACCOUNTING.TAXES.EMPTY.NO_DATA_TITLE' | translate }}</ng-container>
+                }
+              </p>
+              <p class="empty-sub">
+                @if (searchQuery) {
+                  <ng-container>{{ 'ACCOUNTING.TAXES.EMPTY.SEARCH_SUB' | translate }}</ng-container>
+                } @else {
+                  <ng-container>{{ 'ACCOUNTING.TAXES.EMPTY.NO_DATA_SUB' | translate }}</ng-container>
+                }
+              </p>
+              @if (searchQuery) {
+                <button class="btn-ghost-sm" type="button" (click)="searchQuery = ''">{{ 'COMMON.ACTIONS.CLEAR_SEARCH' | translate }}</button>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <div class="table-footer">
+        <div class="footer-left">
+          <span>{{ 'COMMON.TABLE.ROWS' | translate }}&nbsp;:</span>
+          <select [(ngModel)]="pageSize" (ngModelChange)="page = 1">
+            @for (s of pageSizes; track s) { <option [value]="s">{{ s }}</option> }
+          </select>
+        </div>
+        <div class="footer-center">
+          @if (filteredRows().length > 0) {
+            {{ rangeStart() }}-{{ rangeEnd() }} {{ 'COMMON.TABLE.OF' | translate }} {{ filteredRows().length }}
+          }
+        </div>
+        <div class="footer-right">
+          <button class="pager" type="button" (click)="goPrev()" [disabled]="page === 1">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <span class="page-pill">{{ page }} / {{ totalPages() }}</span>
+          <button class="pager" type="button" (click)="goNext()" [disabled]="page >= totalPages()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- FORM -- -->
+    <aside class="card taxes-form" [class.is-editing]="!!editId">
+      <div class="form-head">
+        <div class="form-head-left">
+          <div class="form-head-dot" [class.dot-edit]="!!editId"></div>
+          <h2>{{ (editId ? 'ACCOUNTING.TAXES.FORM.TITLE_EDIT' : 'ACCOUNTING.TAXES.FORM.TITLE_NEW') | translate }}</h2>
+        </div>
+        @if (editId) {
+          <button class="link-reset" type="button" (click)="resetForm()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1.5 6a4.5 4.5 0 1 0 1-2.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M1.5 2.5v3h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ 'COMMON.ACTIONS.RESET' | translate }}
+          </button>
+        }
+      </div>
+
+      <div class="form-body">
+
+        <!-- Titre -->
+        <div class="form-group">
+          <label class="field-label">{{ 'ACCOUNTING.TAXES.FORM.FIELDS.TITLE' | translate }} <span class="req">*</span></label>
+          <input type="text" [(ngModel)]="form.titre" [placeholder]="'ACCOUNTING.TAXES.FORM.FIELDS.TITLE_PLACEHOLDER' | translate"
+            [class.input-error]="submitted && !form.titre.trim()" />
+          @if (submitted && !form.titre.trim()) {
+            <span class="field-hint error">{{ 'COMMON.FORM.REQUIRED' | translate }}</span>
+          }
+        </div>
+
+        <!-- Taux -->
+        <div class="form-group">
+          <label class="field-label">{{ 'ACCOUNTING.TAXES.FORM.FIELDS.RATE' | translate }} <span class="req">*</span></label>
+          <div class="input-addon-wrap">
+            <input type="number" [(ngModel)]="form.taux" min="0" step="0.01"
+              [class.input-error]="submitted && form.taux <= 0" />
+            <span class="input-addon">%</span>
+          </div>
+          @if (submitted && form.taux <= 0) {
+            <span class="field-hint error">{{ 'ACCOUNTING.TAXES.FORM.ERROR_RATE_GT0' | translate }}</span>
+          }
+        </div>
+
+        <!-- Type — chips -->
+        <div class="form-group">
+          <label class="field-label">{{ 'ACCOUNTING.TAXES.FORM.FIELDS.TYPE' | translate }}</label>
+          <div class="chip-group">
+            @for (opt of typeOptions; track opt.value) {
+              <button class="chip" type="button"
+                [class.chip-active]="form.type === opt.value"
+                (click)="setType(opt.value)">
+                {{ opt.labelKey | translate }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Description contextuelle -->
+        <div class="type-desc">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0; margin-top:1px;">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6 5.5v3M6 4h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          {{ descriptionKey() | translate }}
+        </div>
+
+      </div>
+
+      <div class="form-foot">
+        @if (editId) {
+          <button class="btn-ghost" type="button" (click)="resetForm()">{{ 'COMMON.CANCEL' | translate }}</button>
+        }
+        <button class="btn-primary" type="button" (click)="save()" [disabled]="!canSave()">
+          @if (saving()) {
+            <span class="btn-spinner"></span>
+            {{ 'COMMON.SAVING' | translate }}
+          } @else {
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M2 6.5l3.5 3.5 5.5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ (editId ? 'COMMON.ACTIONS.UPDATE' : 'COMMON.ACTIONS.ADD') | translate }}
+          }
+        </button>
+      </div>
+    </aside>
+
+  </div>
+</div>

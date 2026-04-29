@@ -1,0 +1,225 @@
+
+<div class="page-wrap" [@pageIn]>
+
+  
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="topbar-title">Catalogue <em>Catégories</em></h1>
+      <span class="topbar-bc">{{ categories().length }} catégories · {{ totalProduits }} produits</span>
+    </div>
+    <div class="topbar-center">
+      <div class="search-box">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="5.5" cy="5.5" r="4" stroke="#555" stroke-width="1.3"/>
+          <path d="M9 9l2.5 2.5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Rechercher catégorie…" [(ngModel)]="searchQuery"/>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-new" (click)="openModal()">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Nouvelle catégorie
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    
+    <div class="kpi-grid">
+      <div class="kpi kpi--ey" style="animation-delay:.05s">
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-icon--ey">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 4h13M1 8h9M1 12h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="kpi-delta kpi-delta--up">+1</span>
+        </div>
+        <div class="kpi-val">{{ categories().length }}</div>
+        <div class="kpi-label">Catégories</div>
+        
+        <div class="kpi-sub">{{ activeCount }} actives</div>
+      </div>
+      <div class="kpi kpi--ok" style="animation-delay:.1s">
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-icon--ok">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </div>
+          <span class="kpi-delta kpi-delta--up">+2</span>
+        </div>
+        <div class="kpi-val">{{ totalProduits }}</div>
+        <div class="kpi-label">Produits total</div>
+        <div class="kpi-sub">Toutes catégories</div>
+      </div>
+      <div class="kpi kpi--info" style="animation-delay:.15s">
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-icon--info">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M7 1l5 6-5 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="kpi-delta kpi-delta--up">+15%</span>
+        </div>
+        <div class="kpi-val">215 k</div>
+        <div class="kpi-label">CA total (TND)</div>
+        <div class="kpi-sub">Toutes catégories</div>
+      </div>
+      <div class="kpi kpi--warn" style="animation-delay:.2s">
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-icon--warn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M7 4.5v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="7" cy="10" r=".7" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="kpi-delta kpi-delta--down">0</span>
+        </div>
+        
+        <div class="kpi-val">{{ inactiveCount }}</div>
+        <div class="kpi-label">Inactives</div>
+        <div class="kpi-sub">Sans produit actif</div>
+      </div>
+    </div>
+
+    
+    <div class="cats-grid">
+      
+      @for (c of filteredCats; track c.id; let i = $index) {
+        <div class="cat-card" [style.--cat-color]="c.couleur" [style.animation-delay]="(i * 0.06) + 's'">
+          <div class="cat-stripe"></div>
+
+          <div class="cat-body">
+            <div class="cat-head">
+              <div class="cat-icon">
+                {{ c.icone }}
+              </div>
+              <div class="cat-info">
+                <div class="cat-nom">{{ c.nom }}</div>
+                <div class="cat-desc">{{ c.description }}</div>
+              </div>
+              <span class="badge" [ngClass]="'badge--' + c.statut">
+                <span class="badge-dot"></span>{{ c.statutLabel }}
+              </span>
+            </div>
+
+            <div class="cat-stats">
+              <div class="cat-stat">
+                <span class="cat-stat-val">{{ c.nbProduits }}</span>
+                <span class="cat-stat-key">produit{{ c.nbProduits !== 1 ? 's' : '' }}</span>
+              </div>
+              <div class="cat-divider"></div>
+              <div class="cat-stat">
+                <span class="cat-stat-val cat-stat-ey">{{ c.ca }}</span>
+                <span class="cat-stat-key">CA généré</span>
+              </div>
+            </div>
+
+            <div class="cat-bar-track">
+              <div class="cat-bar" [style.width]="pct(c) + '%'"></div>
+            </div>
+
+            <div class="cat-foot">
+              <span class="cat-pct">{{ pct(c) }}% du catalogue</span>
+              <div class="cat-actions">
+                <button class="cat-btn" title="Modifier">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                    <path d="M7.5 1.5l2 2L3 10H1v-2L7.5 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="cat-btn cat-btn--del" title="Supprimer">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                    <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (filteredCats.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">ðŸ—‚ï¸</div>
+          <div class="empty-title">Aucune catégorie trouvée</div>
+          <div class="empty-desc">Modifiez votre recherche ou créez une nouvelle catégorie</div>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>
+
+
+@if (showModal) {
+  <div class="modal-overlay" [@fadeIn] (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2 class="modal-title">Nouvelle catégorie</h2>
+        <button class="modal-close" (click)="closeModal()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group form-group--full">
+            <label class="form-label">Nom de la catégorie *</label>
+            <input class="form-input" type="text" placeholder="Ex : Consulting" [(ngModel)]="newCat.nom"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group form-group--full">
+            <label class="form-label">Description</label>
+            <input class="form-input" type="text" placeholder="Description courte…" [(ngModel)]="newCat.description"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Icône</label>
+            <div class="icon-picker">
+              @for (ic of icones; track ic) {
+                <button class="icon-opt" [class.icon-opt--active]="newCat.icone === ic" (click)="newCat.icone = ic">{{ ic }}</button>
+              }
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Couleur</label>
+            <div class="color-picker">
+              @for (col of couleurs; track col) {
+                <button class="color-opt" [style.background]="col"
+                  [class.color-opt--active]="newCat.couleur === col" (click)="newCat.couleur = col">
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+        
+        <div class="cat-preview" [style.--cat-color]="newCat.couleur">
+          <div class="cat-prev-icon">{{ newCat.icone }}</div>
+          <div>
+            <div class="cat-prev-nom">{{ newCat.nom || 'Nom de la catégorie' }}</div>
+            <div class="cat-prev-desc">{{ newCat.description || 'Description…' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" (click)="closeModal()">Annuler</button>
+        <button class="btn-primary" [disabled]="!newCat.nom.trim()" (click)="saveCat()">
+          Créer la catégorie
+        </button>
+      </div>
+    </div>
+  </div>
+}
+

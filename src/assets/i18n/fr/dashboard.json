@@ -1,0 +1,18 @@
+{
+  "DASHBOARD": {
+    "TITLE": "Tableau de bord",
+    "WELCOME": "Bienvenue",
+    "KPI": {
+      "INVOICES_MONTH": "Factures ce mois",
+      "REVENUE_MONTH": "Chiffre d'affaires",
+      "PENDING": "En attente",
+      "OVERDUE": "En retard",
+      "COMPLIANCE": "Conformité TEIF"
+    },
+    "SECTIONS": {
+      "RECENT_INVOICES": "Factures récentes",
+      "QUICK_ACTIONS": "Actions rapides",
+      "STATS": "Statistiques"
+    }
+  }
+}

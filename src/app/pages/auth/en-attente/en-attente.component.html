@@ -1,0 +1,182 @@
+<div class="ea-shell" [@pageIn]>
+
+  <!-- Fond décoratif -->
+  <div class="ea-bg">
+    <div class="ea-bg__orb ea-bg__orb--1"></div>
+    <div class="ea-bg__orb ea-bg__orb--2"></div>
+    <div class="ea-bg__grid"></div>
+  </div>
+
+  <!-- Card centrale -->
+  <div class="ea-card" [@pulseIn]>
+
+    <!-- Logo -->
+    <div class="ea-card__logo">
+      <div class="ea-card__mark">EY</div>
+      <div class="ea-card__text">
+        <span class="ea-card__name">TunisFlow</span>
+        <span class="ea-card__sub">{{ 'APP.TAGLINE' | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Icône succès -->
+    <div class="ea-icon">
+      <div class="ea-icon__ring ea-icon__ring--1"></div>
+      <div class="ea-icon__ring ea-icon__ring--2"></div>
+      <div class="ea-icon__core">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <path d="M7 15l5 5.5 11-11"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Titre -->
+    <h1 class="ea-title">{{ 'AUTH.WAITING.TITLE_A' | translate }}</h1>
+    <p class="ea-accent">{{ 'AUTH.WAITING.TITLE_B' | translate }}</p>
+    <p class="ea-desc">
+      {{ 'AUTH.WAITING.DESC_A' | translate }}
+      <strong class="ea-email">{{ email }}</strong>
+      {{ 'AUTH.WAITING.DESC_B' | translate }}
+    </p>
+
+    <!-- Badge compteur polling -->
+    <div class="ea-poll-badge" *ngIf="!statusMsg() || statusType() !== 'ok'">
+      <span class="ea-poll-badge__dot"></span>
+      {{ 'AUTH.WAITING.POLL_NEXT_A' | translate }} <strong>{{ nextCheckIn() }}{{ 'AUTH.WAITING.POLL_NEXT_B' | translate }}</strong>
+    </div>
+
+    <!-- Référence dossier -->
+    <div class="ea-ref-box" *ngIf="confirmationRef">
+      <div class="ea-ref-box__label">{{ 'AUTH.WAITING.REFERENCE' | translate }}</div>
+      <div class="ea-ref-box__row">
+        <span class="ea-ref-box__val">{{ confirmationRef }}</span>
+        <button class="ea-ref-box__copy" (click)="copyRef()">
+          {{ refCopied ? ('COMMON.COPIED' | translate) : ('COMMON.COPY' | translate) }}
+        </button>
+      </div>
+      <div class="ea-ref-box__hint">{{ 'AUTH.WAITING.REFERENCE_HINT' | translate }}</div>
+    </div>
+
+    <!-- Timeline statut -->
+    <div class="ea-timeline">
+      <!-- Étape 1 : soumis -->
+      <div class="ea-timeline__step ea-timeline__step--done">
+        <div class="ea-timeline__dot">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M2 5l2 2.5 4-4"
+              stroke="white" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="ea-timeline__info">
+          <span class="ea-timeline__label">{{ 'AUTH.WAITING.TIMELINE.SUBMITTED' | translate }}</span>
+          <span class="ea-timeline__sub">{{ 'AUTH.WAITING.TIMELINE.RECEIVED' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="ea-timeline__connector ea-timeline__connector--active"></div>
+
+      <!-- Étape 2 : examen -->
+      <div class="ea-timeline__step ea-timeline__step--active">
+        <div class="ea-timeline__dot ea-timeline__dot--pulse">
+          <div class="ea-timeline__pulse"></div>
+        </div>
+        <div class="ea-timeline__info">
+          <span class="ea-timeline__label">{{ 'AUTH.WAITING.TIMELINE.IN_REVIEW' | translate }}</span>
+          <span class="ea-timeline__sub">{{ 'AUTH.WAITING.TIMELINE.IN_REVIEW_SUB' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="ea-timeline__connector"></div>
+
+      <!-- Étape 3 : accès -->
+      <div class="ea-timeline__step ea-timeline__step--pending">
+        <div class="ea-timeline__dot ea-timeline__dot--muted"></div>
+        <div class="ea-timeline__info">
+          <span class="ea-timeline__label">{{ 'AUTH.WAITING.TIMELINE.GRANTED' | translate }}</span>
+          <span class="ea-timeline__sub">{{ 'AUTH.WAITING.TIMELINE.GRANTED_SUB' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message statut (aria-live) -->
+    <div
+      class="ea-status-msg"
+      *ngIf="statusMsg()"
+      [class.ea-status-msg--ok]="statusType() === 'ok'"
+      [class.ea-status-msg--wait]="statusType() === 'wait'"
+      [class.ea-status-msg--error]="statusType() === 'error'"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <svg *ngIf="statusType() === 'ok'" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6" fill="#22C55E"/>
+        <path d="M4 7l2 2 4-4" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg *ngIf="statusType() === 'wait'" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M7 4v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      <svg *ngIf="statusType() === 'error'" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M7 4v4M7 10h.01" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      {{ statusMsg() | translate }}
+    </div>
+
+    <!-- Actions -->
+    <div class="ea-actions">
+      <button
+        class="ea-btn ea-btn--primary"
+        (click)="checkStatusManual()"
+        [disabled]="checking() || cooldownActive()"
+        [attr.title]="cooldownActive() ? ('AUTH.WAITING.WAIT_BEFORE_RETRY' | translate:{ seconds: cooldownRemaining() }) : null"
+        [attr.aria-label]="'AUTH.WAITING.ARIA_CHECK_STATUS' | translate"
+      >
+        <span *ngIf="!checking()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M12 7A5 5 0 112 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12 3v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ cooldownActive()
+              ? ('AUTH.WAITING.WAIT_SECONDS' | translate:{ seconds: cooldownRemaining() })
+              : ('COMMON.CHECK_NOW' | translate) }}
+        </span>
+        <span *ngIf="checking()" class="ea-spinner"></span>
+      </button>
+
+      <button class="ea-btn ea-btn--ghost" (click)="logout()" [attr.aria-label]="'COMMON.BACK_HOME' | translate">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M5 1H2a1 1 0 00-1 1v9a1 1 0 001 1h3M9 9l3-2.5L9 4M12 6.5H5"
+            stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ 'COMMON.BACK_HOME' | translate }}
+      </button>
+    </div>
+
+    <!-- Note support -->
+    <div class="ea-card__note">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <rect x="1" y="3" width="10" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M1 5l5 3.5 5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      {{ 'AUTH.WAITING.SUPPORT' | translate }}
+      <a class="ea-link" href="mailto:support&#64;tunisflow.tn">support&#64;tunisflow.tn</a>
+    </div>
+
+  </div>
+
+  <!-- Toast activation compte -->
+  <div class="ea-toast ea-toast--success" *ngIf="showToast()" role="alert" aria-live="assertive">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="7" fill="#22C55E"/>
+      <path d="M5 8l2 2 4-4" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    {{ 'AUTH.WAITING.TOAST_ACTIVE_REDIRECT' | translate }}
+  </div>
+
+</div>

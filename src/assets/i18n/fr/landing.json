@@ -1,0 +1,333 @@
+{
+  "LANDING": {
+    "BADGE": "TEIF 2026 · Certifié DGI · UBL 2.1",
+    "NAV": {
+      "HOME": "Accueil",
+      "KEY_NUMBERS": "Chiffres clés",
+      "WORKFLOW": "Fonctionnement",
+      "FEATURES": "Fonctionnalités",
+      "COMPLIANCE": "Conformité",
+      "SECURITY": "Sécurité",
+      "WHY": "Pourquoi TunisFlow",
+      "AUDIENCE": "Entreprises concernées",
+      "CONTACT": "Contact"
+    },
+    "CTA": {
+      "SIGN_IN": "Se connecter",
+      "REQUEST_ACCESS": "Demander l'accès",
+      "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
+      "SEE_DEMO": "Voir le fonctionnement"
+    },
+    "HERO": {
+      "TITLE_TOP": "Automatisez votre",
+      "TITLE_HIGHLIGHT": "facturation électronique",
+      "TITLE_BOTTOM": "conforme TEIF 2026",
+      "DESC": "De la création à la transmission DGI, tout est automatisé, sécurisé et conforme."
+    },
+    "TRUST": {
+      "COMPLIANT": "Conforme TEIF 2026",
+      "UBL": "Format UBL 2.1",
+      "DGI_LT_2S": "Transmission DGI < 2s"
+    },
+    "PREVIEW": {
+      "BREAD_DASHBOARD": "Dashboard",
+      "BREAD_OVERVIEW": "Vue d'ensemble",
+      "KPI_TEIF": "TEIF 2026",
+      "KPI_TEIF_STATUS": "Conforme",
+      "KPI_INVOICES": "Factures / mois",
+      "KPI_DGI": "Transmission DGI",
+      "KPI_DGI_STATUS": "Optimal",
+      "TABLE": {
+        "REFERENCE": "Référence",
+        "CLIENT": "Client",
+        "AMOUNT": "Montant",
+        "STATUS": "Statut",
+        "STATUS_DGI": "Transmise DGI",
+        "STATUS_VALIDATION": "En validation",
+        "STATUS_UBL": "UBL généré"
+      },
+      "SYNC": "DGI synchronisée · il y a 2 min",
+      "BADGE": "UBL 2.1 ✓",
+      "FLOAT_TITLE": "Score TEIF",
+      "FLOAT_SUB": "Conformité validée"
+    },
+    "STATS": {
+      "ITEMS": {
+        "TEIF_PROCESS": "Processus conforme TEIF 2026",
+        "DGI_TRANSMISSION": "Transmission DGI simulée",
+        "UBL_VALID": "Format UBL 2.1 validé",
+        "PLATFORM_UPTIME": "Disponibilité plateforme"
+      }
+    },
+    "WORKFLOW": {
+      "EYEBROW": "Comment ça fonctionne",
+      "TITLE_LINE1": "De l'inscription à la transmission DGI",
+      "TITLE_HIGHLIGHT": "5 étapes",
+      "TITLE_LINE2": "automatisées",
+      "DESC": "Un processus entièrement digital. Votre conformité TEIF 2026 est garantie à chaque étape.",
+      "ITEMS": {
+        "STEP1": {
+          "TITLE": "Inscription & upload",
+          "DESC": "Créez votre espace entreprise et déposez vos documents légaux : matricule fiscal, RNE et CIN du responsable.",
+          "TAG": "Onboarding digital"
+        },
+        "STEP2": {
+          "TITLE": "Validation KYC",
+          "DESC": "Votre dossier est analysé automatiquement, puis scoré selon les exigences de conformité et d'identité.",
+          "TAG": "Vérification automatique"
+        },
+        "STEP3": {
+          "TITLE": "Création de facture",
+          "DESC": "Créez vos factures dans une interface guidée avec les données fiscales obligatoires déjà cadrées.",
+          "TAG": "Interface guidée"
+        },
+        "STEP4": {
+          "TITLE": "Génération UBL 2.1",
+          "DESC": "La facture est convertie au format officiel, signée électroniquement et sécurisée par empreinte SHA-256.",
+          "TAG": "Format officiel DGI"
+        },
+        "STEP5": {
+          "TITLE": "Transmission DGI",
+          "DESC": "Envoi direct vers la DGI via l'API officielle avec accusé de réception et traçabilité complète.",
+          "TAG": "< 2s · Certifié"
+        }
+      }
+    },
+    "FEATURES": {
+      "EYEBROW": "Fonctionnalités métier",
+      "TITLE_LINE1": "Tout le cycle de facturation TEIF",
+      "TITLE_EM": "natif et automatisé",
+      "DESC": "Six fonctionnalités essentielles conçues pour les entreprises tunisiennes : conformité DGI native, validation KYC, signature électronique et audit trail complet.",
+      "LEARN_MORE": "En savoir plus",
+      "MODAL_REQUEST": "Demander votre espace",
+      "ITEMS": {
+        "KYC": {
+          "TAG": "Onboarding",
+          "TITLE": "Validation KYC entreprise",
+          "DESC": "Upload de documents, vérification automatique d'identité et validation du dossier conforme aux exigences DGI.",
+          "DETAIL": "Le module KYC collecte et vérifie automatiquement les documents légaux : matricule fiscal, registre RNE et CIN du responsable. Chaque dossier est scoré et validé avant toute émission de facture."
+        },
+        "SCORE": {
+          "TAG": "Conformité",
+          "TITLE": "Score de conformité automatique",
+          "DESC": "Score TEIF calculé en temps réel sur chaque facture, avec alertes instantanées en cas d'écart réglementaire.",
+          "DETAIL": "Un moteur de règles analyse chaque facture selon les critères TEIF 2026 : format, données obligatoires, TVA et signature. Le score est mis à jour automatiquement et archivé dans l'audit trail."
+        },
+        "UBL": {
+          "TAG": "Format",
+          "TITLE": "Génération UBL 2.1",
+          "DESC": "Génération automatique de factures au format UBL 2.1 conforme DGI Tunisie, sans intervention manuelle.",
+          "DETAIL": "Le moteur de génération produit des documents XML UBL 2.1 conformes aux schémas officiels DGI Tunisie. Les données sont validées syntaxiquement et sémantiquement avant chaque envoi."
+        },
+        "API": {
+          "TAG": "Intégration",
+          "TITLE": "Transmission DGI (API)",
+          "DESC": "Connexion directe à l'API officielle DGI Tunisie avec accusés de réception automatiques et traçabilité complète.",
+          "DETAIL": "Chaque facture est transmise via l'API officielle DGI Tunisie avec accusé de réception horodaté. En cas d'erreur, le système retente automatiquement et alerte le responsable."
+        },
+        "SIGNATURE": {
+          "TAG": "Sécurité",
+          "TITLE": "Signature électronique",
+          "DESC": "Signature qualifiée avec empreinte cryptographique SHA-256. Chaque facture est inaltérable et auditable.",
+          "DETAIL": "Chaque facture est signée électroniquement via un mécanisme de hachage SHA-256. La signature garantit l'intégrité du document et son authenticité auprès de la DGI."
+        },
+        "AUDIT": {
+          "TAG": "Traçabilité",
+          "TITLE": "Audit trail complet",
+          "DESC": "Journal des créations, validations, transmissions et archivages, exportable pour contrôle fiscal.",
+          "DETAIL": "Chaque action sur une facture est horodatée et archivée dans un journal immuable. L'audit trail est exportable en PDF ou CSV pour faciliter les contrôles fiscaux."
+        }
+      }
+    },
+    "COMPLIANCE": {
+      "EYEBROW": "Conformité réglementaire",
+      "TITLE_LINE1": "100% conforme",
+      "TITLE_EM": "TEIF 2026 & DGI",
+      "DESC": "TunisFlow a été conçu dès le départ pour répondre aux exigences de la TEIF 2026 et de la DGI Tunisie. Chaque fonctionnalité est certifiée et auditable.",
+      "DOC_LINK": "Lire la documentation TEIF",
+      "SCORE_TITLE": "Score de conformité TEIF",
+      "SCORE_BADGE": "2026 ✓",
+      "SCORE_FOOTER": "Mise à jour automatiquement à chaque facture",
+      "ITEMS": {
+        "UBL_VALID": "Format UBL 2.1 validé",
+        "E_SIGNATURE": "Signature électronique qualifiée",
+        "DGI_AUTO": "Transmission DGI automatique",
+        "ARCHIVE_10Y": "Archivage légal 10 ans",
+        "VAT_REPORT": "Rapport TVA mensuel automatisé",
+        "AUDIT_TRAIL": "Audit trail complet",
+        "AES": "Chiffrement AES-256",
+        "KYC": "Validation KYC entreprise"
+      },
+      "SCORE_ROWS": {
+        "UBL": "Format UBL 2.1",
+        "SIGNATURE": "Signature élec.",
+        "DGI": "Transmission DGI",
+        "ARCHIVE": "Archivage"
+      }
+    },
+    "WHY": {
+      "EYEBROW": "Pourquoi TunisFlow",
+      "TITLE_LINE1": "La fin du dépôt papier",
+      "TITLE_EM": "une plateforme, tout inclus",
+      "ITEMS": {
+        "PAPERLESS": {
+          "TITLE": "Remplace le dépôt papier",
+          "DESC": "Plus de déplacements au bureau des impôts. Tout est transmis électroniquement à la DGI avec accusé de réception."
+        },
+        "AUTOMATION": {
+          "TITLE": "Validation automatisée",
+          "DESC": "Chaque facture est validée automatiquement selon les règles TEIF 2026. Zéro erreur humaine, zéro rejet évitable."
+        },
+        "SCORE": {
+          "TITLE": "Score conformité temps réel",
+          "DESC": "Un score de conformité TEIF est calculé en continu sur chaque facture. Vous savez toujours où vous en êtes."
+        }
+      }
+    },
+    "AUDIENCE": {
+      "EYEBROW": "Entreprises concernées",
+      "TITLE_LINE1": "Conçu pour toutes les entreprises",
+      "TITLE_EM": "tunisiennes soumises à la TEIF",
+      "ITEMS": {
+        "SME": {
+          "TITLE": "PME tunisiennes",
+          "DESC": "La solution idéale pour les petites et moyennes entreprises soumises à la TEIF 2026.",
+          "POINTS": [
+            "Onboarding rapide en 5 min",
+            "Interface intuitive sans formation",
+            "Tarifs adaptés aux PME"
+          ]
+        },
+        "ACCOUNTANTS": {
+          "TITLE": "Experts-comptables",
+          "DESC": "Gérez plusieurs entreprises clientes depuis un seul espace multi-entités.",
+          "POINTS": [
+            "Multi-clients centralisé",
+            "Rapports TVA automatisés",
+            "Audit trail exportable"
+          ]
+        },
+        "ENTERPRISE": {
+          "TITLE": "Grandes entreprises",
+          "DESC": "Une architecture scalable pour les grandes structures avec des volumes élevés de facturation.",
+          "POINTS": [
+            "API REST complète",
+            "Gestion multi-filiales",
+            "SLA garantie 99.9%"
+          ]
+        }
+      }
+    },
+    "SECURITY": {
+      "EYEBROW": "Sécurité & conformité",
+      "TITLE_LINE1": "Vos données protégées",
+      "TITLE_EM": "selon les standards EY",
+      "DESC": "Chaque donnée fiscale est chiffrée, tracée et archivée selon les exigences légales tunisiennes et les standards EY. Zéro accès non autorisé.",
+      "LOG_HEADER": "Audit log · temps réel",
+      "LOG_FOOTER": "AES-256 · Hébergé en Tunisie",
+      "ITEMS": {
+        "AES": {
+          "TITLE": "Chiffrement AES-256",
+          "DESC": "Toutes les données fiscales sont chiffrées au repos et en transit avec AES-256."
+        },
+        "AUDIT": {
+          "TITLE": "Audit log immuable",
+          "DESC": "Chaque action est tracée et horodatée dans un journal exportable pour contrôle fiscal."
+        },
+        "HOSTING": {
+          "TITLE": "Hébergement en Tunisie",
+          "DESC": "Données hébergées sur des serveurs certifiés situés en Tunisie, conformément à la réglementation."
+        },
+        "ARCHIVE": {
+          "TITLE": "Archivage 10 ans",
+          "DESC": "Conservation légale des factures pendant 10 ans minimum, conforme aux obligations DGI Tunisie."
+        }
+      },
+      "LOGS": {
+        "ITEM1": {
+          "ACTION": "Facture FAC-0128 générée en UBL 2.1",
+          "TIME": "il y a 2 min",
+          "STATUS": "Succès"
+        },
+        "ITEM2": {
+          "ACTION": "Transmission DGI · FAC-0128",
+          "TIME": "il y a 2 min"
+        },
+        "ITEM3": {
+          "ACTION": "Signature SHA-256 apposée",
+          "TIME": "il y a 5 min",
+          "STATUS": "Validée"
+        },
+        "ITEM4": {
+          "ACTION": "Validation TEIF · FAC-0127",
+          "TIME": "il y a 8 min"
+        },
+        "ITEM5": {
+          "ACTION": "KYC · Beta Industrie vérifié",
+          "TIME": "il y a 12 min",
+          "STATUS": "Approuvé"
+        }
+      }
+    },
+    "CTA_SECTION": {
+      "EYEBROW": "TunisFlow · TEIF 2026",
+      "TITLE": "Prêt à passer au zéro papier ?",
+      "DESC": "Demandez votre espace entreprise en moins de 5 minutes. Onboarding 100% digital, sans déplacement ni dossier papier.",
+      "LOGIN": "Déjà client ? Se connecter",
+      "ITEMS": {
+        "COMPLIANCE": {
+          "TITLE": "Conformité TEIF garantie",
+          "DESC": "Validation automatique à chaque facture"
+        },
+        "TIME": {
+          "TITLE": "Gain de temps massif",
+          "DESC": "Réduction des erreurs et des délais fiscaux"
+        },
+        "DIGITAL": {
+          "TITLE": "Onboarding 100% digital",
+          "DESC": "Aucun déplacement, aucun dossier papier"
+        }
+      },
+      "TRUST": {
+        "AES": "Données sécurisées AES-256",
+        "CERTIFIED": "Certifié TEIF 2026",
+        "DGI": "Transmission DGI < 2s",
+        "HOSTED": "Hébergé en Tunisie"
+      }
+    },
+    "FOOTER": {
+      "SUBTITLE": "Facturation électronique certifiée Tunisie",
+      "TAGLINE": "La plateforme de référence pour la facturation électronique conforme TEIF 2026 en Tunisie. Développée selon les standards EY.",
+      "STATUS": "Systèmes opérationnels · DGI connectée",
+      "COLUMNS": {
+        "PLATFORM": {
+          "TITLE": "Plateforme",
+          "WORKFLOW": "Fonctionnement",
+          "FEATURES": "Fonctionnalités",
+          "COMPLIANCE": "Conformité TEIF",
+          "SECURITY": "Sécurité"
+        },
+        "REGULATION": {
+          "TITLE": "Réglementaire",
+          "TEIF": "TEIF 2026",
+          "DGI": "DGI Tunisie",
+          "UBL": "Norme UBL 2.1",
+          "ARCHIVE": "Archivage légal"
+        },
+        "SUPPORT": {
+          "TITLE": "Support",
+          "HELP": "Centre d'aide",
+          "CONTACT": "Contacter EY",
+          "STATUS": "Statut plateforme",
+          "TRAINING": "Formation"
+        }
+      },
+      "LEGAL": "© {{year}} TunisFlow. Tous droits réservés. TEIF 2026 · DGI Tunisie · UBL 2.1",
+      "LINKS": {
+        "PRIVACY": "Confidentialité",
+        "TERMS": "Conditions d'utilisation",
+        "NOTICES": "Mentions légales"
+      }
+    }
+  }
+}

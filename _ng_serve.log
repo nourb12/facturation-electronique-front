@@ -1,0 +1,634 @@
+
+> tunisflow@0.0.0 start
+> ng serve --port 4200
+
+
+Initial chunk files   | Names                                                              |  Raw size
+main.js               | main                                                               |   2.87 MB | 
+polyfills.js          | polyfills                                                          | 263.09 kB | 
+styles.css, styles.js | styles                                                             | 186.21 kB | 
+runtime.js            | runtime                                                            |  14.14 kB | 
+
+                      | Initial total                                                      |   3.32 MB
+
+Lazy chunk files      | Names                                                              |  Raw size
+515.js                | pages-rapports-rapports-component                                  |   1.61 MB | 
+966.js                | pages-auth-demande-acces-demande-acces-component                   | 452.38 kB | 
+129.js                | canvg                                                              | 435.84 kB | 
+786.js                | pages-auth-register-onboarding-wizard-component                    | 389.46 kB | 
+822.js                | html2canvas                                                        | 377.59 kB | 
+967.js                | pages-landing-landing-component                                    | 355.62 kB | 
+337.js                | pages-entreprise-personnalisation-personnalisation-component       | 337.11 kB | 
+456.js                | pages-auth-demande-acces-demande-acces-component                   | 274.47 kB | 
+483.js                | pages-factures-factures-component                                  | 219.84 kB | 
+807.js                | pages-admin-admin-detail-kyc-admin-detail-kyc-component            | 205.85 kB | 
+175.js                | pages-transactions-transactions-component                          | 195.82 kB | 
+199.js                | pages-dashboard-dashboard-component                                | 195.47 kB | 
+879.js                | pages-devis-devis-component                                        | 194.30 kB | 
+325.js                | pages-profil-profil-component                                      | 191.04 kB | 
+525.js                | pages-avoirs-avoirs-component                                      | 189.84 kB | 
+383.js                | pages-comptabilite-parametres-fiscaux-parametres-fiscaux-component | 188.67 kB | 
+803.js                | pages-entreprise-entreprise-component                              | 154.47 kB | 
+142.js                | pages-auth-forgot-password-forgot-password-component               | 148.21 kB | 
+109.js                | pages-comptabilite-taxes-taxes-component                           | 144.95 kB | 
+147.js                | pages-admin-admin-dashboard-admin-dashboard-component              | 133.61 kB | 
+219.js                | pages-clients-clients-component                                    | 125.72 kB | 
+837.js                | pages-produits-produits-component                                  | 117.31 kB | 
+521.js                | pages-utilisateurs-utilisateurs-component                          | 113.93 kB | 
+910.js                | pages-auth-en-attente-en-attente-component                         | 110.06 kB | 
+220.js                | layouts-main-layout-main-layout-component                          | 101.08 kB | 
+641.js                | pages-categories-categories-component                              | 101.01 kB | 
+94.js                 | pages-auth-login-admin-login-admin-component                       |  97.86 kB | 
+719.js                | pages-admin-admin-demandes-kyc-admin-demandes-kyc-component        |  94.08 kB | 
+502.js                | pages-auth-login-entreprise-login-entreprise-component             |  88.83 kB | 
+214.js                | pages-auth-login-financier-login-financier-component               |  88.32 kB | 
+422.js                | pages-auth-role-selection-role-selection-page-component            |  84.25 kB | 
+746.js                | dompurify                                                          |  65.87 kB | 
+107.js                | pages-paiements-paiements-component                                |  65.86 kB | 
+287.js                | pages-admin-admin-factures-admin-factures-component                |  65.76 kB | 
+421.js                | pages-admin-admin-utilisateurs-admin-utilisateurs-component        |  63.48 kB | 
+895.js                | pages-admin-admin-entreprises-admin-entreprises-component          |  63.48 kB | 
+134.js                | layouts-admin-layout-admin-layout-component                        |  60.87 kB | 
+973.js                | pages-admin-admin-parametres-admin-parametres-component            |  43.75 kB | 
+259.js                | pages-admin-admin-audit-admin-audit-component                      |  40.20 kB | 
+429.js                | pages-landing-landing-component                                    |  23.14 kB | 
+255.js                | pages-landing-landing-component                                    |  23.11 kB | 
+344.js                | pages-dashboard-dashboard-component                                |  21.65 kB | 
+common.js             | common                                                             |   9.77 kB | 
+887.js                | pages-not-found-not-found-component                                |   3.65 kB | 
+
+Build at: 2026-04-28T13:36:52.015Z - Hash: be4aef6a05cc947d - Time: 17234ms
+
+** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
+
+
+√ Compiled successfully.
+
+Initial chunk files | Names   | Raw size
+main.js             | main    |  2.87 MB | 
+runtime.js          | runtime | 14.14 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T13:38:18.687Z - Hash: 423925daf572fc83 - Time: 12688ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 357.00 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T13:46:47.004Z - Hash: d19b6f90a65f778b - Time: 5514ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+main.js             | main                            |   2.87 MB | 
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 367.62 kB | 
+
+45 unchanged chunks
+
+Build at: 2026-04-28T13:58:17.917Z - Hash: d0157ee5ec091bab - Time: 6640ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 375.39 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T13:59:41.117Z - Hash: b46a53bcf59b3b84 - Time: 4503ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 367.62 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:29:25.847Z - Hash: bdbbf9b9dd05407f - Time: 3725ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 357.00 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:29:30.073Z - Hash: e77eb5785393fd51 - Time: 4058ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 352.68 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:46:37.796Z - Hash: b146de7a6b3adb4e - Time: 7760ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                           |  Raw size
+runtime.js          | runtime                         |  14.14 kB | 
+
+Lazy chunk files    | Names                           |  Raw size
+967.js              | pages-landing-landing-component | 352.68 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:46:42.085Z - Hash: f1ffa7b9b365a4d4 - Time: 4086ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 452.30 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:54:06.145Z - Hash: 3c550ad09aa5dfe6 - Time: 9615ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                                   |  Raw size
+runtime.js          | runtime                                                 |  14.14 kB | 
+
+Lazy chunk files    | Names                                                   |  Raw size
+786.js              | pages-auth-register-onboarding-wizard-component         | 389.39 kB | 
+142.js              | pages-auth-forgot-password-forgot-password-component    | 148.20 kB | 
+94.js               | pages-auth-login-admin-login-admin-component            |  97.87 kB | 
+502.js              | pages-auth-login-entreprise-login-entreprise-component  |  88.84 kB | 
+214.js              | pages-auth-login-financier-login-financier-component    |  88.33 kB | 
+422.js              | pages-auth-role-selection-role-selection-page-component |  83.75 kB | 
+
+41 unchanged chunks
+
+Build at: 2026-04-28T16:54:14.519Z - Hash: e7772561a8fa5b29 - Time: 8172ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                        | Raw size
+runtime.js          | runtime                                      | 14.14 kB | 
+
+Lazy chunk files    | Names                                        | Raw size
+94.js               | pages-auth-login-admin-login-admin-component | 97.87 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:54:36.207Z - Hash: 8b871efcead130e4 - Time: 3712ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                                | Raw size
+runtime.js          | runtime                                              | 14.14 kB | 
+
+Lazy chunk files    | Names                                                | Raw size
+214.js              | pages-auth-login-financier-login-financier-component | 88.33 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T16:54:39.221Z - Hash: ad6e350a25d79014 - Time: 2821ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 452.23 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:04:45.294Z - Hash: c4b63de68f33f6e6 - Time: 6866ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 452.92 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:04:51.138Z - Hash: ec8443e0d6af9b74 - Time: 5407ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.00 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:09:40.450Z - Hash: 617d9df942b01ddc - Time: 5221ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.37 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:09:45.348Z - Hash: 1d4f401bcf1fa349 - Time: 4706ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 454.01 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:16:05.304Z - Hash: d689867796399ab8 - Time: 4949ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 454.15 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:20:06.919Z - Hash: 82a7d4e2e2f6ec59 - Time: 4105ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.95 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:27:51.630Z - Hash: 33a6d86d29ac5111 - Time: 5714ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.84 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:27:56.659Z - Hash: e18713e17cdfba14 - Time: 4807ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.73 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:31:13.721Z - Hash: e475edef8db26820 - Time: 11183ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T17:31:15.371Z - Hash: e475edef8db26820 - Time: 1497ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.93 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:35:04.555Z - Hash: cae8700d35b3fdb9 - Time: 4399ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.73 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:40:37.215Z - Hash: 5921f4012e5a1189 - Time: 4030ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 454.34 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:41:02.039Z - Hash: 9eed722d7d6143cc - Time: 4443ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T17:45:48.343Z - Hash: 9eed722d7d6143cc - Time: 1654ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T17:45:49.824Z - Hash: 9eed722d7d6143cc - Time: 1297ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.78 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:49:41.082Z - Hash: 1fac1df129d795ce - Time: 5290ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 453.82 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T17:49:46.659Z - Hash: 89b244aa7365776c - Time: 5350ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 454.20 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T18:04:46.784Z - Hash: b15d137c60a6cde8 - Time: 3940ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 459.17 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T19:33:13.967Z - Hash: e0e5c2d5c67aa1e3 - Time: 4413ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T19:33:15.720Z - Hash: e0e5c2d5c67aa1e3 - Time: 1597ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 460.48 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T19:33:40.885Z - Hash: e1524801c36033fe - Time: 4162ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 461.74 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T19:34:07.977Z - Hash: b008cba38e9cb3f2 - Time: 3789ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+main.js             | main                                             |   2.87 MB | 
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 463.82 kB | 
+
+45 unchanged chunks
+
+Build at: 2026-04-28T19:58:40.411Z - Hash: 7203fd05ccb35b51 - Time: 5970ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            | Raw size
+runtime.js          | runtime                                          | 14.14 kB | 
+
+Lazy chunk files    | Names                                            | Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 77.31 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:25:49.708Z - Hash: fd717b6a2309cd6c - Time: 2767ms
+
+× Failed to compile.
+
+Initial chunk files | Names                                            | Raw size
+runtime.js          | runtime                                          | 14.14 kB | 
+
+Lazy chunk files    | Names                                            | Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 77.31 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:27:54.960Z - Hash: 1c5286fcffaa6ed1 - Time: 2071ms
+
+× Failed to compile.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 465.28 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:30:55.846Z - Hash: 1fb6de22f2748ceb - Time: 3634ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T20:30:57.572Z - Hash: 1fb6de22f2748ceb - Time: 1581ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 488.13 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:34:31.890Z - Hash: 35dee7d0a5987489 - Time: 4302ms
+
+√ Compiled successfully.
+
+
+
+48 unchanged chunks
+
+Build at: 2026-04-28T20:34:33.520Z - Hash: 35dee7d0a5987489 - Time: 1487ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 495.43 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:35:09.095Z - Hash: 9ed4e6d664e8606d - Time: 4391ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 490.57 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:37:26.751Z - Hash: f4ea2f2cc0be3dcf - Time: 4266ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 487.92 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T20:52:27.099Z - Hash: 43901efcbc463dc6 - Time: 3593ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 488.27 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T21:07:33.397Z - Hash: 76c9376968744a41 - Time: 3579ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 488.47 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T21:08:12.149Z - Hash: 3ab5889e121b64e0 - Time: 2952ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 488.29 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T21:11:40.883Z - Hash: 8fcd114c492fcf79 - Time: 3539ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 489.11 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T21:24:51.234Z - Hash: 3f3a825633211030 - Time: 3367ms
+
+√ Compiled successfully.
+
+Initial chunk files | Names                                            |  Raw size
+runtime.js          | runtime                                          |  14.14 kB | 
+
+Lazy chunk files    | Names                                            |  Raw size
+966.js              | pages-auth-demande-acces-demande-acces-component | 491.25 kB | 
+
+46 unchanged chunks
+
+Build at: 2026-04-28T21:25:29.075Z - Hash: c7b243080331bcb9 - Time: 4748ms
+
+√ Compiled successfully.

@@ -1,0 +1,20 @@
+{
+  "ERRORS": {
+    "PASSWORDS_MISMATCH": "Les mots de passe ne correspondent pas.",
+    "REQUIRED": "Ce champ est obligatoire.",
+    "INVALID_EMAIL": "Adresse email invalide.",
+    "INVALID_FORMAT": "Format invalide.",
+    "SERVER_ERROR": "Une erreur est survenue. Veuillez réessayer.",
+    "UNAUTHORIZED": "Session expirée. Veuillez vous reconnecter.",
+    "FORBIDDEN": "Accès refusé.",
+    "NOT_FOUND": "Ressource introuvable.",
+    "CONFLICT": "Cette ressource existe déjà.",
+    "VALIDATION": "Veuillez corriger les erreurs du formulaire.",
+    "NETWORK": "Impossible de contacter le serveur. Vérifiez votre connexion.",
+    "INVALID_CREDENTIALS": "Identifiants incorrects.",
+    "ACCOUNT_INACTIVE": "Votre compte est inactif. Contactez l'administrateur.",
+    "INVALID_TOKEN": "Session invalide. Veuillez vous reconnecter.",
+    "INVALID_OTP": "Code OTP invalide ou expiré.",
+    "ACCESS_DENIED": "Accès refusé."
+  }
+}

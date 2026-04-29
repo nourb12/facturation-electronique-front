@@ -1,0 +1,130 @@
+<div class="dash-layout">
+
+  <!-- Topbar flottante -->
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Entreprises <em>admin</em></h1>
+        <span class="dt-bc">Portefeuille plateforme</span>
+      </div>
+    </div>
+    <div class="dt-center">
+      <div class="dt-search">
+        <span class="dt-search-ico">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input type="text" placeholder="Rechercher une entreprise..." [(ngModel)]="q" (input)="filter()" />
+      </div>
+    </div>
+    <div class="dt-right">
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="dash-content">
+
+    <!-- KPI cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon ey">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 15h12M4 15V7l4-4 4 4v8M6 15v-3h4v3" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Entreprises</div>
+          <div class="kpi-value">{{ stats().total }}</div>
+          <div class="kpi-sub">Enregistrées</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon ok">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Actives</div>
+          <div class="kpi-value">{{ stats().actives }}</div>
+          <div class="kpi-sub">Accès autorisé</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon err">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M5 11l6-6M11 11L5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Suspendues</div>
+          <div class="kpi-value">{{ stats().suspendues }}</div>
+          <div class="kpi-sub">Accès bloqué</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon info">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Utilisateurs</div>
+          <div class="kpi-value">{{ stats().utilisateurs }}</div>
+          <div class="kpi-sub">Total associés</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste -->
+    <div class="box">
+      <div class="box-header">
+        <div>
+          <div class="box-title">Liste des entreprises</div>
+          <div class="box-sub">{{ stats().factures }} factures cumulées · {{ filtered.length }} résultat(s)</div>
+        </div>
+      </div>
+
+      @if (filtered.length === 0) {
+        <div class="list-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+            <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"/>
+          </svg>
+          Aucune entreprise trouvée
+        </div>
+      }
+
+      @for (e of filtered; track e.id) {
+        <div class="list-row">
+          <div class="lr-avatar">{{ (e.raisonSociale || '?')[0] }}</div>
+          <div class="lr-body">
+            <div class="lr-fiscal">{{ e.matriculeFiscal }}</div>
+            <div class="lr-title">{{ e.raisonSociale }}</div>
+            <div class="lr-meta">
+              <span>{{ e.ville || '—' }}</span>
+            </div>
+          </div>
+          <div class="lr-right">
+            <span class="badge" [ngClass]="e.estActive ? 'badge--ok' : 'badge--err'">
+              {{ e.estActive ? 'Active' : 'Suspendue' }}
+            </span>
+            <div class="lr-stats">
+              <div class="lr-stat">{{ e.nbUtilisateurs || 0 }}<span>utilisateurs</span></div>
+              <div class="lr-stat">{{ e.nbFactures || 0 }}<span>factures</span></div>
+            </div>
+            <div class="lr-actions">
+              <button class="btn btn-ghost btn-sm" (click)="toggle(e)">
+                {{ e.estActive ? 'Suspendre' : 'Réactiver' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+  </main>
+</div>

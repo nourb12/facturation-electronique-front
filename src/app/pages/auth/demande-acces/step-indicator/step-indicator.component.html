@@ -1,0 +1,74 @@
+@if (mode === 'sidebar') {
+  <nav class="lp-steps" [attr.aria-label]="'COMMON.STEPS' | translate">
+    @for (step of steps; track step.id) {
+      <div class="lp-step"
+        [class.lp-step--active]="isActive(step)"
+        [class.lp-step--done]="isDone(step)"
+        [class.lp-step--clickable]="canClick(step)"
+        (click)="onStepActivate(step)"
+        (keydown.enter)="onStepActivate(step)"
+        (keydown.space)="onStepActivate(step)"
+        [attr.role]="canClick(step) ? 'button' : null"
+        [attr.tabindex]="canClick(step) ? 0 : null">
+        <div class="lp-step-track">
+          <div class="lp-step-node">
+            @if (isDone(step)) {
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                <path d="M1 4l2.5 2.5L9 1" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            } @else {
+              {{ step.icon }}
+            }
+          </div>
+          @if (step.id < steps.length) {
+            <div class="lp-step-line"></div>
+          }
+        </div>
+        <div class="lp-step-info">
+          <div class="lp-step-label">{{ step.label | translate }}</div>
+          <div class="lp-step-desc">{{ step.desc | translate }}</div>
+        </div>
+      </div>
+    }
+  </nav>
+}
+
+@if (mode === 'bar') {
+  <div class="wiz-progress" role="progressbar"
+    [attr.aria-valuenow]="current"
+    [attr.aria-valuemax]="steps.length">
+    <div class="wiz-progress-meta">
+      <span class="wiz-progress-label">{{ 'COMMON.STEP_OF' | translate:{ current: current, total: steps.length } }}</span>
+      <span class="wiz-progress-pct">{{ progressPct }}%</span>
+    </div>
+    <div class="wiz-progress-track">
+      <div class="wiz-progress-fill" [style.width.%]="progressPct"></div>
+    </div>
+  </div>
+
+  <nav class="wiz-steps" [attr.aria-label]="'COMMON.STEPS_NAV' | translate">
+    @for (step of steps; track step.id) {
+      <button type="button"
+        class="wiz-step"
+        [class.wiz-step--active]="isActive(step)"
+        [class.wiz-step--done]="isDone(step)"
+        [class.wiz-step--clickable]="canClick(step)"
+        [attr.aria-current]="isActive(step) ? 'step' : null"
+        [attr.aria-disabled]="!canClick(step) && !isActive(step) ? 'true' : null"
+        (click)="onStepActivate(step)">
+        <span class="wiz-step-node" aria-hidden="true">
+          @if (isDone(step)) {
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4l2.5 2.5L9 1" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            {{ step.icon }}
+          }
+        </span>
+        <span class="wiz-step-text">{{ step.label | translate }}</span>
+      </button>
+    }
+  </nav>
+}

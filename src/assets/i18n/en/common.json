@@ -1,0 +1,128 @@
+{
+  "APP": {
+    "TAGLINE": "Certified electronic invoicing",
+    "ADMIN_CONSOLE": "Administration console",
+    "BADGE_TEIF_CERTIFIED": "TEIF 2026 · DGI Certified"
+  },
+  "TRUST": {
+    "AES_256": "AES-256 encrypted data",
+    "HOSTED_TN": "Hosted in Tunisia",
+    "TWO_FACTOR_REQUIRED": "Restricted access — 2FA required",
+    "SESSIONS_AUDITED": "All sessions are audited",
+    "ACCESS_DEFINED_BY_COMPANY": "Access defined by your company",
+    "TWO_FACTOR_RECOMMENDED": "2FA recommended",
+    "TEIF_2026_COMPLIANT": "TEIF 2026 compliant"
+  },
+  "COMMON": {
+    "CANCEL": "Cancel",
+    "CLOSE": "Close",
+    "SAVE": "Save",
+    "SAVING": "Saving…",
+    "COPIED": "Copied!",
+    "COPY": "Copy",
+    "CHECK_NOW": "Check now",
+    "BACK_HOME": "Back to home",
+    "LOADING": "Loading…",
+    "STEP_OF": "Step {{current}} of {{total}}",
+    "STEPS": "Steps",
+    "STEPS_NAV": "Step navigation",
+    "ACTIONS": {
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "ADD": "Add",
+      "UPDATE": "Update",
+      "RESET": "Reset",
+      "EXPORT_CSV": "Export CSV",
+      "DETAIL": "View detail",
+      "CLEAR_SEARCH": "Clear search"
+    },
+    "TABLE": {
+      "COLUMNS": "Columns",
+      "VISIBLE_COLUMNS": "Visible columns",
+      "SEARCH": "Search…",
+      "ROWS": "Rows",
+      "OF": "of"
+    },
+    "FORM": {
+      "REQUIRED": "This field is required."
+    },
+    "ARIA": {
+      "MENU": "Menu",
+      "PRIMARY_NAV": "Primary navigation",
+      "ADMIN_NAV": "Admin navigation",
+      "COLLAPSE_SIDEBAR": "Collapse sidebar"
+    }
+  },
+  "NAV": {
+    "SECTIONS": {
+      "MAIN": "Main",
+      "REFERENTIAL": "Reference data",
+      "COMPANY": "My company",
+      "ACCOUNTING": "Accounting",
+      "ANALYTICS": "Analytics"
+    },
+    "ITEMS": {
+      "DASHBOARD": "Dashboard",
+      "INVOICES": "Invoices",
+      "QUOTES": "Quotes",
+      "CREDIT_NOTES": "Credit notes",
+      "PAYMENTS": "Payments",
+      "CLIENTS": "Clients",
+      "PRODUCTS": "Products",
+      "CATEGORIES": "Categories",
+      "MY_COMPANY": "My company",
+      "CUSTOMIZATION": "Customization",
+      "USERS": "Users",
+      "TRANSACTIONS": "Transactions",
+      "FISCAL_PARAMS": "Fiscal parameters",
+      "TAXES": "Taxes",
+      "REPORTS": "Reports",
+      "LOGOUT": "Logout"
+    }
+  },
+  "ADMIN": {
+    "SIDEBAR": {
+      "SUBTITLE": "Supervision & administration",
+      "ROLE": "Super Administrator",
+      "SECTION_SUPERVISION": "Supervision",
+      "SECTION_SYSTEM": "System",
+      "ITEMS": {
+        "DASHBOARD": "Dashboard",
+        "COMPANIES": "Companies",
+        "KYC_REQUESTS": "KYC requests",
+        "USERS": "Users",
+        "INVOICES_GLOBAL": "All invoices",
+        "AUDIT": "Audit log",
+        "SETTINGS": "Settings",
+        "LOGOUT": "Logout"
+      }
+    }
+  },
+  "LANDING": {
+    "BADGE": "TEIF 2026 · DGI Certified · UBL 2.1",
+    "NAV": {
+      "HOME": "Home",
+      "KEY_NUMBERS": "Key figures",
+      "WORKFLOW": "How it works",
+      "FEATURES": "Features",
+      "COMPLIANCE": "Compliance",
+      "SECURITY": "Security",
+      "WHY": "Why TunisFlow",
+      "AUDIENCE": "Who is it for",
+      "CONTACT": "Contact"
+    },
+    "CTA": {
+      "SIGN_IN": "Sign in",
+      "REQUEST_ACCESS": "Request access",
+      "REQUEST_ACCESS_LONG": "Request your company space",
+      "SEE_DEMO": "See how it works"
+    }
+  },
+  "PW_STRENGTH": {
+    "VERY_WEAK": "Very weak",
+    "WEAK": "Weak",
+    "MEDIUM": "Medium",
+    "STRONG": "Strong",
+    "VERY_STRONG": "Very strong"
+  }
+}

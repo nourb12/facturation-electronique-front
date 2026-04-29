@@ -1,0 +1,128 @@
+{
+  "APP": {
+    "TAGLINE": "الفوترة الإلكترونية المعتمدة",
+    "ADMIN_CONSOLE": "لوحة الإدارة",
+    "BADGE_TEIF_CERTIFIED": "TEIF 2026 · معتمد من الـ DGI"
+  },
+  "TRUST": {
+    "AES_256": "بيانات مشفرة AES-256",
+    "HOSTED_TN": "مستضاف في تونس",
+    "TWO_FACTOR_REQUIRED": "وصول مقيّد — المصادقة الثنائية إلزامية",
+    "SESSIONS_AUDITED": "جميع الجلسات مراقبة",
+    "ACCESS_DEFINED_BY_COMPANY": "الوصول محدد من قِبل شركتك",
+    "TWO_FACTOR_RECOMMENDED": "المصادقة الثنائية موصى بها",
+    "TEIF_2026_COMPLIANT": "متوافق مع TEIF 2026"
+  },
+  "COMMON": {
+    "CANCEL": "إلغاء",
+    "CLOSE": "إغلاق",
+    "SAVE": "حفظ",
+    "SAVING": "جارٍ الحفظ…",
+    "COPIED": "تم النسخ!",
+    "COPY": "نسخ",
+    "CHECK_NOW": "تحقق الآن",
+    "BACK_HOME": "العودة للرئيسية",
+    "LOADING": "جارٍ التحميل…",
+    "STEP_OF": "الخطوة {{current}} من {{total}}",
+    "STEPS": "الخطوات",
+    "STEPS_NAV": "التنقل بين الخطوات",
+    "ACTIONS": {
+      "EDIT": "تعديل",
+      "DELETE": "حذف",
+      "ADD": "إضافة",
+      "UPDATE": "تحديث",
+      "RESET": "إعادة تعيين",
+      "EXPORT_CSV": "تصدير CSV",
+      "DETAIL": "عرض التفاصيل",
+      "CLEAR_SEARCH": "مسح البحث"
+    },
+    "TABLE": {
+      "COLUMNS": "الأعمدة",
+      "VISIBLE_COLUMNS": "الأعمدة المرئية",
+      "SEARCH": "بحث…",
+      "ROWS": "صفوف",
+      "OF": "من"
+    },
+    "FORM": {
+      "REQUIRED": "هذا الحقل مطلوب."
+    },
+    "ARIA": {
+      "MENU": "القائمة",
+      "PRIMARY_NAV": "التنقل الرئيسي",
+      "ADMIN_NAV": "تنقل الإدارة",
+      "COLLAPSE_SIDEBAR": "طي الشريط الجانبي"
+    }
+  },
+  "NAV": {
+    "SECTIONS": {
+      "MAIN": "الرئيسية",
+      "REFERENTIAL": "المرجعيات",
+      "COMPANY": "شركتي",
+      "ACCOUNTING": "المحاسبة",
+      "ANALYTICS": "التحليلات"
+    },
+    "ITEMS": {
+      "DASHBOARD": "لوحة القيادة",
+      "INVOICES": "الفواتير",
+      "QUOTES": "عروض الأسعار",
+      "CREDIT_NOTES": "إشعارات الدائن",
+      "PAYMENTS": "المدفوعات",
+      "CLIENTS": "العملاء",
+      "PRODUCTS": "المنتجات",
+      "CATEGORIES": "الفئات",
+      "MY_COMPANY": "شركتي",
+      "CUSTOMIZATION": "التخصيص",
+      "USERS": "المستخدمون",
+      "TRANSACTIONS": "المعاملات",
+      "FISCAL_PARAMS": "المعاملات الجبائية",
+      "TAXES": "الضرائب",
+      "REPORTS": "التقارير",
+      "LOGOUT": "تسجيل الخروج"
+    }
+  },
+  "ADMIN": {
+    "SIDEBAR": {
+      "SUBTITLE": "الإشراف والإدارة",
+      "ROLE": "المدير العام",
+      "SECTION_SUPERVISION": "الإشراف",
+      "SECTION_SYSTEM": "النظام",
+      "ITEMS": {
+        "DASHBOARD": "لوحة القيادة",
+        "COMPANIES": "الشركات",
+        "KYC_REQUESTS": "طلبات KYC",
+        "USERS": "المستخدمون",
+        "INVOICES_GLOBAL": "جميع الفواتير",
+        "AUDIT": "سجل المراجعة",
+        "SETTINGS": "الإعدادات",
+        "LOGOUT": "تسجيل الخروج"
+      }
+    }
+  },
+  "LANDING": {
+    "BADGE": "TEIF 2026 · معتمد DGI · UBL 2.1",
+    "NAV": {
+      "HOME": "الرئيسية",
+      "KEY_NUMBERS": "أرقام رئيسية",
+      "WORKFLOW": "كيف يعمل",
+      "FEATURES": "المميزات",
+      "COMPLIANCE": "الامتثال",
+      "SECURITY": "الأمان",
+      "WHY": "لماذا TunisFlow",
+      "AUDIENCE": "لمن هو",
+      "CONTACT": "اتصل بنا"
+    },
+    "CTA": {
+      "SIGN_IN": "تسجيل الدخول",
+      "REQUEST_ACCESS": "طلب الوصول",
+      "REQUEST_ACCESS_LONG": "طلب مساحة شركتك",
+      "SEE_DEMO": "شاهد كيف يعمل"
+    }
+  },
+  "PW_STRENGTH": {
+    "VERY_WEAK": "ضعيف جداً",
+    "WEAK": "ضعيف",
+    "MEDIUM": "متوسط",
+    "STRONG": "قوي",
+    "VERY_STRONG": "قوي جداً"
+  }
+}

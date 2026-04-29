@@ -1,0 +1,207 @@
+{
+  "INVOICE": {
+    "FIELDS": {
+      "CLIENT": "Client",
+      "TYPE": "Document type",
+      "PAYMENT_MODE": "Payment method",
+      "DUE_DATE": "Due date",
+      "NOTES": "Notes",
+      "REFERENCE": "Reference",
+      "CURRENCY": "Currency",
+      "ISSUE_DATE": "Issue date"
+    },
+    "TOTALS": {
+      "HT": "Total excl. tax",
+      "TTC": "Total incl. tax",
+      "TVA": "Total VAT",
+      "PAID": "Amount paid",
+      "REMAINING": "Balance due"
+    },
+    "ACTIONS": {
+      "GENERATE_XML": "Generate TEIF XML"
+    },
+    "TYPES": {
+      "FACTURE": "Invoice",
+      "AVOIR": "Credit note",
+      "PROFORMA": "Proforma"
+    },
+    "PAYMENT_MODES": {
+      "VIREMENT": "Bank transfer",
+      "CHEQUE": "Cheque",
+      "ESPECES": "Cash",
+      "CARTE_BANCAIRE": "Credit card",
+      "TRAITE": "Bill of exchange"
+    }
+  },
+  "FACTURES": {
+    "TITLE_A": "My",
+    "TITLE_EM": "invoices.",
+    "SUBTITLE": "{{count}} invoices · {{drafts}} draft(s)",
+    "SEARCH_PLACEHOLDER": "Search by number, client…",
+    "LOADING": "Loading invoices…",
+    "EMPTY": "No invoices found.",
+    "KPI": {
+      "ISSUED_MONTH": "Issued this month",
+      "PAID": "Collected",
+      "PENDING": "Pending",
+      "OVERDUE": "Overdue"
+    },
+    "UNITS": {
+      "INVOICES": "invoice(s)"
+    },
+    "TABLE": {
+      "NUMBER": "Number",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "BADGES": {
+      "OVERDUE": "Overdue"
+    },
+    "STATUTS": {
+      "BROUILLON": "Draft",
+      "VALIDEE": "Validated",
+      "CONFORME": "Compliant",
+      "TRANSMISE": "Transmitted",
+      "ACCEPTEE": "Accepted",
+      "REJETEE": "Rejected",
+      "PAYEE": "Paid",
+      "PARTIELLEMENT_PAYEE": "Part. paid",
+      "ANNULEE": "Cancelled"
+    },
+    "ACTIONS": {
+      "VALIDATE": "Validate",
+      "VALIDATE_TEIF": "Validate TEIF",
+      "SIGN": "Sign",
+      "SEND_TTN": "Send to TTN",
+      "RECORD_PAYMENT": "Record payment",
+      "DOWNLOAD_XML": "Download XML",
+      "DOWNLOAD_XML_TEIF": "Download TEIF XML",
+      "DOWNLOAD_PDF": "Download PDF",
+      "GENERATING": "Generating…",
+      "CREATE_CREDIT_NOTE": "Create credit note"
+    },
+    "CREATE": {
+      "TITLE_A": "New",
+      "TITLE_EM": "invoice.",
+      "SUBTITLE": "Fill in the invoice details.",
+      "SELECT_CLIENT_PLACEHOLDER": "Select a client…",
+      "NOTES_PLACEHOLDER": "Payment terms, remarks…",
+      "LINES_TITLE": "Invoice lines",
+      "ADD_LINE": "Add a line",
+      "PRODUCT_PLACEHOLDER": "Product (optional)",
+      "DESIGNATION_PLACEHOLDER": "Description",
+      "QTY_PLACEHOLDER": "Qty",
+      "UNIT_PRICE_PLACEHOLDER": "Unit price",
+      "SUBMIT": "Create invoice",
+      "SUBMITTING": "Creating…"
+    },
+    "PAYMENT": {
+      "TITLE_A": "Record a",
+      "TITLE_EM": "payment.",
+      "SUBTITLE": "Invoice {{number}} · Remaining: {{amount}} TND",
+      "FIELDS": {
+        "AMOUNT": "Amount",
+        "MODE": "Payment method",
+        "DATE": "Payment date",
+        "REFERENCE": "Reference",
+        "REFERENCE_PLACEHOLDER": "Cheque no., transfer…",
+        "BANK": "Bank",
+        "BANK_PLACEHOLDER": "Bank name"
+      }
+    },
+    "DETAIL": {
+      "REMAINING": "Balance due",
+      "LINES_TITLE": "Invoice lines",
+      "LINES_TABLE": {
+        "DESIGNATION": "Description",
+        "QTY": "Qty",
+        "UNIT_PRICE": "Unit price",
+        "DISCOUNT": "Discount",
+        "VAT": "VAT",
+        "TTC": "Incl. tax"
+      },
+      "HISTORY_TITLE": "History"
+    }
+  },
+  "ACCOUNTING": {
+    "TAXES": {
+      "TITLE_A": "Tax",
+      "TITLE_EM": "management.",
+      "SUBTITLE": "Configure VAT, FODEC and consumption tax rates applicable to your invoices.",
+      "COLUMNS": {
+        "TITLE": "Title",
+        "RATE": "Rate",
+        "TYPE": "Type"
+      },
+      "TYPES": {
+        "TVA": "VAT",
+        "FODEC": "FODEC",
+        "DROIT_CONSOMMATION": "Consumption tax"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "No results for \"{{query}}\"",
+        "SEARCH_SUB": "Try a different search term.",
+        "NO_DATA_TITLE": "No taxes configured",
+        "NO_DATA_SUB": "Create your first tax using the form."
+      },
+      "FORM": {
+        "TITLE_NEW": "New tax",
+        "TITLE_EDIT": "Edit tax",
+        "FIELDS": {
+          "TITLE": "Title",
+          "TITLE_PLACEHOLDER": "Ex: VAT 19%",
+          "RATE": "Rate",
+          "TYPE": "Type"
+        },
+        "ERROR_RATE_GT0": "Rate must be greater than 0."
+      }
+    },
+    "FISCAL_PARAMS": {
+      "TITLE_A": "Fiscal",
+      "TITLE_EM": "parameters.",
+      "SUBTITLE": "Configure withholding taxes, stamp duty and other calculation parameters.",
+      "COLUMNS": {
+        "LABEL": "Label",
+        "VALUE_DEFAULT": "Value / Default",
+        "ORDER": "Calculation order",
+        "USAGE": "Usage",
+        "CONDITION": "Condition"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "No results for \"{{query}}\"",
+        "SEARCH_SUB": "Try a different search term.",
+        "NO_DATA_TITLE": "No fiscal parameters configured",
+        "NO_DATA_SUB": "Create your first parameter using the form."
+      },
+      "FORM": {
+        "TITLE_NEW": "New parameter",
+        "TITLE_EDIT": "Edit parameter",
+        "FIELDS": {
+          "LABEL": "Label",
+          "LABEL_PLACEHOLDER": "Ex: Withholding tax 15%",
+          "VALUE_DEFAULT": "Value / Default",
+          "TYPE": "Type",
+          "SIGN": "Sign",
+          "ORDER": "Calculation order",
+          "USAGE": "Usage"
+        },
+        "TYPE": { "PERCENT": "Percentage", "FIXED": "Fixed amount" },
+        "ORDER": { "BEFORE_VAT": "Before VAT", "AFTER_VAT": "After VAT" },
+        "USAGE": { "MANUAL": "Manual", "AUTO": "Automatic" },
+        "WITHHOLDING": {
+          "LABEL": "Include withholding tax",
+          "SUB": "Applicable to B2B invoices subject to withholding"
+        },
+        "DOCS": {
+          "TITLE": "Target documents",
+          "FACTURE": "Invoice",
+          "AVOIR": "Credit note",
+          "PROFORMA": "Proforma"
+        }
+      },
+      "ORDRE": { "AVANT_TVA": "Before VAT", "APRES_TVA": "After VAT" },
+      "UTILISATION": { "MANUEL": "Manual", "AUTO": "Automatic" },
+      "CONDITION": { "NONE": "None", "WITH_RS": "With withholding" }
+    }
+  }
+}

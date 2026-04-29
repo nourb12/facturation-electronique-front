@@ -1,0 +1,18 @@
+{
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "WELCOME": "Welcome",
+    "KPI": {
+      "INVOICES_MONTH": "Invoices this month",
+      "REVENUE_MONTH": "Revenue",
+      "PENDING": "Pending",
+      "OVERDUE": "Overdue",
+      "COMPLIANCE": "TEIF compliance"
+    },
+    "SECTIONS": {
+      "RECENT_INVOICES": "Recent invoices",
+      "QUICK_ACTIONS": "Quick actions",
+      "STATS": "Statistics"
+    }
+  }
+}

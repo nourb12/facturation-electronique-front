@@ -1,0 +1,440 @@
+﻿<div class="dash-layout" [@pageIn]>
+
+  
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Dashboard <em>entreprise</em></h1>
+        <span class="dt-bc">Vue d'ensemble · {{ today }}</span>
+      </div>
+    </div>
+    <div class="dt-center">
+      <div class="dt-search">
+        <span class="dt-search-ico">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input type="text" placeholder="Rechercher une facture, client..." [(ngModel)]="searchQuery"/>
+      </div>
+    </div>
+    <div class="dt-right">
+      <button class="dt-notif-btn" (click)="toggleNotifs()" [class.active]="showNotifs">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M7.5 1a4.5 4.5 0 0 1 4.5 4.5v2.5l1.5 2.5H2L3.5 8V5.5A4.5 4.5 0 0 1 7.5 1z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M5.5 12.5a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+        @if (unreadCount() > 0) {
+          <span class="dt-badge">{{ unreadCount() }}</span>
+        }
+      </button>
+
+      @if (showNotifs) {
+        <div class="dt-notif-panel" [@fadeIn]>
+          <div class="dt-notif-head">
+            <span>Notifications</span>
+            <button (click)="clearNotifs()">Tout lire</button>
+          </div>
+          @if (notifications.length === 0) {
+            <div class="dt-notif-empty">Aucune notification</div>
+          }
+          @for (n of notifications; track n.id) {
+            <div class="dt-notif-item" [class.unread]="!n.read" (click)="markRead(n)">
+              <div class="dt-notif-dot"></div>
+              <div>
+                <div class="dt-notif-text">{{ n.text }}</div>
+                <div class="dt-notif-time">{{ n.time }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <button class="dt-btn-new" (click)="openInvoiceModal()">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Nouvelle facture
+      </button>
+    </div>
+  </header>
+
+  
+  <main class="dash-content">
+
+    @if (loading()) {
+      <div class="dash-loading">
+        <div class="dash-spinner"></div>
+        <span>Chargement du tableau de bord...</span>
+      </div>
+    }
+
+    @if (!loading()) {
+
+      
+      @for (alerte of alertes(); track alerte.type) {
+        <div class="alert-card" [ngClass]="'alert--' + alertType(alerte)" [@fadeIn]>
+          <div class="alert-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1.5L1.5 14h13L8 1.5z" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M8 5.5v4M8 12v.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="alert-body">
+            <div class="alert-title">{{ alerte.titre || 'Alerte' }}</div>
+            <div class="alert-text">{{ alerte.message }}</div>
+          </div>
+          <button class="alert-action" (click)="onAlertAction(alerte)">Voir</button>
+        </div>
+      }
+
+      
+      <div class="kpi-grid">
+        @for (kpi of kpis(); track kpi.title; let i = $index) {
+          <div class="kpi-card" [style.animation-delay]="(i * 0.07) + 's'" (click)="router.navigate([kpi.route])">
+            <div class="kpi-icon" [ngClass]="'kpi-icon--' + kpi.icon">
+              @if (kpi.icon === 'cash') {
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="1.5" y="3" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                  <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              } @else if (kpi.icon === 'file') {
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 2h5l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M9 2v3h3" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              } @else if (kpi.icon === 'alert') {
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M8 6v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  <circle cx="8" cy="12" r=".7" fill="currentColor"/>
+                </svg>
+              } @else if (kpi.icon === 'swap') {
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 5h9M9 3l3 2-3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M13 11H4M7 9l-3 2 3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              } @else {
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 1.5l5 2v4.5c0 3-2.2 5.7-5 6.5-2.8-.8-5-3.5-5-6.5V3.5l5-2z" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              }
+            </div>
+            <div class="kpi-body">
+              <div class="kpi-title">{{ kpi.title }}</div>
+              <div class="kpi-value">{{ kpi.value }}</div>
+              <div class="kpi-meta">
+                <span class="kpi-delta" [ngClass]="kpi.delta >= 0 ? 'delta--up' : 'delta--down'">
+                  <span class="kpi-delta-arrow">{{ kpi.delta >= 0 ? '↑' : '↓' }}</span>
+                  {{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}{{ kpi.deltaUnit }}
+                </span>
+                <span class="kpi-delta-label">{{ kpi.deltaLabel }}</span>
+              </div>
+              <div class="kpi-sub">{{ kpi.sub }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      
+      <div class="main-grid">
+
+        
+        <div class="box box--chart">
+          <div class="box-header">
+            <div>
+              <div class="box-title">Évolution du chiffre d'affaires</div>
+              <div class="box-sub">TND · {{ activeChartTab }}</div>
+            </div>
+            <div class="chart-tabs">
+              @for (tab of chartTabs; track tab) {
+                <button class="chart-tab" [class.active]="activeChartTab===tab" (click)="activeChartTab=tab">{{ tab }}</button>
+              }
+            </div>
+          </div>
+          @if (chartBars().length === 0) {
+            <div class="chart-empty">Aucune donnée d'évolution disponible</div>
+          } @else {
+          <div class="chart-area">
+            <div class="chart-axis">
+              @for (tick of chartTicks; track tick) {
+                <span>{{ tick }}%</span>
+              }
+            </div>
+            <div class="chart-panel">
+              <div class="chart-grid">
+                @for (tick of chartTicks; track tick) {
+                  <div class="chart-grid-line"></div>
+                }
+              </div>
+              <div class="bar-chart">
+                @for (bar of chartBars(); track bar.label) {
+                  <div class="bar-col">
+                    <div class="bar-wrap">
+                      <div class="bar" [style.height.%]="bar.pct" [class.bar--active]="bar.active">
+                        <div class="bar-tooltip">{{ bar.valueLabel }}</div>
+                      </div>
+                    </div>
+                    <span class="bar-label">{{ bar.label }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+
+        
+        <div class="box box--donut">
+          <div class="box-header">
+            <div class="box-title">Répartition des factures</div>
+          </div>
+          <div class="donut-wrapper">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              @for (seg of donutSegments(); track seg.label; let i = $index) {
+                <circle
+                  class="donut-seg"
+                  cx="60" cy="60" r="46"
+                  [style.stroke]="seg.color"
+                  [style.stroke-dasharray]="seg.dash"
+                  [style.stroke-dashoffset]="seg.offset"
+                  stroke-width="16" fill="none"
+                  transform="rotate(-90 60 60)"
+                />
+              }
+              <circle cx="60" cy="60" r="38" fill="var(--bg-card)"/>
+            </svg>
+            <div class="donut-center">
+              <div class="donut-total">{{ totalFactures() }}</div>
+              <div class="donut-label">factures</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            @for (seg of donutSegments(); track seg.label) {
+              <div class="legend-item">
+                <div class="legend-dot" [style.background]="seg.color"></div>
+                <span class="legend-label">{{ seg.label }}</span>
+                <span class="legend-val">{{ seg.count }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        
+        <div class="box box--recent">
+          <div class="box-header">
+            <div class="box-title">Dernières factures</div>
+            <a class="box-link" routerLink="/factures">Voir tout →</a>
+          </div>
+          @if (dernieresFactures().length === 0) {
+            <div class="recent-empty">Aucune facture pour le moment</div>
+          }
+          @for (f of dernieresFactures(); track f.id) {
+            <div class="recent-row" (click)="router.navigate(['/factures'])">
+              <div class="rr-left">
+                <div class="rr-num">{{ f.numero }}</div>
+                <div class="rr-client">{{ f.clientNom }}</div>
+              </div>
+              <div class="rr-right">
+                <div class="rr-amount">{{ f.totalTtc | number:'1.3-3' }} {{ f.devise }}</div>
+                <span class="badge" [ngClass]="'badge--' + getStatutClass(f.statut)">{{ f.statut }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        
+        <div class="box box--fin">
+          <div class="box-header">
+            <div class="box-title">Indicateurs financiers</div>
+          </div>
+          <div class="fin-grid">
+            <div class="fin-item">
+              <div class="fin-label">Taux d'encaissement</div>
+              <div class="fin-bar-wrap">
+                <div class="fin-bar" [style.width.%]="tauxEncaissement()"></div>
+              </div>
+              <div class="fin-val">{{ tauxEncaissement() }}%</div>
+            </div>
+            <div class="fin-item">
+              <div class="fin-label">Taux conformité TEIF</div>
+              <div class="fin-bar-wrap">
+                <div class="fin-bar fin-bar--ok" [style.width.%]="tauxConformite()"></div>
+              </div>
+              <div class="fin-val fin-val--ok">{{ tauxConformite() }}%</div>
+            </div>
+            <div class="fin-item">
+              <div class="fin-label">Factures en retard</div>
+              <div class="fin-bar-wrap">
+                <div class="fin-bar fin-bar--err" [style.width.%]="pctRetard()"></div>
+              </div>
+              <div class="fin-val fin-val--err">{{ nbRetard() }} facture(s)</div>
+            </div>
+          </div>
+
+          <div class="montants-grid">
+            <div class="montant-box">
+              <div class="montant-label">Total émis</div>
+              <div class="montant-val">{{ formatMontant(montantTotal()) }} TND</div>
+            </div>
+            <div class="montant-box montant-box--ok">
+              <div class="montant-label">Encaissé</div>
+              <div class="montant-val">{{ formatMontant(montantEncaisse()) }} TND</div>
+            </div>
+            <div class="montant-box montant-box--warn">
+              <div class="montant-label">En attente</div>
+              <div class="montant-val">{{ formatMontant(montantAttente()) }} TND</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+  </main>
+  @if (showInvoiceModal) {
+    <div class="modal-overlay" [@fadeIn] (click)="closeInvoiceModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Nouvelle <em>facture</em></h2>
+            <p class="modal-sub">Renseignez les informations de la facture</p>
+          </div>
+          <button class="modal-close" (click)="closeInvoiceModal()">x</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Numéro facture <span class="req">*</span></label>
+              <input type="text" class="form-input"
+                [(ngModel)]="invoiceForm.numero" (ngModelChange)="validateInvoice()"
+                placeholder="FAC-2026-001"
+                [class.form-input--error]="hasInvError('numero')"
+                [class.form-input--valid]="invoiceForm.numero.trim().length >= 3 && !hasInvError('numero')"/>
+              @if (hasInvError('numero')) {
+                <span class="field-error">{{ getInvError('numero') }}</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date d'émission <span class="req">*</span></label>
+              <input type="date" class="form-input"
+                [(ngModel)]="invoiceForm.dateEmission" (ngModelChange)="validateInvoice()"
+                [class.form-input--error]="hasInvError('dateEmission')"
+                [class.form-input--valid]="invoiceForm.dateEmission && !hasInvError('dateEmission')"/>
+              @if (hasInvError('dateEmission')) {
+                <span class="field-error">{{ getInvError('dateEmission') }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Client <span class="req">*</span></label>
+              <select class="form-input" [(ngModel)]="invoiceForm.clientId" (ngModelChange)="onClientChange()"
+                [class.form-input--error]="hasInvError('clientId')"
+                [class.form-input--valid]="invoiceForm.clientId && !hasInvError('clientId')">
+                <option value="">Sélectionner un client</option>
+                @for (c of clientsList(); track c.id) {
+                  <option [value]="c.id">{{ c.nom }}</option>
+                }
+              </select>
+              @if (hasInvError('clientId')) {
+                <span class="field-error">{{ getInvError('clientId') }}</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label">Matricule fiscal <span class="req">*</span></label>
+              <input type="text" class="form-input"
+                [(ngModel)]="invoiceForm.clientMatriculeFiscal" (ngModelChange)="validateInvoice()"
+                placeholder="1495908/S ou 0000000X/X/X/000"
+                [class.form-input--error]="hasInvError('clientMatriculeFiscal')"
+                [class.form-input--valid]="isMatriculeFiscalValid(invoiceForm.clientMatriculeFiscal) && !hasInvError('clientMatriculeFiscal')"/>
+              @if (hasInvError('clientMatriculeFiscal')) {
+                <span class="field-error">{{ getInvError('clientMatriculeFiscal') }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Type de facture <span class="req">*</span></label>
+              <select class="form-input" [(ngModel)]="invoiceForm.typeFacture" (ngModelChange)="validateInvoice()">
+                @for (t of invoiceTypes; track t) { <option [value]="t">{{ t }}</option> }
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mode de paiement</label>
+              <select class="form-input" [(ngModel)]="invoiceForm.modePaiement">
+                @for (m of paymentModes; track m) { <option [value]="m">{{ m }}</option> }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Total HT <span class="req">*</span></label>
+              <input type="number" class="form-input" step="0.001"
+                [(ngModel)]="invoiceForm.totalHt" (ngModelChange)="onAmountChange()"
+                [class.form-input--error]="hasInvError('totalHt')"
+                [class.form-input--valid]="toNumber(invoiceForm.totalHt) > 0 && !hasInvError('totalHt')"/>
+              @if (hasInvError('totalHt')) {
+                <span class="field-error">{{ getInvError('totalHt') }}</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label">TVA <span class="req">*</span></label>
+              <input type="number" class="form-input" step="0.001"
+                [(ngModel)]="invoiceForm.totalTva" (ngModelChange)="onAmountChange()"
+                [class.form-input--error]="hasInvError('totalTva')"
+                [class.form-input--valid]="invoiceForm.totalTva !== '' && !hasInvError('totalTva')"/>
+              @if (hasInvError('totalTva')) {
+                <span class="field-error">{{ getInvError('totalTva') }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Timbre fiscal</label>
+              <input type="number" class="form-input" step="0.001"
+                [(ngModel)]="invoiceForm.timbreFiscal" (ngModelChange)="onAmountChange()"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total TTC <span class="req">*</span></label>
+              <input type="text" class="form-input" [value]="invoiceForm.totalTtc" disabled
+                [class.form-input--error]="hasInvError('totalTtc')"
+                [class.form-input--valid]="invoiceForm.totalTtc && !hasInvError('totalTtc')"/>
+              @if (hasInvError('totalTtc')) {
+                <span class="field-error">{{ getInvError('totalTtc') }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date d'échéance</label>
+              <input type="date" class="form-input" [(ngModel)]="invoiceForm.dateEcheance"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Référence</label>
+              <input type="text" class="form-input" [(ngModel)]="invoiceForm.reference" placeholder="Bon de commande..."/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Note</label>
+            <textarea class="form-input form-textarea" rows="3" [(ngModel)]="invoiceForm.note" placeholder="Détails additionnels..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-ghost" (click)="closeInvoiceModal()">Annuler</button>
+          <button class="btn-primary" [disabled]="!invoiceValid()" (click)="saveInvoice()">
+            Enregistrer la facture
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,103 @@
+=1 : Le terme �=1� n'est pas reconnu comme nom d'applet de commande, fonction, fichier de script ou programme 
+ex�cutable. V�rifiez l'orthographe du nom, ou si un chemin d'acc�s existe, v�rifiez que le chemin d'acc�s est correct 
+et r�essayez.
+Au caract�re Ligne:1 : 1
++ ='1'; Set-Location 'C:\frontendpfe\ey-invoice-portal'; npm start -- - ...
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (=1:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+- Generating browser application bundles (phase: setup)...
+√ Browser application bundle generation complete.
+
+Warning: C:/frontendpfe/ey-invoice-portal/src/app/core/guards/financier-guard.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/frontendpfe/ey-invoice-portal/src/app/core/services/notification.service.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/frontendpfe/ey-invoice-portal/src/app/shared/components/step-indicator/step-indicator.component.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/frontendpfe/ey-invoice-portal/src/environments/environment.prod.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/frontendpfe/ey-invoice-portal/src/test.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+
+Error: src/app/pages/auth/demande-acces/demande-acces.component.html:621:5 - error NG5002: Unexpected closing block. The block may have been closed earlier. If you meant to write the } character, you should use the "&#125;" HTML entity instead.
+
+621     }
+        ~
+
+  src/app/pages/auth/demande-acces/demande-acces.component.ts:94:16
+    94   templateUrl: './demande-acces.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component DemandeAccesComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+Error: src/app/pages/auth/demande-acces/demande-acces.component.html:620:5 - error NG5002: Unexpected closing block. The block may have been closed earlier. If you meant to write the } character, you should use the "&#125;" HTML entity instead.
+
+620     }
+        ~
+
+  src/app/pages/auth/demande-acces/demande-acces.component.ts:94:16
+    94   templateUrl: './demande-acces.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component DemandeAccesComponent.
+
+
+
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.
+√ Browser application bundle generation complete.

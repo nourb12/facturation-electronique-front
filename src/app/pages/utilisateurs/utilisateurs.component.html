@@ -1,0 +1,138 @@
+
+<div class="page-layout" [@pageIn]>
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Accès <em>responsable financier</em></h1>
+      <p class="page-desc">Définissez précisément les droits de votre équipe financière</p>
+    </div>
+    <button class="btn-primary" (click)="inviteModal=true">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Inviter un responsable
+    </button>
+  </div>
+
+  <div class="access-grid">
+
+    
+    <div class="perms-col">
+
+      <div class="perm-section" *ngFor="let section of permSections">
+        <div class="perm-section-title">{{ section.icon }} {{ section.title }}</div>
+
+        <div class="perm-row" *ngFor="let perm of section.perms" (click)="togglePerm(perm)">
+          <div class="perm-icon" [ngClass]="'pi--' + perm.color">
+            <span [innerHTML]="perm.icon"></span>
+          </div>
+          <div class="perm-info">
+            <div class="perm-name">{{ perm.name }}</div>
+            <div class="perm-desc">{{ perm.desc }}</div>
+          </div>
+          <span class="perm-risk" [ngClass]="'risk--' + perm.risk">
+            {{ perm.riskLabel }}
+          </span>
+          <label class="toggle" (click)="$event.stopPropagation()">
+            <input type="checkbox" [(ngModel)]="perm.enabled" (change)="onPermChange()"/>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <div class="profile-col">
+      <div class="fin-profile">
+        <div class="fp-head">
+          <div class="fp-avatar">{{ currentFinancier.initials }}</div>
+          <div>
+            <div class="fp-name">{{ currentFinancier.name }}</div>
+            <div class="fp-role">Responsable Financier</div>
+            <div class="fp-email">{{ currentFinancier.email }}</div>
+          </div>
+        </div>
+
+        <div class="fp-status">
+          <div class="fp-dot"></div>
+          <span class="fp-status-text">Compte actif · {{ currentFinancier.lastLogin }}</span>
+        </div>
+
+        <div class="fp-summary">
+          <div class="fps-row"><span class="fps-k">Permissions actives</span><span class="fps-v ok">{{ activePermsCount }}</span></div>
+          <div class="fps-row"><span class="fps-k">Permissions totales</span><span class="fps-v">{{ totalPerms }}</span></div>
+          <div class="fps-row"><span class="fps-k">Niveau d'accès</span><span class="fps-v" [ngClass]="'acc--' + accessLevelColor">{{ accessLevel }}</span></div>
+          <div class="fps-row"><span class="fps-k">2FA</span><span class="fps-v ok">Activé</span></div>
+          <div class="fps-row"><span class="fps-k">Dernière connexion</span><span class="fps-v mono">{{ currentFinancier.lastLogin }}</span></div>
+        </div>
+
+        
+        <div class="fp-section-title">Historique récent</div>
+        <div class="fp-hist" *ngFor="let h of currentFinancier.history">
+          <div class="fph-icon" [ngClass]="'fph--' + h.type">{{ h.icon }}</div>
+          <div>
+            <div class="fph-action">{{ h.action }}</div>
+            <div class="fph-time">{{ h.time }}</div>
+          </div>
+        </div>
+
+        <button class="btn-save" (click)="saveAccess()">Enregistrer les modifications</button>
+        <button class="btn-revoke" (click)="revokeAccess()">Révoquer l'accès</button>
+      </div>
+
+      
+      <div class="other-users">
+        <div class="ou-title">Autres membres</div>
+        <div class="ou-item" *ngFor="let u of otherUsers">
+          <div class="ou-avatar" [style.background]="u.color">{{ u.initials }}</div>
+          <div class="ou-info">
+            <div class="ou-name">{{ u.name }}</div>
+            <div class="ou-role">{{ formatRole(u.role) }}</div>
+          </div>
+          <span class="badge" [ngClass]="'badge--' + u.statut">{{ u.statutLabel }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+@if (inviteModal) {
+  <div class="modal-overlay" [@fadeIn] (click)="inviteModal=false">
+    <div class="modal" (click)="$event.stopPropagation()" [@modalIn]>
+      <div class="modal-header">
+        <h2 class="modal-title">Inviter un <em>responsable financier</em></h2>
+        <button class="modal-close" (click)="inviteModal=false">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Prénom & Nom <span class="req">*</span></label>
+          <input type="text" class="form-input" placeholder="ex: Ahmed Trabelsi" [(ngModel)]="inviteForm.name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email professionnel <span class="req">*</span></label>
+          <input type="email" class="form-input" placeholder="financier@entreprise.tn" [(ngModel)]="inviteForm.email"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Niveau d'accès initial</label>
+          <select class="form-select" [(ngModel)]="inviteForm.level">
+            <option value="lecture">Lecture seule</option>
+            <option value="standard">Standard (3 permissions)</option>
+            <option value="editeur">Éditeur (5 permissions)</option>
+          </select>
+        </div>
+        <div class="invite-note">
+          📧 Un email d'invitation sera envoyé avec un lien de création de compte sécurisé (valable 48h).
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="inviteModal=false">Annuler</button>
+        <button class="btn-primary" (click)="sendInvite()">Envoyer l'invitation</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (toast) {
+  <div class="toast" [@fadeIn]><span class="toast-dot"></span>{{ toast }}</div>
+}

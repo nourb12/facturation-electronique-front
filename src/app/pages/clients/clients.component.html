@@ -1,0 +1,258 @@
+<div class="page-wrap" [@pageIn]>
+
+    <div class="page-header">
+    <div>
+      <h1 class="page-title">Clients <em>& contacts</em></h1>
+      <p class="page-desc">{{ filteredClients().length }} client(s) actifs</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary" (click)="openModal()">Nouveau client</button>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    
+    <div class="kpi-grid">
+      <div class="kpi kpi--ey" style="animation-delay:.05s">
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-icon--ey">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M1 13c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="kpi-val">{{ clients().length }}</div>
+        <div class="kpi-label">Total clients</div>
+        <div class="kpi-sub">{{ filters[1].count }} actifs</div>
+      </div>
+      <div class="kpi kpi--ok" style="animation-delay:.10s">
+        <div class="kpi-top"><div class="kpi-icon kpi-icon--ok">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div></div>
+        <div class="kpi-val">{{ filters[1].count }}</div>
+        <div class="kpi-label">Clients actifs</div>
+        <div class="kpi-sub">B2B + B2C + B2G</div>
+      </div>
+      <div class="kpi kpi--warn" style="animation-delay:.15s">
+        <div class="kpi-top"><div class="kpi-icon kpi-icon--warn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M7 4.5v3M7 9.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div></div>
+        <div class="kpi-val">{{ filters[2].count }}</div>
+        <div class="kpi-label">Inactifs</div>
+        <div class="kpi-sub">Désactivés</div>
+      </div>
+      <div class="kpi kpi--info" style="animation-delay:.20s">
+        <div class="kpi-top"><div class="kpi-icon kpi-icon--info">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M5 5h4M5 8h4M5 11h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div></div>
+        <div class="kpi-val">{{ filteredClients().length }}</div>
+        <div class="kpi-label">Résultats filtrés</div>
+        <div class="kpi-sub">{{ searchQuery || activeFilter }}</div>
+      </div>
+    </div>
+
+    
+        <div class="filters-bar">
+      <div class="search-box">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Rechercher client, matricule, ville..." [(ngModel)]="searchQuery"/>
+      </div>
+      <div class="filter-tabs">
+        @for (f of filters; track f.key) {
+          <button class="filter-tab" [class.active]="activeFilter===f.key" (click)="activeFilter=f.key">
+            {{ f.label }} <span class="filter-count">{{ f.count }}</span>
+          </button>
+        }
+      </div>
+      <div class="filters-actions">
+        <button class="view-btn" [class.active]="viewMode==='grid'" (click)="viewMode='grid'">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="7" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="1" y="7" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="7" y="7" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </button>
+        <button class="view-btn" [class.active]="viewMode==='list'" (click)="viewMode='list'">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 3h9M2 6.5h9M2 10h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+@if (loading()) {
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <span>Chargement des clients…</span>
+      </div>
+    }
+
+    
+    @if (!loading() && viewMode === 'grid') {
+      <div class="clients-grid">
+        @if (filteredClients().length === 0) {
+          <div class="empty-state">Aucun client trouvé</div>
+        }
+        @for (c of filteredClients(); track c.id) {
+          <div class="client-card" [class.inactive]="!c.estActif" [@fadeIn]>
+            <div class="cc-header">
+              <div class="cc-avatar">{{ getInitials(c.nom) }}</div>
+              <div class="cc-meta">
+                <div class="cc-name">{{ c.nom }}</div>
+                <div class="cc-type">
+                  <span class="badge" [ngClass]="'badge--' + (c.typeClient === 'B2B' ? 'ey' : 'info')">{{ c.typeClient }}</span>
+                </div>
+              </div>
+              <div class="cc-status">
+                <span class="badge" [ngClass]="c.estActif ? 'badge--ok' : 'badge--neutral'">
+                  {{ c.estActif ? 'Actif' : 'Inactif' }}
+                </span>
+              </div>
+            </div>
+            <div class="cc-body">
+              <div class="cc-row">
+                <span class="cc-key">Email</span>
+                <span class="cc-val">{{ c.email }}</span>
+              </div>
+              @if (c.matriculeFiscal) {
+                <div class="cc-row">
+                  <span class="cc-key">MF</span>
+                  <span class="cc-val cc-mf">{{ c.matriculeFiscal }}</span>
+                </div>
+              }
+              @if (c.ville) {
+                <div class="cc-row">
+                  <span class="cc-key">Ville</span>
+                  <span class="cc-val">{{ c.ville }}, {{ c.pays }}</span>
+                </div>
+              }
+              @if (c.telephone) {
+                <div class="cc-row">
+                  <span class="cc-key">Tél</span>
+                  <span class="cc-val">{{ c.telephone }}</span>
+                </div>
+              }
+            </div>
+            <div class="cc-footer">
+              <button class="act-btn act-btn--ghost" (click)="toggleActif(c)">
+                {{ c.estActif ? 'Désactiver' : 'Réactiver' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    
+    @if (!loading() && viewMode === 'list') {
+      <div class="table-box">
+        <table class="cl-table">
+          <thead>
+            <tr>
+              <th>Client</th><th>Type</th><th>Matricule Fiscal</th>
+              <th>Ville</th><th>Email</th><th>Statut</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of filteredClients(); track c.id) {
+              <tr>
+                <td>
+                  <div class="ft-client-cell">
+                    <div class="ft-client-init">{{ getInitials(c.nom) }}</div>
+                    <span class="ft-client-name">{{ c.nom }}</span>
+                  </div>
+                </td>
+                <td><span class="badge" [ngClass]="'badge--' + (c.typeClient === 'B2B' ? 'ey' : 'info')">{{ c.typeClient }}</span></td>
+                <td class="ft-mf">{{ c.matriculeFiscal ?? '—' }}</td>
+                <td>{{ c.ville ?? '—' }}</td>
+                <td class="ft-email">{{ c.email }}</td>
+                <td><span class="badge" [ngClass]="c.estActif ? 'badge--ok' : 'badge--neutral'">{{ c.estActif ? 'Actif' : 'Inactif' }}</span></td>
+                <td>
+                  <button class="act-btn act-btn--ghost" (click)="toggleActif(c)">
+                    {{ c.estActif ? 'Désactiver' : 'Réactiver' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  
+  @if (showModal) {
+    <div class="modal-overlay" [@fadeIn] (click)="closeModal()">
+      <div class="modal" [@modalIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Nouveau <em>client</em></h2>
+            <p class="modal-sub">Renseignez les informations du client</p>
+          </div>
+          <button class="modal-close" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nom <span class="req">*</span></label>
+              <input type="text" class="form-input" [(ngModel)]="newClient.nom" placeholder="Raison sociale ou nom…"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type client</label>
+              <select class="form-select" [(ngModel)]="newClient.typeClient">
+                <option value="B2B">B2B — Entreprise</option>
+                <option value="B2C">B2C — Particulier</option>
+                <option value="B2G">B2G — Administration</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email <span class="req">*</span></label>
+              <input type="email" class="form-input" [(ngModel)]="newClient.email" placeholder="contact@entreprise.tn"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Matricule fiscal <span class="req" *ngIf="newClient.typeClient==='B2B'">*</span></label>
+          <input type="text" class="form-input" [(ngModel)]="newClient.matriculeFiscal" placeholder="1495908/S ou 0000000X/X/X/000" maxlength="16"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Téléphone</label>
+              <input type="tel" class="form-input" [(ngModel)]="newClient.telephone" placeholder="+216 XX XXX XXX"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ville</label>
+              <input type="text" class="form-input" [(ngModel)]="newClient.ville" placeholder="Tunis, Sfax, Sousse…"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresse</label>
+            <input type="text" class="form-input" [(ngModel)]="newClient.adresse" placeholder="Adresse complète…"/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Annuler</button>
+          <button class="btn-primary" [disabled]="!newClient.nom || !newClient.email || saving()" (click)="saveClient()">
+            @if (saving()) { Création… } @else { Créer le client }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+

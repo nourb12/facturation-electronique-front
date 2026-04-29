@@ -1,0 +1,147 @@
+<div class="dash-layout">
+
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Factures <em>admin</em></h1>
+        <span class="dt-bc">Vue globale plateforme</span>
+      </div>
+    </div>
+    <div class="dt-center">
+      <div class="dt-search">
+        <span class="dt-search-ico">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input type="text" placeholder="N° ou entreprise..." [(ngModel)]="q" (input)="filter()" />
+      </div>
+    </div>
+    <div class="dt-right">
+      <select class="dt-select" [(ngModel)]="statutFilter" (change)="filter()">
+        <option value="">Tous statuts</option>
+        <option value="Brouillon">Brouillon</option>
+        <option value="Émise">Émise</option>
+        <option value="Payée">Payée</option>
+        <option value="EnRetard">En retard</option>
+        <option value="Annulée">Annulée</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="dash-content">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon ey">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 2h5l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M9 2v3h3" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Factures</div>
+          <div class="kpi-value">{{ stats().total }}</div>
+          <div class="kpi-sub">Total plateforme</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon ok">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Payées</div>
+          <div class="kpi-value">{{ stats().payees }}</div>
+          <div class="kpi-sub">Montants recouvrés</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon warn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 6v4M8 12v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">En retard</div>
+          <div class="kpi-value">{{ stats().retard }}</div>
+          <div class="kpi-sub">À relancer</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon info">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M11 5H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V7l-3-2z" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M11 5v2h2" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Brouillons</div>
+          <div class="kpi-value">{{ stats().brouillon }}</div>
+          <div class="kpi-sub">À finaliser</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total TTC banner -->
+    <div class="alert-card">
+      <div class="alert-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1.5" y="3" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/>
+          <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </div>
+      <div class="alert-body">
+        <div class="alert-title">Total TTC affiché</div>
+        <div class="alert-text">
+          <strong>{{ stats().totalTtc | number:'1.3-3' }} TND</strong>
+          — {{ stats().total }} élément(s) filtrés
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste -->
+    <div class="box">
+      <div class="box-header">
+        <div class="box-title">Liste des factures</div>
+      </div>
+
+      @if (filtered.length === 0) {
+        <div class="list-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+          </svg>
+          Aucune facture trouvée
+        </div>
+      }
+
+      @for (f of filtered; track f.numero) {
+        <div class="list-row">
+          <div class="lr-avatar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M8 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5L8 1z" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M8 1v4h4" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div class="lr-body">
+            <div class="lr-fiscal">{{ f.numero }}</div>
+            <div class="lr-title">{{ f.entrepriseNom }}</div>
+            <div class="lr-meta"><span>{{ f.clientNom }}</span></div>
+          </div>
+          <div class="lr-right">
+            <div class="lr-amount">{{ f.totalTTC | number:'1.3-3' }} TND</div>
+            <span class="badge" [ngClass]="getBadge(f.statut)">{{ f.statut }}</span>
+            <div class="lr-date">{{ f.dateEmission | date:'dd/MM/yyyy' }}</div>
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+</div>
+

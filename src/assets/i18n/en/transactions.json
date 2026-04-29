@@ -1,0 +1,98 @@
+{
+  "TRANSACTIONS": {
+    "TITLE": "Transactions",
+    "TITLE_A": "Transaction",
+    "TITLE_EM": "journal.",
+    "SUBTITLE": "Track your income and expenses.",
+    "ACTIONS": {
+      "ADD": "New transaction",
+      "EXPORT": "Export",
+      "EXPORT_CSV": "Export CSV",
+      "EXPORT_PDF": "Export PDF",
+      "BULK": {
+        "CATEGORIZE": "Categorize",
+        "DELETE": "Delete",
+        "EXPORT": "Export",
+        "JUSTIFY": "Justify"
+      }
+    },
+    "FILTERS": {
+      "ALL": "All",
+      "IN": "Income",
+      "OUT": "Expenses",
+      "MONTH": "This month",
+      "QUARTER": "This quarter",
+      "YEAR": "This year",
+      "CUSTOM": "Custom",
+      "SEARCH_PLACEHOLDER": "Search a transaction…"
+    },
+    "TAB": {
+      "ALL": "All transactions",
+      "BY_CATEGORY": "By category"
+    },
+    "TABLE": {
+      "DATE": "Date",
+      "LABEL": "Label",
+      "TIER": "Party",
+      "CATEGORY": "Category",
+      "AMOUNT": "Amount",
+      "TYPE": "Type",
+      "STATUS": "Status",
+      "DOC": "Document",
+      "EMPTY": "No transactions found."
+    },
+    "TYPE": {
+      "ENTREE": "Income",
+      "SORTIE": "Expense",
+      "": ""
+    },
+    "STATUS": {
+      "NONJUSTIFIEE": "Unjustified",
+      "ENATTENTE": "Pending",
+      "JUSTIFIEE": "Justified",
+      "": ""
+    },
+    "COUNTERS": {
+      "JUSTIFIED": "Justified",
+      "PENDING": "Pending",
+      "UNJUSTIFIED": "Unjustified"
+    },
+    "CATEGORY_ANALYSIS": {
+      "TITLE": "Category analysis",
+      "EMPTY": "No data available."
+    },
+    "DETAIL": {
+      "TITLE": "Transaction detail",
+      "TAB": {
+        "RECEIPT": "Receipt",
+        "ANALYTICS": "Analytics",
+        "COMMENTS": "Comments"
+      },
+      "RECEIPT": {
+        "STATUS_LABEL": "Receipt status",
+        "STATUS_MISSING": "Lost",
+        "STATUS_OPTIONAL": "Optional",
+        "STATUS_PRESENT": "Present",
+        "UPLOAD": "Upload a receipt",
+        "DRAG_DROP": "Drag & drop or click to choose",
+        "LINK_INVOICE": "Link to an invoice",
+        "AUTO_TRANSMIT": "Automatic transmission"
+      },
+      "ANALYTICS": {
+        "CATEGORY": "Category",
+        "EDIT_CATEGORY": "Edit category",
+        "SPLIT": "Split"
+      },
+      "COMMENTS": {
+        "HISTORY": "Notes history",
+        "ADD_NOTE": "Add a note",
+        "PLACEHOLDER": "Your comment…"
+      },
+      "SIDE": {
+        "GLOBAL_STATUS": "Global status",
+        "ACCOUNT": "Account",
+        "EDIT_ALL": "Edit all"
+      }
+    }
+  }
+}

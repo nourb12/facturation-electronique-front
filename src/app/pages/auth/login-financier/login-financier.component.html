@@ -1,0 +1,142 @@
+
+<div class="auth-layout" [@pageIn]>
+
+  
+  <aside class="left-panel">
+    <div class="lp-orb lp-orb--1"></div>
+    <div class="lp-orb lp-orb--2"></div>
+
+    <a class="lp-logo" routerLink="/landing">
+      <div class="lp-mark">EY</div>
+      <div class="lp-wordmark">
+        <span class="lp-name">TunisFlow</span>
+        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
+      </div>
+    </a>
+
+    <div class="lp-content">
+      <div class="lp-badge lp-badge--blue">
+        <span class="lp-badge-dot"></span>
+        {{ 'AUTH.PANELS.FINANCIER.BADGE' | translate }}
+      </div>
+
+      <h2 class="lp-headline">
+        {{ 'AUTH.PANELS.FINANCIER.HEADLINE_A' | translate }}<br>
+        {{ 'AUTH.PANELS.FINANCIER.HEADLINE_B' | translate }}<br>
+        <em>{{ 'AUTH.PANELS.FINANCIER.HEADLINE_EM' | translate }}</em>
+      </h2>
+
+      <p class="lp-desc">
+        {{ 'AUTH.PANELS.FINANCIER.DESC' | translate }}
+      </p>
+
+      <div class="lp-permissions">
+        <div class="lp-perm-title">{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS_TITLE' | translate }}</div>
+        <div class="lp-perm-row">
+          <span class="lp-perm-dot lp-perm-dot--ok"></span>
+          <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.INVOICES' | translate }}</span>
+        </div>
+        <div class="lp-perm-row">
+          <span class="lp-perm-dot lp-perm-dot--ok"></span>
+          <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.DASHBOARD' | translate }}</span>
+        </div>
+        <div class="lp-perm-row">
+          <span class="lp-perm-dot lp-perm-dot--warn"></span>
+          <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.EXPORTS' | translate }}</span>
+        </div>
+        <div class="lp-perm-row">
+          <span class="lp-perm-dot lp-perm-dot--muted"></span>
+          <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.ADMIN' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lp-footer">
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot"></span>
+        {{ 'TRUST.ACCESS_DEFINED_BY_COMPANY' | translate }}
+      </div>
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot lp-footer-dot--ey"></span>
+        {{ 'TRUST.TWO_FACTOR_RECOMMENDED' | translate }}
+      </div>
+    </div>
+  </aside>
+
+  
+  <main class="right-panel">
+    <div class="rp-orb"></div>
+
+    <div class="form-wrap" [class.form-wrap--shake]="shake()">
+
+      <div class="form-header">
+        <div class="form-eyebrow form-eyebrow--blue">{{ 'AUTH.SIGN_IN' | translate }} · {{ 'AUTH.ROLES.FINANCIER' | translate }}</div>
+        <h1 class="form-title">
+          {{ 'AUTH.LOGIN.TITLE_A' | translate }}<br><em>{{ 'AUTH.LOGIN.TITLE_B' | translate }}</em>
+        </h1>
+        <p class="form-subtitle">{{ 'AUTH.LOGIN.INVITATION_SUBTITLE' | translate }}</p>
+      </div>
+
+      @if (errorMsg()) {
+        <div class="alert-error" [@fadeIn]>
+          <div class="alert-bar"></div>
+          {{ errorMsg() | translate }}
+        </div>
+      }
+
+      <div class="form-body">
+
+        <div class="form-group">
+          <label class="form-label" for="email">
+            {{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }} <span class="form-req">·</span>
+          </label>
+          <input id="email" class="form-input" type="email" autocomplete="email"
+            [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate"
+            [(ngModel)]="form.email"
+            [class.form-input--valid]="emailValid"/>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label" for="password">{{ 'AUTH.PASSWORD' | translate }}</label>
+            <a class="link-forgot" routerLink="/forgot-password">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
+          </div>
+          <div class="input-wrap">
+            <input id="password" class="form-input form-input--pr"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password" placeholder="••••••••"
+              [(ngModel)]="form.password"
+              [class.form-input--valid]="form.password.length >= 6"/>
+            <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
+              {{ showPassword() ? ('AUTH.LOGIN.HIDE' | translate) : ('AUTH.LOGIN.SHOW' | translate) }}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="code">
+            {{ 'AUTH.LOGIN.COMPANY_CODE_LABEL' | translate }}
+            <span class="form-hint-inline">({{ 'AUTH.LOGIN.OPTIONAL' | translate }})</span>
+          </label>
+          <input id="code" class="form-input form-input--mono"
+            type="text" [placeholder]="'AUTH.LOGIN.COMPANY_CODE_PLACEHOLDER' | translate"
+            [(ngModel)]="form.entrepriseCode"/>
+        </div>
+
+        <button class="btn-submit btn-submit--blue"
+          [disabled]="!canSubmit || loading()"
+          (click)="onSubmit()">
+          @if (loading()) {
+            <span class="btn-spinner"></span>
+            {{ 'AUTH.VERIFYING' | translate }}
+          } @else {
+            {{ 'AUTH.LOGIN.SUBMIT_FINANCIER' | translate }}
+          }
+        </button>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+

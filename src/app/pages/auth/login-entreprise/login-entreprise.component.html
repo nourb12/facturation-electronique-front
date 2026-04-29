@@ -1,0 +1,154 @@
+
+<div class="auth-layout" [@pageIn]>
+
+  
+  <aside class="left-panel">
+    <div class="lp-orb lp-orb--1"></div>
+    <div class="lp-orb lp-orb--2"></div>
+
+    <a class="lp-logo" routerLink="/landing">
+      <div class="lp-mark">EY</div>
+      <div class="lp-wordmark">
+        <span class="lp-name">TunisFlow</span>
+        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
+      </div>
+    </a>
+
+    <div class="lp-content">
+      <div class="lp-badge">
+        <span class="lp-badge-dot"></span>
+        {{ 'AUTH.PANELS.ENTREPRISE.BADGE' | translate }}
+      </div>
+
+      <h2 class="lp-headline">
+        {{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_A' | translate }}<br>
+        {{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_B' | translate }}<br>
+        <em>{{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_EM' | translate }}</em>
+      </h2>
+
+      <p class="lp-desc">
+        {{ 'AUTH.PANELS.ENTREPRISE.DESC' | translate }}
+      </p>
+
+      <div class="lp-features">
+        <div class="lp-feature">
+          <span class="lp-feature-dot lp-feature-dot--ey"></span>
+          <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.UBL' | translate }}</span>
+        </div>
+        <div class="lp-feature">
+          <span class="lp-feature-dot lp-feature-dot--ok"></span>
+          <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.TEIF' | translate }}</span>
+        </div>
+        <div class="lp-feature">
+          <span class="lp-feature-dot lp-feature-dot--ok"></span>
+          <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.DASH' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lp-footer">
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot"></span>
+        {{ 'TRUST.AES_256' | translate }}
+      </div>
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot lp-footer-dot--ey"></span>
+        {{ 'TRUST.HOSTED_TN' | translate }}
+      </div>
+    </div>
+  </aside>
+
+  
+  <main class="right-panel">
+
+    
+    <div class="rp-orb"></div>
+
+    <div class="form-wrap" [class.form-wrap--shake]="shake()">
+
+      
+      <div class="form-header">
+        <div class="form-eyebrow">{{ 'AUTH.SIGN_IN' | translate }} · {{ 'AUTH.ROLES.ENTREPRISE' | translate }}</div>
+        <h1 class="form-title">
+          {{ 'AUTH.LOGIN.TITLE_A' | translate }}<br><em>{{ 'AUTH.LOGIN.TITLE_B' | translate }}</em>
+        </h1>
+      </div>
+
+      
+      @if (errorMsg()) {
+        <div class="alert-error" [@fadeIn]>
+          <div class="alert-bar"></div>
+          {{ errorMsg() | translate }}
+        </div>
+      }
+
+      
+      <div class="form-body">
+
+        <div class="form-group">
+          <label class="form-label" for="email">
+            {{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}
+            <span class="form-req">·</span>
+          </label>
+          <input
+            id="email"
+            class="form-input"
+            type="email"
+            autocomplete="email"
+            [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate"
+            [(ngModel)]="form.email"
+            [class.form-input--valid]="emailValid"
+          />
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label" for="password">{{ 'AUTH.PASSWORD' | translate }}</label>
+            <a class="link-forgot" routerLink="/forgot-password">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
+          </div>
+          <div class="input-wrap">
+            <input
+              id="password"
+              class="form-input form-input--pr"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              [(ngModel)]="form.password"
+              [class.form-input--valid]="form.password.length >= 6"
+            />
+            <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
+              {{ showPassword() ? ('AUTH.LOGIN.HIDE' | translate) : ('AUTH.LOGIN.SHOW' | translate) }}
+            </button>
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" class="cb-input" [(ngModel)]="form.remember"/>
+          <span class="cb-box">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4l2.5 2.5L9 1" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="cb-text">{{ 'AUTH.LOGIN.REMEMBER_ME' | translate }}</span>
+        </label>
+
+        <button
+          class="btn-submit"
+          [disabled]="!canSubmit || loading()"
+          (click)="onSubmit()"
+        >
+          @if (loading()) {
+            <span class="btn-spinner"></span>
+            {{ 'AUTH.SUBMITTING' | translate }}
+          } @else {
+            {{ 'AUTH.LOGIN.SUBMIT' | translate }}
+          }
+        </button>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+

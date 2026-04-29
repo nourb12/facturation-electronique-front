@@ -1,0 +1,545 @@
+{
+  "APP": {
+    "TAGLINE": "Facturation électronique certifiée",
+    "ADMIN_CONSOLE": "Console d'administration",
+    "BADGE_TEIF_CERTIFIED": "TEIF 2026 · Certifié DGI"
+  },
+  "TRUST": {
+    "AES_256": "Données chiffrées AES-256",
+    "HOSTED_TN": "Hébergé en Tunisie",
+    "TWO_FACTOR_REQUIRED": "Accès restreint — 2FA obligatoire",
+    "SESSIONS_AUDITED": "Toutes les sessions sont auditées",
+    "ACCESS_DEFINED_BY_COMPANY": "Accès défini par votre entreprise",
+    "TWO_FACTOR_RECOMMENDED": "2FA recommandé",
+    "TEIF_2026_COMPLIANT": "Conforme TEIF 2026"
+  },
+  "AUTH": {
+    "SIGN_IN": "Connexion",
+    "PASSWORD": "Mot de passe",
+    "FORGOT_PASSWORD": "Mot de passe oublié ?",
+    "SUBMITTING": "Connexion en cours…",
+    "VERIFYING": "Vérification…",
+    "BACK_TO_SIGN_IN": "Retour à la connexion",
+    "ROLES": {
+      "ENTREPRISE": "Responsable Entreprise",
+      "FINANCIER": "Responsable Financier"
+    },
+    "PANELS": {
+      "ENTREPRISE": {
+        "BADGE": "Espace Responsable Entreprise",
+        "HEADLINE_A": "Gérez vos",
+        "HEADLINE_B": "factures",
+        "HEADLINE_EM": "en conformité.",
+        "DESC": "Accédez à votre tableau de bord, pilotez vos factures TEIF 2026 et suivez votre conformité DGI en temps réel.",
+        "FEATURES": {
+          "UBL": "Facturation UBL 2.1 certifiée DGI",
+          "TEIF": "Conformité TEIF 2026 automatique",
+          "DASH": "Tableau de bord financier temps réel"
+        }
+      },
+      "ADMIN": {
+        "BADGE": "Accès Administrateur",
+        "HEADLINE_A": "Console",
+        "HEADLINE_B": "d'administration",
+        "HEADLINE_EM": "TunisFlow.",
+        "DESC": "Accès réservé aux administrateurs système. Toutes les actions sont auditées et tracées.",
+        "SCOPE_TITLE": "Périmètre d'accès",
+        "SCOPE": {
+          "COMPANIES": "Gestion des entreprises",
+          "USERS": "Gestion des utilisateurs",
+          "AUDIT": "Journal d'audit complet",
+          "SETTINGS": "Paramètres système"
+        }
+      },
+      "FINANCIER": {
+        "BADGE": "Espace Responsable Financier",
+        "HEADLINE_A": "Votre accès",
+        "HEADLINE_B": "financier",
+        "HEADLINE_EM": "sécurisé.",
+        "DESC": "Consultez les factures, suivez les impayés et exportez vos rapports comptables selon vos droits définis par l'entreprise.",
+        "PERMISSIONS_TITLE": "Accès typique du rôle",
+        "PERMISSIONS": {
+          "INVOICES": "Consultation des factures",
+          "DASHBOARD": "Tableau de bord financier",
+          "EXPORTS": "Export selon droits accordés",
+          "ADMIN": "Administration (non accordée)"
+        }
+      }
+    },
+    "LOGIN": {
+      "TITLE_A": "Bon retour,",
+      "TITLE_B": "connectez-vous.",
+      "NO_ACCOUNT": "Pas encore de compte ?",
+      "CREATE_SPACE": "Créer votre espace",
+      "EMAIL_LABEL": "Email professionnel",
+      "EMAIL_PLACEHOLDER": "vous@entreprise.tn",
+      "REMEMBER_ME": "Se souvenir de moi pendant 30 jours",
+      "SUBMIT": "Accéder à mon espace",
+      "SUBMIT_FINANCIER": "Accéder à mon espace financier",
+      "SHOW": "Afficher",
+      "HIDE": "Masquer",
+      "INVITATION_SUBTITLE": "Votre compte a été créé par invitation.",
+      "COMPANY_CODE_LABEL": "Code entreprise",
+      "COMPANY_CODE_PLACEHOLDER": "Ex: TECH-2026-A",
+      "OPTIONAL": "facultatif"
+    },
+    "ADMIN_LOGIN": {
+      "EYEBROW": "Accès restreint · Admin",
+      "TITLE_A": "Authentification",
+      "TITLE_B": "administrateur.",
+      "SUBTITLE": "Connexion sécurisée — session auditée.",
+      "IDENT_LABEL": "Identifiant administrateur",
+      "IDENT_PLACEHOLDER": "admin.ey / votre identifiant",
+      "PASSWORD_PLACEHOLDER": "Minimum 8 caractères",
+      "NOTICE": "Un code 2FA vous sera demandé à l'étape suivante. Assurez-vous d'avoir accès à votre application d'authentification.",
+      "CONTINUE": "Continuer vers la vérification 2FA"
+    },
+    "ADMIN_OTP": {
+      "EYEBROW": "Vérification · 2FA",
+      "TITLE_A": "Code de",
+      "TITLE_B": "vérification.",
+      "SUBTITLE": "Entrez le code à 6 chiffres généré par votre application 2FA.",
+      "OTP_LABEL": "Code OTP",
+      "OTP_PLACEHOLDER": "000 000",
+      "OTP_HINT": "Valable 30 secondes — ne partagez jamais ce code.",
+      "SUBMIT": "Accéder à la console",
+      "BACK": "Revenir aux identifiants"
+    },
+    "ROLE_SELECTION": {
+      "TITLE_A": "Quel est",
+      "TITLE_B": "votre rôle ?",
+      "DESC": "Votre rôle détermine vos accès et les fonctionnalités disponibles sur la plateforme.",
+      "CARD_ENTREPRISE_TITLE": "Responsable d'entreprise",
+      "CARD_ENTREPRISE_DESC": "Gérant, DG, PDG — accès complet à la configuration et aux données fiscales.",
+      "CARD_FINANCIER_TITLE": "Responsable financier",
+      "CARD_FINANCIER_DESC": "DAF, comptable, RAF — gestion des factures, TVA et rapports financiers.",
+      "ARIA_ENTREPRISE": "Sélectionner le rôle Responsable d'entreprise",
+      "ARIA_FINANCIER": "Sélectionner le rôle Responsable financier",
+      "BACK_HOME": "Retour à l'accueil"
+    },
+    "FORGOT": {
+      "BADGE": "Réinitialisation sécurisée",
+      "HEADLINE_A": "Récupérez",
+      "HEADLINE_B": "votre",
+      "HEADLINE_EM": "accès sécurisé.",
+      "DESC": "3 étapes simples pour réinitialiser votre mot de passe en toute sécurité. Le processus prend moins d'une minute.",
+      "STEPS": {
+        "EMAIL_LABEL": "Saisie de l'email",
+        "EMAIL_HINT": "Votre adresse professionnelle",
+        "OTP_LABEL": "Code de vérification",
+        "OTP_HINT": "OTP à 6 chiffres · 10 min",
+        "NEW_PW_LABEL": "Nouveau mot de passe",
+        "NEW_PW_HINT": "Minimum 8 caractères"
+      },
+      "FOOTER": {
+        "SSL_AES": "Lien sécurisé SSL · AES-256",
+        "CODE_VALID_10": "Code valable 10 minutes",
+        "EY_ENCRYPTED": "Données chiffrées EY Tunisia"
+      },
+      "STEP": {
+        "OF": "Étape {{current}} sur {{total}}",
+        "STEP2": "Étape 2 sur 3 · Vérification",
+        "STEP3": "Étape 3 sur 3 · Sécurisation"
+      },
+      "TITLE_EMAIL_A": "Votre email",
+      "TITLE_EMAIL_EM": "professionnel.",
+      "SUBTITLE_EMAIL": "Renseignez l'adresse associée à votre compte TunisFlow. Nous vous enverrons un code de vérification immédiatement.",
+      "EMAIL_PLACEHOLDER": "vous@ey-tunisie.com",
+      "EMAIL_HINT_SPAM": "Vérifiez votre dossier spam si vous ne recevez pas l'email.",
+      "SENDING": "Envoi en cours…",
+      "SEND_CODE": "Envoyer le code de vérification",
+      "TITLE_CODE_A": "Code de",
+      "TITLE_CODE_EM": "confirmation.",
+      "SUBTITLE_CODE": "Un code à 6 chiffres a été envoyé à",
+      "RESEND_IN": "Renvoyer le code dans",
+      "NO_CODE": "Vous n'avez pas reçu le code ?",
+      "RESEND": "Renvoyer →",
+      "VERIFY_CODE": "Vérifier le code",
+      "EDIT_EMAIL": "Modifier l'adresse email",
+      "TITLE_NEW_PW_A": "Nouveau",
+      "TITLE_NEW_PW_EM": "mot de passe.",
+      "SUBTITLE_NEW_PW": "Choisissez un mot de passe fort d'au moins 8 caractères, avec majuscules, chiffres et symboles.",
+      "NEW_PASSWORD_LABEL": "Nouveau mot de passe",
+      "NEW_PASSWORD_PLACEHOLDER": "Minimum 8 caractères",
+      "CONFIRM_PASSWORD_LABEL": "Confirmer le mot de passe",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Répétez votre mot de passe",
+      "UPDATING": "Mise à jour…",
+      "RESET_ACTION": "Réinitialiser mon mot de passe",
+      "BACK_TO_OTP": "Revenir au code OTP"
+    },
+    "WAITING": {
+      "TITLE_A": "Demande envoyée",
+      "TITLE_B": "avec succès.",
+      "DESC_A": "Votre dossier est en cours d'examen par notre équipe. Vous recevrez vos identifiants par email à",
+      "DESC_B": "sous 48h ouvrables.",
+      "POLL_NEXT_A": "Prochaine vérification dans",
+      "POLL_NEXT_B": "s",
+      "REFERENCE": "Référence dossier",
+      "REFERENCE_HINT": "Conservez cette référence pour tout suivi.",
+      "TIMELINE": {
+        "SUBMITTED": "Dossier soumis",
+        "RECEIVED": "Reçu avec succès",
+        "IN_REVIEW": "Examen en cours",
+        "IN_REVIEW_SUB": "48h ouvrables",
+        "GRANTED": "Accès accordé",
+        "GRANTED_SUB": "Email + identifiants"
+      },
+      "WAIT_BEFORE_RETRY": "Attendez {{seconds}}s avant de réessayer",
+      "WAIT_SECONDS": "Patienter {{seconds}}s…",
+      "ARIA_CHECK_STATUS": "Vérifier le statut du compte",
+      "SUPPORT": "Pour toute question :",
+      "TOAST_ACTIVE_REDIRECT": "Compte activé ! Redirection en cours…"
+    },
+    "ACCESS_REQUEST": {
+      "SIDEBAR_BADGE": "Portail d'accès entreprise",
+      "SIDEBAR_TITLE": "Rejoignez-nous",
+      "SIDEBAR_TITLE_A": "Rejoignez",
+      "SIDEBAR_TITLE_EM": "nous.",
+      "SIDEBAR_DESC": "Soumettez votre demande d'accès. Notre équipe valide votre dossier et vous envoie vos identifiants sous 48h ouvrables.",
+      "STEP1_EYEBROW": "Étape 1 — Informations entreprise",
+      "STEP1_TITLE_A": "Informations",
+      "STEP1_TITLE_EM": "de l'entreprise.",
+      "LOGO": {
+        "LABEL": "Logo entreprise",
+        "HINT": "(optionnel — jpg, png, svg — max 2 Mo)",
+        "PICK": "Cliquer pour choisir un fichier",
+        "PICK_HINT": "jpg, png, svg — 2 Mo max",
+        "UPLOADED": "Logo chargé avec succès",
+        "REMOVE": "Supprimer"
+      },
+      "STEPS": {
+        "STEP1": {
+          "LABEL": "Informations entreprise",
+          "DESC": "Identité légale et coordonnées"
+        },
+        "STEP2": {
+          "LABEL": "Responsable légal",
+          "DESC": "Contact principal de l'entreprise"
+        },
+        "STEP3": {
+          "LABEL": "Documents justificatifs",
+          "DESC": "Pièces requises pour validation KYC"
+        }
+      }
+    }
+  },
+  "LANDING": {
+    "BADGE": "TEIF 2026 · Certifié DGI · UBL 2.1",
+    "NAV": {
+      "HOME": "Accueil",
+      "KEY_NUMBERS": "Chiffres clés",
+      "WORKFLOW": "Fonctionnement",
+      "FEATURES": "Fonctionnalités",
+      "COMPLIANCE": "Conformité",
+      "SECURITY": "Sécurité",
+      "WHY": "Pourquoi TunisFlow",
+      "AUDIENCE": "Pour qui",
+      "CONTACT": "Contact"
+    },
+    "CTA": {
+      "SIGN_IN": "Se connecter",
+      "REQUEST_ACCESS": "Demander l'accès",
+      "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
+      "SEE_DEMO": "Voir le fonctionnement"
+    }
+  },
+  "NAV": {
+    "SECTIONS": {
+      "MAIN": "Principal",
+      "REFERENTIAL": "Référentiel",
+      "COMPANY": "Mon entreprise",
+      "ACCOUNTING": "Comptabilité",
+      "ANALYTICS": "Analyses"
+    },
+    "ITEMS": {
+      "DASHBOARD": "Tableau de bord",
+      "INVOICES": "Factures",
+      "QUOTES": "Devis",
+      "CREDIT_NOTES": "Avoirs",
+      "PAYMENTS": "Paiements",
+      "CLIENTS": "Clients",
+      "PRODUCTS": "Produits",
+      "CATEGORIES": "Catégories",
+      "MY_COMPANY": "Mon entreprise",
+      "CUSTOMIZATION": "Personnalisation",
+      "USERS": "Utilisateurs",
+      "TRANSACTIONS": "Transactions",
+      "FISCAL_PARAMS": "Paramètres fiscaux",
+      "TAXES": "Taxes",
+      "REPORTS": "Rapports",
+      "LOGOUT": "Déconnexion"
+    }
+  },
+  "ADMIN": {
+    "SIDEBAR": {
+      "SUBTITLE": "Supervision & administration",
+      "ROLE": "Super Administrateur",
+      "SECTION_SUPERVISION": "Supervision",
+      "SECTION_SYSTEM": "Système",
+      "ITEMS": {
+        "DASHBOARD": "Tableau de bord",
+        "COMPANIES": "Entreprises",
+        "KYC_REQUESTS": "Demandes KYC",
+        "USERS": "Utilisateurs",
+        "INVOICES_GLOBAL": "Factures globales",
+        "AUDIT": "Journal d'audit",
+        "SETTINGS": "Paramètres",
+        "LOGOUT": "Déconnexion"
+      }
+    }
+  },
+  "COMMON": {
+    "CANCEL": "Annuler",
+    "CLOSE": "Fermer",
+    "SAVE": "Enregistrer",
+    "SAVING": "Enregistrement…",
+    "COPIED": "Copié !",
+    "COPY": "Copier",
+    "CHECK_NOW": "Vérifier maintenant",
+    "BACK_HOME": "Retour à l'accueil",
+    "ACTIONS": {
+      "EDIT": "Modifier",
+      "DELETE": "Supprimer",
+      "ADD": "Ajouter",
+      "UPDATE": "Mettre à jour",
+      "RESET": "Réinitialiser",
+      "EXPORT_CSV": "Exporter CSV",
+      "DETAIL": "Voir le détail",
+      "CLEAR_SEARCH": "Effacer la recherche"
+    },
+    "TABLE": {
+      "COLUMNS": "Colonnes",
+      "VISIBLE_COLUMNS": "Colonnes visibles",
+      "SEARCH": "Rechercher…",
+      "ROWS": "Lignes",
+      "OF": "sur"
+    },
+    "FORM": {
+      "REQUIRED": "Ce champ est obligatoire."
+    },
+    "ARIA": {
+      "MENU": "Menu",
+      "PRIMARY_NAV": "Navigation principale",
+      "ADMIN_NAV": "Navigation administration",
+      "COLLAPSE_SIDEBAR": "Réduire la barre latérale"
+    }
+  },
+  "ERRORS": {
+    "PASSWORDS_MISMATCH": "Les mots de passe ne correspondent pas."
+  },
+  "GLOSSARY": {
+    "VAT": "TVA"
+  },
+  "INVOICE": {
+    "FIELDS": {
+      "CLIENT": "Client",
+      "TYPE": "Type de document",
+      "PAYMENT_MODE": "Mode de paiement",
+      "DUE_DATE": "Date d'échéance",
+      "NOTES": "Notes"
+    },
+    "TOTALS": {
+      "HT": "Total HT",
+      "TTC": "Total TTC"
+    },
+    "ACTIONS": {
+      "GENERATE_XML": "Générer le XML TEIF"
+    }
+  },
+  "FACTURES": {
+    "TITLE_A": "Mes",
+    "TITLE_EM": "factures.",
+    "SUBTITLE": "{{count}} factures · {{drafts}} brouillon(s)",
+    "SEARCH_PLACEHOLDER": "Rechercher par numéro, client…",
+    "LOADING": "Chargement des factures…",
+    "EMPTY": "Aucune facture trouvée.",
+    "KPI": {
+      "ISSUED_MONTH": "Émis ce mois",
+      "PAID": "Encaissé",
+      "PENDING": "En attente",
+      "OVERDUE": "En retard"
+    },
+    "UNITS": {
+      "INVOICES": "facture(s)"
+    },
+    "TABLE": {
+      "NUMBER": "Numéro",
+      "STATUS": "Statut",
+      "ACTIONS": "Actions"
+    },
+    "BADGES": {
+      "OVERDUE": "En retard"
+    },
+    "STATUTS": {
+      "BROUILLON": "Brouillon",
+      "VALIDEE": "Validée",
+      "CONFORME": "Conforme",
+      "TRANSMISE": "Transmise",
+      "ACCEPTEE": "Acceptée",
+      "REJETEE": "Rejetée",
+      "PAYEE": "Payée",
+      "PARTIELLEMENT_PAYEE": "Part. payée",
+      "ANNULEE": "Annulée"
+    },
+    "ACTIONS": {
+      "VALIDATE": "Valider",
+      "VALIDATE_TEIF": "Valider TEIF",
+      "SIGN": "Signer",
+      "SEND_TTN": "Envoyer TTN",
+      "RECORD_PAYMENT": "Enregistrer paiement",
+      "DOWNLOAD_XML": "Télécharger XML",
+      "DOWNLOAD_XML_TEIF": "Télécharger XML TEIF",
+      "DOWNLOAD_PDF": "Télécharger PDF",
+      "GENERATING": "Génération…",
+      "CREATE_CREDIT_NOTE": "Créer un avoir"
+    },
+    "CREATE": {
+      "TITLE_A": "Nouvelle",
+      "TITLE_EM": "facture.",
+      "SUBTITLE": "Remplissez les informations de la facture.",
+      "SELECT_CLIENT_PLACEHOLDER": "Sélectionner un client…",
+      "NOTES_PLACEHOLDER": "Conditions de paiement, remarques…",
+      "LINES_TITLE": "Lignes de facturation",
+      "ADD_LINE": "Ajouter une ligne",
+      "PRODUCT_PLACEHOLDER": "Produit (optionnel)",
+      "DESIGNATION_PLACEHOLDER": "Désignation",
+      "QTY_PLACEHOLDER": "Qté",
+      "UNIT_PRICE_PLACEHOLDER": "Prix unitaire",
+      "SUBMIT": "Créer la facture",
+      "SUBMITTING": "Création en cours…"
+    },
+    "PAYMENT": {
+      "TITLE_A": "Enregistrer un",
+      "TITLE_EM": "paiement.",
+      "SUBTITLE": "Facture {{number}} · Restant : {{amount}} TND",
+      "FIELDS": {
+        "AMOUNT": "Montant",
+        "MODE": "Mode de paiement",
+        "DATE": "Date de paiement",
+        "REFERENCE": "Référence",
+        "REFERENCE_PLACEHOLDER": "N° chèque, virement…",
+        "BANK": "Banque",
+        "BANK_PLACEHOLDER": "Nom de la banque"
+      }
+    },
+    "DETAIL": {
+      "REMAINING": "Restant dû",
+      "LINES_TITLE": "Lignes de la facture",
+      "LINES_TABLE": {
+        "DESIGNATION": "Désignation",
+        "QTY": "Qté",
+        "UNIT_PRICE": "Prix U.",
+        "DISCOUNT": "Remise",
+        "VAT": "TVA",
+        "TTC": "TTC"
+      },
+      "HISTORY_TITLE": "Historique"
+    }
+  },
+  "ACCOUNTING": {
+    "TAXES": {
+      "TITLE_A": "Gestion des",
+      "TITLE_EM": "taxes.",
+      "SUBTITLE": "Configurez les taux de TVA, FODEC et droits de consommation applicables à vos factures.",
+      "COLUMNS": {
+        "TITLE": "Titre",
+        "RATE": "Taux",
+        "TYPE": "Type"
+      },
+      "TYPES": {
+        "TVA": "TVA",
+        "FODEC": "FODEC",
+        "DROIT_CONSOMMATION": "Droit de conso."
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
+        "SEARCH_SUB": "Essayez un autre terme de recherche.",
+        "NO_DATA_TITLE": "Aucune taxe configurée",
+        "NO_DATA_SUB": "Créez votre première taxe via le formulaire."
+      },
+      "FORM": {
+        "TITLE_NEW": "Nouvelle taxe",
+        "TITLE_EDIT": "Modifier la taxe",
+        "FIELDS": {
+          "TITLE": "Titre",
+          "TITLE_PLACEHOLDER": "Ex : TVA 19%",
+          "RATE": "Taux",
+          "TYPE": "Type"
+        },
+        "ERROR_RATE_GT0": "Le taux doit être supérieur à 0."
+      }
+    },
+    "FISCAL_PARAMS": {
+      "TITLE_A": "Paramètres",
+      "TITLE_EM": "fiscaux.",
+      "SUBTITLE": "Configurez les retenues à la source, timbre fiscal et autres paramètres de calcul.",
+      "COLUMNS": {
+        "LABEL": "Libellé",
+        "VALUE_DEFAULT": "Valeur / Défaut",
+        "ORDER": "Ordre de calcul",
+        "USAGE": "Utilisation",
+        "CONDITION": "Condition"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
+        "SEARCH_SUB": "Essayez un autre terme de recherche.",
+        "NO_DATA_TITLE": "Aucun paramètre fiscal configuré",
+        "NO_DATA_SUB": "Créez votre premier paramètre via le formulaire."
+      },
+      "FORM": {
+        "TITLE_NEW": "Nouveau paramètre",
+        "TITLE_EDIT": "Modifier le paramètre",
+        "FIELDS": {
+          "LABEL": "Libellé",
+          "LABEL_PLACEHOLDER": "Ex : Retenue à la source 15%",
+          "VALUE_DEFAULT": "Valeur / Défaut",
+          "TYPE": "Type",
+          "SIGN": "Signe",
+          "ORDER": "Ordre de calcul",
+          "USAGE": "Utilisation"
+        },
+        "TYPE": {
+          "PERCENT": "Pourcentage",
+          "FIXED": "Montant fixe"
+        },
+        "ORDER": {
+          "BEFORE_VAT": "Avant TVA",
+          "AFTER_VAT": "Après TVA"
+        },
+        "USAGE": {
+          "MANUAL": "Manuel",
+          "AUTO": "Automatique"
+        },
+        "WITHHOLDING": {
+          "LABEL": "Inclure retenue à la source",
+          "SUB": "Applicable aux factures B2B soumises à la RS"
+        },
+        "DOCS": {
+          "TITLE": "Documents cibles",
+          "FACTURE": "Facture",
+          "AVOIR": "Avoir",
+          "PROFORMA": "Proforma"
+        }
+      },
+      "ORDRE": {
+        "AVANT_TVA": "Avant TVA",
+        "APRES_TVA": "Après TVA"
+      },
+      "UTILISATION": {
+        "MANUEL": "Manuel",
+        "AUTO": "Automatique"
+      },
+      "CONDITION": {
+        "NONE": "Aucune",
+        "WITH_RS": "Avec RS"
+      }
+    }
+  },
+  "PW_STRENGTH": {
+    "VERY_WEAK": "Très faible",
+    "WEAK": "Faible",
+    "MEDIUM": "Moyen",
+    "STRONG": "Fort",
+    "VERY_STRONG": "Très fort"
+  }
+}

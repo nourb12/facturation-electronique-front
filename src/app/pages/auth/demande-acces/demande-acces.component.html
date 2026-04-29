@@ -1,0 +1,639 @@
+<div class="wizard-layout" [@pageIn]>
+  <aside class="left-panel">
+    <div class="lp-orb lp-orb--1" aria-hidden="true"></div>
+    <div class="lp-orb lp-orb--2" aria-hidden="true"></div>
+
+    <a class="lp-logo" routerLink="/landing">
+      <div class="lp-mark">EY</div>
+      <div class="lp-wordmark">
+        <span class="lp-name">TunisFlow</span>
+        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
+      </div>
+    </a>
+
+    <div class="lp-promise">
+      <div class="lp-badge">
+        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_BADGE' | translate }}
+      </div>
+      <h2 class="lp-headline">
+        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_TITLE' | translate }}
+      </h2>
+      <p class="lp-desc">
+        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_DESC' | translate }}
+      </p>
+    </div>
+    <app-step-indicator
+      mode="sidebar"
+      [steps]="steps"
+      [current]="currentStep()"
+      (stepClick)="goToStep($event)">
+    </app-step-indicator>
+
+    <footer class="lp-trust">
+      <div class="lp-trust-item">
+        <div class="lp-trust-dot"></div>
+        <span>{{ 'TRUST.AES_256' | translate }}</span>
+      </div>
+      <div class="lp-trust-item">
+        <div class="lp-trust-dot lp-trust-dot--ey"></div>
+        <span>{{ 'TRUST.TEIF_2026_COMPLIANT' | translate }}</span>
+      </div>
+    </footer>
+  </aside>
+  <main class="right-panel" role="main">
+    <div class="form-col" [class.form-col--success]="step() === 'confirmation'">
+      @if (step() === 'form') {
+      <div class="form-shell">
+        <div class="form-main">
+          <div class="rp-inner">
+          <app-step-indicator
+            mode="bar"
+            [steps]="steps"
+            [current]="currentStep()"
+            (stepClick)="goToStep($event)">
+          </app-step-indicator>
+
+        @if (step() === 'form' && currentStep() === 1) {
+          <div class="step-pane" [@slideUp]>
+            <header class="step-header">
+              <div class="step-eyebrow">{{ 'AUTH.ACCESS_REQUEST.STEP1_EYEBROW' | translate }}</div>
+              <h1 class="step-title">{{ 'AUTH.ACCESS_REQUEST.STEP1_TITLE_A' | translate }} <em>{{ 'AUTH.ACCESS_REQUEST.STEP1_TITLE_EM' | translate }}</em></h1>
+            
+            </header>
+            <div class="form-group" [@fieldShake]="shakeField() === 'logo' ? 'error' : 'idle'">
+              <label class="form-label" for="logo">
+                {{ 'AUTH.ACCESS_REQUEST.LOGO.LABEL' | translate }} <span class="form-hint-inline">{{ 'AUTH.ACCESS_REQUEST.LOGO.HINT' | translate }}</span>
+              </label>
+              <div class="logo-upload">
+                @if (!form.logoPreview) {
+                  <label class="logo-upload-zone" for="logo">
+                    <div class="logo-upload-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect x="1" y="1" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.3"/>
+                        <path d="M9 6v6M6 9h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="logo-upload-text">
+                      {{ 'AUTH.ACCESS_REQUEST.LOGO.PICK' | translate }}
+                      <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.PICK_HINT' | translate }}</span>
+                    </div>
+                    <input id="logo" type="file" accept="image/*"
+                      style="position:absolute;width:0;height:0;opacity:0"
+                      (change)="onLogoChange($event)"/>
+                  </label>
+                } @else {
+                  <div class="logo-preview">
+                    <img class="logo-preview-img" [src]="form.logoPreview" alt="Logo entreprise"/>
+                    <div class="logo-preview-info">
+                      <strong>{{ form.logoFileName || 'logo.png' }}</strong>
+                      <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.UPLOADED' | translate }}</span>
+                    </div>
+                    <button type="button" class="logo-remove" (click)="removeLogo()">{{ 'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate }}</button>
+                  </div>
+                }
+              </div>
+              @if (errors()['logo']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['logo'] | translate }}</span>
+              }
+            </div>
+            <div class="form-group" [@fieldShake]="shakeField() === 'nomEntreprise' ? 'error' : 'idle'">
+              <label class="form-label" for="nomEntreprise">Nom commercial <span class="form-req">*</span>@if (isFieldValid('nomEntreprise')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+              <input id="nomEntreprise" class="form-input"
+                type="text" placeholder="Ex : Tech Solutions"
+                [(ngModel)]="form.nomEntreprise"
+                (blur)="validateField('nomEntreprise')"
+                (input)="validateField('nomEntreprise')"
+                [class.form-input--error]="errors()['nomEntreprise']"
+                [class.form-input--valid]="form.nomEntreprise.trim().length > 2 && !errors()['nomEntreprise']"/>
+              @if (errors()['nomEntreprise']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['nomEntreprise'] | translate }}</span>
+              }
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" [@fieldShake]="shakeField() === 'matriculeFiscal' ? 'error' : 'idle'">
+                <label class="form-label" for="matriculeFiscal">Matricule fiscal <span class="form-req">*</span>@if (isFieldValid('matriculeFiscal')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="matriculeFiscal" class="form-input"
+                  type="text" placeholder="Ex : 1495908/S ou 1234567A/B/M/000"
+                  [(ngModel)]="form.matriculeFiscal"
+                  (input)="onMatriculeFiscalInput($event)"
+                  (focus)="onMatriculeFocus()"
+                  (blur)="onMatriculeBlur()"
+                  [class.form-input--error]="errors()['matriculeFiscal']"
+                  [class.form-input--valid]="isMatriculeFiscalValid() && !errors()['matriculeFiscal']"/>
+                @if (showMatriculeHint()) {
+                  <span class="form-hint">Formats acceptés : 1495908/S ou 1234567A/B/M/000</span>
+                }
+                @if (errors()['matriculeFiscal']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['matriculeFiscal'] | translate }}</span>
+                }
+              </div>
+
+              <div class="form-group" [@fieldShake]="shakeField() === 'formeJuridique' ? 'error' : 'idle'">
+                <label class="form-label" for="formeJuridique">Forme juridique <span class="form-req">*</span>@if (isFieldValid('formeJuridique')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <div class="select-wrap">
+                  <select id="formeJuridique" class="form-select"
+                    [(ngModel)]="form.formeJuridique" (ngModelChange)="validateField('formeJuridique')"
+                    [class.form-input--error]="errors()['formeJuridique']"
+                    [class.form-input--valid]="!!form.formeJuridique && !errors()['formeJuridique']">
+                    <option value="">Sélectionner...</option>
+                    @for (f of formesJuridiques; track f) {
+                      <option [value]="f">{{ f }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                @if (errors()['formeJuridique']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['formeJuridique'] | translate }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group" [@fieldShake]="shakeField() === 'raisonSociale' ? 'error' : 'idle'">
+              <label class="form-label" for="raisonSociale">Raison sociale <span class="form-req">*</span>@if (isFieldValid('raisonSociale')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+              <input id="raisonSociale" class="form-input"
+                type="text" placeholder="Nom officiel enregistré au RNE"
+                [(ngModel)]="form.raisonSociale"
+                (blur)="validateField('raisonSociale')"
+                (input)="validateField('raisonSociale')"
+                [class.form-input--error]="errors()['raisonSociale']"
+                [class.form-input--valid]="form.raisonSociale.trim().length > 2 && !errors()['raisonSociale']"/>
+              @if (errors()['raisonSociale']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['raisonSociale'] | translate }}</span>
+              }
+            </div>
+
+
+
+            <div class="form-group" [@fieldShake]="shakeField() === 'adresse' ? 'error' : 'idle'">
+              <label class="form-label" for="adresse">Adresse siège social <span class="form-req">*</span>@if (isFieldValid('adresse')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+              <input id="adresse" class="form-input"
+                type="text" placeholder="Numéro, rue, avenue..."
+                [(ngModel)]="form.adresse"
+                (blur)="validateField('adresse')"
+                (input)="validateField('adresse')"
+                [class.form-input--error]="errors()['adresse']"
+                [class.form-input--valid]="form.adresse.trim().length > 5 && !errors()['adresse']"/>
+              @if (errors()['adresse']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['adresse'] | translate }}</span>
+              }
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" [@fieldShake]="shakeField() === 'gouvernorat' ? 'error' : 'idle'">
+                <label class="form-label" for="gouvernorat">Gouvernorat <span class="form-req">*</span>@if (isFieldValid('gouvernorat')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <div class="select-wrap">
+                  <select id="gouvernorat" class="form-select"
+                    [(ngModel)]="form.gouvernorat" (ngModelChange)="validateField('gouvernorat')"
+                    [class.form-input--error]="errors()['gouvernorat']"
+                    [class.form-input--valid]="!!form.gouvernorat && !errors()['gouvernorat']">
+                    <option value="">Gouvernorat...</option>
+                    @for (g of gouvernorats; track g) {
+                      <option [value]="g">{{ g }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                @if (errors()['gouvernorat']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['gouvernorat'] | translate }}</span>
+                }
+              </div>
+
+              <div class="form-group" [@fieldShake]="shakeField() === 'codePostal' ? 'error' : 'idle'">
+                <label class="form-label" for="codePostal">Code postal <span class="form-req">*</span>@if (isFieldValid('codePostal')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="codePostal" class="form-input"
+                  type="text" inputmode="numeric" maxlength="4" placeholder="ex : 1000"
+                  [(ngModel)]="form.codePostal"
+                  (input)="onNumericInput($event, 'codePostal')"
+                  (blur)="validateField('codePostal')"
+                  [class.form-input--error]="errors()['codePostal']"
+                  [class.form-input--valid]="form.codePostal.trim().length === 4 && !errors()['codePostal']"/>
+                @if (errors()['codePostal']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['codePostal'] | translate }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" [@fieldShake]="shakeField() === 'siteWeb' ? 'error' : 'idle'">
+                <label class="form-label" for="siteWeb">Site internet <span class="form-hint-inline">(optionnel)</span>@if (isFieldValid('siteWeb')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="siteWeb" class="form-input"
+                  type="url" placeholder="https://exemple.tn"
+                  [(ngModel)]="form.siteWeb"
+                  (blur)="validateField('siteWeb')"
+                  (input)="validateField('siteWeb')"
+                  [class.form-input--error]="errors()['siteWeb']"
+                  [class.form-input--valid]="form.siteWeb.trim().length > 0 && !errors()['siteWeb']"/>
+                @if (errors()['siteWeb']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['siteWeb'] | translate }}</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="devisePrincipale">Devise principale</label>
+                <div class="select-wrap">
+                  <select id="devisePrincipale" class="form-select"
+                    [(ngModel)]="form.devisePrincipale">
+                    @for (d of devises; track d) {
+                      <option [value]="d">{{ d }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" [@fieldShake]="shakeField() === 'telEntreprise' ? 'error' : 'idle'">
+              <label class="form-label" for="telEntreprise">Téléphone entreprise <span class="form-req">*</span>@if (isFieldValid('telEntreprise')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+              <div class="input-adorn">
+                <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
+                <input id="telEntreprise" class="form-input form-input--padded"
+                  type="tel" inputmode="numeric" placeholder="XX XXX XXX"
+                  [(ngModel)]="form.telEntreprise"
+                  (input)="onNumericInput($event, 'telEntreprise')"
+                  (blur)="validateField('telEntreprise')"
+                  [class.form-input--error]="errors()['telEntreprise']"
+                  [class.form-input--valid]="form.telEntreprise.trim().length >= 8 && !errors()['telEntreprise']"/>
+              </div>
+              @if (errors()['telEntreprise']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['telEntreprise'] | translate }}</span>
+              }
+            </div>
+
+            <div class="step-actions step-actions--full">
+              <button class="btn-ghost" disabled aria-hidden="true">Retour</button>
+              <button class="btn-primary" [disabled]="!canContinue(1)" (click)="goToStep(2)">
+                Continuer
+                <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+        @if (step() === 'form' && currentStep() === 2) {
+          <div class="step-pane" [@slideUp]>
+            <header class="step-header">
+              <div class="step-eyebrow">Étape 2 — Responsable légal</div>
+              <h1 class="step-title">Responsable <em>de l'entreprise.</em></h1>
+            </header>
+
+            <div class="form-row">
+              <div class="form-group" [@fieldShake]="shakeField() === 'respPrenom' ? 'error' : 'idle'">
+                <label class="form-label" for="respPrenom">Prénom <span class="form-req">*</span>@if (isFieldValid('respPrenom')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="respPrenom" class="form-input"
+                  type="text" placeholder="Sarra"
+                  [(ngModel)]="form.respPrenom"
+                  (input)="onAlphaInput($event, 'respPrenom')"
+                  (blur)="validateField('respPrenom')"
+                  [class.form-input--error]="errors()['respPrenom']"
+                  [class.form-input--valid]="form.respPrenom.trim().length > 1 && !errors()['respPrenom']"/>
+                @if (errors()['respPrenom']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respPrenom'] | translate }}</span>
+                }
+              </div>
+
+              <div class="form-group" [@fieldShake]="shakeField() === 'respNom' ? 'error' : 'idle'">
+                <label class="form-label" for="respNom">Nom <span class="form-req">*</span>@if (isFieldValid('respNom')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="respNom" class="form-input"
+                  type="text" placeholder="Trabelsi"
+                  [(ngModel)]="form.respNom"
+                  (input)="onAlphaInput($event, 'respNom')"
+                  (blur)="validateField('respNom')"
+                  [class.form-input--error]="errors()['respNom']"
+                  [class.form-input--valid]="form.respNom.trim().length > 1 && !errors()['respNom']"/>
+                @if (errors()['respNom']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respNom'] | translate }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group" [@fieldShake]="shakeField() === 'respFonction' ? 'error' : 'idle'">
+              <label class="form-label" for="respFonction">Fonction officielle <span class="form-req">*</span>@if (isFieldValid('respFonction')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+              <div class="select-wrap">
+                <select id="respFonction" class="form-select"
+                  [(ngModel)]="form.respFonction" (ngModelChange)="validateField('respFonction')"
+                  [class.form-input--error]="errors()['respFonction']"
+                  [class.form-input--valid]="!!form.respFonction && !errors()['respFonction']">
+                  <option value="">Sélectionner votre titre...</option>
+                  @for (f of fonctions; track f) {
+                    <option [value]="f">{{ f }}</option>
+                  }
+                </select>
+                <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                  <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              @if (errors()['respFonction']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respFonction'] | translate }}</span>
+              }
+            </div>
+
+            @if (form.respFonction === 'Autre') {
+              <div class="form-group" [@fieldShake]="shakeField() === 'respFonctionAutre' ? 'error' : 'idle'">
+                <label class="form-label" for="respFonctionAutre">Précisez la fonction <span class="form-req">*</span>@if (isFieldValid('respFonctionAutre')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="respFonctionAutre" class="form-input"
+                  type="text" placeholder="Ex : Directeur opérations"
+                  [(ngModel)]="form.respFonctionAutre"
+                  (blur)="validateField('respFonctionAutre')"
+                  (input)="validateField('respFonctionAutre')"
+                  [class.form-input--error]="errors()['respFonctionAutre']"
+                  [class.form-input--valid]="form.respFonctionAutre.trim().length > 2 && !errors()['respFonctionAutre']"/>
+                @if (errors()['respFonctionAutre']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respFonctionAutre'] | translate }}</span>
+                }
+              </div>
+            }
+
+            <div class="form-row">
+              <div class="form-group" [@fieldShake]="shakeField() === 'respEmail' ? 'error' : 'idle'">
+                <label class="form-label" for="respEmail">Email <span class="form-req">*</span>@if (isFieldValid('respEmail')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <input id="respEmail" class="form-input"
+                  type="email" placeholder="responsable@entreprise.tn"
+                  [(ngModel)]="form.respEmail"
+                  (blur)="validateField('respEmail')"
+                  (input)="validateField('respEmail')"
+                  [class.form-input--error]="errors()['respEmail']"
+                  [class.form-input--valid]="form.respEmail.trim().length > 0 && !errors()['respEmail']"/>
+                @if (errors()['respEmail']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respEmail'] | translate }}</span>
+                }
+              </div>
+
+              <div class="form-group" [@fieldShake]="shakeField() === 'respTel' ? 'error' : 'idle'">
+                <label class="form-label" for="respTel">Téléphone <span class="form-req">*</span>@if (isFieldValid('respTel')) { <span class="label-check" aria-hidden="true">&#10003;</span> }</label>
+                <div class="input-adorn">
+                  <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
+                  <input id="respTel" class="form-input form-input--padded"
+                    type="tel" inputmode="numeric" placeholder="XX XXX XXX"
+                    [(ngModel)]="form.respTel"
+                    (input)="onNumericInput($event, 'respTel')"
+                    (blur)="validateField('respTel')"
+                    [class.form-input--error]="errors()['respTel']"
+                    [class.form-input--valid]="form.respTel.trim().length >= 8 && !errors()['respTel']"/>
+                </div>
+                @if (errors()['respTel']) {
+                <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respTel'] | translate }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button class="btn-ghost" (click)="goToStep(1)">Retour</button>
+              <button class="btn-primary" [disabled]="!canContinue(2)" (click)="goToStep(3)">
+                Continuer
+                <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+        @if (step() === 'form' && currentStep() === 3) {
+          <div class="step-pane" [@slideUp]>
+            <header class="step-header">
+              <div class="step-eyebrow">Étape 3 — Documents justificatifs</div>
+              <h1 class="step-title">Documents <em>justificatifs.</em></h1>
+              <p class="form-hint">Formats acceptés : PDF, JPG, PNG — Max 5 Mo par fichier</p>
+            </header>
+
+            @if (errors()['submit']) {
+          <div class="field-error" role="alert" aria-live="assertive">{{ errors()['submit'] | translate }}</div>
+            }
+            @if (errors()['documents']) {
+          <div class="field-error" role="alert" aria-live="polite">{{ errors()['documents'] | translate }}</div>
+            }
+
+            <div id="documents" class="doc-progress">
+              <div class="doc-progress__meta">
+                <span>Documents requis</span>
+                <span>{{ requiredCount() }}/{{ totalRequired() }}</span>
+              </div>
+              <div class="doc-progress__bar">
+                <div class="doc-progress__fill" [style.width.%]="progressPct()"></div>
+              </div>
+            </div>
+            @if (draftSavedAt()) {
+              <p class="form-hint form-hint--draft">Brouillon sauvegardé à {{ draftSavedLabel() }}</p>
+            }
+
+            <div class="doc-grid">
+              @for (doc of documents; track doc.key) {
+                <div class="doc-card"
+                  [class.doc-card--uploaded]="doc.file"
+                  [class.doc-card--drag]="dragTarget() === doc.key"
+                  [class.doc-card--error]="doc.error"
+                  [class.doc-card--optional]="!doc.required"
+                  (dragover)="onDragOver($event, doc.key)"
+                  (dragleave)="onDragLeave()"
+                  (drop)="onDrop($event, doc)">
+
+                  <div class="doc-card__head">
+                    <div class="doc-card__title">{{ doc.label }}</div>
+                    <span class="doc-card__badge" [class.doc-card__badge--optional]="!doc.required">
+                      {{ doc.required ? 'Requis' : 'Optionnel' }}
+                    </span>
+                  </div>
+
+                  <div class="doc-card__desc">{{ doc.description }}</div>
+
+                  <div class="doc-card__body">
+                    @if (doc.file) {
+                      <div class="doc-file">
+                        <div class="doc-file__thumb">
+                          @if (doc.preview) {
+                            <img [src]="doc.preview" alt="" />
+                          } @else {
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                              <rect x="3" y="1" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.4"/>
+                              <path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                            </svg>
+                          }
+                          @if (doc.loading) {
+                            <div class="doc-loading"><span class="doc-spinner"></span></div>
+                          }
+                        </div>
+                        <div class="doc-file__info">
+                          <span class="doc-file__name">{{ doc.file.name }}</span>
+                          <span class="doc-file__size">{{ formatSize(doc.file.size) }}</span>
+                        </div>
+                        <button type="button" class="doc-file__remove" (click)="removeFile(doc)" aria-label="Supprimer le document" title="Supprimer">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M2.5 3.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M5.5 2h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M4 5.2v5.1c0 .7.5 1.2 1.2 1.2h3.6c.7 0 1.2-.5 1.2-1.2V5.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5.8 6.4v3.3M8.2 6.4v3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                      </div>
+                    } @else {
+                      <label class="doc-upload">
+                        <div class="doc-upload__icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <rect x="1" y="1" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.3"/>
+                            <path d="M9 5v8M5 9h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                        <div class="doc-upload__text">
+                          Déposer un fichier ou <span>parcourir</span>
+                        </div>
+                        <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp"
+                          (change)="onFileSelect($event, doc)"/>
+                      </label>
+                    }
+                  </div>
+
+                  @if (doc.error) {
+                    <div class="doc-card__error" role="alert" aria-live="polite" aria-atomic="true">{{ doc.error }}</div>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="step-actions step-actions--submit">
+              <button class="btn-ghost" (click)="goToStep(2)">Retour</button>
+              <div class="submit-block">
+                <button class="btn-primary submit-block__button" [disabled]="!canSubmit()" (click)="submit()">
+                  @if (submitting()) {
+                    Envoi en cours...
+                  } @else {
+                    Soumettre la demande
+                  }
+                  <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                    <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                @if (submitBlockMessage()) {
+                  <div class="submit-block__error" role="alert" aria-live="polite">
+                    <span class="submit-block__error-icon" aria-hidden="true">!</span>
+                    <span>{{ submitBlockMessage() | translate }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+        </div>
+</div>
+    }
+    @if (step() === 'confirmation') {
+      <div class="rp-inner rp-inner--success">
+        <div class="success-pane" [@confirmIn]>
+          <div class="success-card">
+            <div class="success-badge">Dossier reçu</div>
+            <div class="success-brand">
+              <div class="success-brand-mark">
+                @if (form.logoPreview) {
+                  <img class="success-brand-logo" [src]="form.logoPreview" alt="Logo de l'entreprise">
+                } @else {
+                  <div class="success-brand-fallback">EY</div>
+                }
+              </div>
+              <div class="success-brand-copy">
+                <span class="success-brand-name">{{ form.raisonSociale || form.nomEntreprise || 'Votre entreprise' }}</span>
+                <span class="success-brand-sub">Validation KYC et création d'espace en cours</span>
+              </div>
+            </div>
+
+          <h2 class="success-title">Demande envoyée avec succès</h2>
+
+          <!-- Sous-titre -->
+          <p class="success-sub">
+            Votre dossier est en cours d'examen. Vous recevrez vos identifiants par email sous 48h ouvrables.
+          </p>
+
+          <!-- Référence dossier — fond sombre -->
+          <div class="success-grid">
+          <div class="success-ref">
+            <div class="success-ref-label">Référence dossier</div>
+            <div class="success-ref-box">
+              <span class="success-ref-value">{{ confirmationRef }}</span>
+              <button type="button" class="btn-copy" (click)="copyReference()">
+                @if (copySuccess()) {
+                  <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3 3L11 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Copié
+                } @else {
+                  Copier
+                }
+              </button>
+            </div>
+            <div class="success-ref-hint">Conservez cette référence pour tout suivi.</div>
+          </div>
+
+          <!-- Timeline suivi -->
+          <div class="success-timeline">
+            <div class="success-tl-label">Suivi de votre demande</div>
+            <div class="success-tl-steps">
+              <!-- Étape 1 : Dossier soumis -->
+              <div class="success-tl-step success-tl-step--done">
+                <div class="success-tl-node">
+                  <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                    <path d="M1 4l2.5 2.5L9 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="success-tl-connector"></div>
+                <div class="success-tl-info">
+                  <span class="success-tl-title">Dossier soumis</span>
+                  <span class="success-tl-desc">Reçu le {{ today() }}</span>
+                </div>
+              </div>
+              <!-- Étape 2 : Examen en cours -->
+              <div class="success-tl-step success-tl-step--active">
+                <div class="success-tl-node">
+                  <span class="success-tl-dot"></span>
+                </div>
+                <div class="success-tl-connector"></div>
+                <div class="success-tl-info">
+                  <span class="success-tl-title">Examen en cours</span>
+                  <span class="success-tl-desc">Délai estimé : 48h ouvrables</span>
+                </div>
+              </div>
+              <!-- Étape 3 : Accès accordé -->
+              <div class="success-tl-step success-tl-step--pending">
+                <div class="success-tl-node">3</div>
+                <div class="success-tl-info">
+                  <span class="success-tl-title">Accès accordé</span>
+                  <span class="success-tl-desc">Email avec identifiants</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="success-actions">
+          <button class="btn-dashboard" (click)="goToLogin()">
+            Retour à la connexion
+            <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button type="button" class="btn-follow" (click)="copyReference()">
+            @if (copySuccess()) {
+              Référence copiée
+            } @else {
+              Copier la référence
+            }
+          </button>
+
+          </div>
+          </div>
+        </div>
+      </div>
+    }
+    </div>
+    
+  </main>
+</div>

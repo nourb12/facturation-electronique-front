@@ -1,0 +1,98 @@
+{
+  "TRANSACTIONS": {
+    "TITLE": "المعاملات",
+    "TITLE_A": "سجل",
+    "TITLE_EM": "المعاملات.",
+    "SUBTITLE": "تابع إيراداتك ومصاريفك.",
+    "ACTIONS": {
+      "ADD": "معاملة جديدة",
+      "EXPORT": "تصدير",
+      "EXPORT_CSV": "تصدير CSV",
+      "EXPORT_PDF": "تصدير PDF",
+      "BULK": {
+        "CATEGORIZE": "تصنيف",
+        "DELETE": "حذف",
+        "EXPORT": "تصدير",
+        "JUSTIFY": "تبرير"
+      }
+    },
+    "FILTERS": {
+      "ALL": "الكل",
+      "IN": "الإيرادات",
+      "OUT": "المصاريف",
+      "MONTH": "هذا الشهر",
+      "QUARTER": "هذا الربع",
+      "YEAR": "هذه السنة",
+      "CUSTOM": "مخصص",
+      "SEARCH_PLACEHOLDER": "بحث عن معاملة…"
+    },
+    "TAB": {
+      "ALL": "جميع المعاملات",
+      "BY_CATEGORY": "حسب الفئة"
+    },
+    "TABLE": {
+      "DATE": "التاريخ",
+      "LABEL": "التسمية",
+      "TIER": "الطرف",
+      "CATEGORY": "الفئة",
+      "AMOUNT": "المبلغ",
+      "TYPE": "النوع",
+      "STATUS": "الحالة",
+      "DOC": "المستند",
+      "EMPTY": "لا توجد معاملات."
+    },
+    "TYPE": {
+      "ENTREE": "إيراد",
+      "SORTIE": "مصروف",
+      "": ""
+    },
+    "STATUS": {
+      "NONJUSTIFIEE": "غير مبررة",
+      "ENATTENTE": "في الانتظار",
+      "JUSTIFIEE": "مبررة",
+      "": ""
+    },
+    "COUNTERS": {
+      "JUSTIFIED": "مبررة",
+      "PENDING": "في الانتظار",
+      "UNJUSTIFIED": "غير مبررة"
+    },
+    "CATEGORY_ANALYSIS": {
+      "TITLE": "تحليل حسب الفئة",
+      "EMPTY": "لا توجد بيانات."
+    },
+    "DETAIL": {
+      "TITLE": "تفاصيل المعاملة",
+      "TAB": {
+        "RECEIPT": "المستند",
+        "ANALYTICS": "التحليل",
+        "COMMENTS": "التعليقات"
+      },
+      "RECEIPT": {
+        "STATUS_LABEL": "حالة المستند",
+        "STATUS_MISSING": "مفقود",
+        "STATUS_OPTIONAL": "اختياري",
+        "STATUS_PRESENT": "موجود",
+        "UPLOAD": "رفع مستند",
+        "DRAG_DROP": "اسحب وأفلت أو انقر للاختيار",
+        "LINK_INVOICE": "ربط بفاتورة",
+        "AUTO_TRANSMIT": "إرسال تلقائي"
+      },
+      "ANALYTICS": {
+        "CATEGORY": "الفئة",
+        "EDIT_CATEGORY": "تعديل الفئة",
+        "SPLIT": "تقسيم"
+      },
+      "COMMENTS": {
+        "HISTORY": "سجل الملاحظات",
+        "ADD_NOTE": "إضافة ملاحظة",
+        "PLACEHOLDER": "تعليقك…"
+      },
+      "SIDE": {
+        "GLOBAL_STATUS": "الحالة العامة",
+        "ACCOUNT": "الحساب",
+        "EDIT_ALL": "تعديل الكل"
+      }
+    }
+  }
+}

@@ -1,0 +1,345 @@
+<div class="page-wrap" [@pageIn]>
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">
+        {{ 'ACCOUNTING.FISCAL_PARAMS.TITLE_A' | translate }} <em>{{ 'ACCOUNTING.FISCAL_PARAMS.TITLE_EM' | translate }}</em>
+      </h1>
+      <p class="page-desc">{{ 'ACCOUNTING.FISCAL_PARAMS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      @if (selectedIds.size > 0) {
+        <button class="btn-danger-ghost" type="button" (click)="deleteSelected()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 3.5h9M5 3.5V2.5h3v1M4 3.5l.5 7h4l.5-7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ 'COMMON.ACTIONS.DELETE' | translate }} ({{ selectedIds.size }})
+        </button>
+      }
+    </div>
+  </header>
+
+  <div class="fiscal-layout">
+
+    <!-- -- TABLE -- -->
+    <section class="card fiscal-list">
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <div class="cols-wrap">
+            <button class="cols-btn" type="button" (click)="showColumns = !showColumns">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <rect x="1.5" y="2" width="3.5" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="2" width="4.5" height="5.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              {{ 'COMMON.TABLE.COLUMNS' | translate }}
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            @if (showColumns) {
+              <div class="cols-panel">
+                <div class="cols-panel-title">{{ 'COMMON.TABLE.VISIBLE_COLUMNS' | translate }}</div>
+                @for (c of columns; track c.key) {
+                  <label class="cols-item">
+                    <input type="checkbox" [(ngModel)]="visibleColumns[c.key]" />
+                    <span>{{ c.labelKey | translate }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="toolbar-right">
+          <div class="search-box">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="text" [placeholder]="'COMMON.TABLE.SEARCH' | translate" [(ngModel)]="searchQuery" (ngModelChange)="page = 1" />
+            @if (searchQuery) {
+              <button class="search-clear" type="button" (click)="searchQuery = ''; page = 1">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="table-box">
+        @if (loading()) {
+          <div class="table-skeleton">
+            @for (i of [1,2,3,4,5]; track i) {
+              <div class="skeleton-row">
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-md"></div>
+                <div class="skel skel-lg"></div>
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-md"></div>
+              </div>
+            }
+          </div>
+        } @else {
+          <table class="pf-table">
+            <thead>
+              <tr>
+                <th class="chk-col">
+                  <input type="checkbox" [checked]="isAllPageSelected()" (change)="toggleSelectAll($any($event.target).checked)" />
+                </th>
+                @if (visibleColumns['libelle']) { <th>{{ 'ACCOUNTING.FISCAL_PARAMS.COLUMNS.LABEL' | translate }}</th> }
+                @if (visibleColumns['valeur']) { <th>{{ 'ACCOUNTING.FISCAL_PARAMS.COLUMNS.VALUE_DEFAULT' | translate }}</th> }
+                @if (visibleColumns['ordre']) { <th>{{ 'ACCOUNTING.FISCAL_PARAMS.COLUMNS.ORDER' | translate }}</th> }
+                @if (visibleColumns['utilisation']) { <th>{{ 'ACCOUNTING.FISCAL_PARAMS.COLUMNS.USAGE' | translate }}</th> }
+                @if (visibleColumns['condition']) { <th>{{ 'ACCOUNTING.FISCAL_PARAMS.COLUMNS.CONDITION' | translate }}</th> }
+                @if (visibleColumns['action']) { <th class="act-col"></th> }
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of pagedRows(); track p.id) {
+                <tr [class.row-selected]="selectedIds.has(p.id)">
+                  <td class="chk-col">
+                    <input type="checkbox" [checked]="selectedIds.has(p.id)" (change)="toggleSelect(p.id, $any($event.target).checked)" />
+                  </td>
+                  @if (visibleColumns['libelle']) {
+                    <td class="libelle-cell">
+                      <span class="libelle-text">{{ p.libelle }}</span>
+                      @if (p.inclureRetenueSource) {
+                        <span class="tag-retenue">RS</span>
+                      }
+                    </td>
+                  }
+                  @if (visibleColumns['valeur']) {
+                    <td>
+                      <span class="val-badge" [class.val-neg]="p.signe === 'Negatif'">
+                        {{ formatValeur(p) }}
+                      </span>
+                    </td>
+                  }
+                  @if (visibleColumns['ordre']) { <td class="muted-cell">{{ ordreLabelKey(p) | translate }}</td> }
+                  @if (visibleColumns['utilisation']) {
+                    <td>
+                      <span class="util-badge" [class.util-auto]="p.utilisation === 'Auto'">
+                        {{ utilisationLabelKey(p) | translate }}
+                      </span>
+                    </td>
+                  }
+                  @if (visibleColumns['condition']) {
+                    <td>
+                      <span class="cond-badge" [class.cond-badge--active]="hasCondition(p)">
+                        {{ conditionLabelKey(p) | translate }}
+                      </span>
+                    </td>
+                  }
+                  @if (visibleColumns['action']) {
+                    <td class="act-col">
+                      <button class="row-action" type="button" (click)="edit(p)" [title]="'COMMON.ACTIONS.EDIT' | translate">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                          <path d="M8.5 2.5l2 2L4 11H2v-2L8.5 2.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (pagedRows().length === 0) {
+            <div class="empty-state">
+              <div class="empty-icon">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <rect x="3" y="3" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.4"/>
+                  <path d="M7 11h8M11 7v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="empty-title">
+                @if (searchQuery) {
+                  <ng-container>{{ 'ACCOUNTING.FISCAL_PARAMS.EMPTY.SEARCH_TITLE' | translate:{ query: searchQuery } }}</ng-container>
+                } @else {
+                  <ng-container>{{ 'ACCOUNTING.FISCAL_PARAMS.EMPTY.NO_DATA_TITLE' | translate }}</ng-container>
+                }
+              </p>
+              <p class="empty-sub">
+                @if (searchQuery) {
+                  <ng-container>{{ 'ACCOUNTING.FISCAL_PARAMS.EMPTY.SEARCH_SUB' | translate }}</ng-container>
+                } @else {
+                  <ng-container>{{ 'ACCOUNTING.FISCAL_PARAMS.EMPTY.NO_DATA_SUB' | translate }}</ng-container>
+                }
+              </p>
+              @if (searchQuery) {
+                <button class="btn-ghost-sm" type="button" (click)="searchQuery = ''">{{ 'COMMON.ACTIONS.CLEAR_SEARCH' | translate }}</button>
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <div class="table-footer">
+        <div class="footer-left">
+          <span>{{ 'COMMON.TABLE.ROWS' | translate }}&nbsp;:</span>
+          <select [(ngModel)]="pageSize" (ngModelChange)="page = 1">
+            @for (s of pageSizes; track s) { <option [value]="s">{{ s }}</option> }
+          </select>
+        </div>
+        <div class="footer-center">
+          @if (filteredRows().length > 0) {
+            {{ rangeStart() }}-{{ rangeEnd() }} {{ 'COMMON.TABLE.OF' | translate }} {{ filteredRows().length }}
+          }
+        </div>
+        <div class="footer-right">
+          <button class="pager" type="button" (click)="goPrev()" [disabled]="page === 1">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <span class="page-pill">{{ page }} / {{ totalPages() }}</span>
+          <button class="pager" type="button" (click)="goNext()" [disabled]="page >= totalPages()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- FORM -- -->
+    <aside class="card fiscal-form" [class.is-editing]="!!editId">
+      <div class="form-head">
+        <div class="form-head-left">
+          <div class="form-head-dot" [class.dot-edit]="!!editId"></div>
+          <h2>{{ (editId ? 'ACCOUNTING.FISCAL_PARAMS.FORM.TITLE_EDIT' : 'ACCOUNTING.FISCAL_PARAMS.FORM.TITLE_NEW') | translate }}</h2>
+        </div>
+        @if (editId) {
+          <button class="link-reset" type="button" (click)="resetForm()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1.5 6a4.5 4.5 0 1 0 1-2.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M1.5 2.5v3h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ 'COMMON.ACTIONS.RESET' | translate }}
+          </button>
+        }
+      </div>
+
+      <div class="form-body">
+
+        <!-- Libellé -->
+        <div class="form-group">
+          <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.LABEL' | translate }} <span class="req">*</span></label>
+          <input type="text" [(ngModel)]="form.libelle" [placeholder]="'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.LABEL_PLACEHOLDER' | translate"
+            [class.input-error]="submitted && !form.libelle.trim()" />
+          @if (submitted && !form.libelle.trim()) {
+            <span class="field-hint error">{{ 'COMMON.FORM.REQUIRED' | translate }}</span>
+          }
+        </div>
+
+        <!-- Valeur -->
+        <div class="form-group">
+          <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.VALUE_DEFAULT' | translate }} <span class="req">*</span></label>
+          <div class="input-addon-wrap">
+            <input type="number" [(ngModel)]="form.valeur" min="0" step="0.01"
+              [class.input-error]="submitted && form.valeur <= 0" />
+            <span class="input-addon">{{ form.type === 'Pourcentage' ? '%' : 'DT' }}</span>
+          </div>
+        </div>
+
+        <!-- Type + Signe -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.TYPE' | translate }} <span class="req">*</span></label>
+            <div class="chip-group">
+              <button class="chip" type="button"
+                [class.chip-active]="form.type === 'Pourcentage'"
+                (click)="form.type = 'Pourcentage'">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.TYPE.PERCENT' | translate }}</button>
+              <button class="chip" type="button"
+                [class.chip-active]="form.type === 'Fixe'"
+                (click)="form.type = 'Fixe'">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.TYPE.FIXED' | translate }}</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.SIGN' | translate }} <span class="req">*</span></label>
+            <div class="chip-group">
+              <button class="chip chip-pos" type="button"
+                [class.chip-active]="form.signe === 'Positif'"
+                (click)="form.signe = 'Positif'">
+                <span class="signe-dot dot-plus"></span>+
+              </button>
+              <button class="chip chip-neg" type="button"
+                [class.chip-active]="form.signe === 'Negatif'"
+                (click)="form.signe = 'Negatif'">
+                <span class="signe-dot dot-minus"></span>-
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ordre + Utilisation -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.ORDER' | translate }}</label>
+            <select [(ngModel)]="form.ordreCalcul">
+              <option value="AvantTva">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.ORDER.BEFORE_VAT' | translate }}</option>
+              <option value="ApresTva">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.ORDER.AFTER_VAT' | translate }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.FIELDS.USAGE' | translate }}</label>
+            <select [(ngModel)]="form.utilisation">
+              <option value="Manuel">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.USAGE.MANUAL' | translate }}</option>
+              <option value="Auto">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.USAGE.AUTO' | translate }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Toggle retenue -->
+        <div class="toggle-row">
+          <div class="toggle-text">
+            <span class="toggle-label">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.WITHHOLDING.LABEL' | translate }}</span>
+            <span class="toggle-sub">{{ 'ACCOUNTING.FISCAL_PARAMS.FORM.WITHHOLDING.SUB' | translate }}</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="form.inclureRetenueSource" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Documents -->
+        <div class="doc-block">
+          <div class="doc-title">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <rect x="1.5" y="1" width="9" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M4 4.5h4M4 6.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            {{ 'ACCOUNTING.FISCAL_PARAMS.FORM.DOCS.TITLE' | translate }}
+          </div>
+          <div class="doc-grid">
+            @for (d of documentOptions; track d.key) {
+              <label class="doc-item" [class.doc-checked]="isDocChecked(d.key)">
+                <input type="checkbox" [checked]="isDocChecked(d.key)" (change)="toggleDoc(d.key)" />
+                <span>{{ d.labelKey | translate }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-foot">
+        @if (editId) {
+          <button class="btn-ghost" type="button" (click)="resetForm()">{{ 'COMMON.CANCEL' | translate }}</button>
+        }
+        <button class="btn-primary" type="button" (click)="save()" [disabled]="!canSave()">
+          @if (saving()) {
+            <span class="btn-spinner"></span>
+            {{ 'COMMON.SAVING' | translate }}
+          } @else {
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M2 6.5l3.5 3.5 5.5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ (editId ? 'COMMON.ACTIONS.UPDATE' : 'COMMON.ACTIONS.ADD') | translate }}
+          }
+        </button>
+      </div>
+    </aside>
+
+  </div>
+</div>

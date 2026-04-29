@@ -1,0 +1,998 @@
+<div class="page-wrap page-layout" [@pageIn]>
+
+  <!-- --- HEADER --- -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Paramètres de <em>personnalisation</em></h1>
+      <p class="page-desc">Configuration globale · {{ activeSection().label }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="resetSection()">Réinitialiser</button>
+      <button class="btn-primary" [disabled]="saving()" (click)="saveSection()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        {{ saving() ? 'Enregistrement…' : 'Enregistrer' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- --- LAYOUT SPLIT --- -->
+  <div class="perso-layout">
+
+    <!-- NAV SIDEBAR -->
+    <nav class="perso-nav">
+      @for (group of navGroups; track group.label) {
+        <div class="nav-group">
+          <span class="nav-group-label">{{ group.label }}</span>
+          @for (item of group.items; track item.key) {
+            <button class="nav-item" [class.active]="activeSectionKey() === item.key"
+                    (click)="setSection(item.key)">
+              <span class="nav-item-icon" [innerHTML]="item.icon"></span>
+              <span class="nav-item-label">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="nav-badge">{{ item.badge }}</span>
+              }
+            </button>
+          }
+        </div>
+      }
+    </nav>
+
+    <!-- CONTENT AREA -->
+    <div class="perso-content" [@sectionIn]="activeSectionKey()">
+
+      <!-- ══════════════════════════════════════════
+           1. SÉQUENCES DE NUMÉROTATION
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'numerotation') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Séquences de <em>numérotation</em></h2>
+            <p class="section-desc">Définissez le format des numéros pour chaque type de document (obligatoire conformité DGI Tunisie).</p>
+          </div>
+
+          <div class="cards-grid">
+            @for (seq of data.sequences; track seq.type) {
+              <div class="setting-card">
+                <div class="setting-card-head">
+                  <span class="sc-icon" [style.background]="seq.color + '18'" [style.color]="seq.color">
+                    <span [innerHTML]="seq.icon"></span>
+                  </span>
+                  <div>
+                    <div class="sc-title">{{ seq.label }}</div>
+                    <div class="sc-preview">{{ buildPreview(seq) }}</div>
+                  </div>
+                </div>
+                <div class="sc-fields">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Préfixe</label>
+                      <input class="form-input" [(ngModel)]="seq.prefix" placeholder="FAC" (ngModelChange)="markDirty()" maxlength="6"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Séparateur</label>
+                      <select class="form-select" [(ngModel)]="seq.sep" (ngModelChange)="markDirty()">
+                        <option value="-">Tiret  —</option>
+                        <option value="/">Slash  /</option>
+                        <option value="_">Underscore _</option>
+                        <option value="">Aucun</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Inclure année</label>
+                      <select class="form-select" [(ngModel)]="seq.includeYear" (ngModelChange)="markDirty()">
+                        <option [ngValue]="true">Oui (AAAA)</option>
+                        <option [ngValue]="false">Non</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Nb chiffres</label>
+                      <select class="form-select" [(ngModel)]="seq.digits" (ngModelChange)="markDirty()">
+                        <option [ngValue]="4">4 — ex: 0001</option>
+                        <option [ngValue]="5">5 — ex: 00001</option>
+                        <option [ngValue]="6">6 — ex: 000001</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Prochain numéro</label>
+                      <input class="form-input font-mono" type="number" [(ngModel)]="seq.nextNum" min="1" (ngModelChange)="markDirty()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Remise à zéro</label>
+                      <select class="form-select" [(ngModel)]="seq.reset" (ngModelChange)="markDirty()">
+                        <option value="annuelle">Annuelle</option>
+                        <option value="continue">Continue</option>
+                        <option value="mensuelle">Mensuelle</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           2. PDF & APPARENCE
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'pdf') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">PDF & <em>Apparence</em></h2>
+            <p class="section-desc">Personnalisez l'aspect visuel de vos documents exportés (factures, devis, bons de commande).</p>
+          </div>
+
+          <div class="two-col-layout">
+            <div class="left-col">
+
+              <div class="setting-block">
+                <div class="block-title">Identité visuelle</div>
+                <div class="logo-upload-zone" (click)="triggerLogoUpload()">
+                  @if (data.pdf.logoUrl) {
+                    <img [src]="data.pdf.logoUrl" alt="Logo" class="logo-preview"/>
+                    <span class="logo-change">Changer le logo</span>
+                  } @else {
+                    <div class="logo-placeholder">
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect x="2" y="6" width="24" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="9" cy="12" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5 22l5-5 4 4 4-5 5 6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Déposer votre logo</span>
+                      <span class="logo-hint">PNG, JPG · max 2 Mo</span>
+                    </div>
+                  }
+                </div>
+                <input #logoInput type="file" accept="image/*" style="display:none" (change)="onLogoChange($event)"/>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Couleur principale</div>
+                <div class="color-row">
+                  @for (c of colorPresets; track c) {
+                    <button class="color-swatch" [style.background]="c"
+                            [class.active]="data.pdf.primaryColor === c"
+                            (click)="setPdfPrimaryColor(c)"></button>
+                  }
+                  <input type="color" class="color-custom" [(ngModel)]="data.pdf.primaryColor" (ngModelChange)="markDirty()" title="Couleur personnalisée"/>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Police des documents</div>
+                <select class="form-select" [(ngModel)]="data.pdf.font" (ngModelChange)="markDirty()">
+                  <option value="Helvetica">Helvetica</option>
+                  <option value="Arial">Arial</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Calibri">Calibri</option>
+                </select>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Taille du papier</div>
+                <div class="toggle-group">
+                  @for (s of ['A4','Letter','A5']; track s) {
+                    <button class="toggle-btn" [class.active]="data.pdf.paperSize === s"
+                            (click)="setPdfPaperSize(s)">{{ s }}</button>
+                  }
+                </div>
+              </div>
+
+            </div>
+
+            <div class="right-col">
+              <div class="setting-block">
+                <div class="block-title">Mentions légales obligatoires (DGI)</div>
+                <div class="form-group">
+                  <label class="form-label">Matricule fiscal</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.pdf.matriculeFiscal" placeholder="1234567A/B/C/000" (ngModelChange)="markDirty()"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">RNE</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.pdf.rne" placeholder="J12345678" (ngModelChange)="markDirty()"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">RC (Registre de commerce)</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.pdf.rc" placeholder="B12345678" (ngModelChange)="markDirty()"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">IBAN / RIB bancaire</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.pdf.iban" placeholder="TN59 10 006 0351835984788" (ngModelChange)="markDirty()"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Pied de page personnalisé</label>
+                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.footerText"
+                    placeholder="Toute facture non réglée dans les délais sera majorée d'une pénalité de retard…"
+                    rows="3" (ngModelChange)="markDirty()"></textarea>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Options d'affichage</div>
+                @for (opt of pdfOptions; track opt.key) {
+                  <div class="toggle-row">
+                    <div>
+                      <div class="toggle-label">{{ opt.label }}</div>
+                      <div class="toggle-hint">{{ opt.hint }}</div>
+                    </div>
+                    <button class="switch" [class.on]="data.pdf.options[opt.key]"
+                            (click)="togglePdfOption(opt.key)">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           3. TYPES DE DOCUMENTS
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'types') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Types de <em>documents</em></h2>
+            <p class="section-desc">Configurez les types de documents disponibles et leurs paramètres par défaut (Art. 18 Code TVA Tunisie).</p>
+          </div>
+
+          <div class="table-box">
+            <table class="ft-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Code préfixe</th>
+                  <th>Numérotation</th>
+                  <th>TVA par défaut</th>
+                  <th>Délai paiement</th>
+                  <th>Actif</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (t of data.typesDocuments; track t.key) {
+                  <tr>
+                    <td>
+                      <div class="ft-client-cell">
+                        <div class="ft-client-init" [style.background]="t.color+'18'" [style.color]="t.color">
+                          {{ t.label.substring(0,2) }}
+                        </div>
+                        <div>
+                          <div class="ft-client-name">{{ t.label }}</div>
+                          <div class="ft-client-email">{{ t.description }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><input class="form-input font-mono" style="width:90px" [(ngModel)]="t.prefix" (ngModelChange)="markDirty()"/></td>
+                    <td>
+                      <select class="form-select" style="width:140px" [(ngModel)]="t.seqKey" (ngModelChange)="markDirty()">
+                        @for (s of data.sequences; track s.type) {
+                          <option [value]="s.type">{{ s.label }}</option>
+                        }
+                        <option value="custom">Séquence propre</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-select" style="width:90px" [(ngModel)]="t.defaultTva" (ngModelChange)="markDirty()">
+                        <option [ngValue]="19">19%</option>
+                        <option [ngValue]="13">13%</option>
+                        <option [ngValue]="7">7%</option>
+                        <option [ngValue]="0">0%</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-select" style="width:110px" [(ngModel)]="t.delaiPaiement" (ngModelChange)="markDirty()">
+                        <option [ngValue]="0">Comptant</option>
+                        <option [ngValue]="30">30 jours</option>
+                        <option [ngValue]="60">60 jours</option>
+                        <option [ngValue]="90">90 jours</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button class="switch" [class.on]="t.actif" (click)="toggleTypeDocumentActive(t)">
+                        <span class="switch-thumb"></span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           4. CATÉGORIES DE VENTE
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'catVente') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Catégories de <em>vente</em></h2>
+            <p class="section-desc">Organisez vos produits/services. Liées aux comptes de produits (Classe 7 — PCG Tunisie).</p>
+          </div>
+          <ng-container *ngTemplateOutlet="categoryManager; context: { $implicit: data.categoriesVente, type: 'vente' }"/>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           5. CATÉGORIES D'ACHAT
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'catAchat') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Catégories d'<em>achat</em></h2>
+            <p class="section-desc">Classifiez vos dépenses. Liées aux comptes de charges (Classe 6 — PCG Tunisie). Importantes pour déductibilité TVA.</p>
+          </div>
+          <ng-container *ngTemplateOutlet="categoryManager; context: { $implicit: data.categoriesAchat, type: 'achat' }"/>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           6. TAXES & TAUX
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'taxes') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Taxes & <em>Taux</em></h2>
+            <p class="section-desc">TVA, FODEC, Droit de consommation, TCL, Timbre fiscal — Conformité code TVA & loi de finances Tunisie.</p>
+          </div>
+
+          <div class="mini-kpis" style="margin-bottom:20px">
+            <div class="mini-kpi">
+              <span class="mk-label">Taxes actives</span>
+              <span class="mk-val mk--ey">{{ activeTaxesCount() }}</span>
+            </div>
+            <div class="mini-kpi">
+              <span class="mk-label">Taux TVA normal</span>
+              <span class="mk-val mk--ok">19%</span>
+            </div>
+            <div class="mini-kpi">
+              <span class="mk-label">Timbre fiscal</span>
+              <span class="mk-val mk--warn">1 DT / facture ≥ 1000</span>
+            </div>
+          </div>
+
+          <div class="table-box">
+            <div class="table-toolbar">
+              <span class="lignes-title">Configuration des taxes</span>
+              <button class="btn-add-ligne" (click)="addTaxe()">+ Ajouter taxe</button>
+            </div>
+            <table class="ft-table">
+              <thead>
+                <tr>
+                  <th>Désignation</th>
+                  <th>Type</th>
+                  <th>Taux</th>
+                  <th>Base de calcul</th>
+                  <th>Compte PCG</th>
+                  <th>Actif</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tax of data.taxes; track tax.id) {
+                  <tr>
+                    <td class="ft-bold">
+                      {{ tax.label }}
+                      @if (tax.systeme) { <span class="badge badge--neutral" style="margin-left:6px">Système</span> }
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="taxTypeClass(tax.type)">{{ tax.type }}</span>
+                    </td>
+                    <td>
+                      @if (tax.systeme) {
+                        <span class="font-mono ft-bold" [style.color]="'var(--c-ey)'">{{ tax.taux }}%</span>
+                      } @else {
+                        <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="tax.taux"
+                               min="0" max="100" step="0.1" (ngModelChange)="markDirty()"/>
+                      }
+                    </td>
+                    <td>
+                      <select class="form-select" style="width:130px" [(ngModel)]="tax.base" [disabled]="tax.systeme" (ngModelChange)="markDirty()">
+                        <option value="HT">Montant HT</option>
+                        <option value="apres_tva">Après TVA</option>
+                        <option value="TTC">Montant TTC</option>
+                        <option value="fixe">Montant fixe</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input class="form-input font-mono" style="width:90px" [(ngModel)]="tax.comptePcg"
+                             placeholder="4457…" [disabled]="tax.systeme" (ngModelChange)="markDirty()"/>
+                    </td>
+                    <td>
+                      <button class="switch" [class.on]="tax.actif" [disabled]="tax.systeme"
+                              (click)="toggleTaxeActive(tax)">
+                        <span class="switch-thumb"></span>
+                      </button>
+                    </td>
+                    <td>
+                      @if (!tax.systeme) {
+                        <button class="act-btn act-btn--err" (click)="removeTaxe(tax.id)">
+                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 6v4M7 4v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>Le timbre fiscal de 1 DT s'applique automatiquement sur toute facture dont le montant TTC est ≥ 1000 DT (Loi de finances 2024).</span>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           7. RETENUES À LA SOURCE
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'retenues') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Retenues à la <em>source</em></h2>
+            <p class="section-desc">Taux légaux Tunisie — Code IRPP & IS. Obligatoire sur tout paiement professionnel soumis à RS.</p>
+          </div>
+
+          <div class="table-box">
+            <div class="table-toolbar">
+              <span class="lignes-title">Taux de retenue configurés</span>
+              <button class="btn-add-ligne" (click)="addRetenue()">+ Ajouter taux</button>
+            </div>
+            <table class="ft-table">
+              <thead>
+                <tr>
+                  <th>Désignation</th>
+                  <th>Taux</th>
+                  <th>Applicable à</th>
+                  <th>Nature paiement</th>
+                  <th>Compte PCG</th>
+                  <th>Actif</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of data.retenues; track r.id) {
+                  <tr>
+                    <td>
+                      <input class="form-input" style="width:220px" [(ngModel)]="r.label"
+                             [disabled]="r.systeme" (ngModelChange)="markDirty()"/>
+                    </td>
+                    <td>
+                      @if (r.systeme) {
+                        <span class="font-mono ft-bold" [style.color]="'var(--c-ey)'">{{ r.taux }}%</span>
+                      } @else {
+                        <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="r.taux"
+                               min="0" max="100" step="0.5" (ngModelChange)="markDirty()"/>
+                      }
+                    </td>
+                    <td>
+                      <select class="form-select" style="width:150px" [(ngModel)]="r.applicable" (ngModelChange)="markDirty()">
+                        <option value="personne_physique">Personne physique</option>
+                        <option value="personne_morale">Personne morale</option>
+                        <option value="les_deux">Les deux</option>
+                        <option value="non_resident">Non-résident</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-select" style="width:160px" [(ngModel)]="r.nature" (ngModelChange)="markDirty()">
+                        <option value="fournitures">Fournitures / Marchés</option>
+                        <option value="honoraires">Honoraires professionnels</option>
+                        <option value="loyers">Loyers</option>
+                        <option value="commissions">Commissions</option>
+                        <option value="dividendes">Dividendes</option>
+                        <option value="artistes">Artistes / sportifs</option>
+                        <option value="autres">Autres revenus</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input class="form-input font-mono" style="width:90px" [(ngModel)]="r.comptePcg"
+                             placeholder="4452…" [disabled]="r.systeme" (ngModelChange)="markDirty()"/>
+                    </td>
+                    <td>
+                      <button class="switch" [class.on]="r.actif"
+                              (click)="toggleRetenueActive(r)">
+                        <span class="switch-thumb"></span>
+                      </button>
+                    </td>
+                    <td>
+                      @if (!r.systeme) {
+                        <button class="act-btn act-btn--err" (click)="removeRetenue(r.id)">
+                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box info-box--warn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l6 11H1L7 1z" stroke="currentColor" stroke-width="1.3"/><path d="M7 6v3M7 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>La déclaration mensuelle RS (formulaire DGI) est due avant le 28 du mois suivant le paiement.</span>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           8. GESTION DES ARTICLES
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'articles') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Gestion des <em>articles</em></h2>
+            <p class="section-desc">Unités de mesure, familles d'articles et paramètres par défaut pour le catalogue.</p>
+          </div>
+
+          <div class="two-col-layout">
+            <div class="left-col">
+              <div class="setting-block">
+                <div class="block-title">Unités de mesure</div>
+                <div class="tag-manager">
+                  @for (u of data.articles.unites; track u.id) {
+                    <div class="tag-item">
+                      <input class="tag-input" [(ngModel)]="u.label" (ngModelChange)="markDirty()" maxlength="10"/>
+                      <input class="tag-input tag-input--sm" [(ngModel)]="u.code" (ngModelChange)="markDirty()" maxlength="5" placeholder="kg"/>
+                      <button class="tag-del" (click)="removeUnite(u.id)">×</button>
+                    </div>
+                  }
+                  <button class="btn-add-ligne" (click)="addUnite()">+ Unité</button>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Familles d'articles</div>
+                <div class="tag-manager">
+                  @for (f of data.articles.familles; track f.id) {
+                    <div class="tag-item">
+                      <input class="tag-input" [(ngModel)]="f.label" (ngModelChange)="markDirty()"/>
+                      <span class="tag-badge" [style.background]="f.color+'22'" [style.color]="f.color">{{ f.label.substring(0,2).toUpperCase() }}</span>
+                      <button class="tag-del" (click)="removeFamille(f.id)">×</button>
+                    </div>
+                  }
+                  <button class="btn-add-ligne" (click)="addFamille()">+ Famille</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="right-col">
+              <div class="setting-block">
+                <div class="block-title">Paramètres par défaut</div>
+                <div class="form-group">
+                  <label class="form-label">TVA par défaut</label>
+                  <select class="form-select" [(ngModel)]="data.articles.defaultTva" (ngModelChange)="markDirty()">
+                    <option [ngValue]="19">19% — Taux normal</option>
+                    <option [ngValue]="13">13% — Banques / Assurances</option>
+                    <option [ngValue]="7">7% — Produits de base</option>
+                    <option [ngValue]="0">0% — Exonéré / Export</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Unité par défaut</label>
+                  <select class="form-select" [(ngModel)]="data.articles.defaultUnite" (ngModelChange)="markDirty()">
+                    @for (u of data.articles.unites; track u.id) {
+                      <option [value]="u.id">{{ u.label }} ({{ u.code }})</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Compte PCG produits (Cl. 7)</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.articles.comptePcgProduits"
+                         placeholder="701000" (ngModelChange)="markDirty()"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Compte PCG services (Cl. 7)</label>
+                  <input class="form-input font-mono" [(ngModel)]="data.articles.comptePcgServices"
+                         placeholder="706000" (ngModelChange)="markDirty()"/>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Options catalogue</div>
+                @for (opt of articleOptions; track opt.key) {
+                  <div class="toggle-row">
+                    <div>
+                      <div class="toggle-label">{{ opt.label }}</div>
+                      <div class="toggle-hint">{{ opt.hint }}</div>
+                    </div>
+                    <button class="switch" [class.on]="data.articles.options[opt.key]"
+                            (click)="toggleArticleOption(opt.key)">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           9. MODES DE PAIEMENT
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'paiements') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Modes de <em>paiement</em></h2>
+            <p class="section-desc">Configurez les modes de règlement. Attention : plafond légal espèces B2B = 5 000 DT (Loi 2022-46).</p>
+          </div>
+
+          <div class="table-box">
+            <div class="table-toolbar">
+              <span class="lignes-title">Modes disponibles</span>
+              <button class="btn-add-ligne" (click)="addModePaiement()">+ Ajouter</button>
+            </div>
+            <table class="ft-table">
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Code</th>
+                  <th>Délai par défaut</th>
+                  <th>Plafond légal (DT)</th>
+                  <th>Compte PCG</th>
+                  <th>Actif</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of data.modesPaiement; track m.id) {
+                  <tr>
+                    <td>
+                      <div class="ft-client-cell">
+                        <div class="ft-client-init" [style.background]="m.color+'18'" [style.color]="m.color">
+                          <span [innerHTML]="m.icon"></span>
+                        </div>
+                        <input class="form-input" style="width:150px" [(ngModel)]="m.label"
+                               [disabled]="m.systeme" (ngModelChange)="markDirty()"/>
+                      </div>
+                    </td>
+                    <td><input class="form-input font-mono" style="width:70px" [(ngModel)]="m.code"
+                               [disabled]="m.systeme" (ngModelChange)="markDirty()"/></td>
+                    <td>
+                      <select class="form-select" style="width:120px" [(ngModel)]="m.delai" (ngModelChange)="markDirty()">
+                        <option [ngValue]="0">Comptant</option>
+                        <option [ngValue]="30">30 jours</option>
+                        <option [ngValue]="60">60 jours</option>
+                        <option [ngValue]="90">90 jours</option>
+                        <option [ngValue]="120">120 jours</option>
+                      </select>
+                    </td>
+                    <td>
+                      @if (m.plafond) {
+                        <span class="badge badge--warn">{{ m.plafond | number }} DT</span>
+                      } @else {
+                        <span class="ft-muted">—</span>
+                      }
+                    </td>
+                    <td>
+                      <input class="form-input font-mono" style="width:90px" [(ngModel)]="m.comptePcg"
+                             placeholder="532…" (ngModelChange)="markDirty()"/>
+                    </td>
+                    <td>
+                      <button class="switch" [class.on]="m.actif"
+                              (click)="toggleModePaiementActive(m)">
+                        <span class="switch-thumb"></span>
+                      </button>
+                    </td>
+                    <td>
+                      @if (!m.systeme) {
+                        <button class="act-btn act-btn--err" (click)="removeModePaiement(m.id)">
+                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           10. COMPTABILITÉ
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'comptabilite') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title"><em>Comptabilité</em></h2>
+            <p class="section-desc">Plan comptable général (PCG Tunisie 1997), journaux, exercice fiscal et paramètres de clôture.</p>
+          </div>
+
+          <div class="two-col-layout">
+            <div class="left-col">
+              <div class="setting-block">
+                <div class="block-title">Exercice fiscal</div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Début exercice</label>
+                    <input class="form-input" type="date" [(ngModel)]="data.comptabilite.debutExercice" (ngModelChange)="markDirty()"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Fin exercice</label>
+                    <input class="form-input" type="date" [(ngModel)]="data.comptabilite.finExercice" (ngModelChange)="markDirty()"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Devise de référence</label>
+                  <select class="form-select" [(ngModel)]="data.comptabilite.devise" (ngModelChange)="markDirty()">
+                    <option value="TND">TND — Dinar tunisien</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="USD">USD — Dollar US</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Méthode de comptabilisation</label>
+                  <select class="form-select" [(ngModel)]="data.comptabilite.methode" (ngModelChange)="markDirty()">
+                    <option value="engagement">Comptabilité d'engagement</option>
+                    <option value="tresorerie">Comptabilité de trésorerie</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Journaux comptables</div>
+                @for (j of data.comptabilite.journaux; track j.id) {
+                  <div class="journal-row">
+                    <span class="journal-code font-mono">{{ j.code }}</span>
+                    <input class="form-input" style="flex:1" [(ngModel)]="j.label" (ngModelChange)="markDirty()"/>
+                    <button class="switch" [class.on]="j.actif" (click)="toggleJournalActive(j)">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="right-col">
+              <div class="setting-block">
+                <div class="block-title">Comptes PCG clés</div>
+                @for (c of data.comptabilite.comptesCles; track c.id) {
+                  <div class="form-group">
+                    <label class="form-label">{{ c.label }}</label>
+                    <input class="form-input font-mono" [(ngModel)]="c.compte" (ngModelChange)="markDirty()" placeholder="{{ c.placeholder }}"/>
+                  </div>
+                }
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Options de clôture</div>
+                @for (opt of comptaOptions; track opt.key) {
+                  <div class="toggle-row">
+                    <div>
+                      <div class="toggle-label">{{ opt.label }}</div>
+                      <div class="toggle-hint">{{ opt.hint }}</div>
+                    </div>
+                    <button class="switch" [class.on]="data.comptabilite.options[opt.key]"
+                            (click)="toggleComptaOption(opt.key)">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           11. CONDITIONS PAR DÉFAUT
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'conditions') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title">Conditions & <em>affichage</em> par défaut</h2>
+            <p class="section-desc">Délais, devises, langue des documents et conditions générales de vente.</p>
+          </div>
+
+          <div class="two-col-layout">
+            <div class="left-col">
+              <div class="setting-block">
+                <div class="block-title">Délais et devises</div>
+                <div class="form-group">
+                  <label class="form-label">Délai de paiement par défaut</label>
+                  <select class="form-select" [(ngModel)]="data.conditions.delaiPaiement" (ngModelChange)="markDirty()">
+                    <option [ngValue]="0">Comptant</option>
+                    <option [ngValue]="30">30 jours</option>
+                    <option [ngValue]="60">60 jours</option>
+                    <option [ngValue]="90">90 jours fin de mois</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Devise par défaut</label>
+                  <select class="form-select" [(ngModel)]="data.conditions.devise" (ngModelChange)="markDirty()">
+                    <option value="TND">TND — Dinar tunisien</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="USD">USD — Dollar américain</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Langue des documents</label>
+                  <div class="toggle-group">
+                    @for (l of [['fr','Français'],['ar','العربية'],['en','English']]; track l[0]) {
+                      <button class="toggle-btn" [class.active]="data.conditions.langue === l[0]"
+                              (click)="setConditionsLangue(l[0])">{{ l[1] }}</button>
+                    }
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Taux de pénalité de retard (%)</label>
+                  <input class="form-input font-mono" type="number" [(ngModel)]="data.conditions.penaliteRetard"
+                         min="0" max="100" step="0.5" (ngModelChange)="markDirty()"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="right-col">
+              <div class="setting-block">
+                <div class="block-title">Conditions générales de vente</div>
+                <textarea class="form-input form-textarea" [(ngModel)]="data.conditions.cgv"
+                  rows="8" (ngModelChange)="markDirty()"
+                  placeholder="Saisir les conditions générales de vente qui apparaîtront sur vos factures…"></textarea>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Mentions légales automatiques</div>
+                @for (opt of conditionsOptions; track opt.key) {
+                  <div class="toggle-row">
+                    <div>
+                      <div class="toggle-label">{{ opt.label }}</div>
+                      <div class="toggle-hint">{{ opt.hint }}</div>
+                    </div>
+                    <button class="switch" [class.on]="data.conditions.options[opt.key]"
+                            (click)="toggleConditionsOption(opt.key)">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════════════════
+           12. WEBHOOKS
+      ══════════════════════════════════════════ -->
+      @if (activeSectionKey() === 'webhooks') {
+        <div class="section-body">
+          <div class="section-intro">
+            <h2 class="section-title"><em>Webhooks</em> & Intégrations</h2>
+            <p class="section-desc">Notifications automatiques vers vos systèmes externes (ERP, RH, e-commerce).</p>
+          </div>
+
+          <div class="table-box" style="margin-bottom:16px">
+            <div class="table-toolbar">
+              <span class="lignes-title">Endpoints configurés</span>
+              <button class="btn-add-ligne" (click)="addWebhook()">+ Ajouter webhook</button>
+            </div>
+            <table class="ft-table">
+              <thead>
+                <tr><th>URL</th><th>Événements</th><th>Dernier appel</th><th>Statut</th><th>Actif</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                @for (w of data.webhooks; track w.id) {
+                  <tr>
+                    <td><input class="form-input font-mono" style="width:260px" [(ngModel)]="w.url" placeholder="https://…" (ngModelChange)="markDirty()"/></td>
+                    <td>
+                      <div style="display:flex;gap:4px;flex-wrap:wrap">
+                        @for (ev of webhookEvents; track ev.key) {
+                          <button class="toggle-btn toggle-btn--sm" [class.active]="w.events.includes(ev.key)"
+                                  (click)="toggleWebhookEvent(w, ev.key)">{{ ev.label }}</button>
+                        }
+                      </div>
+                    </td>
+                    <td><span class="ft-date">{{ w.lastCall | date:'dd/MM/yy HH:mm' }}</span></td>
+                    <td>
+                      @if (w.lastStatus === 200) {
+                        <span class="badge badge--ok">200 OK</span>
+                      } @else if (w.lastStatus) {
+                        <span class="badge badge--err">{{ w.lastStatus }}</span>
+                      } @else {
+                        <span class="badge badge--neutral">—</span>
+                      }
+                    </td>
+                    <td>
+                      <button class="switch" [class.on]="w.actif" (click)="toggleWebhookActive(w)">
+                        <span class="switch-thumb"></span>
+                      </button>
+                    </td>
+                    <td>
+                      <div class="ft-actions">
+                        <button class="act-btn act-btn--ghost" (click)="testWebhook(w)" title="Tester">
+                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <path d="M2 5.5l2 2 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                        <button class="act-btn act-btn--err" (click)="removeWebhook(w.id)">
+                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                @if (data.webhooks.length === 0) {
+                  <tr><td colspan="6" class="empty-row">Aucun webhook configuré</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+<!-- --- TEMPLATE RÉUTILISABLE : CATEGORY MANAGER --- -->
+<ng-template #categoryManager let-cats let-type="type">
+  <div class="table-box">
+    <div class="table-toolbar">
+      <div class="search-box" style="min-width:200px">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Rechercher…" [(ngModel)]="catSearch"/>
+      </div>
+      <button class="btn-add-ligne" (click)="addCategory(type)">+ Ajouter</button>
+    </div>
+    <table class="ft-table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Code comptable (PCG)</th>
+          <th>TVA associée</th>
+          <th>Documents</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of cats | catFilter:catSearch; track c.id) {
+          <tr>
+            <td><input class="form-input" style="width:220px" [(ngModel)]="c.label" (ngModelChange)="markDirty()"/></td>
+            <td><input class="form-input font-mono" style="width:100px" [(ngModel)]="c.compte" placeholder="601000" (ngModelChange)="markDirty()"/></td>
+            <td>
+              <select class="form-select" style="width:90px" [(ngModel)]="c.tva" (ngModelChange)="markDirty()">
+                <option [ngValue]="19">19%</option>
+                <option [ngValue]="13">13%</option>
+                <option [ngValue]="7">7%</option>
+                <option [ngValue]="0">0%</option>
+              </select>
+            </td>
+            <td>
+              @if (c.docs > 0) {
+                <span class="badge badge--ey">{{ c.docs }} doc(s)</span>
+              } @else {
+                <span class="badge badge--neutral">0 document</span>
+              }
+            </td>
+            <td>
+              <button class="act-btn act-btn--err" (click)="removeCategory(type, c.id)" [disabled]="c.docs > 0">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</ng-template>

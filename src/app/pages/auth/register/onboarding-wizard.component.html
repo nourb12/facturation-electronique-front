@@ -1,0 +1,916 @@
+<!-- -------------------------------------------------------------------------
+     ONBOARDING WIZARD - Live Card Preview  [FIXED v2]
+     Corrections : logo upload UX, code postal étape 2, validations harmonisées
+---------------------------------------------------------------------------- -->
+
+<div class="wizard-layout">
+
+  <!-- -------------------------------------------------
+       PANNEAU GAUCHE — FIXE
+  ------------------------------------------------- -->
+  <aside class="left-panel">
+    <div class="lp-orb lp-orb--1" aria-hidden="true"></div>
+    <div class="lp-orb lp-orb--2" aria-hidden="true"></div>
+
+    <a class="lp-logo" routerLink="/landing">
+      <div class="lp-mark">EY</div>
+      <div class="lp-wordmark">
+        <span class="lp-name">TunisFlow</span>
+        <span class="lp-sub">Facturation électronique certifiée</span>
+      </div>
+    </a>
+
+    <div class="lp-promise">
+      <div class="lp-badge">
+        <span class="lp-badge-dot"></span>
+        TEIF 2026 - Certifié DGI
+      </div>
+      <h2 class="lp-headline">
+        Votre fiche<br><em>Entreprise.</em>
+      </h2>
+      <p class="lp-desc">
+        Complétez les informations et visualisez la structuration de votre identité fiscale.
+      </p>
+    </div>
+
+    <nav class="lp-steps" aria-label="étapes">
+      @for (step of steps; track step.id) {
+        <div class="lp-step"
+          [class.lp-step--active]="currentStep() === step.id"
+          [class.lp-step--done]="currentStep() > step.id">
+          <div class="lp-step-track">
+            <div class="lp-step-node">
+              @if (currentStep() > step.id) {
+                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                  <path d="M1 4l2.5 2.5L9 1" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              } @else {
+                {{ step.icon }}
+              }
+            </div>
+            @if (step.id < steps.length) {
+              <div class="lp-step-line"></div>
+            }
+          </div>
+          <div class="lp-step-info">
+            <div class="lp-step-label">{{ step.label }}</div>
+          </div>
+        </div>
+      }
+    </nav>
+
+    <footer class="lp-trust">
+      <div class="lp-trust-item">
+        <div class="lp-trust-dot"></div>
+        <span>Données hébergées en Tunisie — AES-256</span>
+      </div>
+      <div class="lp-trust-item">
+        <div class="lp-trust-dot lp-trust-dot--ey"></div>
+        <span>Aucune carte bancaire requise</span>
+      </div>
+    </footer>
+  </aside>
+
+  <!-- -------------------------------------------------
+       PANNEAU DROIT — FORMULAIRE + CARTE
+  ------------------------------------------------- -->
+  <main class="right-panel" role="main">
+
+    <!-- -- FORMULAIRE -- -->
+    <div class="form-col" [class.form-col--success]="currentStep() === 5">
+      <div class="rp-inner">
+
+        <!-- Progress (masqué sur succés) -->
+        @if (currentStep() < 5) {
+          <div class="wiz-progress" role="progressbar"
+            [attr.aria-valuenow]="currentStep()"
+            [attr.aria-valuemax]="steps.length">
+            <div class="wiz-progress-meta">
+              <span class="wiz-progress-label">Étape {{ currentStep() }} sur {{ steps.length }}</span>
+              <span class="wiz-progress-pct">{{ progressPct() }}%</span>
+            </div>
+            <div class="wiz-progress-track">
+              <div class="wiz-progress-fill" [style.width.%]="progressPct()"></div>
+            </div>
+          </div>
+        }
+
+        <!-- -------------------------------------------
+             ÉTAPE 1 — Profil responsable entreprise
+        --------------------------------------------- -->
+        @if (currentStep() === 1) {
+          <div class="step-pane" [@stepAnim]="animDir()">
+            <header class="step-header">
+              <div class="step-eyebrow">Étape 1 — Profil responsable entreprise</div>
+              <h1 class="step-title">Créez votre<br><em>identifiant unique.</em></h1>
+            </header>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="s1-prenom">Prénom <span class="form-req">*</span></label>
+                <input id="s1-prenom" class="form-input"
+                  type="text" autocomplete="given-name" placeholder="Mohamed"
+                  [(ngModel)]="form.prenom" (ngModelChange)="validatePrenom()"
+                  [class.form-input--error]="hasError('prenom')"
+                  [class.form-input--valid]="form.prenom.trim().length > 1 && !hasError('prenom')"/>
+                @if (hasError('prenom')) {
+                  <span class="field-error">{{ getError('prenom') }}</span>
+                } @else if (form.prenom.trim().length > 1) {
+                  <span class="field-success">Prénom valide</span>
+                }
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="s1-nom">Nom <span class="form-req">*</span></label>
+                <input id="s1-nom" class="form-input"
+                  type="text" autocomplete="family-name" placeholder="Ben Ali"
+                  [(ngModel)]="form.nom" (ngModelChange)="validateNom()"
+                  [class.form-input--error]="hasError('nom')"
+                  [class.form-input--valid]="form.nom.trim().length > 1 && !hasError('nom')"/>
+                @if (hasError('nom')) {
+                  <span class="field-error">{{ getError('nom') }}</span>
+                } @else if (form.nom.trim().length > 1) {
+                  <span class="field-success">Nom valide</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s1-email">Email professionnel <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <span class="input-adorn-prefix">
+                  <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+                    <rect x=".7" y=".7" width="12.6" height="10.6" rx="1.8" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M1 2.5l6 4 6-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <input id="s1-email" class="form-input form-input--padded"
+                  type="email" autocomplete="email" placeholder="vous@entreprise.tn"
+                  [(ngModel)]="form.email" (ngModelChange)="validateEmail()"
+                  [class.form-input--error]="hasError('email')"
+                  [class.form-input--valid]="isEmailValid() && form.email.trim().length > 0 && !hasError('email')"/>
+              </div>
+              @if (hasError('email')) {
+                <span class="field-error">{{ getError('email') }}</span>
+              } @else if (isEmailValid() && form.email.trim().length > 0) {
+                <span class="field-success">Email valide</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s1-pw">Mot de passe <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <input id="s1-pw" class="form-input form-input--padded-r"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  autocomplete="new-password" placeholder="Minimum 8 caractéres"
+                  [(ngModel)]="form.password" (ngModelChange)="onPasswordChange()"
+                  [class.form-input--error]="hasError('password')"
+                  [class.form-input--valid]="form.password.length >= 8 && !hasError('password')"/>
+                <button type="button" class="input-adorn-action" (click)="togglePassword()" aria-label="Afficher/masquer le mot de passe">
+                  @if (showPassword()) {
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                      <path d="M1 1l14 10M6.2 3.2A4 4 0 0111.8 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                  } @else {
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                      <path d="M8 1C4.5 1 1.5 4.5 1.5 6S4.5 11 8 11s6.5-3.5 6.5-5S11.5 1 8 1z" stroke="currentColor" stroke-width="1.3"/>
+                      <circle cx="8" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+              <div class="pw-meter">
+                <div class="pw-meter-bars">
+                  @for (bar of [1,2,3,4]; track bar) {
+                    <div class="pw-meter-bar"
+                      [class.pw-meter-bar--weak]="passwordStrength() >= bar && passwordStrength() === 1"
+                      [class.pw-meter-bar--medium]="passwordStrength() >= bar && passwordStrength() === 2"
+                      [class.pw-meter-bar--good]="passwordStrength() >= bar && passwordStrength() === 3"
+                      [class.pw-meter-bar--strong]="passwordStrength() >= bar && passwordStrength() === 4">
+                    </div>
+                  }
+                </div>
+                <span class="pw-meter-label" [style.color]="pwColor()">{{ pwLabel() }}</span>
+              </div>
+              @if (hasError('password')) {
+                <span class="field-error">{{ getError('password') }}</span>
+              } @else if (form.password.length >= 8 && !hasError('password')) {
+                <span class="field-success">Mot de passe valide</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s1-cpw">Confirmer le mot de passe <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <input id="s1-cpw" class="form-input form-input--padded-r"
+                  [type]="isConfPwdVisible ? 'text' : 'password'"
+                  autocomplete="new-password" placeholder="Répétez votre mot de passe"
+                  [(ngModel)]="form.confirmPassword" (ngModelChange)="validateConfirmPassword()"
+                  [class.form-input--error]="hasError('confirmPassword')"
+                  [class.form-input--valid]="form.confirmPassword.length > 0 && form.confirmPassword === form.password && !hasError('confirmPassword')"/>
+                <button type="button" class="input-adorn-action" (click)="toggleConfPassword()" aria-label="Afficher/masquer la confirmation">
+                  @if (isConfPwdVisible) {
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                      <path d="M1 1l14 10M6.2 3.2A4 4 0 0111.8 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                  } @else {
+                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                      <path d="M8 1C4.5 1 1.5 4.5 1.5 6S4.5 11 8 11s6.5-3.5 6.5-5S11.5 1 8 1z" stroke="currentColor" stroke-width="1.3"/>
+                      <circle cx="8" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+              @if (hasError('confirmPassword')) {
+                <span class="field-error">{{ getError('confirmPassword') }}</span>
+              } @else if (form.confirmPassword.length > 0 && form.confirmPassword === form.password) {
+                <span class="field-success">Confirmation OK</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s1-tel">Téléphone mobile <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
+                <input id="s1-tel" class="form-input form-input--padded"
+                  type="tel" placeholder="XX XXX XXX"
+                  [(ngModel)]="form.telephone" (ngModelChange)="validateTelephone()"
+                  [class.form-input--error]="hasError('telephone')"
+                  [class.form-input--valid]="phoneLen(form.telephone) >= 8 && !hasError('telephone')"/>
+              </div>
+              @if (hasError('telephone')) {
+                <span class="field-error">{{ getError('telephone') }}</span>
+              } @else if (phoneLen(form.telephone) >= 8) {
+                <span class="field-success">Téléphone valide</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" class="checkbox-input"
+                  [(ngModel)]="form.cgu" (ngModelChange)="validateStep1()"/>
+                <span class="checkbox-box">
+                  <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                    <path d="M1 4l2.5 2.5L9 1" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="checkbox-text">
+                  J'accepte les <a class="link-ey" href="#" (click)="$event.preventDefault()">CGU</a>
+                  et la <a class="link-ey" href="#" (click)="$event.preventDefault()">politique de confidentialité</a>.
+                </span>
+              </label>
+            </div>
+
+            <div class="step-actions">
+              <button class="btn-ghost" disabled aria-hidden="true">Retour</button>
+              <button class="btn-primary" [disabled]="!step1Valid()" (click)="nextStep()">
+                Continuer
+                <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- -------------------------------------------
+             éTAPE 2 — Profil entreprise
+             FIX : logo upload UX + code postal
+        --------------------------------------------- -->
+        @if (currentStep() === 2) {
+          <div class="step-pane" [@stepAnim]="animDir()">
+            <header class="step-header">
+              <div class="step-eyebrow">étape 2 — Profil entreprise</div>
+              <h1 class="step-title">Identité<br><em>fiscale et légale.</em></h1>
+            </header>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="s2-mf">
+                  Matricule fiscal <span class="form-req">*</span>
+                </label>
+                <div class="input-adorn">
+                  <span class="input-adorn-prefix input-adorn-prefix--text">MF</span>
+                  <input id="s2-mf" class="form-input form-input--padded"
+                    type="text" placeholder="1495908/S ou 1234567A/B/C/000"
+                    [(ngModel)]="form.matriculeFiscal" (ngModelChange)="validateMatriculeFiscal()"
+                    [class.form-input--error]="hasError('matriculeFiscal')"
+                    [class.form-input--valid]="isMatriculeFiscalValid() && !hasError('matriculeFiscal')"/>
+                </div>
+                @if (hasError('matriculeFiscal')) {
+                  <span class="field-error">{{ getError('matriculeFiscal') }}</span>
+                } @else if (isMatriculeFiscalValid()) {
+                  <span class="field-success">Matricule valide</span>
+                }
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="s2-forme">Forme juridique <span class="form-req">*</span></label>
+                <div class="select-wrap">
+                  <select id="s2-forme" class="form-select"
+                    [(ngModel)]="form.formeJuridique" (ngModelChange)="validateFormeJuridique()"
+                    [class.form-input--error]="hasError('formeJuridique')"
+                    [class.form-input--valid]="!!form.formeJuridique && !hasError('formeJuridique')">
+                    <option value="">Sélectionner...</option>
+                    @for (f of formesJuridiques; track f) {
+                      <option [value]="f">{{ f }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                @if (hasError('formeJuridique')) {
+                  <span class="field-error">{{ getError('formeJuridique') }}</span>
+                } @else if (form.formeJuridique) {
+                  <span class="field-success">Forme juridique valide</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s2-rs">Raison sociale <span class="form-req">*</span></label>
+              <input id="s2-rs" class="form-input"
+                type="text" placeholder="Nom officiel enregistré au RNE"
+                [(ngModel)]="form.raisonSociale" (ngModelChange)="validateRaisonSociale()"
+                [class.form-input--error]="hasError('raisonSociale')"
+                [class.form-input--valid]="form.raisonSociale.trim().length > 2 && !hasError('raisonSociale')"/>
+              @if (hasError('raisonSociale')) {
+                <span class="field-error">{{ getError('raisonSociale') }}</span>
+              } @else if (form.raisonSociale.trim().length > 2) {
+                <span class="field-success">Raison sociale valide</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s2-nom-ent">
+                Nom commercial <span class="form-req">*</span>
+              </label>
+              <input id="s2-nom-ent" class="form-input"
+                type="text" placeholder="Ex : Tech Solutions"
+                [(ngModel)]="form.nomEntreprise" (ngModelChange)="validateNomEntreprise()"
+                [class.form-input--error]="hasError('nomEntreprise')"
+                [class.form-input--valid]="form.nomEntreprise.trim().length > 2 && !hasError('nomEntreprise')"/>
+              @if (hasError('nomEntreprise')) {
+                <span class="field-error">{{ getError('nomEntreprise') }}</span>
+              } @else if (form.nomEntreprise.trim().length > 2) {
+                <span class="field-success">Nom valide</span>
+              }
+            </div>
+
+            <!-- FIX: Logo upload avec UX compléte -->
+            <div class="form-group">
+              <label class="form-label" for="s2-logo">
+                Logo entreprise
+                <span class="form-hint-inline">(facultatif — jpg, png, svg · max 2 Mo)</span>
+              </label>
+              <div class="logo-upload">
+                @if (!form.logoPreview) {
+                  <label class="logo-upload-zone" for="s2-logo">
+                    <div class="logo-upload-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect x="1" y="1" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.3"/>
+                        <path d="M9 6v6M6 9h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="logo-upload-text">
+                      Cliquer pour choisir un fichier
+                      <span>jpg, png, svg — 2 Mo max</span>
+                    </div>
+                    <input id="s2-logo" type="file" accept="image/*"
+                      style="position:absolute;width:0;height:0;opacity:0"
+                      (change)="onLogoChange($event)"/>
+                  </label>
+                } @else {
+                  <div class="logo-preview">
+                    <img class="logo-preview-img" [src]="form.logoPreview" alt="Logo entreprise"/>
+                    <div class="logo-preview-info">
+                      <strong>{{ form.logoFileName || 'logo.png' }}</strong>
+                      <span>Logo chargé avec succès</span>
+                    </div>
+                    <button type="button" class="logo-remove" (click)="removeLogo()">Supprimer</button>
+                  </div>
+                }
+              </div>
+              @if (hasError('logo')) {
+                <span class="field-error">{{ getError('logo') }}</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s2-adr">Adresse siège social <span class="form-req">*</span></label>
+              <input id="s2-adr" class="form-input"
+                type="text" placeholder="Numéro, rue, avenue..."
+                [(ngModel)]="form.adresse" (ngModelChange)="validateAdresse()"
+                [class.form-input--error]="hasError('adresse')"
+                [class.form-input--valid]="form.adresse.trim().length > 5 && !hasError('adresse')"/>
+              @if (hasError('adresse')) {
+                <span class="field-error">{{ getError('adresse') }}</span>
+              } @else if (form.adresse.trim().length > 5) {
+                <span class="field-success">Adresse valide</span>
+              }
+            </div>
+
+            <!-- FIX: gouvernorat + code postal côte à côte -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="s2-gov">Gouvernorat <span class="form-req">*</span></label>
+                <div class="select-wrap">
+                  <select id="s2-gov" class="form-select"
+                    [(ngModel)]="form.gouvernorat" (ngModelChange)="validateGouvernorat()"
+                    [class.form-input--error]="hasError('gouvernorat')"
+                    [class.form-input--valid]="!!form.gouvernorat && !hasError('gouvernorat')">
+                    <option value="">Gouvernorat...</option>
+                    @for (g of gouvernorats; track g) {
+                      <option [value]="g">{{ g }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                @if (hasError('gouvernorat')) {
+                  <span class="field-error">{{ getError('gouvernorat') }}</span>
+                } @else if (form.gouvernorat) {
+                  <span class="field-success">Gouvernorat valide</span>
+                }
+              </div>
+
+              <!-- FIX: Code postal ? NOUVEAU champ -->
+              <div class="form-group">
+                <label class="form-label" for="s2-cp">Code postal <span class="form-req">*</span></label>
+                <input id="s2-cp" class="form-input"
+                  type="text" inputmode="numeric" maxlength="4" placeholder="ex : 1000"
+                  [(ngModel)]="form.codePostal" (ngModelChange)="validateCodePostal()"
+                  [class.form-input--error]="hasError('codePostal')"
+                  [class.form-input--valid]="form.codePostal.trim().length === 4 && !hasError('codePostal')"/>
+                @if (hasError('codePostal')) {
+                  <span class="field-error">{{ getError('codePostal') }}</span>
+                } @else if (form.codePostal.trim().length === 4) {
+                  <span class="field-success">Code postal valide</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="s2-site">Site internet</label>
+                <input id="s2-site" class="form-input"
+                  type="url" placeholder="https://exemple.tn"
+                  [(ngModel)]="form.siteWeb" (ngModelChange)="validateSiteWeb()"
+                  [class.form-input--error]="hasError('siteWeb')"
+                  [class.form-input--valid]="form.siteWeb.trim().length > 0 && !hasError('siteWeb')"/>
+                @if (hasError('siteWeb')) {
+                  <span class="field-error">{{ getError('siteWeb') }}</span>
+                } @else if (form.siteWeb.trim().length > 0) {
+                  <span class="field-success">Site valide</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="s2-devise">Devise principale <span class="form-req">*</span></label>
+                <div class="select-wrap">
+                  <select id="s2-devise" class="form-select"
+                    [(ngModel)]="form.devisePrincipale" (ngModelChange)="validateDevisePrincipale()"
+                    [class.form-input--error]="hasError('devisePrincipale')"
+                    [class.form-input--valid]="!!form.devisePrincipale && !hasError('devisePrincipale')">
+                    <option value="">Devise...</option>
+                    @for (d of devises; track d) {
+                      <option [value]="d">{{ d }}</option>
+                    }
+                  </select>
+                  <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                @if (hasError('devisePrincipale')) {
+                  <span class="field-error">{{ getError('devisePrincipale') }}</span>
+                } @else if (form.devisePrincipale) {
+                  <span class="field-success">Devise valide</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s2-tel">Téléphone entreprise <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
+                <input id="s2-tel" class="form-input form-input--padded"
+                  type="tel" placeholder="XX XXX XXX"
+                  [(ngModel)]="form.telEntreprise" (ngModelChange)="validateTelEntreprise()"
+                  [class.form-input--error]="hasError('telEntreprise')"
+                  [class.form-input--valid]="phoneLen(form.telEntreprise) >= 8 && !hasError('telEntreprise')"/>
+              </div>
+              @if (hasError('telEntreprise')) {
+                <span class="field-error">{{ getError('telEntreprise') }}</span>
+              } @else if (phoneLen(form.telEntreprise) >= 8) {
+                <span class="field-success">Téléphone valide</span>
+              }
+            </div>
+
+            <div class="step-actions">
+              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-primary" [disabled]="!step2Valid()" (click)="nextStep()">
+                Continuer
+                <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- -------------------------------------------
+             ÉTAPE 3 — Responsable légal (DGI)
+        --------------------------------------------- -->
+        @if (currentStep() === 3) {
+          <div class="step-pane" [@stepAnim]="animDir()">
+            <header class="step-header">
+              <div class="step-eyebrow">Étape 3 — Responsable légal</div>
+              <h1 class="step-title">L'interlocuteur<br><em>DGI officiel.</em></h1>
+            </header>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="s3-prenom">Prénom <span class="form-req">*</span></label>
+                <input id="s3-prenom" class="form-input"
+                  type="text" placeholder="Sarra"
+                  [(ngModel)]="form.respPrenom" (ngModelChange)="validateRespPrenom()"
+                  [class.form-input--error]="hasError('respPrenom')"
+                  [class.form-input--valid]="form.respPrenom.trim().length > 1 && !hasError('respPrenom')"/>
+                @if (hasError('respPrenom')) {
+                  <span class="field-error">{{ getError('respPrenom') }}</span>
+                } @else if (form.respPrenom.trim().length > 1) {
+                  <span class="field-success">Prénom valide</span>
+                }
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="s3-nom">Nom <span class="form-req">*</span></label>
+                <input id="s3-nom" class="form-input"
+                  type="text" placeholder="Trabelsi"
+                  [(ngModel)]="form.respNom" (ngModelChange)="validateRespNom()"
+                  [class.form-input--error]="hasError('respNom')"
+                  [class.form-input--valid]="form.respNom.trim().length > 1 && !hasError('respNom')"/>
+                @if (hasError('respNom')) {
+                  <span class="field-error">{{ getError('respNom') }}</span>
+                } @else if (form.respNom.trim().length > 1) {
+                  <span class="field-success">Nom valide</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s3-fn">Fonction officielle <span class="form-req">*</span></label>
+              <div class="select-wrap">
+                <select id="s3-fn" class="form-select"
+                  [(ngModel)]="form.respFonction" (ngModelChange)="validateRespFonction()"
+                  [class.form-input--error]="hasError('respFonction')"
+                  [class.form-input--valid]="!!form.respFonction && !hasError('respFonction')">
+                  <option value="">Sélectionner votre titre...</option>
+                  @for (f of fonctions; track f) {
+                    <option [value]="f">{{ f }}</option>
+                  }
+                </select>
+                <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
+                  <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              @if (hasError('respFonction')) {
+                <span class="field-error">{{ getError('respFonction') }}</span>
+              } @else if (form.respFonction) {
+                <span class="field-success">Fonction valide</span>
+              }
+            </div>
+
+            @if (form.respFonction === 'Autre') {
+              <div class="form-group">
+                <label class="form-label" for="s3-fn-other">Précisez la fonction <span class="form-req">*</span></label>
+                <input id="s3-fn-other" class="form-input"
+                  type="text" placeholder="Ex : Directeur opérations"
+                  [(ngModel)]="form.respFonctionAutre" (ngModelChange)="validateFonctionAutre()"
+                  [class.form-input--error]="hasError('respFonctionAutre')"
+                  [class.form-input--valid]="form.respFonctionAutre.trim().length > 2 && !hasError('respFonctionAutre')"/>
+                @if (hasError('respFonctionAutre')) {
+                  <span class="field-error">{{ getError('respFonctionAutre') }}</span>
+                } @else if (form.respFonctionAutre.trim().length > 2) {
+                  <span class="field-success">Fonction valide</span>
+                }
+              </div>
+            }
+
+            <div class="form-group">
+              <label class="form-label" for="s3-tel">Téléphone <span class="form-req">*</span></label>
+              <div class="input-adorn">
+                <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
+                <input id="s3-tel" class="form-input form-input--padded"
+                  type="tel" placeholder="XX XXX XXX"
+                  [(ngModel)]="form.respTel" (ngModelChange)="validateRespTel()"
+                  [class.form-input--error]="hasError('respTel')"
+                  [class.form-input--valid]="phoneLen(form.respTel) >= 8 && !hasError('respTel')"/>
+              </div>
+              @if (hasError('respTel')) {
+                <span class="field-error">{{ getError('respTel') }}</span>
+              } @else if (phoneLen(form.respTel) >= 8) {
+                <span class="field-success">Téléphone valide</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="s3-cin">CIN <span class="form-hint-inline">(facultatif)</span></label>
+              <input id="s3-cin" class="form-input"
+                type="text" placeholder="ex : 12345678"
+                [(ngModel)]="form.cin" (ngModelChange)="refresh()"/>
+            </div>
+
+            <div class="step-actions">
+              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-primary" [disabled]="!step3Valid()" (click)="nextStep()">
+                Continuer
+                <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- -------------------------------------------
+             éTAPE 4 — Catalogue
+        --------------------------------------------- -->
+        @if (currentStep() === 4) {
+          <div class="step-pane" [@stepAnim]="animDir()">
+            <header class="step-header">
+              <div class="step-eyebrow">étape 4 — Catalogue</div>
+              <h1 class="step-title">Structurez votre<br><em>offre commerciale.</em></h1>
+            </header>
+
+            <div class="cat-grid">
+              @for (cat of predefinedCats; track cat.key) {
+                <button type="button" class="cat-card"
+                  [class.cat-card--selected]="isCatSelected(cat.key)"
+                  (click)="toggleCat(cat)"
+                  [attr.aria-pressed]="isCatSelected(cat.key)">
+                  <div class="cat-card-check">
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4l2.5 2.5L9 1" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="cat-card-name">{{ cat.name }}</div>
+                  <div class="cat-card-desc">{{ cat.desc }}</div>
+                </button>
+              }
+            </div>
+
+            <div class="custom-cat">
+              <input class="custom-cat-input" type="text"
+                placeholder="Ajouter une catégorie personnalisée..."
+                [(ngModel)]="customCatName" (keydown.enter)="addCustomCat()"/>
+              <button type="button" class="custom-cat-btn"
+                [disabled]="!customCatName.trim()" (click)="addCustomCat()">
+                Ajouter
+              </button>
+            </div>
+
+            @if (selectedCats().length > 0) {
+              <div class="cat-tags">
+                @for (cat of selectedCats(); track cat.key) {
+                  <div class="cat-tag" [@tagAnim]>
+                    <span>{{ cat.name }}</span>
+                    <button type="button" class="cat-tag-remove" (click)="removeCat(cat.key)" [attr.aria-label]="'Retirer ' + cat.name">
+                      <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M1 1l6 6M7 1L1 7" stroke="currentColor"
+                          stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="cat-notice" [class.cat-notice--met]="selectedCats().length >= 2">
+              <div class="cat-notice-bar"></div>
+              <span>
+                @if (selectedCats().length < 2) {
+                  Sélectionnez encore
+                  <strong>{{ 2 - selectedCats().length }} catégorie{{ selectedCats().length === 1 ? '' : 's' }}</strong>
+                  pour continuer
+                } @else {
+                  <strong>{{ selectedCats().length }} catégories</strong> sélectionnées — vous pouvez finaliser
+                }
+              </span>
+            </div>
+
+            @if (errorMsg()) {
+              <div class="field-error" style="margin-bottom: 12px;">{{ errorMsg() }}</div>
+            }
+
+            <div class="step-actions">
+              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-primary"
+                [disabled]="selectedCats().length < 2 || loading()"
+                (click)="finishOnboarding()">
+                @if (loading()) {
+                  Création en cours...
+                } @else {
+                  Créer mon espace
+                  <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                    <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                }
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- -------------------------------------------
+             ÉTAPE 5 — SUCCÈS + REDIRECTION AUTO
+        --------------------------------------------- -->
+        @if (currentStep() === 5) {
+          <div class="success-pane" [@fadeUp]>
+
+            <div class="success-ring">
+              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                <circle cx="50" cy="50" r="44" stroke="#1a1a1a" stroke-width="4"/>
+                <circle cx="50" cy="50" r="44"
+                  stroke="#FFE600" stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-dasharray="276.5"
+                  stroke-dashoffset="0"
+                  transform="rotate(-90 50 50)"
+                  class="success-ring-circle"/>
+              </svg>
+              <div class="success-ring-inner">
+                <svg width="32" height="26" viewBox="0 0 32 26" fill="none" aria-hidden="true">
+                  <path d="M2 14l8 8L30 2" stroke="#FFE600" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="success-check"/>
+                </svg>
+              </div>
+            </div>
+
+            <h2 class="success-title">Votre espace<br><em>est prét.</em></h2>
+
+            <p class="success-sub">
+              Bienvenue, <strong>{{ form.prenom }} {{ form.nom }}</strong>.
+              Votre compte <strong>{{ form.raisonSociale || form.nomEntreprise }}</strong>
+              est activé et conforme TEIF 2026.
+            </p>
+
+            @if (selectedCats().length > 0) {
+              <div class="success-cats">
+                @for (cat of selectedCats(); track cat.key) {
+                  <span class="success-cat-chip">{{ cat.name }}</span>
+                }
+              </div>
+            }
+
+            <button class="btn-dashboard" (click)="goToDashboardNow()">
+              Accéder à mon tableau de bord
+              <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <div class="auto-redirect" role="status" aria-live="polite">
+              <div class="auto-redirect-track">
+                <div class="auto-redirect-fill"
+                  [style.animation-duration]="redirectDelay + 'ms'">
+                </div>
+              </div>
+              <span class="auto-redirect-text">
+                Redirection automatique dans
+                <strong class="auto-redirect-count">{{ redirectCountdown() }}s</strong>
+              </span>
+            </div>
+
+          </div>
+        }
+
+      </div><!-- /rp-inner -->
+    </div><!-- /form-col -->
+
+    <!-- -- CARTE LIVE (masquée sur succés) -- -->
+    @if (currentStep() < 5) {
+      <div class="card-col">
+        <div class="live-card" @cardPop>
+
+          <div class="lc-header">
+            <div class="lc-logo-mark">
+              @if (form.logoPreview) {
+                <img class="lc-logo-img" [src]="form.logoPreview" alt="Logo entreprise"/>
+              } @else {
+                EY
+              }
+            </div>
+            <div class="lc-header-text">
+              <div class="lc-brand">TunisFlow</div>
+              <div class="lc-sub">Fiche d'identification TEIF 2026</div>
+            </div>
+            <div class="lc-status">
+              <div class="lc-status-dot"></div>
+              <span>DGI</span>
+            </div>
+          </div>
+
+          <div class="lc-avatar-zone">
+            <div class="lc-avatar">
+              @if (form.logoPreview) {
+                <img class="lc-avatar-logo" [src]="form.logoPreview" alt="Logo"/>
+              } @else {
+                {{ cardInitials() }}
+              }
+            </div>
+            <div class="lc-avatar-ring"></div>
+          </div>
+
+          <div class="lc-rs">
+            <div class="lc-rs-name" [class.lc-placeholder]="!form.raisonSociale.trim()">
+              {{ cardRS() }}
+            </div>
+            <div class="lc-rs-forme" [class.lc-placeholder]="!form.formeJuridique">
+              {{ cardForme() }}
+            </div>
+          </div>
+
+          <div class="lc-divider"></div>
+
+          <div class="lc-grid">
+            <div class="lc-field">
+              <div class="lc-field-key">Matricule fiscal</div>
+              <div class="lc-field-val lc-mono" [class.lc-placeholder]="!form.matriculeFiscal.trim()">
+                {{ cardMF() }}
+              </div>
+            </div>
+            <div class="lc-field">
+              <div class="lc-field-key">Gouvernorat</div>
+              <div class="lc-field-val" [class.lc-placeholder]="!form.gouvernorat">
+                {{ cardGouv() }}
+              </div>
+            </div>
+            <div class="lc-field">
+              <div class="lc-field-key">Code postal</div>
+              <div class="lc-field-val lc-mono" [class.lc-placeholder]="!form.codePostal.trim()">
+                {{ cardCodePostal() }}
+              </div>
+            </div>
+            <div class="lc-field">
+              <div class="lc-field-key">Responsable légal</div>
+              <div class="lc-field-val" [class.lc-placeholder]="!form.respPrenom && !form.prenom">
+                {{ cardResp() }}
+              </div>
+            </div>
+            <div class="lc-field">
+              <div class="lc-field-key">Fonction</div>
+              <div class="lc-field-val" [class.lc-placeholder]="!form.respFonction">
+                {{ cardFonction() }}
+              </div>
+            </div>
+          </div>
+
+          @if (cardCats().length > 0) {
+            <div class="lc-divider"></div>
+            <div class="lc-cats-label">Catégories & Produits</div>
+            <div class="lc-cats">
+              @for (cat of cardCats(); track cat.key) {
+                <span class="lc-cat-chip" [@tagAnim]>{{ cat.name }}</span>
+              }
+            </div>
+          }
+
+          <div class="lc-divider"></div>
+
+          <div class="lc-score-row">
+            <span class="lc-score-label">Complétude du dossier</span>
+            <span class="lc-score-pct">{{ cardCompletePct() }}%</span>
+          </div>
+          <div class="lc-score-track">
+            <div class="lc-score-fill" [style.width.%]="cardCompletePct()"></div>
+          </div>
+
+          <div class="lc-footer">
+            <span class="lc-footer-item">
+              <span class="lc-dot lc-dot--green"></span>TEIF 2026
+            </span>
+            <span class="lc-footer-item">
+              <span class="lc-dot lc-dot--ey"></span>DGI Tunisie
+            </span>
+            <span class="lc-footer-item">
+              <span class="lc-dot lc-dot--green"></span>UBL 2.1
+            </span>
+          </div>
+
+        </div><!-- /live-card -->
+
+        <p class="card-hint">
+          Votre carte se complète au fur et à mesure de votre saisie
+        </p>
+      </div>
+    }
+
+  </main>
+</div>

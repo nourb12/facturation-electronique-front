@@ -1,0 +1,207 @@
+{
+  "INVOICE": {
+    "FIELDS": {
+      "CLIENT": "العميل",
+      "TYPE": "نوع الوثيقة",
+      "PAYMENT_MODE": "طريقة الدفع",
+      "DUE_DATE": "تاريخ الاستحقاق",
+      "NOTES": "ملاحظات",
+      "REFERENCE": "المرجع",
+      "CURRENCY": "العملة",
+      "ISSUE_DATE": "تاريخ الإصدار"
+    },
+    "TOTALS": {
+      "HT": "المجموع خارج الضريبة",
+      "TTC": "المجموع شامل الضريبة",
+      "TVA": "مجموع الضريبة",
+      "PAID": "المبلغ المدفوع",
+      "REMAINING": "الرصيد المستحق"
+    },
+    "ACTIONS": {
+      "GENERATE_XML": "توليد XML TEIF"
+    },
+    "TYPES": {
+      "FACTURE": "فاتورة",
+      "AVOIR": "إشعار دائن",
+      "PROFORMA": "فاتورة مبدئية"
+    },
+    "PAYMENT_MODES": {
+      "VIREMENT": "تحويل بنكي",
+      "CHEQUE": "شيك",
+      "ESPECES": "نقداً",
+      "CARTE_BANCAIRE": "بطاقة بنكية",
+      "TRAITE": "كمبيالة"
+    }
+  },
+  "FACTURES": {
+    "TITLE_A": "فواتيري",
+    "TITLE_EM": "",
+    "SUBTITLE": "{{count}} فاتورة · {{drafts}} مسودة",
+    "SEARCH_PLACEHOLDER": "بحث برقم الفاتورة أو العميل…",
+    "LOADING": "جارٍ تحميل الفواتير…",
+    "EMPTY": "لا توجد فواتير.",
+    "KPI": {
+      "ISSUED_MONTH": "صادرة هذا الشهر",
+      "PAID": "محصّلة",
+      "PENDING": "في الانتظار",
+      "OVERDUE": "متأخرة"
+    },
+    "UNITS": {
+      "INVOICES": "فاتورة"
+    },
+    "TABLE": {
+      "NUMBER": "الرقم",
+      "STATUS": "الحالة",
+      "ACTIONS": "الإجراءات"
+    },
+    "BADGES": {
+      "OVERDUE": "متأخرة"
+    },
+    "STATUTS": {
+      "BROUILLON": "مسودة",
+      "VALIDEE": "مصادق عليها",
+      "CONFORME": "مطابقة",
+      "TRANSMISE": "مرسلة",
+      "ACCEPTEE": "مقبولة",
+      "REJETEE": "مرفوضة",
+      "PAYEE": "مدفوعة",
+      "PARTIELLEMENT_PAYEE": "مدفوعة جزئياً",
+      "ANNULEE": "ملغاة"
+    },
+    "ACTIONS": {
+      "VALIDATE": "مصادقة",
+      "VALIDATE_TEIF": "التحقق من TEIF",
+      "SIGN": "توقيع",
+      "SEND_TTN": "إرسال إلى TTN",
+      "RECORD_PAYMENT": "تسجيل دفعة",
+      "DOWNLOAD_XML": "تحميل XML",
+      "DOWNLOAD_XML_TEIF": "تحميل XML TEIF",
+      "DOWNLOAD_PDF": "تحميل PDF",
+      "GENERATING": "جارٍ التوليد…",
+      "CREATE_CREDIT_NOTE": "إنشاء إشعار دائن"
+    },
+    "CREATE": {
+      "TITLE_A": "فاتورة",
+      "TITLE_EM": "جديدة.",
+      "SUBTITLE": "أدخل تفاصيل الفاتورة.",
+      "SELECT_CLIENT_PLACEHOLDER": "اختر عميلاً…",
+      "NOTES_PLACEHOLDER": "شروط الدفع، ملاحظات…",
+      "LINES_TITLE": "بنود الفاتورة",
+      "ADD_LINE": "إضافة بند",
+      "PRODUCT_PLACEHOLDER": "المنتج (اختياري)",
+      "DESIGNATION_PLACEHOLDER": "الوصف",
+      "QTY_PLACEHOLDER": "الكمية",
+      "UNIT_PRICE_PLACEHOLDER": "سعر الوحدة",
+      "SUBMIT": "إنشاء الفاتورة",
+      "SUBMITTING": "جارٍ الإنشاء…"
+    },
+    "PAYMENT": {
+      "TITLE_A": "تسجيل",
+      "TITLE_EM": "دفعة.",
+      "SUBTITLE": "الفاتورة {{number}} · المتبقي: {{amount}} دينار",
+      "FIELDS": {
+        "AMOUNT": "المبلغ",
+        "MODE": "طريقة الدفع",
+        "DATE": "تاريخ الدفع",
+        "REFERENCE": "المرجع",
+        "REFERENCE_PLACEHOLDER": "رقم الشيك، التحويل…",
+        "BANK": "البنك",
+        "BANK_PLACEHOLDER": "اسم البنك"
+      }
+    },
+    "DETAIL": {
+      "REMAINING": "الرصيد المستحق",
+      "LINES_TITLE": "بنود الفاتورة",
+      "LINES_TABLE": {
+        "DESIGNATION": "الوصف",
+        "QTY": "الكمية",
+        "UNIT_PRICE": "سعر الوحدة",
+        "DISCOUNT": "الخصم",
+        "VAT": "الضريبة",
+        "TTC": "شامل الضريبة"
+      },
+      "HISTORY_TITLE": "السجل"
+    }
+  },
+  "ACCOUNTING": {
+    "TAXES": {
+      "TITLE_A": "إدارة",
+      "TITLE_EM": "الضرائب.",
+      "SUBTITLE": "ضبط معدلات الضريبة على القيمة المضافة وFODEC وحقوق الاستهلاك.",
+      "COLUMNS": {
+        "TITLE": "العنوان",
+        "RATE": "المعدل",
+        "TYPE": "النوع"
+      },
+      "TYPES": {
+        "TVA": "الضريبة على القيمة المضافة",
+        "FODEC": "FODEC",
+        "DROIT_CONSOMMATION": "حق الاستهلاك"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "لا نتائج لـ «{{query}}»",
+        "SEARCH_SUB": "جرّب مصطلح بحث آخر.",
+        "NO_DATA_TITLE": "لا توجد ضرائب مضبوطة",
+        "NO_DATA_SUB": "أنشئ أول ضريبة عبر النموذج."
+      },
+      "FORM": {
+        "TITLE_NEW": "ضريبة جديدة",
+        "TITLE_EDIT": "تعديل الضريبة",
+        "FIELDS": {
+          "TITLE": "العنوان",
+          "TITLE_PLACEHOLDER": "مثال: الضريبة 19%",
+          "RATE": "المعدل",
+          "TYPE": "النوع"
+        },
+        "ERROR_RATE_GT0": "يجب أن يكون المعدل أكبر من 0."
+      }
+    },
+    "FISCAL_PARAMS": {
+      "TITLE_A": "المعاملات",
+      "TITLE_EM": "الجبائية.",
+      "SUBTITLE": "ضبط الخصم من المصدر والطابع الجبائي وغيرها من معاملات الحساب.",
+      "COLUMNS": {
+        "LABEL": "التسمية",
+        "VALUE_DEFAULT": "القيمة / الافتراضي",
+        "ORDER": "ترتيب الحساب",
+        "USAGE": "الاستخدام",
+        "CONDITION": "الشرط"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "لا نتائج لـ «{{query}}»",
+        "SEARCH_SUB": "جرّب مصطلح بحث آخر.",
+        "NO_DATA_TITLE": "لا توجد معاملات جبائية مضبوطة",
+        "NO_DATA_SUB": "أنشئ أول معامل عبر النموذج."
+      },
+      "FORM": {
+        "TITLE_NEW": "معامل جديد",
+        "TITLE_EDIT": "تعديل المعامل",
+        "FIELDS": {
+          "LABEL": "التسمية",
+          "LABEL_PLACEHOLDER": "مثال: خصم من المصدر 15%",
+          "VALUE_DEFAULT": "القيمة / الافتراضي",
+          "TYPE": "النوع",
+          "SIGN": "الإشارة",
+          "ORDER": "ترتيب الحساب",
+          "USAGE": "الاستخدام"
+        },
+        "TYPE": { "PERCENT": "نسبة مئوية", "FIXED": "مبلغ ثابت" },
+        "ORDER": { "BEFORE_VAT": "قبل الضريبة", "AFTER_VAT": "بعد الضريبة" },
+        "USAGE": { "MANUAL": "يدوي", "AUTO": "تلقائي" },
+        "WITHHOLDING": {
+          "LABEL": "تضمين الخصم من المصدر",
+          "SUB": "ينطبق على فواتير B2B الخاضعة للخصم"
+        },
+        "DOCS": {
+          "TITLE": "الوثائق المستهدفة",
+          "FACTURE": "فاتورة",
+          "AVOIR": "إشعار دائن",
+          "PROFORMA": "فاتورة مبدئية"
+        }
+      },
+      "ORDRE": { "AVANT_TVA": "قبل الضريبة", "APRES_TVA": "بعد الضريبة" },
+      "UTILISATION": { "MANUEL": "يدوي", "AUTO": "تلقائي" },
+      "CONDITION": { "NONE": "لا شرط", "WITH_RS": "مع الخصم من المصدر" }
+    }
+  }
+}

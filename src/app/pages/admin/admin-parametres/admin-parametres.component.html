@@ -1,0 +1,150 @@
+<div class="dash-layout">
+
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Paramètres <em>admin</em></h1>
+        <span class="dt-bc">Configuration plateforme</span>
+      </div>
+    </div>
+    <div class="dt-center"></div>
+    <div class="dt-right">
+      <button class="dt-btn-new ghost" type="button">Annuler</button>
+      <button class="dt-btn-new" type="button" (click)="save()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Enregistrer
+      </button>
+    </div>
+  </header>
+
+  <main class="dash-content">
+    <div class="params-grid">
+
+      <!-- Conformité TEIF -->
+      <div class="box">
+        <div class="box-header">
+          <div class="box-header-inner">
+            <div class="kpi-icon ey">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7.1C11.5 14.4 14 11.3 14 8V4L8 1z" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M5.5 8l1.5 1.5 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="box-title">Conformité / TEIF</div>
+              <div class="box-sub">Connexion à l'API de facturation tunisienne</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-body">
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">URL API TEIF</span>
+              <input class="form-input" type="text" placeholder="https://api.teif.tn" />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Clé API</span>
+              <input class="form-input" type="password" placeholder="••••••••••••" />
+            </label>
+          </div>
+          <div class="form-hint">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M6 5v4M6 4h.01" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Les credentials TEIF sont chiffrés avant stockage.
+          </div>
+        </div>
+      </div>
+
+      <!-- Sécurité -->
+      <div class="box">
+        <div class="box-header">
+          <div class="box-header-inner">
+            <div class="kpi-icon info">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="7" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M5 7V5a3 3 0 1 1 6 0v2" stroke="currentColor" stroke-width="1.3"/>
+                <circle cx="8" cy="11" r="1" fill="currentColor"/>
+              </svg>
+            </div>
+            <div>
+              <div class="box-title">Sécurité</div>
+              <div class="box-sub">Sessions et authentification multi-facteurs</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-body">
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Durée session (min)</span>
+              <input class="form-input" type="number" min="5" max="240" value="60" />
+            </label>
+            <label class="form-field">
+              <span class="form-label">2FA obligatoire</span>
+              <select class="form-input form-select">
+                <option>Oui</option>
+                <option>Non</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="box box--full">
+        <div class="box-header">
+          <div class="box-header-inner">
+            <div class="kpi-icon warn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1a5 5 0 0 1 5 5v3l1.5 2.5H2L3.5 9V6A5 5 0 0 1 8 1z" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M6 14a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.3"/>
+              </svg>
+            </div>
+            <div>
+              <div class="box-title">Notifications</div>
+              <div class="box-sub">Alertes e-mail et SMS plateforme</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-body">
+          <div class="toggle-list">
+            <div class="toggle-item">
+              <div>
+                <div class="toggle-label">Alertes factures en retard</div>
+                <div class="toggle-sub">Email au SuperAdmin quotidiennement</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div>
+                <div class="toggle-label">Nouvelles inscriptions</div>
+                <div class="toggle-sub">Notification immédiate par email</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="toggle-item">
+              <div>
+                <div class="toggle-label">SMS critique</div>
+                <div class="toggle-sub">En cas d'échec API TEIF</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

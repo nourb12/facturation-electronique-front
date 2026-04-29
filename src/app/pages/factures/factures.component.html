@@ -1,0 +1,469 @@
+<div class="page-layout" [@pageIn]>
+
+  
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'FACTURES.TITLE_A' | translate }} <em>{{ 'FACTURES.TITLE_EM' | translate }}</em></h1>
+      <p class="page-desc">{{ 'FACTURES.SUBTITLE' | translate:{ count: filteredFactures().length, drafts: (stats()?.totalBrouillons ?? 0) } }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="exportCSV()">{{ 'COMMON.ACTIONS.EXPORT_CSV' | translate }}</button>
+    </div>
+  </div>
+
+  
+  <div class="mini-kpis">
+    <div class="mini-kpi">
+      <span class="mk-label">{{ 'FACTURES.KPI.ISSUED_MONTH' | translate }}</span>
+      <span class="mk-val mk--ey">{{ (stats()?.montantTotalMois ?? 0) | number:'1.3-3' }} TND</span>
+    </div>
+    <div class="mini-kpi">
+      <span class="mk-label">{{ 'FACTURES.KPI.PAID' | translate }}</span>
+      <span class="mk-val mk--ok">{{ (stats()?.montantEncaisseMois ?? 0) | number:'1.3-3' }} TND</span>
+    </div>
+    <div class="mini-kpi">
+      <span class="mk-label">{{ 'FACTURES.KPI.PENDING' | translate }}</span>
+      <span class="mk-val mk--warn">{{ (stats()?.montantEnAttente ?? 0) | number:'1.3-3' }} TND</span>
+    </div>
+    <div class="mini-kpi">
+      <span class="mk-label">{{ 'FACTURES.KPI.OVERDUE' | translate }}</span>
+      <span class="mk-val mk--err">{{ stats()?.totalEnRetard ?? 0 }} {{ 'FACTURES.UNITS.INVOICES' | translate }}</span>
+    </div>
+  </div>
+
+  
+  <div class="filters-bar">
+    <div class="search-box">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text" [placeholder]="'FACTURES.SEARCH_PLACEHOLDER' | translate" [(ngModel)]="searchQuery"/>
+    </div>
+    <div class="filter-tabs">
+      @for (s of statuts; track s.key) {
+        <button class="filter-tab" [class.active]="activeStatut===s.key" (click)="setStatut(s.key)">
+          {{ s.labelKey | translate }}
+          <span class="filter-count">{{ s.count }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <span>{{ 'FACTURES.LOADING' | translate }}</span>
+    </div>
+  }
+
+  
+  @if (!loading()) {
+    <div class="table-box">
+      <table class="ft-table">
+        <thead>
+          <tr>
+            <th>{{ 'FACTURES.TABLE.NUMBER' | translate }}</th>
+            <th>{{ 'INVOICE.FIELDS.CLIENT' | translate }}</th>
+            <th>{{ 'INVOICE.TOTALS.HT' | translate }}</th>
+            <th>{{ 'GLOSSARY.VAT' | translate }}</th>
+            <th>{{ 'INVOICE.TOTALS.TTC' | translate }}</th>
+            <th>{{ 'INVOICE.FIELDS.DUE_DATE' | translate }}</th>
+            <th>{{ 'FACTURES.TABLE.STATUS' | translate }}</th>
+            <th>{{ 'FACTURES.TABLE.ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (filteredFactures().length === 0) {
+            <tr>
+              <td colspan="8" class="empty-row">
+                {{ 'FACTURES.EMPTY' | translate }}
+              </td>
+            </tr>
+          }
+          @for (f of filteredFactures(); track f.id) {
+            <tr [@rowIn] [class.retard]="f.estEnRetard">
+              <td><span class="ft-id">{{ f.numero }}</span></td>
+              <td>
+                <div class="ft-client-cell">
+                  <div class="ft-client-init">{{ f.clientNom.substring(0,2).toUpperCase() }}</div>
+                  <div>
+                    <div class="ft-client-name">{{ f.clientNom }}</div>
+                    <div class="ft-client-email">{{ f.clientMatriculeFiscal ?? '—' }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="ft-num">{{ f.totalHt | number:'1.3-3' }}</td>
+              <td class="ft-num ft-muted">{{ f.totalTva | number:'1.3-3' }}</td>
+              <td class="ft-num ft-bold">{{ f.totalTtc | number:'1.3-3' }} {{ f.devise }}</td>
+              <td class="ft-date" [class.ft-retard]="f.estEnRetard">
+                {{ f.dateEcheance | date:'dd/MM/yy' }}
+                @if (f.estEnRetard) { <span class="retard-badge">{{ 'FACTURES.BADGES.OVERDUE' | translate }}</span> }
+              </td>
+              <td>
+                <span class="badge" [ngClass]="'badge--' + getStatutClass(f.statut)">
+                  <span class="badge-dot"></span>{{ statutLabelKey(f.statut) | translate }}
+                </span>
+              </td>
+              <td>
+                <div class="ft-actions">
+                 
+                  <button class="act-btn act-btn--ghost" (click)="openDetail(f)" [title]="'COMMON.ACTIONS.DETAIL' | translate">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.3"/>
+                      <path d="M6.5 5v4M6.5 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+
+                  
+                  @if (f.statut === 'Brouillon') {
+                    <button class="act-btn act-btn--ok" (click)="valider(f)" [title]="'FACTURES.ACTIONS.VALIDATE' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.statut === 'Validee' && !f.xmlGenere) {
+                    <button class="act-btn act-btn--ey" (click)="genererXml(f)" [title]="'INVOICE.ACTIONS.GENERATE_XML' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M2 4l3-3 3 3M5 1v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M1 10h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.statut === 'Validee' && f.xmlGenere) {
+                    <button class="act-btn act-btn--ey" (click)="validerTeif(f)" [title]="'FACTURES.ACTIONS.VALIDATE_TEIF' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M6.5 1L1.5 3v4c0 2.5 2.2 4.3 5 5 2.8-.7 5-2.5 5-5V3L6.5 1z" stroke="currentColor" stroke-width="1.3"/>
+                        <path d="M4 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.statut === 'Conforme') {
+                    <button class="act-btn act-btn--ey" (click)="signer(f)" [title]="'FACTURES.ACTIONS.SIGN' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M2 10l2-1 6.5-6.5-1-1L3 8l-1 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.statut === 'Conforme') {
+                    <button class="act-btn act-btn--info" (click)="envoyerTtn(f)" [title]="'FACTURES.ACTIONS.SEND_TTN' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M1 6.5l10-5-4 5 4 5-10-5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.statut === 'Acceptee' || f.statut === 'PartiellemntPayee') {
+                    <button class="act-btn act-btn--ok" (click)="ouvrirPaiement(f)" [title]="'FACTURES.ACTIONS.RECORD_PAYMENT' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <rect x="1" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                        <path d="M1 6h11" stroke="currentColor" stroke-width="1.3"/>
+                      </svg>
+                    </button>
+                  }
+
+                  
+                  @if (f.xmlGenere) {
+                    <button class="act-btn act-btn--ghost" (click)="telechargerXml(f)" [title]="'FACTURES.ACTIONS.DOWNLOAD_XML' | translate">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M6.5 1v8M4 7l2.5 2.5L9 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M1 11h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  
+  @if (showModal()) {
+    <div class="modal-overlay" [@fadeIn] (click)="closeModal()">
+      <div class="modal" [@modalIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">{{ 'FACTURES.CREATE.TITLE_A' | translate }} <em>{{ 'FACTURES.CREATE.TITLE_EM' | translate }}</em></h2>
+            <p class="modal-sub">{{ 'FACTURES.CREATE.SUBTITLE' | translate }}</p>
+          </div>
+          <button class="modal-close" (click)="closeModal()">×</button>
+        </div>
+
+        <div class="modal-body">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">{{ 'INVOICE.FIELDS.CLIENT' | translate }} <span class="req">*</span></label>
+              <select class="form-select" [(ngModel)]="newFacture.clientId">
+                <option value="">{{ 'FACTURES.CREATE.SELECT_CLIENT_PLACEHOLDER' | translate }}</option>
+                @for (c of clients(); track c.id) {
+                  <option [value]="c.id">{{ c.nom }} {{ c.matriculeFiscal ? '· ' + c.matriculeFiscal : '' }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'INVOICE.FIELDS.TYPE' | translate }}</label>
+              <select class="form-select" [(ngModel)]="newFacture.typeFacture">
+                @for (t of typeFactureOptions; track t.value) {
+                  <option [value]="t.value">{{ t.labelKey | translate }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">{{ 'INVOICE.FIELDS.PAYMENT_MODE' | translate }}</label>
+              <select class="form-select" [(ngModel)]="newFacture.modePaiement">
+                @for (m of modePaiementOptions; track m.value) {
+                  <option [value]="m.value">{{ m.labelKey | translate }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'INVOICE.FIELDS.DUE_DATE' | translate }} <span class="req">*</span></label>
+              <input type="date" class="form-input" [(ngModel)]="newFacture.dateEcheance"/>
+            </div>
+          </div>
+
+          
+          <div class="form-group">
+            <label class="form-label">{{ 'INVOICE.FIELDS.NOTES' | translate }}</label>
+            <textarea class="form-input form-textarea" [(ngModel)]="newFacture.notes" [placeholder]="'FACTURES.CREATE.NOTES_PLACEHOLDER' | translate" rows="2"></textarea>
+          </div>
+
+          
+          <div class="lignes-header">
+            <span class="lignes-title">{{ 'FACTURES.CREATE.LINES_TITLE' | translate }}</span>
+            <button class="btn-add-ligne" (click)="addLigne()">+ {{ 'FACTURES.CREATE.ADD_LINE' | translate }}</button>
+          </div>
+
+          @for (ligne of newFacture.lignes; track i; let i = $index) {
+            <div class="ligne-row">
+              <div class="ligne-num">{{ i + 1 }}</div>
+
+              <select class="form-select ligne-select-produit" [(ngModel)]="ligne.produitId"
+                      (change)="onProduitChange(ligne, ligne.produitId)">
+                <option value="">{{ 'FACTURES.CREATE.PRODUCT_PLACEHOLDER' | translate }}</option>
+                @for (p of produits(); track p.id) {
+                  <option [value]="p.id">{{ p.code }} — {{ p.libelle }}</option>
+                }
+              </select>
+
+              <input type="text" class="form-input ligne-designation" [(ngModel)]="ligne.designation" [placeholder]="'FACTURES.CREATE.DESIGNATION_PLACEHOLDER' | translate"/>
+              <input type="number" class="form-input ligne-small" [(ngModel)]="ligne.quantite" (ngModelChange)="recalculerTotaux()" [placeholder]="'FACTURES.CREATE.QTY_PLACEHOLDER' | translate" min="0.001" step="0.001"/>
+              <input type="number" class="form-input ligne-medium" [(ngModel)]="ligne.prixUnitaire" (ngModelChange)="recalculerTotaux()" [placeholder]="'FACTURES.CREATE.UNIT_PRICE_PLACEHOLDER' | translate" min="0"/>
+              <select class="form-select ligne-tva" [(ngModel)]="ligne.tauxTva" (ngModelChange)="recalculerTotaux()">
+                <option [value]="0">0%</option>
+                <option [value]="7">7%</option>
+                <option [value]="13">13%</option>
+                <option [value]="19">19%</option>
+              </select>
+              <span class="ligne-total">{{ ligne.montantTtc | number:'1.3-3' }}</span>
+
+              @if (newFacture.lignes.length > 1) {
+                <button class="ligne-del" (click)="removeLigne(i)">×</button>
+              }
+            </div>
+          }
+
+          
+          <div class="totaux">
+            <div class="totaux-row"><span>{{ 'INVOICE.TOTALS.HT' | translate }}</span><span class="totaux-val">{{ totalHt | number:'1.3-3' }} TND</span></div>
+            <div class="totaux-row"><span>{{ 'GLOSSARY.VAT' | translate }}</span><span class="totaux-val">{{ totalTva | number:'1.3-3' }} TND</span></div>
+            <div class="totaux-row totaux-ttc"><span>{{ 'INVOICE.TOTALS.TTC' | translate }}</span><span class="totaux-val totaux-ey">{{ totalTtc | number:'1.3-3' }} TND</span></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button class="btn-primary" [disabled]="!newFacture.clientId || saving()" (click)="creerFacture()">
+            @if (saving()) {
+              <ng-container>{{ 'FACTURES.CREATE.SUBMITTING' | translate }}</ng-container>
+            } @else {
+              <ng-container>{{ 'FACTURES.CREATE.SUBMIT' | translate }}</ng-container>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  
+  @if (showPaiementModal()) {
+    <div class="modal-overlay" [@fadeIn] (click)="showPaiementModal.set(false)">
+      <div class="modal modal--sm" [@modalIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">{{ 'FACTURES.PAYMENT.TITLE_A' | translate }} <em>{{ 'FACTURES.PAYMENT.TITLE_EM' | translate }}</em></h2>
+            <p class="modal-sub">
+              {{ 'FACTURES.PAYMENT.SUBTITLE' | translate:{ number: selectedFacture()?.numero, amount: (selectedFacture()?.montantRestant | number:'1.3-3') } }}
+            </p>
+          </div>
+          <button class="modal-close" (click)="showPaiementModal.set(false)">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">{{ 'FACTURES.PAYMENT.FIELDS.AMOUNT' | translate }} <span class="req">*</span></label>
+              <input type="number" class="form-input" [(ngModel)]="paiementForm.montant" [max]="selectedFacture()?.montantRestant ?? null" min="0.001" step="0.001"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'FACTURES.PAYMENT.FIELDS.MODE' | translate }}</label>
+              <select class="form-select" [(ngModel)]="paiementForm.mode">
+                @for (m of modePaiementOptions; track m.value) {
+                  <option [value]="m.value">{{ m.labelKey | translate }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">{{ 'FACTURES.PAYMENT.FIELDS.DATE' | translate }}</label>
+              <input type="date" class="form-input" [(ngModel)]="paiementForm.datePaiement"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{{ 'FACTURES.PAYMENT.FIELDS.REFERENCE' | translate }}</label>
+              <input type="text" class="form-input" [(ngModel)]="paiementForm.reference" [placeholder]="'FACTURES.PAYMENT.FIELDS.REFERENCE_PLACEHOLDER' | translate"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ 'FACTURES.PAYMENT.FIELDS.BANK' | translate }}</label>
+            <input type="text" class="form-input" [(ngModel)]="paiementForm.banque" [placeholder]="'FACTURES.PAYMENT.FIELDS.BANK_PLACEHOLDER' | translate"/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="showPaiementModal.set(false)">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button class="btn-primary" [disabled]="!paiementForm.montant || saving()" (click)="enregistrerPaiement()">
+            @if (saving()) {
+              <ng-container>{{ 'COMMON.SAVING' | translate }}</ng-container>
+            } @else {
+              <ng-container>{{ 'COMMON.SAVE' | translate }}</ng-container>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  
+  @if (showDetailModal() && selectedFacture()) {
+    <div class="modal-overlay" [@fadeIn] (click)="closeDetail()">
+      <div class="modal modal--lg" [@modalIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Facture <em>{{ selectedFacture()?.numero }}</em></h2>
+            <p class="modal-sub">{{ selectedFacture()?.clientNom }} · {{ selectedFacture()?.dateEmission | date:'dd/MM/yyyy' }}</p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="badge" [ngClass]="'badge--' + getStatutClass(selectedFacture()?.statut ?? '')">
+              {{ statutLabelKey(selectedFacture()?.statut ?? '') | translate }}
+            </span>
+            <button class="modal-close" (click)="closeDetail()">×</button>
+          </div>
+        </div>
+        <div class="modal-body">
+
+          
+          <div class="detail-summary">
+            <div class="ds-item">
+              <span class="ds-label">{{ 'INVOICE.TOTALS.HT' | translate }}</span>
+              <span class="ds-val">{{ selectedFacture()?.totalHt | number:'1.3-3' }} TND</span>
+            </div>
+            <div class="ds-item">
+              <span class="ds-label">{{ 'GLOSSARY.VAT' | translate }}</span>
+              <span class="ds-val">{{ selectedFacture()?.totalTva | number:'1.3-3' }} TND</span>
+            </div>
+            <div class="ds-item ds-item--ey">
+              <span class="ds-label">{{ 'INVOICE.TOTALS.TTC' | translate }}</span>
+              <span class="ds-val">{{ selectedFacture()?.totalTtc | number:'1.3-3' }} TND</span>
+            </div>
+            <div class="ds-item" [class.ds-item--warn]="(selectedFacture()?.montantRestant ?? 0) > 0">
+              <span class="ds-label">{{ 'FACTURES.DETAIL.REMAINING' | translate }}</span>
+              <span class="ds-val">{{ selectedFacture()?.montantRestant | number:'1.3-3' }} TND</span>
+            </div>
+          </div>
+
+          
+          <h3 class="detail-section-title">{{ 'FACTURES.DETAIL.LINES_TITLE' | translate }}</h3>
+          <table class="ft-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.DESIGNATION' | translate }}</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.QTY' | translate }}</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.UNIT_PRICE' | translate }}</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.DISCOUNT' | translate }}</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.VAT' | translate }}</th>
+                <th>{{ 'FACTURES.DETAIL.LINES_TABLE.TTC' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (l of selectedFacture()?.lignes; track l.id) {
+                <tr>
+                  <td>{{ l.ordre }}</td>
+                  <td>{{ l.designation }}</td>
+                  <td>{{ l.quantite }}</td>
+                  <td>{{ l.prixUnitaire | number:'1.3-3' }}</td>
+                  <td>{{ l.tauxRemise }}%</td>
+                  <td>{{ l.tauxTva }}%</td>
+                  <td class="ft-bold">{{ l.montantTtc | number:'1.3-3' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          
+          @if ((selectedFacture()?.historique?.length ?? 0) > 0) {
+            <h3 class="detail-section-title" style="margin-top:20px">{{ 'FACTURES.DETAIL.HISTORY_TITLE' | translate }}</h3>
+            @for (h of selectedFacture()?.historique; track h.id) {
+              <div class="hist-row">
+                <div class="hist-action">{{ h.action }}</div>
+                <div class="hist-detail">{{ h.details }}</div>
+                <div class="hist-date">{{ ($any(h).creeLe ?? $any(h).date) | date:'dd/MM/yy HH:mm' }}</div>
+              </div>
+            }
+          }
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeDetail()">{{ 'COMMON.CLOSE' | translate }}</button>
+          <button class="btn-ghost" (click)="telechargerPdf(selectedFacture()!)" [disabled]="pdfLoading()">
+            @if (pdfLoading()) {
+              <ng-container>{{ 'FACTURES.ACTIONS.GENERATING' | translate }}</ng-container>
+            } @else {
+              <ng-container>{{ 'FACTURES.ACTIONS.DOWNLOAD_PDF' | translate }}</ng-container>
+            }
+          </button>
+          @if (selectedFacture()?.statut === 'Brouillon') {
+            <button class="btn-primary" (click)="valider(selectedFacture()!); closeDetail()">{{ 'FACTURES.ACTIONS.VALIDATE' | translate }}</button>
+          }
+          
+          @if (selectedFacture()?.statut === 'Payee' || selectedFacture()?.statut === 'Rejetee') {
+            <button class="btn-primary" (click)="creerAvoirDepuisFacture(selectedFacture()!)">{{ 'FACTURES.ACTIONS.CREATE_CREDIT_NOTE' | translate }}</button>
+          }
+          @if (selectedFacture()?.xmlGenere) {
+            <button class="btn-ghost" (click)="telechargerXml(selectedFacture()!)">{{ 'FACTURES.ACTIONS.DOWNLOAD_XML_TEIF' | translate }}</button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
+
+

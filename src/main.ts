@@ -1,6 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
-import { App } from './app/app';
+import { environment } from './environments/environment';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+if (environment.production && environment.demoMode) {
+  throw new Error('demoMode ne doit jamais etre active en production.');
+}
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));

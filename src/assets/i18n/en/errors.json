@@ -1,0 +1,20 @@
+{
+  "ERRORS": {
+    "PASSWORDS_MISMATCH": "Passwords do not match.",
+    "REQUIRED": "This field is required.",
+    "INVALID_EMAIL": "Invalid email address.",
+    "INVALID_FORMAT": "Invalid format.",
+    "SERVER_ERROR": "An error occurred. Please try again.",
+    "UNAUTHORIZED": "Session expired. Please sign in again.",
+    "FORBIDDEN": "Access denied.",
+    "NOT_FOUND": "Resource not found.",
+    "CONFLICT": "This resource already exists.",
+    "VALIDATION": "Please correct the form errors.",
+    "NETWORK": "Unable to reach the server. Check your connection.",
+    "INVALID_CREDENTIALS": "Invalid credentials.",
+    "ACCOUNT_INACTIVE": "Your account is inactive. Contact the administrator.",
+    "INVALID_TOKEN": "Invalid session. Please sign in again.",
+    "INVALID_OTP": "Invalid or expired OTP code.",
+    "ACCESS_DENIED": "Access denied."
+  }
+}

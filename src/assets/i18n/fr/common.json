@@ -1,0 +1,128 @@
+{
+  "APP": {
+    "TAGLINE": "Facturation électronique certifiée",
+    "ADMIN_CONSOLE": "Console d'administration",
+    "BADGE_TEIF_CERTIFIED": "TEIF 2026 · Certifié DGI"
+  },
+  "TRUST": {
+    "AES_256": "Données chiffrées AES-256",
+    "HOSTED_TN": "Hébergé en Tunisie",
+    "TWO_FACTOR_REQUIRED": "Accès restreint — 2FA obligatoire",
+    "SESSIONS_AUDITED": "Toutes les sessions sont auditées",
+    "ACCESS_DEFINED_BY_COMPANY": "Accès défini par votre entreprise",
+    "TWO_FACTOR_RECOMMENDED": "2FA recommandé",
+    "TEIF_2026_COMPLIANT": "Conforme TEIF 2026"
+  },
+  "COMMON": {
+    "CANCEL": "Annuler",
+    "CLOSE": "Fermer",
+    "SAVE": "Enregistrer",
+    "SAVING": "Enregistrement…",
+    "COPIED": "Copié !",
+    "COPY": "Copier",
+    "CHECK_NOW": "Vérifier maintenant",
+    "BACK_HOME": "Retour à l'accueil",
+    "LOADING": "Chargement…",
+    "STEP_OF": "Étape {{current}} sur {{total}}",
+    "STEPS": "Étapes",
+    "STEPS_NAV": "Navigation par étapes",
+    "ACTIONS": {
+      "EDIT": "Modifier",
+      "DELETE": "Supprimer",
+      "ADD": "Ajouter",
+      "UPDATE": "Mettre à jour",
+      "RESET": "Réinitialiser",
+      "EXPORT_CSV": "Exporter CSV",
+      "DETAIL": "Voir le détail",
+      "CLEAR_SEARCH": "Effacer la recherche"
+    },
+    "TABLE": {
+      "COLUMNS": "Colonnes",
+      "VISIBLE_COLUMNS": "Colonnes visibles",
+      "SEARCH": "Rechercher…",
+      "ROWS": "Lignes",
+      "OF": "sur"
+    },
+    "FORM": {
+      "REQUIRED": "Ce champ est obligatoire."
+    },
+    "ARIA": {
+      "MENU": "Menu",
+      "PRIMARY_NAV": "Navigation principale",
+      "ADMIN_NAV": "Navigation administration",
+      "COLLAPSE_SIDEBAR": "Réduire la barre latérale"
+    }
+  },
+  "NAV": {
+    "SECTIONS": {
+      "MAIN": "Principal",
+      "REFERENTIAL": "Référentiel",
+      "COMPANY": "Mon entreprise",
+      "ACCOUNTING": "Comptabilité",
+      "ANALYTICS": "Analyses"
+    },
+    "ITEMS": {
+      "DASHBOARD": "Tableau de bord",
+      "INVOICES": "Factures",
+      "QUOTES": "Devis",
+      "CREDIT_NOTES": "Avoirs",
+      "PAYMENTS": "Paiements",
+      "CLIENTS": "Clients",
+      "PRODUCTS": "Produits",
+      "CATEGORIES": "Catégories",
+      "MY_COMPANY": "Mon entreprise",
+      "CUSTOMIZATION": "Personnalisation",
+      "USERS": "Utilisateurs",
+      "TRANSACTIONS": "Transactions",
+      "FISCAL_PARAMS": "Paramètres fiscaux",
+      "TAXES": "Taxes",
+      "REPORTS": "Rapports",
+      "LOGOUT": "Déconnexion"
+    }
+  },
+  "ADMIN": {
+    "SIDEBAR": {
+      "SUBTITLE": "Supervision & administration",
+      "ROLE": "Super Administrateur",
+      "SECTION_SUPERVISION": "Supervision",
+      "SECTION_SYSTEM": "Système",
+      "ITEMS": {
+        "DASHBOARD": "Tableau de bord",
+        "COMPANIES": "Entreprises",
+        "KYC_REQUESTS": "Demandes KYC",
+        "USERS": "Utilisateurs",
+        "INVOICES_GLOBAL": "Factures globales",
+        "AUDIT": "Journal d'audit",
+        "SETTINGS": "Paramètres",
+        "LOGOUT": "Déconnexion"
+      }
+    }
+  },
+  "LANDING": {
+    "BADGE": "TEIF 2026 · Certifié DGI · UBL 2.1",
+    "NAV": {
+      "HOME": "Accueil",
+      "KEY_NUMBERS": "Chiffres clés",
+      "WORKFLOW": "Fonctionnement",
+      "FEATURES": "Fonctionnalités",
+      "COMPLIANCE": "Conformité",
+      "SECURITY": "Sécurité",
+      "WHY": "Pourquoi TunisFlow",
+      "AUDIENCE": "Pour qui",
+      "CONTACT": "Contact"
+    },
+    "CTA": {
+      "SIGN_IN": "Se connecter",
+      "REQUEST_ACCESS": "Demander l'accès",
+      "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
+      "SEE_DEMO": "Voir le fonctionnement"
+    }
+  },
+  "PW_STRENGTH": {
+    "VERY_WEAK": "Très faible",
+    "WEAK": "Faible",
+    "MEDIUM": "Moyen",
+    "STRONG": "Fort",
+    "VERY_STRONG": "Très fort"
+  }
+}

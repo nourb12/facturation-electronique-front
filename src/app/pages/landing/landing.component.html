@@ -1,0 +1,557 @@
+<div class="cursor" [style.left.px]="cursorX" [style.top.px]="cursorY"></div>
+<div class="cursor-ring" [style.left.px]="ringX" [style.top.px]="ringY"></div>
+
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#accueil" (click)="scrollToSection($event, 'accueil')">
+      <span class="nav-name">TunisFlow</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#accueil" (click)="scrollToSection($event, 'accueil')">{{ 'LANDING.NAV.HOME' | translate }}</a></li>
+      <li><a href="#chiffres" (click)="scrollToSection($event, 'chiffres')">{{ 'LANDING.NAV.KEY_NUMBERS' | translate }}</a></li>
+      <li><a href="#workflow" (click)="scrollToSection($event, 'workflow')">{{ 'LANDING.NAV.WORKFLOW' | translate }}</a></li>
+      <li><a href="#features" (click)="scrollToSection($event, 'features')">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+      <li><a href="#conformite" (click)="scrollToSection($event, 'conformite')">{{ 'LANDING.NAV.COMPLIANCE' | translate }}</a></li>
+      <li><a href="#securite" (click)="scrollToSection($event, 'securite')">{{ 'LANDING.NAV.SECURITY' | translate }}</a></li>
+    </ul>
+
+    <ul class="nav-links nav-links--extended">
+      <li><a href="#pourquoi" (click)="scrollToSection($event, 'pourquoi')">{{ 'LANDING.NAV.WHY' | translate }}</a></li>
+      <li><a href="#pour-qui" (click)="scrollToSection($event, 'pour-qui')">{{ 'LANDING.NAV.AUDIENCE' | translate }}</a></li>
+      <li><a href="#contact" (click)="scrollToSection($event, 'contact')">{{ 'LANDING.NAV.CONTACT' | translate }}</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <app-theme-toggle></app-theme-toggle>
+      <app-language-switcher></app-language-switcher>
+      <a routerLink="/login/entreprise" class="btn-ghost-sm">{{ 'LANDING.CTA.SIGN_IN' | translate }}</a>
+      <a routerLink="/demande-acces" class="btn-ey-sm">
+        {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }} <span class="btn-arrow">&#8594;</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="accueil">
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">{{ 'LANDING.BADGE' | translate }}</div>
+
+      <h1 class="hero-title">
+        <span class="hero-title-line">
+          <span class="hero-title-inner">{{ 'LANDING.HERO.TITLE_TOP' | translate }}</span>
+        </span>
+        <span class="hero-title-line">
+          <span class="hero-title-inner hero-em">{{ 'LANDING.HERO.TITLE_HIGHLIGHT' | translate }}</span>
+        </span>
+        <span class="hero-title-line">
+          <span class="hero-title-inner">{{ 'LANDING.HERO.TITLE_BOTTOM' | translate }}</span>
+        </span>
+      </h1>
+
+      <p class="hero-desc">{{ 'LANDING.HERO.DESC' | translate }}</p>
+
+      <div class="hero-ctas">
+        <a routerLink="/demande-acces" class="btn-primary">
+          {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} <span class="btn-arrow">&#8594;</span>
+        </a>
+        <a href="#workflow" class="btn-outline" (click)="scrollToSection($event, 'workflow')">
+          {{ 'LANDING.CTA.SEE_DEMO' | translate }} <span class="btn-arrow">&#8594;</span>
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="hero-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 1L1 4v3.5C1 10.2 3.5 12.1 6.5 12.5c3-.4 5.5-2.3 5.5-5V4L6.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M4.5 6.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ 'LANDING.TRUST.COMPLIANT' | translate }}
+        </div>
+        <div class="hero-trust-sep">·</div>
+        <div class="hero-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1" y="1" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M4 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ 'LANDING.TRUST.UBL' | translate }}
+        </div>
+        <div class="hero-trust-sep">·</div>
+        <div class="hero-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 4v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          {{ 'LANDING.TRUST.DGI_LT_2S' | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-preview" aria-hidden="true">
+      <div class="app-window">
+        <div class="app-chrome">
+          <div class="chrome-dots"><span></span><span></span><span></span></div>
+          <div class="chrome-url">TunisFlow.ey.tn/dashboard</div>
+        </div>
+        <div class="app-body">
+          <div class="preview-topbar">
+            <div class="preview-bread">
+              <span>{{ 'LANDING.PREVIEW.BREAD_DASHBOARD' | translate }}</span>
+              <span class="sep">›</span>
+              <span class="cur">{{ 'LANDING.PREVIEW.BREAD_OVERVIEW' | translate }}</span>
+            </div>
+            <div class="preview-dot"></div>
+          </div>
+
+          <div class="preview-kpis">
+            <div class="preview-kpi preview-kpi--ey">
+              <div class="pk-lbl">{{ 'LANDING.PREVIEW.KPI_TEIF' | translate }}</div>
+              <div class="pk-val">100%</div>
+              <div class="pk-delta up">{{ 'LANDING.PREVIEW.KPI_TEIF_STATUS' | translate }}</div>
+            </div>
+            <div class="preview-kpi">
+              <div class="pk-lbl">{{ 'LANDING.PREVIEW.KPI_INVOICES' | translate }}</div>
+              <div class="pk-val">128</div>
+              <div class="pk-delta up">+8</div>
+            </div>
+            <div class="preview-kpi">
+              <div class="pk-lbl">{{ 'LANDING.PREVIEW.KPI_DGI' | translate }}</div>
+              <div class="pk-val">1.4s</div>
+              <div class="pk-delta up">{{ 'LANDING.PREVIEW.KPI_DGI_STATUS' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="preview-table">
+            <div class="pt-header">
+              <span>{{ 'LANDING.PREVIEW.TABLE.REFERENCE' | translate }}</span>
+              <span>{{ 'LANDING.PREVIEW.TABLE.CLIENT' | translate }}</span>
+              <span>{{ 'LANDING.PREVIEW.TABLE.AMOUNT' | translate }}</span>
+              <span>{{ 'LANDING.PREVIEW.TABLE.STATUS' | translate }}</span>
+            </div>
+            <div class="pt-row">
+              <span class="mono">FAC-0128</span><span>Alpha Systems</span>
+              <span class="mono">13 056 TND</span><span class="s-ok">{{ 'LANDING.PREVIEW.TABLE.STATUS_DGI' | translate }}</span>
+            </div>
+            <div class="pt-row">
+              <span class="mono">FAC-0127</span><span>Beta Industrie</span>
+              <span class="mono">8 250 TND</span><span class="s-warn">{{ 'LANDING.PREVIEW.TABLE.STATUS_VALIDATION' | translate }}</span>
+            </div>
+            <div class="pt-row">
+              <span class="mono">FAC-0126</span><span>Gamma Corp</span>
+              <span class="mono">31 200 TND</span><span class="s-info">{{ 'LANDING.PREVIEW.TABLE.STATUS_UBL' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="preview-dgi">
+            <div class="dgi-dot"></div>
+            <span>{{ 'LANDING.PREVIEW.SYNC' | translate }}</span>
+            <span class="dgi-badge">{{ 'LANDING.PREVIEW.BADGE' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card float-card--teif">
+        <div class="fc-score">100<span>%</span></div>
+        <div>
+          <div class="fc-title">{{ 'LANDING.PREVIEW.FLOAT_TITLE' | translate }}</div>
+          <div class="fc-sub">{{ 'LANDING.PREVIEW.FLOAT_SUB' | translate }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section" id="chiffres">
+  <div class="stats-grid">
+    @for (stat of stats(); track stat.label; let i = $index) {
+      <div class="stat-item reveal" [style.--reveal-delay]="(i * 80) + 'ms'">
+        <div class="stat-value">{{ stat.display }}</div>
+        <div class="stat-label">{{ stat.label | translate }}</div>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="workflow-section" id="workflow">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">{{ 'LANDING.WORKFLOW.EYEBROW' | translate }}</div>
+      <h2 class="section-title">
+        {{ 'LANDING.WORKFLOW.TITLE_LINE1' | translate }}<br>
+        <span class="section-highlight">{{ 'LANDING.WORKFLOW.TITLE_HIGHLIGHT' | translate }}</span>
+        {{ 'LANDING.WORKFLOW.TITLE_LINE2' | translate }}
+      </h2>
+      <p class="section-desc">{{ 'LANDING.WORKFLOW.DESC' | translate }}</p>
+    </div>
+
+    <div class="workflow-timeline">
+      @for (step of workflowSteps(); track step.title; let i = $index) {
+        <div class="wf-step reveal" [style.--reveal-delay]="(i * 90) + 'ms'">
+          <div class="wf-node">
+            <div class="wf-num">{{ step.num }}</div>
+            <div class="wf-connector" *ngIf="step.num < 5"></div>
+          </div>
+          <div class="wf-card">
+            <div class="wf-icon" [innerHTML]="safeSvg(step.icon)"></div>
+            <h3 class="wf-title">{{ step.title | translate }}</h3>
+            <p class="wf-desc">{{ step.desc | translate }}</p>
+            <div class="wf-tag">{{ step.tag | translate }}</div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">{{ 'LANDING.FEATURES.EYEBROW' | translate }}</div>
+      <h2 class="section-title">
+        {{ 'LANDING.FEATURES.TITLE_LINE1' | translate }}<br>
+        <em>{{ 'LANDING.FEATURES.TITLE_EM' | translate }}</em>
+      </h2>
+      <p class="section-desc">{{ 'LANDING.FEATURES.DESC' | translate }}</p>
+    </div>
+
+    <div class="features-grid">
+      @for (feat of features(); track feat.title; let i = $index) {
+        <div class="feature-card reveal" [style.--reveal-delay]="(i * 70) + 'ms'" (click)="openFeatureModal(feat)">
+          <div class="feat-tag">{{ feat.tag | translate }}</div>
+          <h3 class="feat-title">{{ feat.title | translate }}</h3>
+          <p class="feat-desc">{{ feat.desc | translate }}</p>
+          <div class="feat-more">{{ 'LANDING.FEATURES.LEARN_MORE' | translate }} <span class="feat-more-arrow">&#8594;</span></div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+@if (selectedFeature()) {
+  <div class="modal-backdrop" (click)="closeFeatureModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-topline"></div>
+      <div class="modal-head">
+        <div>
+          <div class="modal-tag">{{ selectedFeature()!.tag | translate }}</div>
+          <h3 class="modal-title">{{ selectedFeature()!.title | translate }}</h3>
+        </div>
+        <button class="modal-close" (click)="closeFeatureModal()">&times;</button>
+      </div>
+      <div class="modal-body">{{ selectedFeature()!.detail | translate }}</div>
+      <div class="modal-footer">
+        <button class="btn-modal-ghost" (click)="closeFeatureModal()">{{ 'COMMON.CLOSE' | translate }}</button>
+        <a routerLink="/demande-acces" class="btn-modal-ey" (click)="closeFeatureModal()">
+          {{ 'LANDING.FEATURES.MODAL_REQUEST' | translate }} &#8594;
+        </a>
+      </div>
+    </div>
+  </div>
+}
+
+<section class="compliance-section" id="conformite">
+  <div class="container">
+    <div class="compliance-inner">
+      <div class="compliance-content reveal-left">
+        <div class="section-eyebrow">{{ 'LANDING.COMPLIANCE.EYEBROW' | translate }}</div>
+        <h2 class="section-title compliance-title">
+          {{ 'LANDING.COMPLIANCE.TITLE_LINE1' | translate }}<br>
+          <em>{{ 'LANDING.COMPLIANCE.TITLE_EM' | translate }}</em>
+        </h2>
+        <p class="compliance-desc">{{ 'LANDING.COMPLIANCE.DESC' | translate }}</p>
+        <div class="compliance-list">
+          @for (item of complianceItems(); track item.label; let i = $index) {
+            <div
+              class="compliance-item"
+              [class.done]="item.done"
+              [class.pending]="!item.done"
+              [class.visible]="complianceVisible()"
+              [style.transition-delay]="(i * 55) + 'ms'"
+            >
+              <span class="ci-icon">{{ item.done ? '&#10003;' : '⏳' }}</span>
+              <span>{{ item.label | translate }}</span>
+            </div>
+          }
+        </div>
+        <div class="compliance-cta">
+          <a routerLink="/demande-acces" class="btn-primary">
+            {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} &#8594;
+          </a>
+          <a href="#" class="link-text">{{ 'LANDING.COMPLIANCE.DOC_LINK' | translate }}</a>
+        </div>
+      </div>
+
+      <div class="compliance-visual reveal-right">
+        <div class="score-card">
+          <div class="score-header">
+            <span class="score-title-txt">{{ 'LANDING.COMPLIANCE.SCORE_TITLE' | translate }}</span>
+            <span class="score-badge">{{ 'LANDING.COMPLIANCE.SCORE_BADGE' | translate }}</span>
+          </div>
+          <div class="score-ring-wrap">
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <circle cx="80" cy="80" r="68" fill="none" stroke="var(--bg-edge)" stroke-width="8"/>
+              <circle
+                cx="80"
+                cy="80"
+                r="68"
+                fill="none"
+                stroke="var(--c-ey)"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-dasharray="427.3"
+                [attr.stroke-dashoffset]="scoreAnimated() ? 0 : 427.3"
+                transform="rotate(-90 80 80)"
+                class="score-circle"
+              />
+            </svg>
+            <div class="score-pct">
+              <span class="score-num">100</span>
+              <span class="score-unit">%</span>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            @for (row of scoreRows(); track row.key) {
+              <div class="sb-row">
+                <span class="sb-key">{{ row.key | translate }}</span>
+                <div class="sb-bar">
+                  <div class="sb-fill" [class.sb-fill--warn]="row.warn" [style.width]="scoreAnimated() ? row.pct + '%' : '0%'"></div>
+                </div>
+                <span class="sb-val" [class.sb-warn]="row.warn">{{ row.pct }}%</span>
+              </div>
+            }
+          </div>
+          <div class="score-footer">
+            <div class="sf-dot"></div>
+            <span>{{ 'LANDING.COMPLIANCE.SCORE_FOOTER' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="diff-section" id="pourquoi">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">{{ 'LANDING.WHY.EYEBROW' | translate }}</div>
+      <h2 class="section-title">
+        {{ 'LANDING.WHY.TITLE_LINE1' | translate }}<br>
+        <em>{{ 'LANDING.WHY.TITLE_EM' | translate }}</em>
+      </h2>
+    </div>
+    <div class="diff-grid">
+      @for (item of diffItems(); track item.title; let i = $index) {
+        <div class="diff-card reveal" [style.--reveal-delay]="(i * 90) + 'ms'">
+          <div class="diff-icon" [innerHTML]="safeSvg(item.icon)"></div>
+          <h3 class="diff-title">{{ item.title | translate }}</h3>
+          <p class="diff-desc">{{ item.desc | translate }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="audience-section" id="pour-qui">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">{{ 'LANDING.AUDIENCE.EYEBROW' | translate }}</div>
+      <h2 class="section-title">
+        {{ 'LANDING.AUDIENCE.TITLE_LINE1' | translate }}<br>
+        <em>{{ 'LANDING.AUDIENCE.TITLE_EM' | translate }}</em>
+      </h2>
+    </div>
+    <div class="audience-grid">
+      @for (aud of audiences(); track aud.title; let i = $index) {
+        <div class="audience-card reveal" [style.--reveal-delay]="(i * 90) + 'ms'">
+          <div class="audience-icon" [innerHTML]="safeSvg(aud.icon)"></div>
+          <h3 class="audience-title">{{ aud.title | translate }}</h3>
+          <p class="audience-desc">{{ aud.desc | translate }}</p>
+          <ul class="audience-list">
+            @for (point of aud.points; track point) {
+              <li>{{ point | translate }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="security-section" id="securite">
+  <div class="container">
+    <div class="security-inner">
+      <div class="security-content reveal-left">
+        <div class="section-eyebrow">{{ 'LANDING.SECURITY.EYEBROW' | translate }}</div>
+        <h2 class="section-title">
+          {{ 'LANDING.SECURITY.TITLE_LINE1' | translate }}<br>
+          <em>{{ 'LANDING.SECURITY.TITLE_EM' | translate }}</em>
+        </h2>
+        <p class="security-desc">{{ 'LANDING.SECURITY.DESC' | translate }}</p>
+        <div class="security-items">
+          @for (sec of securityItems(); track sec.label; let i = $index) {
+            <div class="sec-item reveal" [style.--reveal-delay]="(i * 80) + 'ms'">
+              <div class="sec-icon" [innerHTML]="safeSvg(sec.icon)" aria-hidden="true"></div>
+              <div class="sec-body">
+                <div class="sec-label">{{ sec.label | translate }}</div>
+                <div class="sec-desc">{{ sec.desc | translate }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="security-visual reveal-right">
+        <div class="sec-card">
+          <div class="sec-card-header">
+            <div class="sec-card-dot"></div>
+            <span>{{ 'LANDING.SECURITY.LOG_HEADER' | translate }}</span>
+          </div>
+          <div class="sec-log-list">
+            @for (log of auditLogs(); track log.action) {
+              <div class="sec-log-item">
+                <div class="sec-log-icon" [class.sec-log-icon--ok]="log.ok" [class.sec-log-icon--warn]="!log.ok">
+                  {{ log.ok ? '✓' : '!' }}
+                </div>
+                <div class="sec-log-body">
+                  <div class="sec-log-action">{{ log.action | translate }}</div>
+                  <div class="sec-log-time">{{ log.time | translate }}</div>
+                </div>
+                <div class="sec-log-status" [class.ok]="log.ok">{{ log.status | translate }}</div>
+              </div>
+            }
+          </div>
+          <div class="sec-card-footer">
+            <div class="sec-footer-dot"></div>
+            <span>{{ 'LANDING.SECURITY.LOG_FOOTER' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="cta-halo" aria-hidden="true"></div>
+      <div class="cta-eyebrow">{{ 'LANDING.CTA_SECTION.EYEBROW' | translate }}</div>
+      <h2 class="cta-title">{{ 'LANDING.CTA_SECTION.TITLE' | translate }}</h2>
+      <p class="cta-desc">{{ 'LANDING.CTA_SECTION.DESC' | translate }}</p>
+
+      <div class="cta-persuasion">
+        <div class="cta-persuasion-item">
+          <div class="cta-persuasion-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 1.5L2 5.5v4.5C2 13.8 5.1 16.6 9 17c3.9-.4 7-3.2 7-7V5.5L9 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M6.5 9l2 2 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="cta-persuasion-text">
+            <strong>{{ 'LANDING.CTA_SECTION.ITEMS.COMPLIANCE.TITLE' | translate }}</strong>
+            <span>{{ 'LANDING.CTA_SECTION.ITEMS.COMPLIANCE.DESC' | translate }}</span>
+          </div>
+        </div>
+        <div class="cta-persuasion-item">
+          <div class="cta-persuasion-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M9 5.5v3.5l2.5 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="cta-persuasion-text">
+            <strong>{{ 'LANDING.CTA_SECTION.ITEMS.TIME.TITLE' | translate }}</strong>
+            <span>{{ 'LANDING.CTA_SECTION.ITEMS.TIME.DESC' | translate }}</span>
+          </div>
+        </div>
+        <div class="cta-persuasion-item">
+          <div class="cta-persuasion-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M6 9l2.5 2.5L12 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="cta-persuasion-text">
+            <strong>{{ 'LANDING.CTA_SECTION.ITEMS.DIGITAL.TITLE' | translate }}</strong>
+            <span>{{ 'LANDING.CTA_SECTION.ITEMS.DIGITAL.DESC' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-actions">
+        <a routerLink="/demande-acces" class="btn-primary btn-primary--lg">
+          {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} &#8594;
+        </a>
+        <a routerLink="/login/entreprise" class="btn-outline-light">
+          {{ 'LANDING.CTA_SECTION.LOGIN' | translate }}
+        </a>
+      </div>
+
+      <div class="cta-trust">
+        <div class="ctr-item"><span></span> {{ 'LANDING.CTA_SECTION.TRUST.AES' | translate }}</div>
+        <div class="ctr-sep">·</div>
+        <div class="ctr-item"><span></span> {{ 'LANDING.CTA_SECTION.TRUST.CERTIFIED' | translate }}</div>
+        <div class="ctr-sep">·</div>
+        <div class="ctr-item"><span></span> {{ 'LANDING.CTA_SECTION.TRUST.DGI' | translate }}</div>
+        <div class="ctr-sep">·</div>
+        <div class="ctr-item"><span></span> {{ 'LANDING.CTA_SECTION.TRUST.HOSTED' | translate }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-mark">EY</div>
+          <div>
+            <div class="footer-name">TunisFlow</div>
+            <div class="footer-sub">{{ 'LANDING.FOOTER.SUBTITLE' | translate }}</div>
+          </div>
+        </div>
+        <p class="footer-tagline">{{ 'LANDING.FOOTER.TAGLINE' | translate }}</p>
+        <div class="footer-status">
+          <div class="status-dot"></div>
+          <span>{{ 'LANDING.FOOTER.STATUS' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">{{ 'LANDING.FOOTER.COLUMNS.PLATFORM.TITLE' | translate }}</div>
+        <a href="#workflow" (click)="scrollToSection($event, 'workflow')">{{ 'LANDING.FOOTER.COLUMNS.PLATFORM.WORKFLOW' | translate }}</a>
+        <a href="#features" (click)="scrollToSection($event, 'features')">{{ 'LANDING.FOOTER.COLUMNS.PLATFORM.FEATURES' | translate }}</a>
+        <a href="#conformite" (click)="scrollToSection($event, 'conformite')">{{ 'LANDING.FOOTER.COLUMNS.PLATFORM.COMPLIANCE' | translate }}</a>
+        <a href="#securite" (click)="scrollToSection($event, 'securite')">{{ 'LANDING.FOOTER.COLUMNS.PLATFORM.SECURITY' | translate }}</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">{{ 'LANDING.FOOTER.COLUMNS.REGULATION.TITLE' | translate }}</div>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.REGULATION.TEIF' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.REGULATION.DGI' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.REGULATION.UBL' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.REGULATION.ARCHIVE' | translate }}</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">{{ 'LANDING.FOOTER.COLUMNS.SUPPORT.TITLE' | translate }}</div>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.SUPPORT.HELP' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.SUPPORT.CONTACT' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.SUPPORT.STATUS' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.COLUMNS.SUPPORT.TRAINING' | translate }}</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-legal">{{ 'LANDING.FOOTER.LEGAL' | translate:{ year: activeYear() } }}</div>
+      <div class="footer-links">
+        <a href="#">{{ 'LANDING.FOOTER.LINKS.PRIVACY' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.LINKS.TERMS' | translate }}</a>
+        <a href="#">{{ 'LANDING.FOOTER.LINKS.NOTICES' | translate }}</a>
+      </div>
+    </div>
+  </div>
+</footer>

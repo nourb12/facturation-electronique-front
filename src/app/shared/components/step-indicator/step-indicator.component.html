@@ -1,0 +1,49 @@
+﻿<!-- Sidebar mode -->
+<div class="da-left__steps" *ngIf="mode === 'sidebar'">
+  <ng-container *ngFor="let step of steps; let last = last">
+    <div class="da-left__step"
+         [class.da-left__step--active]="currentStep >= step.id"
+         [class.da-left__step--done]="currentStep > step.id"
+         [class.da-left__step--clickable]="canNavigateTo(step.id)"
+         (click)="onStepClick(step.id)"
+         (keydown.enter)="onStepClick(step.id)"
+         (keydown.space)="onStepClick(step.id)"
+         [attr.role]="canNavigateTo(step.id) ? 'button' : null"
+         [attr.tabindex]="canNavigateTo(step.id) ? 0 : null">
+      <div class="da-left__step-num" [class.da-left__step-num--ey]="currentStep >= step.id">
+        <svg *ngIf="currentStep > step.id" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 5l2 2.5 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span *ngIf="currentStep <= step.id">{{ step.id }}</span>
+      </div>
+      <div class="da-left__step-info">
+        <span class="da-left__step-title">{{ step.title }}</span>
+        <span class="da-left__step-sub">{{ step.subtitle }}</span>
+      </div>
+    </div>
+    <div class="da-left__step-line" *ngIf="!last" [class.da-left__step-line--done]="currentStep > step.id"></div>
+  </ng-container>
+</div>
+
+<!-- Bar mode -->
+<div class="da-stepper" *ngIf="mode === 'bar'">
+  <ng-container *ngFor="let step of steps; let last = last">
+    <div class="da-stepper__item"
+         [class.da-stepper__item--active]="currentStep === step.id"
+         [class.da-stepper__item--done]="currentStep > step.id"
+         [class.da-stepper__item--clickable]="canNavigateTo(step.id)"
+         (click)="onStepClick(step.id)"
+         (keydown.enter)="onStepClick(step.id)"
+         (keydown.space)="onStepClick(step.id)"
+         [attr.role]="canNavigateTo(step.id) ? 'button' : null"
+         [attr.tabindex]="canNavigateTo(step.id) ? 0 : null">
+      <div class="da-stepper__dot">
+        <svg *ngIf="currentStep > step.id" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 5l2 2.5 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="da-stepper__label">{{ step.label }}</span>
+    </div>
+    <div class="da-stepper__bar" *ngIf="!last" [class.da-stepper__bar--done]="currentStep > step.id"></div>
+  </ng-container>
+</div>

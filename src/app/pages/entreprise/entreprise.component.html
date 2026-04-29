@@ -1,0 +1,337 @@
+<div class="page-wrap" [@pageIn]>
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-eyemark">EY</div>
+      <div>
+        <h1 class="topbar-title">Profil fiscal de l'entreprise</h1>
+        <span class="topbar-bc">Completez les informations pour generer une identite fiscale conforme TEIF</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      @if (saved) {
+        <div class="save-toast" [@fadeIn]>Modifications enregistrees</div>
+      }
+      <button class="btn-save" (click)="save()" [disabled]="saving()">Enregistrer</button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="profile-grid">
+
+      <section class="form-panel">
+        <div class="form-head">
+          <div class="form-head-left">
+            <div class="step-kicker">Etape {{ activeStepIndex + 1 }} / 4</div>
+            <div class="step-title">{{ steps[activeStepIndex].title }}</div>
+            <div class="step-sub">{{ steps[activeStepIndex].subtitle }}</div>
+          </div>
+          <div class="form-head-right">
+            <div class="progress-label">Progression</div>
+            <div class="progress-track">
+              <span class="progress-fill" [style.width.%]="overallProgress"></span>
+            </div>
+            <div class="progress-value">{{ overallProgress }}%</div>
+          </div>
+        </div>
+
+        <div class="stepper">
+          @for (s of steps; track s.key; let i = $index) {
+            <button class="step-btn" [class.active]="i === activeStepIndex" [class.done]="stepCompletion(i) === 100"
+                    (click)="goToStep(i)">
+              <span class="step-dot"></span>
+              <span class="step-label">{{ s.label }}</span>
+            </button>
+          }
+        </div>
+
+        <div class="step-content" [@fadeIn]>
+          @if (activeStepIndex === 0) {
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">Identite</div>
+                <div class="section-hint">Informations principales de l'entreprise</div>
+              </div>
+              <div class="field-grid">
+                <div class="field field--critical">
+                  <label class="field-label">Raison sociale <span class="req">*</span></label>
+                  <input class="field-input" type="text" placeholder="Ex: EY Mizenia"
+                    [(ngModel)]="entreprise.raisonSociale"
+                    (ngModelChange)="onFieldChange('raisonSociale')" (blur)="markTouched('raisonSociale')"
+                    [class.is-error]="showError('raisonSociale')" [class.is-valid]="isFieldValid('raisonSociale')"/>
+                  @if (showError('raisonSociale')) {
+                    <div class="field-msg field-msg--error">{{ fieldError('raisonSociale') }}</div>
+                  } @else if (isFieldValid('raisonSociale')) {
+                    <div class="field-msg field-msg--ok">Raison sociale valide</div>
+                  }
+                </div>
+                <div class="field">
+                  <label class="field-label">Nom commercial</label>
+                  <input class="field-input" type="text" placeholder="Nom utilise sur les factures"
+                    [(ngModel)]="entreprise.nomCommercial" (ngModelChange)="onFieldChange()"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">Informations legales</div>
+                <div class="section-hint">Structure juridique et activite</div>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Forme juridique <span class="req">*</span></label>
+                  <select class="field-input" [(ngModel)]="entreprise.forme" (ngModelChange)="onFieldChange('forme')">
+                    @for (f of formes; track f) { <option [value]="f">{{ f }}</option> }
+                  </select>
+                  @if (formeSuggestion) {
+                    <div class="field-msg field-msg--info">{{ formeSuggestion }}</div>
+                  }
+                </div>
+                <div class="field">
+                  <label class="field-label">Capital social</label>
+                  <div class="field-inline">
+                    <input class="field-input" type="number" min="0" placeholder="0"
+                      [(ngModel)]="entreprise.capital" (ngModelChange)="onFieldChange('capital')"/>
+                    <span class="field-unit">TND</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Date de creation</label>
+                  <input class="field-input" type="date" [(ngModel)]="entreprise.dateCreation" (ngModelChange)="onFieldChange('dateCreation')"/>
+                </div>
+                <div class="field">
+                  <label class="field-label">Code activite NAT <span class="req">*</span></label>
+                  <select class="field-input" [(ngModel)]="entreprise.activiteCode" (ngModelChange)="onFieldChange('activiteCode')">
+                    @for (a of activitesCodes; track a) { <option [value]="a">{{ a }}</option> }
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Libelle activite</label>
+                <input class="field-input" type="text" [value]="activiteLabel" disabled />
+                <div class="field-msg field-msg--info">Libelle mis a jour automatiquement</div>
+              </div>
+            </div>
+          }
+
+          @if (activeStepIndex === 1) {
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">Coordonnees</div>
+                <div class="section-hint">Localisation et contacts officiels</div>
+              </div>
+              <div class="field">
+                <label class="field-label">Adresse <span class="req">*</span></label>
+                <input class="field-input" type="text" placeholder="Adresse complete"
+                  [(ngModel)]="entreprise.adresse"
+                  (ngModelChange)="onFieldChange('adresse')" (blur)="markTouched('adresse')"
+                  [class.is-error]="showError('adresse')" [class.is-valid]="isFieldValid('adresse')"/>
+                @if (showError('adresse')) {
+                  <div class="field-msg field-msg--error">{{ fieldError('adresse') }}</div>
+                }
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Code postal</label>
+                  <input class="field-input" type="text" placeholder="1000"
+                    [(ngModel)]="entreprise.codePostal" (ngModelChange)="onFieldChange('codePostal')"/>
+                </div>
+                <div class="field">
+                  <label class="field-label">Gouvernorat <span class="req">*</span></label>
+                  <select class="field-input" [(ngModel)]="entreprise.gouvernorat" (ngModelChange)="onFieldChange('gouvernorat')">
+                    @for (g of gouvernorats; track g) { <option [value]="g">{{ g }}</option> }
+                  </select>
+                  @if (showError('gouvernorat')) {
+                    <div class="field-msg field-msg--error">{{ fieldError('gouvernorat') }}</div>
+                  }
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Telephone mobile <span class="req">*</span></label>
+                  <input class="field-input" type="tel" placeholder="+216 XX XXX XXX"
+                    [(ngModel)]="entreprise.telephone"
+                    (ngModelChange)="onFieldChange('telephone')" (blur)="markTouched('telephone')"
+                    [class.is-error]="showError('telephone')" [class.is-valid]="isFieldValid('telephone')"/>
+                  @if (showError('telephone')) {
+                    <div class="field-msg field-msg--error">{{ fieldError('telephone') }}</div>
+                  } @else if (isFieldValid('telephone')) {
+                    <div class="field-msg field-msg--ok">Numero valide</div>
+                  }
+                </div>
+                <div class="field">
+                  <label class="field-label">Email professionnel <span class="req">*</span></label>
+                  <input class="field-input" type="email" placeholder="contact@entreprise.tn"
+                    [(ngModel)]="entreprise.email"
+                    (ngModelChange)="onFieldChange('email')" (blur)="markTouched('email')"
+                    [class.is-error]="showError('email')" [class.is-valid]="isFieldValid('email')"/>
+                  @if (showError('email')) {
+                    <div class="field-msg field-msg--error">{{ fieldError('email') }}</div>
+                  } @else if (isFieldValid('email')) {
+                    <div class="field-msg field-msg--ok">Email valide</div>
+                  }
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Site web</label>
+                  <input class="field-input" type="text" placeholder="www.entreprise.tn"
+                    [(ngModel)]="entreprise.siteWeb" (ngModelChange)="onFieldChange('siteWeb')"/>
+                </div>
+                <div class="field">
+                  <label class="field-label">Fax</label>
+                  <input class="field-input" type="text" placeholder="Optionnel"
+                    [(ngModel)]="entreprise.fax" (ngModelChange)="onFieldChange('fax')"/>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (activeStepIndex === 2) {
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">Fiscal</div>
+                <div class="section-hint">Informations fiscales indispensables</div>
+              </div>
+              <div class="field-grid">
+                <div class="field field--critical">
+                  <label class="field-label">Matricule fiscal <span class="req">*</span></label>
+          <input class="field-input" type="text" placeholder="1495908/S ou 0000000X/X/X/000"
+                    [(ngModel)]="entreprise.matriculeFiscal"
+                    (ngModelChange)="onFieldChange('matriculeFiscal')" (blur)="markTouched('matriculeFiscal')"
+                    [class.is-error]="showError('matriculeFiscal')" [class.is-valid]="isFieldValid('matriculeFiscal')"/>
+                  @if (showError('matriculeFiscal')) {
+                    <div class="field-msg field-msg--error">{{ fieldError('matriculeFiscal') }}</div>
+                  } @else if (isFieldValid('matriculeFiscal')) {
+                    <div class="field-msg field-msg--ok">Matricule valide</div>
+                  }
+                </div>
+                <div class="field">
+                  <label class="field-label">Numero RNE</label>
+                  <input class="field-input" type="text" placeholder="RNE..."
+                    [(ngModel)]="entreprise.numRNE" (ngModelChange)="onFieldChange('numRNE')"/>
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label class="field-label">Regime TVA <span class="req">*</span></label>
+                  <select class="field-input" [(ngModel)]="entreprise.regimeTVA" (ngModelChange)="onFieldChange('regimeTVA')">
+                    @for (r of regimesTVA; track r) { <option [value]="r">{{ r }}</option> }
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label">Taux TVA principal <span class="req">*</span></label>
+                  <select class="field-input" [(ngModel)]="entreprise.tauxTVAPrincipal" (ngModelChange)="onFieldChange('tauxTVAPrincipal')">
+                    <option [value]="0">0 %</option>
+                    <option [value]="7">7 %</option>
+                    <option [value]="13">13 %</option>
+                    <option [value]="19">19 %</option>
+                  </select>
+                </div>
+              </div>
+              <div class="info-banner">
+                <span class="info-banner-label">TEIF 2026</span>
+                Toute facture emise a partir du 1er janvier 2026 doit etre transmise a la DGI via TEIF.
+              </div>
+            </div>
+          }
+
+          @if (activeStepIndex === 3) {
+            <div class="section-card">
+              <div class="section-head">
+                <div class="section-title">Conformite TEIF</div>
+                <div class="section-hint">Activez les criteres pour atteindre la conformite</div>
+              </div>
+              <div class="teif-checklist">
+                @for (item of teifItems; track item.key) {
+                  <div class="teif-row" [class.is-ok]="getEntrepriseValue(item.key)">
+                    <div>
+                      <div class="teif-label">{{ item.label }}</div>
+                      <div class="teif-detail">{{ item.detail }}</div>
+                    </div>
+                    <label class="toggle">
+                      <input type="checkbox"
+                        [ngModel]="getEntrepriseValue(item.key)"
+                        (ngModelChange)="onTeifToggle(item.key, $event)"/>
+                      <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                  </div>
+                }
+              </div>
+              <div class="field-msg field-msg--info">Les mises a jour sont visibles en temps reel dans le panneau TEIF.</div>
+            </div>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-secondary" (click)="prevStep()" [disabled]="activeStepIndex === 0">Retour</button>
+          <button class="btn-primary" (click)="nextStep()" [disabled]="saving()">
+            @if (activeStepIndex === steps.length - 1) { Enregistrer } @else { Continuer }
+          </button>
+        </div>
+      </section>
+
+      <aside class="teif-panel">
+        <div class="teif-card" [class.pulse]="statusPulse">
+          <div class="teif-head">
+            <div>
+              <div class="teif-title">Conformite TEIF</div>
+              <div class="teif-message">{{ teifStatusMessage }}</div>
+            </div>
+            <span class="teif-badge" [ngClass]="teifLevelClass">{{ teifLevelLabel }}</span>
+          </div>
+
+          <div class="score-block" [class.pulse]="scorePulse">
+            <div class="score-ring">
+              <svg width="84" height="84" viewBox="0 0 84 84">
+                <circle cx="42" cy="42" r="32" class="ring-track"/>
+                <circle cx="42" cy="42" r="32" class="ring-fill" [style.stroke]="teifColor" [style.stroke-dashoffset]="teifDash"/>
+              </svg>
+              <div class="score-inner">
+                <span class="score-val" [style.color]="teifColor">{{ teifScore }}</span>
+              </div>
+            </div>
+            <div class="score-meta">
+              <div class="score-label">Score de conformite TEIF</div>
+              <div class="score-status" [ngClass]="teifLevelClass">{{ teifLevelLabel }}</div>
+            </div>
+          </div>
+
+          <div class="score-bar">
+            <span [style.width.%]="teifScore" [style.background]="teifColor"></span>
+          </div>
+
+          <div class="rec-box">
+            <div class="rec-title">Recommandations</div>
+            @if (teifRecommendations.length === 0) {
+              <div class="rec-item">Aucune action necessaire. Votre dossier est conforme.</div>
+            }
+            @for (rec of teifRecommendations; track rec) {
+              <div class="rec-item">{{ rec }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="teif-live">
+          <div class="teif-live-title">Etat en temps reel</div>
+          @for (item of teifItems; track item.key) {
+            <div class="teif-live-row" [class.is-ok]="getEntrepriseValue(item.key)">
+              <span>{{ item.label }}</span>
+              <span class="status-pill" [ngClass]="getEntrepriseValue(item.key) ? 'status-pill--ok' : 'status-pill--warn'">
+                {{ getEntrepriseValue(item.key) ? 'OK' : 'Requis' }}
+              </span>
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

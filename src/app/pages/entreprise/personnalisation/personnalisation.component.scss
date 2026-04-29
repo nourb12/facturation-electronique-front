@@ -1,0 +1,803 @@
+@use 'sass:color';
+
+$ey: var(--c-ey); $ey-dim: rgba(var(--c-ey-rgb),.08); $ey-glow: rgba(var(--c-ey-rgb),.18);
+$surf: var(--bg-surf); $card: var(--bg-card);
+$b0: var(--b0); $b1: var(--b1); $b2: var(--b2); $b-ey: var(--b-ey);
+$tp: var(--tp); $ts: var(--ts); $tt: var(--tt);
+$ok: #22C55E; $warn: #F59E0B; $err: #EF4444; $info: #3B82F6;
+$ease: cubic-bezier(.16,1,.3,1);
+$fd: 'Playfair Display',Georgia,serif;
+$fb: 'DM Sans',sans-serif;
+$fm: 'JetBrains Mono',monospace;
+
+:host { display: block; width: 100%; }
+
+.page-wrap {
+  padding: 28px 32px;
+  background: var(--bg-void);
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--navbar-bg);
+  border: 1px solid var(--navbar-border);
+  box-shadow: var(--navbar-shadow);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-family: $fd;
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  color: $tp;
+  line-height: 1.15;
+
+  em {
+    color: $ey;
+    font-style: italic;
+  }
+}
+
+.page-desc {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: $tt;
+  letter-spacing: .01em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid $b1;
+  background: transparent;
+  color: $tp;
+  font-family: $fb;
+  font-weight: 600;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  &:hover { background: $b0; color: $tp; }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: none;
+  background: $ey;
+  color: var(--ey-btn-text);
+  font-family: $fb;
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all .2s $ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(var(--c-ey-rgb), .3);
+  }
+
+  &:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes sectionSlide { from{opacity:0;transform:translateX(8px)} to{opacity:1;transform:translateX(0)} }
+// --- LAYOUT ---------------------------------------------------
+.perso-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+// --- SIDEBAR NAV ----------------------------------------------
+.perso-nav {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 12px 8px;
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-group {
+  margin-bottom: 4px;
+  &:not(:last-child) { margin-bottom: 8px; }
+}
+
+.nav-group-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: $tt;
+  padding: 6px 10px 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: none;
+  background: none;
+  font-family: $fb;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: $ts;
+  cursor: pointer;
+  transition: all .13s;
+  text-align: left;
+
+  &:hover {
+    background: $b0;
+    color: $tp;
+  }
+
+  &.active {
+    background: $ey-dim;
+    color: $ey;
+    font-weight: 700;
+    border-left: 2px solid $ey;
+    padding-left: 8px;
+  }
+}
+
+.nav-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: .7;
+
+  .nav-item.active & { opacity: 1; }
+
+  svg { width: 14px; height: 14px; }
+}
+
+.nav-item-label { flex: 1; }
+
+.nav-badge {
+  font-family: $fb;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: var(--ey-capsule-bg);
+  border: 1px solid var(--ey-capsule-border);
+  color: var(--ey-capsule-color);
+}
+
+// --- CONTENT PANEL --------------------------------------------
+.perso-content {
+  animation: sectionSlide .22s $ease;
+}
+
+.section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-intro {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.section-title {
+  font-family: $fd;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  em { color: $ey; font-style: italic; }
+}
+
+.section-desc {
+  font-size: 12px;
+  color: $ts;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+// --- SETTING CARDS GRID ---------------------------------------
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+.setting-card {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  overflow: hidden;
+  animation: fadeUp .2s $ease both;
+
+  &:hover { border-color: $b-ey; }
+}
+
+.setting-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid $b0;
+  background: $b0;
+}
+
+.sc-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  svg { width: 16px; height: 16px; }
+}
+
+.sc-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: $tp;
+}
+
+.sc-preview {
+  font-family: $fm;
+  font-size: 11px;
+  color: $ey;
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+.sc-fields {
+  padding: 14px 16px;
+}
+
+// --- TWO COL LAYOUT -------------------------------------------
+.two-col-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.left-col, .right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// --- SETTING BLOCK --------------------------------------------
+.setting-block {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.block-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: $ts;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $b0;
+}
+
+// --- TABLE TOOLBAR --------------------------------------------
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid $b0;
+  background: $b0;
+  gap: 12px;
+}
+
+// --- FORM ELEMENTS --------------------------------------------
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+  &:last-child { margin-bottom: 0; }
+}
+
+.form-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: $ts;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 9px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 13px;
+  outline: none;
+  transition: border .15s, box-shadow .15s;
+
+  &::placeholder { color: var(--input-placeholder); }
+  &:focus { border-color: $ey; box-shadow: 0 0 0 3px rgba(var(--c-ey-rgb),.13); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+.form-select {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 9px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 13px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  &:focus { border-color: $ey; box-shadow: 0 0 0 3px rgba(var(--c-ey-rgb),.13); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+.form-textarea { resize: vertical; min-height: 72px; }
+.font-mono { font-family: $fm !important; font-size: 12px !important; }
+
+// --- TOGGLE SWITCH --------------------------------------------
+.switch {
+  width: 38px;
+  height: 21px;
+  border-radius: 99px;
+  background: $b2;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: background .2s;
+  flex-shrink: 0;
+
+  &.on { background: $ey; }
+  &:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .2s $ease;
+  display: block;
+
+  .switch.on & { transform: translateX(17px); }
+}
+
+// --- TOGGLE BUTTON GROUP --------------------------------------
+.toggle-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid $b2;
+  background: none;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 600;
+  color: $ts;
+  cursor: pointer;
+  transition: all .13s;
+
+  &:hover { background: $b0; color: $tp; }
+  &.active { background: $ey-dim; color: $ey; border-color: $b-ey; }
+
+  &--sm { padding: 3px 8px; font-size: 10.5px; }
+}
+
+// --- TOGGLE ROW -----------------------------------------------
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid $b0;
+
+  &:last-child { border-bottom: none; padding-bottom: 0; }
+}
+
+.toggle-label { font-size: 13px; font-weight: 500; color: $tp; }
+.toggle-hint  { font-size: 11px; color: $tt; margin-top: 1px; }
+
+// --- LOGO UPLOAD ----------------------------------------------
+.logo-upload-zone {
+  border: 1.5px dashed $b2;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+  margin-bottom: 12px;
+
+  &:hover { border-color: $ey; background: $ey-dim; }
+}
+
+.logo-preview {
+  max-height: 60px;
+  max-width: 180px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.logo-change { font-size: 11px; color: $ts; display: block; }
+
+.logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: $ts;
+
+  svg { color: $tt; }
+  span { font-size: 12px; font-weight: 600; color: $ts; }
+}
+
+.logo-hint { font-size: 10px; color: $tt !important; font-weight: 400 !important; }
+
+// --- COLOR PICKER ---------------------------------------------
+.color-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all .13s;
+
+  &:hover { transform: scale(1.15); }
+  &.active { border-color: $tp; box-shadow: 0 0 0 2px $surf, 0 0 0 4px var(--tp); }
+}
+
+.color-custom {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1.5px dashed $b2;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  overflow: hidden;
+}
+
+// --- TAG MANAGER ----------------------------------------------
+.tag-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: $b0;
+  border-radius: 9px;
+  border: 1px solid $b0;
+
+  &:hover { border-color: $b1; }
+}
+
+.tag-input {
+  flex: 1;
+  padding: 5px 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 7px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 12px;
+  outline: none;
+
+  &--sm { flex: 0 0 55px; font-family: $fm; font-size: 11px; }
+  &:focus { border-color: $ey; }
+}
+
+.tag-badge {
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.tag-del {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  color: $err;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+
+  &:hover { background: rgba(239,68,68,.1); }
+}
+
+// --- JOURNAL ROW ----------------------------------------------
+.journal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.journal-code {
+  width: 48px;
+  flex-shrink: 0;
+  font-family: $fm;
+  font-size: 11px;
+  font-weight: 700;
+  color: $ey;
+  text-align: center;
+  padding: 6px 4px;
+  background: $ey-dim;
+  border-radius: 7px;
+}
+
+// --- INFO BOX -------------------------------------------------
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(59,130,246,.07);
+  border: 1px solid rgba(59,130,246,.2);
+  border-radius: 10px;
+  font-size: 12px;
+  color: $info;
+  line-height: 1.5;
+
+  svg { flex-shrink: 0; margin-top: 1px; }
+
+  &--warn {
+    background: rgba(245,158,11,.07);
+    border-color: rgba(245,158,11,.2);
+    color: $warn;
+  }
+}
+
+// --- BADGE overrides ------------------------------------------
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  &--ok      { background: rgba(34,197,94,.1);  color: $ok   }
+  &--warn    { background: rgba(245,158,11,.1); color: $warn }
+  &--err     { background: rgba(239,68,68,.1);  color: $err  }
+  &--info    { background: rgba(59,130,246,.1); color: $info }
+  &--neutral { background: $b1; color: $ts }
+  &--ey      { background: $ey-dim; color: $ey }
+}
+
+// --- SEARCH BOX  ----------------------------------------------
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 9px;
+  color: $ts;
+
+  input {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: $fb;
+    font-size: 12px;
+    color: $tp;
+    &::placeholder { color: $tt; }
+  }
+}
+
+// --- BTN ADD LIGNE --------------------------------------------
+.btn-add-ligne {
+  padding: 6px 14px;
+  background: $ey-dim;
+  border: 1px solid $b-ey;
+  border-radius: 9px;
+  color: $ey;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .13s;
+  white-space: nowrap;
+
+  &:hover { background: $ey-glow; }
+}
+
+// --- LIGNES TITLE ---------------------------------------------
+.lignes-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: $ts;
+}
+
+// --- ACTION BUTTONS -------------------------------------------
+.ft-actions { display: flex; gap: 4px; }
+
+.act-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .13s;
+
+  &--ghost { background: $b0; color: $ts;   &:hover { background: $b1; color: $tp; } }
+  &--err   { background: rgba(239,68,68,.1); color: $err; &:hover { background: rgba(239,68,68,.2); } }
+  &--ok    { background: rgba(34,197,94,.1); color: $ok; }
+  &--ey    { background: $ey-dim; color: $ey; }
+
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+// --- TABLE STYLES ---------------------------------------------
+.table-box {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.ft-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead th {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: $ts;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid $b0;
+    background: var(--table-header-bg);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $b0;
+    transition: background .13s;
+
+    &:hover { background: rgba(255,255,255,.02); }
+    &:last-child { border-bottom: none; }
+
+    td { padding: 10px 14px; font-size: 13px; color: $tp; }
+  }
+}
+
+.empty-row { text-align: center; color: $ts; padding: 36px !important; }
+.ft-bold   { font-weight: 700; }
+.ft-muted  { color: $ts; }
+
+.ft-client-cell { display: flex; align-items: center; gap: 10px; }
+.ft-client-init {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; flex-shrink: 0;
+}
+.ft-client-name  { font-size: 13px; font-weight: 600; color: $tp; }
+.ft-client-email { font-size: 10.5px; color: $tt; margin-top: 1px; font-family: $fm; }
+
+// --- MINI KPIS ------------------------------------------------
+.mini-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+.mini-kpi {
+  padding: 12px 16px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 140px;
+}
+.mk-label { font-size: 10.5px; color: $ts; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.mk-val   { font-family: $fm; font-size: 14px; font-weight: 700; }
+.mk--ey   { color: $ey; }
+.mk--ok   { color: $ok; }
+.mk--warn { color: $warn; }
+
+// --- RESPONSIVE -----------------------------------------------
+@media (max-width: 900px) {
+  .perso-layout { grid-template-columns: 1fr; }
+  .perso-nav { position: static; display: flex; flex-direction: row; overflow-x: auto; gap: 4px; padding: 8px; }
+  .nav-group { display: flex; flex-direction: row; align-items: center; gap: 4px; margin: 0; }
+  .nav-group-label { display: none; }
+  .two-col-layout { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: 1fr; }
+}

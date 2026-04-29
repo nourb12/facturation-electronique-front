@@ -1,0 +1,109 @@
+<div class="page-layout" [@pageIn]>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Rapports <em>financiers</em></h1>
+      <p class="page-desc">Analyse · {{ currentMonthLabel }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="exportPDF()"> Exporter PDF</button>
+      <button class="btn-secondary" (click)="exportExcel()"> Exporter Excel</button>
+    </div>
+  </div>
+
+  <div class="period-bar">
+    <button class="period-btn" *ngFor="let p of periods" [class.active]="activePeriod===p" (click)="changerPeriode(p)">{{ p }}</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" *ngFor="let k of kpis()">
+      <div class="kc-label">{{ k.label }}</div>
+      <div class="kc-val" [ngClass]="'kc--' + k.color">{{ k.val }}</div>
+      <div class="kc-sub">{{ k.sub }}</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="box">
+      <div class="box-header"><span class="box-title">CA mensuel (TND)</span></div>
+      <div class="data-empty" *ngIf="caData().length === 0">Données indisponibles</div>
+      <div class="bar-chart-vert" *ngIf="caData().length > 0">
+        <div class="bcv-bars">
+          <div class="bcv-col" *ngFor="let m of caData()">
+            <div class="bcv-val">{{ m.val }}</div>
+            <div class="bcv-bar" [style.height]="m.pct + '%'" [class.bcv--current]="m.current"></div>
+            <div class="bcv-lbl" [class.bcv-lbl--curr]="m.current">{{ m.label }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header"><span class="box-title">Répartition par taux TVA</span></div>
+      <div class="data-empty" *ngIf="tvaData().length === 0">Données indisponibles</div>
+      <div class="tva-list" *ngIf="tvaData().length > 0">
+        <div class="tva-row" *ngFor="let t of tvaData()">
+          <span class="tva-rate">{{ t.rate }}</span>
+          <div class="tva-bar-wrap"><div class="tva-bar" [style.width]="t.pct + '%'" [style.background]="t.color"></div></div>
+          <span class="tva-amount">{{ t.amount }}</span>
+          <span class="tva-pct">{{ t.pct }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header"><span class="box-title">Statuts des factures</span></div>
+      <div class="data-empty" *ngIf="statutData().length === 0">Données indisponibles</div>
+      <div class="statut-list" *ngIf="statutData().length > 0">
+        <div class="statut-row" *ngFor="let s of statutData()">
+          <span class="badge" [ngClass]="'badge--' + s.color">{{ s.label }}</span>
+          <div class="statut-bar-wrap"><div class="statut-bar" [style.width]="s.pct + '%'" [ngClass]="'sbar--' + s.color"></div></div>
+          <span class="statut-count">{{ s.count }} — {{ s.amount }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header"><span class="box-title">Délais de paiement moyens</span></div>
+      <div class="data-empty" *ngIf="delayData().length === 0">Données indisponibles</div>
+      <div class="delay-list" *ngIf="delayData().length > 0">
+        <div class="delay-row" *ngFor="let d of delayData()">
+          <div class="delay-client">
+            <div class="delay-init" [style.background]="d.color">{{ d.init }}</div>
+            <span>{{ d.client }}</span>
+          </div>
+          <div class="delay-bar-wrap"><div class="delay-bar" [style.width]="d.pct + '%'" [ngClass]="d.days > 30 ? 'dbar--warn' : 'dbar--ok'"></div></div>
+          <span class="delay-days" [ngClass]="d.days > 30 ? 'days--warn' : 'days--ok'">{{ d.days }}j</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="margin-top:12px">
+    <div class="box-header"><span class="box-title">Récapitulatif mensuel</span></div>
+    <div class="data-empty" *ngIf="recapData().length === 0">Données indisponibles</div>
+    <table class="recap-table" *ngIf="recapData().length > 0">
+      <thead><tr><th>Mois</th><th>Factures émises</th><th>CA HT</th><th>TVA collectée</th><th>CA TTC</th><th>Payé</th><th>Impayé</th><th>Taux recouvrement</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let r of recapData()" [class.recap-current]="r.current">
+          <td class="mono">{{ r.mois }}</td>
+          <td>{{ r.nbFact }}</td>
+          <td class="mono">{{ r.ht }}</td>
+          <td class="mono warn">{{ r.tva }}</td>
+          <td class="mono bold">{{ r.ttc }}</td>
+          <td class="mono ok">{{ r.paye }}</td>
+          <td class="mono err">{{ r.impaye }}</td>
+          <td>
+            <div class="recap-bar-wrap">
+              <div class="recap-bar" [style.width]="r.taux + '%'"></div>
+              <span>{{ r.taux }}%</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (toast) {
+  <div class="toast" [@fadeIn]><span class="toast-dot"></span>{{ toast }}</div>
+}

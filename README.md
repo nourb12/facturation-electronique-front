@@ -1,6 +1,6 @@
-# EyInvoicePortal
+# TunisFlow
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+TunisFlow est une application Angular (CLI 21.2.0) pour la facturation Ã©lectronique.
 
 ## Development server
 

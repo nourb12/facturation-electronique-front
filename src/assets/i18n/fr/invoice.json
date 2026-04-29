@@ -1,0 +1,234 @@
+{
+  "INVOICE": {
+    "FIELDS": {
+      "CLIENT": "Client",
+      "TYPE": "Type de document",
+      "PAYMENT_MODE": "Mode de paiement",
+      "DUE_DATE": "Date d'échéance",
+      "NOTES": "Notes",
+      "REFERENCE": "Référence",
+      "CURRENCY": "Devise",
+      "ISSUE_DATE": "Date d'émission"
+    },
+    "TOTALS": {
+      "HT": "Total HT",
+      "TTC": "Total TTC",
+      "TVA": "Total TVA",
+      "PAID": "Montant payé",
+      "REMAINING": "Restant dû"
+    },
+    "ACTIONS": {
+      "GENERATE_XML": "Générer le XML TEIF",
+      "VALIDATE": "Valider",
+      "REJECT": "Rejeter",
+      "CANCEL": "Annuler",
+      "SIGN": "Signer",
+      "SEND_TTN": "Envoyer à la DGI",
+      "DOWNLOAD_PDF": "Télécharger PDF",
+      "DOWNLOAD_XML": "Télécharger XML TEIF",
+      "RECORD_PAYMENT": "Enregistrer un paiement",
+      "CREATE_CREDIT_NOTE": "Créer un avoir"
+    },
+    "TYPES": {
+      "FACTURE": "Facture",
+      "AVOIR": "Avoir",
+      "PROFORMA": "Proforma"
+    },
+    "PAYMENT_MODES": {
+      "VIREMENT": "Virement bancaire",
+      "CHEQUE": "Chèque",
+      "ESPECES": "Espèces",
+      "CARTE_BANCAIRE": "Carte bancaire",
+      "TRAITE": "Traite"
+    }
+  },
+  "FACTURES": {
+    "TITLE_A": "Mes",
+    "TITLE_EM": "factures.",
+    "SUBTITLE": "{{count}} factures · {{drafts}} brouillon(s)",
+    "SEARCH_PLACEHOLDER": "Rechercher par numéro, client…",
+    "LOADING": "Chargement des factures…",
+    "EMPTY": "Aucune facture trouvée.",
+    "KPI": {
+      "ISSUED_MONTH": "Émis ce mois",
+      "PAID": "Encaissé",
+      "PENDING": "En attente",
+      "OVERDUE": "En retard"
+    },
+    "UNITS": {
+      "INVOICES": "facture(s)"
+    },
+    "TABLE": {
+      "NUMBER": "Numéro",
+      "STATUS": "Statut",
+      "ACTIONS": "Actions"
+    },
+    "BADGES": {
+      "OVERDUE": "En retard"
+    },
+    "STATUTS": {
+      "BROUILLON": "Brouillon",
+      "VALIDEE": "Validée",
+      "CONFORME": "Conforme",
+      "TRANSMISE": "Transmise",
+      "ACCEPTEE": "Acceptée",
+      "REJETEE": "Rejetée",
+      "PAYEE": "Payée",
+      "PARTIELLEMENT_PAYEE": "Part. payée",
+      "ANNULEE": "Annulée"
+    },
+    "ACTIONS": {
+      "VALIDATE": "Valider",
+      "VALIDATE_TEIF": "Valider TEIF",
+      "SIGN": "Signer",
+      "SEND_TTN": "Envoyer TTN",
+      "RECORD_PAYMENT": "Enregistrer paiement",
+      "DOWNLOAD_XML": "Télécharger XML",
+      "DOWNLOAD_XML_TEIF": "Télécharger XML TEIF",
+      "DOWNLOAD_PDF": "Télécharger PDF",
+      "GENERATING": "Génération…",
+      "CREATE_CREDIT_NOTE": "Créer un avoir"
+    },
+    "CREATE": {
+      "TITLE_A": "Nouvelle",
+      "TITLE_EM": "facture.",
+      "SUBTITLE": "Remplissez les informations de la facture.",
+      "SELECT_CLIENT_PLACEHOLDER": "Sélectionner un client…",
+      "NOTES_PLACEHOLDER": "Conditions de paiement, remarques…",
+      "LINES_TITLE": "Lignes de facturation",
+      "ADD_LINE": "Ajouter une ligne",
+      "PRODUCT_PLACEHOLDER": "Produit (optionnel)",
+      "DESIGNATION_PLACEHOLDER": "Désignation",
+      "QTY_PLACEHOLDER": "Qté",
+      "UNIT_PRICE_PLACEHOLDER": "Prix unitaire",
+      "SUBMIT": "Créer la facture",
+      "SUBMITTING": "Création en cours…"
+    },
+    "PAYMENT": {
+      "TITLE_A": "Enregistrer un",
+      "TITLE_EM": "paiement.",
+      "SUBTITLE": "Facture {{number}} · Restant : {{amount}} TND",
+      "FIELDS": {
+        "AMOUNT": "Montant",
+        "MODE": "Mode de paiement",
+        "DATE": "Date de paiement",
+        "REFERENCE": "Référence",
+        "REFERENCE_PLACEHOLDER": "N° chèque, virement…",
+        "BANK": "Banque",
+        "BANK_PLACEHOLDER": "Nom de la banque"
+      }
+    },
+    "DETAIL": {
+      "REMAINING": "Restant dû",
+      "LINES_TITLE": "Lignes de la facture",
+      "LINES_TABLE": {
+        "DESIGNATION": "Désignation",
+        "QTY": "Qté",
+        "UNIT_PRICE": "Prix U.",
+        "DISCOUNT": "Remise",
+        "VAT": "TVA",
+        "TTC": "TTC"
+      },
+      "HISTORY_TITLE": "Historique"
+    }
+  },
+  "ACCOUNTING": {
+    "TAXES": {
+      "TITLE_A": "Gestion des",
+      "TITLE_EM": "taxes.",
+      "SUBTITLE": "Configurez les taux de TVA, FODEC et droits de consommation applicables à vos factures.",
+      "COLUMNS": {
+        "TITLE": "Titre",
+        "RATE": "Taux",
+        "TYPE": "Type"
+      },
+      "TYPES": {
+        "TVA": "TVA",
+        "FODEC": "FODEC",
+        "DROIT_CONSOMMATION": "Droit de conso."
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
+        "SEARCH_SUB": "Essayez un autre terme de recherche.",
+        "NO_DATA_TITLE": "Aucune taxe configurée",
+        "NO_DATA_SUB": "Créez votre première taxe via le formulaire."
+      },
+      "FORM": {
+        "TITLE_NEW": "Nouvelle taxe",
+        "TITLE_EDIT": "Modifier la taxe",
+        "FIELDS": {
+          "TITLE": "Titre",
+          "TITLE_PLACEHOLDER": "Ex : TVA 19%",
+          "RATE": "Taux",
+          "TYPE": "Type"
+        },
+        "ERROR_RATE_GT0": "Le taux doit être supérieur à 0."
+      }
+    },
+    "FISCAL_PARAMS": {
+      "TITLE_A": "Paramètres",
+      "TITLE_EM": "fiscaux.",
+      "SUBTITLE": "Configurez les retenues à la source, timbre fiscal et autres paramètres de calcul.",
+      "COLUMNS": {
+        "LABEL": "Libellé",
+        "VALUE_DEFAULT": "Valeur / Défaut",
+        "ORDER": "Ordre de calcul",
+        "USAGE": "Utilisation",
+        "CONDITION": "Condition"
+      },
+      "EMPTY": {
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
+        "SEARCH_SUB": "Essayez un autre terme de recherche.",
+        "NO_DATA_TITLE": "Aucun paramètre fiscal configuré",
+        "NO_DATA_SUB": "Créez votre premier paramètre via le formulaire."
+      },
+      "FORM": {
+        "TITLE_NEW": "Nouveau paramètre",
+        "TITLE_EDIT": "Modifier le paramètre",
+        "FIELDS": {
+          "LABEL": "Libellé",
+          "LABEL_PLACEHOLDER": "Ex : Retenue à la source 15%",
+          "VALUE_DEFAULT": "Valeur / Défaut",
+          "TYPE": "Type",
+          "SIGN": "Signe",
+          "ORDER": "Ordre de calcul",
+          "USAGE": "Utilisation"
+        },
+        "TYPE": {
+          "PERCENT": "Pourcentage",
+          "FIXED": "Montant fixe"
+        },
+        "ORDER": {
+          "BEFORE_VAT": "Avant TVA",
+          "AFTER_VAT": "Après TVA"
+        },
+        "USAGE": {
+          "MANUAL": "Manuel",
+          "AUTO": "Automatique"
+        },
+        "WITHHOLDING": {
+          "LABEL": "Inclure retenue à la source",
+          "SUB": "Applicable aux factures B2B soumises à la RS"
+        },
+        "DOCS": {
+          "TITLE": "Documents cibles",
+          "FACTURE": "Facture",
+          "AVOIR": "Avoir",
+          "PROFORMA": "Proforma"
+        }
+      },
+      "ORDRE": {
+        "AVANT_TVA": "Avant TVA",
+        "APRES_TVA": "Après TVA"
+      },
+      "UTILISATION": {
+        "MANUEL": "Manuel",
+        "AUTO": "Automatique"
+      },
+      "CONDITION": {
+        "NONE": "Aucune",
+        "WITH_RS": "Avec RS"
+      }
+    }
+  }
+}

@@ -1,0 +1,254 @@
+﻿<div class="dash-layout">
+
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Console <em>admin</em></h1>
+        <span class="dt-bc">Vue d’ensemble admin</span>
+      </div>
+    </div>
+    <div class="dt-center">
+      <div class="dt-search">
+        <span class="dt-search-ico">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input type="text" placeholder="Rechercher entreprise, utilisateur" />
+      </div>
+    </div>
+    <div class="dt-right">
+      <button class="dt-notif-btn" (click)="toggleNotifs()" [class.active]="showNotifs()">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M7.5 1a4.5 4.5 0 0 1 4.5 4.5v2.5l1.5 2.5H2L3.5 8V5.5A4.5 4.5 0 0 1 7.5 1z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M5.5 12.5a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+        @if (unreadCount() > 0) { <span class="dt-badge">{{ unreadCount() }}</span> }
+      </button>
+
+      @if (showNotifs()) {
+        <div class="dt-notif-panel">
+          <div class="dt-notif-head">
+            <span>Notifications</span>
+            <button (click)="clearNotifs()">Tout lire</button>
+          </div>
+          @if (notifications.length === 0) {
+            <div class="dt-notif-empty">Aucune notification</div>
+          }
+          @for (n of notifications; track n.id) {
+            <div class="dt-notif-item" [class.unread]="!n.read" (click)="markNotifRead(n)">
+              <div class="dt-notif-dot"></div>
+              <div>
+                <div class="dt-notif-text">{{ n.text }}</div>
+                <div class="dt-notif-time">{{ n.time }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <button class="dt-btn-new" (click)="router.navigate(['/admin/entreprises'])">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Nouvelle entreprise
+      </button>
+    </div>
+  </header>
+
+  <main class="dash-content">
+
+    @if (loading()) {
+      <div class="dash-loading">
+        <div class="dash-spinner"></div>
+        <span>Chargement du tableau de bord</span>
+      </div>
+    }
+
+    @if (!loading()) {
+
+      <div class="kpi-grid">
+        <div class="kpi-card" (click)="router.navigate(['/admin/entreprises'])">
+          <div class="kpi-icon kpi-icon--shield">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1.5l5 2v4.5c0 3-2.2 5.7-5 6.5-2.8-.8-5-3.5-5-6.5V3.5l5-2z" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Entreprises</div>
+            <div class="kpi-value">{{ stats.entreprises }}</div>
+            <div class="kpi-meta">
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">↑</span>+12%</span>
+              <span class="kpi-delta-label">30 jours</span>
+            </div>
+            <div class="kpi-sub">Actives plateforme</div>
+          </div>
+        </div>
+        <div class="kpi-card" (click)="router.navigate(['/admin/utilisateurs'])">
+          <div class="kpi-icon kpi-icon--file">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Utilisateurs</div>
+            <div class="kpi-value">{{ stats.utilisateurs }}</div>
+            <div class="kpi-meta">
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">↑</span>+4%</span>
+              <span class="kpi-delta-label">30 jours</span>
+            </div>
+            <div class="kpi-sub">Tous rôles</div>
+          </div>
+        </div>
+        <div class="kpi-card" (click)="router.navigate(['/admin/factures'])">
+          <div class="kpi-icon kpi-icon--cash">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1.5" y="3" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Factures</div>
+            <div class="kpi-value">{{ stats.factures }}</div>
+            <div class="kpi-meta">
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">↑</span>+9%</span>
+              <span class="kpi-delta-label">30 jours</span>
+            </div>
+            <div class="kpi-sub">Cumul</div>
+          </div>
+        </div>
+        <div class="kpi-card" (click)="router.navigate(['/admin/factures'])">
+          <div class="kpi-icon kpi-icon--alert">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M8 6v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="8" cy="12" r=".7" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-title">Retards</div>
+            <div class="kpi-value">{{ stats.retard }}</div>
+            <div class="kpi-meta">
+              <span class="kpi-delta delta--down"><span class="kpi-delta-arrow">↓</span>-2</span>
+              <span class="kpi-delta-label">Cette semaine</span>
+            </div>
+            <div class="kpi-sub">En suivi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+
+        <div class="box box--chart">
+          <div class="box-header">
+            <div>
+              <div class="box-title">Flux factures</div>
+              <div class="box-sub">6 derniers mois</div>
+            </div>
+          </div>
+          <div class="chart-area">
+            <div class="chart-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+            <div class="chart-panel">
+              <div class="chart-grid">
+                <div class="chart-grid-line"></div>
+                <div class="chart-grid-line"></div>
+                <div class="chart-grid-line"></div>
+                <div class="chart-grid-line"></div>
+                <div class="chart-grid-line"></div>
+              </div>
+              <div class="bar-chart">
+                @for (bar of barData(); track bar.label) {
+                  <div class="bar-col">
+                    <div class="bar-wrap">
+                      <div class="bar" [style.height.%]="bar.pct" [class.bar--active]="bar.active">
+                        <div class="bar-tooltip">{{ bar.pct }}%</div>
+                      </div>
+                    </div>
+                    <span class="bar-label">{{ bar.label }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box box--donut">
+          <div class="box-header">
+            <div class="box-title">Répartition</div>
+          </div>
+          <div class="donut-wrapper">
+            <svg class="donut-svg" viewBox="0 0 120 120">
+              @for (seg of donutSegments(); track seg.label) {
+                <circle class="donut-seg" cx="60" cy="60" r="46"
+                  [style.stroke]="seg.color" [style.stroke-dasharray]="seg.dash"
+                  [style.stroke-dashoffset]="seg.offset" stroke-width="16" fill="none"
+                  transform="rotate(-90 60 60)" />
+              }
+              <circle cx="60" cy="60" r="38" fill="var(--bg-card)" />
+            </svg>
+            <div class="donut-center">
+              <div class="donut-total">{{ stats.factures }}</div>
+              <div class="donut-label">éléments</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            @for (seg of donutSegments(); track seg.label) {
+              <div class="legend-item">
+                <div class="legend-dot" [style.background]="seg.color"></div>
+                <span class="legend-label">{{ seg.label }}</span>
+                <span class="legend-val">{{ seg.count }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="box box--recent">
+          <div class="box-header">
+            <div class="box-title">Dernière activité</div>
+          </div>
+          @if (auditLog.length === 0) {
+            <div class="recent-empty">Aucune entrée</div>
+          }
+          @for (a of auditLog; track a.action) {
+            <div class="recent-row">
+              <div class="rr-left">
+                <div class="rr-num">Journal</div>
+                <div class="rr-client">{{ a.action }}</div>
+              </div>
+              <div class="rr-right">
+                <div class="rr-amount">{{ a.date }}</div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="box box--fin">
+          <div class="box-header">
+            <div class="box-title">Systeme</div>
+          </div>
+          <div class="fin-grid">
+            <div class="fin-item">
+              <div class="fin-label">Sante API</div>
+              <div class="fin-bar-wrap"><div class="fin-bar" [style.width.%]="96"></div></div>
+              <div class="fin-val">96% uptime</div>
+            </div>
+            <div class="fin-item">
+              <div class="fin-label">Latence moyenne</div>
+              <div class="fin-bar-wrap"><div class="fin-bar" [style.width.%]="88"></div></div>
+              <div class="fin-val">180 ms</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    }
+  </main>
+</div>

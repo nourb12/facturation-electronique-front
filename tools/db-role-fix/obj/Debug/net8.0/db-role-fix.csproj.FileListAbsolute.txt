@@ -1,0 +1,17 @@
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\db-role-fix.exe
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\db-role-fix.deps.json
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\db-role-fix.runtimeconfig.json
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\db-role-fix.dll
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\db-role-fix.pdb
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\bin\Debug\net8.0\Npgsql.dll
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.csproj.AssemblyReference.cache
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.GeneratedMSBuildEditorConfig.editorconfig
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.AssemblyInfoInputs.cache
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.AssemblyInfo.cs
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.csproj.CoreCompileInputs.cache
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-.40363417.Up2Date
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.dll
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\refint\db-role-fix.dll
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.pdb
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\db-role-fix.genruntimeconfig.cache
+C:\frontendpfe\ey-invoice-portal\tools\db-role-fix\obj\Debug\net8.0\ref\db-role-fix.dll

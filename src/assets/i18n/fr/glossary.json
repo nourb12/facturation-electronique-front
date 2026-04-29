@@ -1,0 +1,22 @@
+{
+  "GLOSSARY": {
+    "VAT": "TVA",
+    "HT": "Hors Taxes",
+    "TTC": "Toutes Taxes Comprises",
+    "TEIF": "Télédéclaration et Interconnexion Fiscale",
+    "DGI": "Direction Générale des Impôts",
+    "UBL": "Universal Business Language",
+    "RS": "Retenue à la Source",
+    "FODEC": "Fonds de Développement de la Compétitivité"
+  },
+  "ERRORS": {
+    "PASSWORDS_MISMATCH": "Les mots de passe ne correspondent pas.",
+    "REQUIRED": "Ce champ est obligatoire.",
+    "INVALID_EMAIL": "Adresse email invalide.",
+    "INVALID_FORMAT": "Format invalide.",
+    "SERVER_ERROR": "Une erreur est survenue. Veuillez réessayer.",
+    "UNAUTHORIZED": "Session expirée. Veuillez vous reconnecter.",
+    "FORBIDDEN": "Accès refusé.",
+    "NOT_FOUND": "Ressource introuvable."
+  }
+}

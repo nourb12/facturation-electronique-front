@@ -1,0 +1,891 @@
+// ── Design tokens ──────────────────────────────────────────────────────────
+$ey:      var(--c-ey);
+$ey-dim:  rgba(var(--c-ey-rgb), .08);
+$ey-glow: rgba(var(--c-ey-rgb), .22);
+$void:    var(--bg-void);
+$surf:    var(--bg-surf);
+$card:    var(--bg-card);
+$edge:    var(--bg-edge);
+$b0:      var(--b0);
+$b1:      var(--b1);
+$b2:      var(--b2);
+$tp:      var(--tp);
+$ts:      var(--ts);
+$tt:      var(--tt);
+$ok:      #22C55E;
+$err:     #EF4444;
+$info:    #3B82F6;
+$warn:    #F59E0B;
+$fd:      'Playfair Display', Georgia, serif;
+$fb:      'DM Sans', sans-serif;
+$fm:      'JetBrains Mono', monospace;
+$ease:    cubic-bezier(.16, 1, .3, 1);
+
+// ── Host ────────────────────────────────────────────────────────────────────
+:host { display: block; width: 100%; }
+
+// ── Page wrap ───────────────────────────────────────────────────────────────
+.page-wrap {
+  padding: 28px 32px;
+  background: $void;
+  min-height: 100vh;
+}
+
+// ── Page header ─────────────────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--navbar-bg);
+  border: 1px solid var(--navbar-border);
+  box-shadow: var(--navbar-shadow);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-family: $fd;
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  color: $tp;
+  line-height: 1.15;
+
+  em {
+    color: $ey;
+    font-style: italic;
+  }
+}
+
+.page-desc {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: $ts;
+  letter-spacing: .01em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.btn-danger-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1px solid rgba($err, .3);
+  border-radius: 9px;
+  background: rgba($err, .06);
+  color: $err;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  &:hover {
+    background: rgba($err, .12);
+    border-color: rgba($err, .5);
+  }
+}
+
+// ── Layout ───────────────────────────────────────────────────────────────────
+.fiscal-layout {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+// ── Card base ────────────────────────────────────────────────────────────────
+.card {
+  background: $card;
+  border: 1px solid $b1;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.05);
+  transition: box-shadow .2s $ease;
+}
+
+// ── Toolbar ──────────────────────────────────────────────────────────────────
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid $b0;
+  gap: 12px;
+}
+
+// Columns dropdown
+.cols-wrap { position: relative; }
+
+.cols-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  background: $surf;
+  color: $tp;
+  border: 1px solid $b1;
+  border-radius: 9px;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  &:hover {
+    border-color: $ey-glow;
+    background: $ey-dim;
+  }
+
+  svg { color: $ts; }
+}
+
+.cols-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: $card;
+  border: 1px solid $b1;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 190px;
+  z-index: 20;
+  box-shadow: 0 16px 40px rgba(0,0,0,.1);
+  animation: panelIn .18s $ease;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cols-panel-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: $tt;
+  padding: 0 2px 8px;
+  border-bottom: 1px solid $b0;
+  margin-bottom: 6px;
+}
+
+.cols-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: $tp;
+  padding: 5px 2px;
+  cursor: pointer;
+
+  input { accent-color: $ey; }
+}
+
+// Search
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 10px;
+  min-width: 230px;
+  transition: border-color .15s $ease;
+
+  &:focus-within {
+    border-color: $ey-glow;
+    background: $card;
+  }
+
+  svg { color: $tt; flex-shrink: 0; }
+
+  input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: $fb;
+    font-size: 12.5px;
+    color: $tp;
+    width: 100%;
+
+    &::placeholder { color: $tt; }
+  }
+}
+
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: $edge;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: $ts;
+  padding: 0;
+
+  &:hover { background: rgba($err, .15); color: $err; }
+}
+
+// ── Table ─────────────────────────────────────────────────────────────────────
+.table-box { padding: 0 18px 4px; }
+
+.pf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  thead th {
+    text-align: left;
+    padding: 10px 10px;
+    color: $tt;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    font-weight: 600;
+    border-bottom: 1px solid $b0;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background .12s;
+
+    &:hover { background: color-mix(in srgb, $ey 4%, transparent); }
+    &.row-selected { background: $ey-dim; }
+
+    td {
+      padding: 11px 10px;
+      border-bottom: 1px solid $b0;
+      color: $tp;
+      vertical-align: middle;
+    }
+
+    &:last-child td { border-bottom: none; }
+  }
+}
+
+.chk-col { width: 32px; }
+.act-col  { width: 40px; text-align: right; }
+
+.libelle-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.libelle-text { font-weight: 600; color: $tp; }
+
+.tag-retenue {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: rgba($info, .12);
+  color: $info;
+}
+
+.val-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 7px;
+  font-family: $fm;
+  font-size: 11.5px;
+  font-weight: 500;
+  background: rgba($ok, .10);
+  color: darken(#22C55E, 12%);
+
+  &.val-neg {
+    background: rgba($err, .10);
+    color: $err;
+  }
+}
+
+.muted-cell { color: $ts; }
+
+.util-badge {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: $edge;
+  color: $ts;
+  font-weight: 500;
+
+  &.util-auto {
+    background: rgba($warn, .12);
+    color: darken(#F59E0B, 10%);
+  }
+}
+
+.cond-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: $edge;
+  color: $tt;
+
+  &--active {
+    background: rgba($ok, .12);
+    color: darken(#22C55E, 15%);
+  }
+}
+
+.row-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid $b1;
+  background: $surf;
+  cursor: pointer;
+  color: $ts;
+  transition: all .15s $ease;
+
+  &:hover {
+    border-color: $ey-glow;
+    background: $ey-dim;
+    color: $tp;
+  }
+}
+
+// ── Skeleton loading ─────────────────────────────────────────────────────────
+.table-skeleton { padding: 8px 0; }
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 10px;
+  border-bottom: 1px solid $b0;
+
+  &:last-child { border-bottom: none; }
+}
+
+.skel {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, $edge 25%, color-mix(in srgb, $edge 80%, $surf) 50%, $edge 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skel-sm  { width: 40px; }
+.skel-md  { width: 90px; }
+.skel-lg  { width: 140px; flex: 1; }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: $ey-dim;
+  border: 1.5px dashed $ey-glow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $ey;
+  margin-bottom: 4px;
+}
+
+.empty-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $tp;
+}
+
+.empty-sub {
+  font-size: 12px;
+  color: $ts;
+  max-width: 260px;
+  line-height: 1.55;
+}
+
+.btn-ghost-sm {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: 1px solid $b1;
+  border-radius: 9px;
+  background: $surf;
+  font-size: 12px;
+  color: $tp;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all .15s $ease;
+
+  &:hover { border-color: $ey-glow; background: $ey-dim; }
+}
+
+// ── Table footer ─────────────────────────────────────────────────────────────
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px 16px;
+  font-size: 12px;
+  color: $ts;
+  gap: 10px;
+  border-top: 1px solid $b0;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  select {
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid $b1;
+    background: $surf;
+    font-size: 12px;
+    color: $tp;
+    cursor: pointer;
+  }
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid $b1;
+  background: $surf;
+  font-size: 12px;
+  cursor: pointer;
+  color: $tp;
+  transition: all .15s $ease;
+
+  &:not(:disabled):hover {
+    border-color: $ey-glow;
+    background: $ey-dim;
+  }
+
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+.page-pill {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: $edge;
+  color: $tp;
+  min-width: 52px;
+  text-align: center;
+}
+
+// ── Form aside ────────────────────────────────────────────────────────────────
+.fiscal-form {
+  padding: 20px;
+  position: sticky;
+  top: 18px;
+  transition: box-shadow .2s $ease;
+
+  &.is-editing {
+    border-color: $ey-glow;
+    box-shadow: 0 0 0 3px $ey-dim, 0 12px 32px rgba(0,0,0,.07);
+  }
+}
+
+.form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid $b0;
+}
+
+.form-head-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  h2 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: $tp;
+  }
+}
+
+.form-head-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $edge;
+  border: 1.5px solid $b1;
+  transition: all .2s $ease;
+  flex-shrink: 0;
+
+  &.dot-edit {
+    background: $ey;
+    border-color: $ey-glow;
+    box-shadow: 0 0 0 3px $ey-dim;
+  }
+}
+
+.link-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: $ts;
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 7px;
+  transition: all .15s;
+
+  &:hover { background: $edge; color: $tp; }
+}
+
+// ── Form internals ────────────────────────────────────────────────────────────
+.form-body { display: flex; flex-direction: column; gap: 14px; }
+.form-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: $ts;
+
+  .req { color: $err; margin-left: 1px; }
+}
+
+.field-hint {
+  font-size: 10.5px;
+  color: $ts;
+
+  &.error { color: $err; }
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid $b1;
+  background: $surf;
+  font-family: $fb;
+  font-size: 12.5px;
+  color: $tp;
+  transition: border-color .15s $ease;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: $ey-glow;
+    box-shadow: 0 0 0 3px $ey-dim;
+  }
+
+  &.input-error { border-color: rgba($err, .5); box-shadow: 0 0 0 3px rgba($err, .08); }
+}
+
+.input-addon-wrap {
+  position: relative;
+
+  input { padding-right: 40px; }
+
+  .input-addon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: $fm;
+    font-size: 11px;
+    color: $ts;
+    pointer-events: none;
+  }
+}
+
+// Chip toggle buttons (Type / Signe)
+.chip-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid $b1;
+  background: $surf;
+  font-family: $fb;
+  font-size: 11.5px;
+  color: $ts;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  &:hover { border-color: $b2; color: $tp; }
+
+  &.chip-active {
+    background: $ey;
+    border-color: $ey;
+    color: var(--ey-btn-text);
+    font-weight: 600;
+  }
+
+  &.chip-pos.chip-active { background: $ok; border-color: $ok; color: #fff; }
+  &.chip-neg.chip-active { background: $err; border-color: $err; color: #fff; }
+}
+
+.signe-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-plus  { background: $ok; }
+.dot-minus { background: $err; }
+
+// Toggle switch
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: $surf;
+  border: 1px solid $b0;
+}
+
+.toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggle-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $tp;
+}
+
+.toggle-sub {
+  font-size: 11px;
+  color: $ts;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+
+  input { opacity: 0; width: 0; height: 0; }
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: $edge;
+  transition: .2s $ease;
+  border-radius: 999px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: .2s $ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  }
+}
+
+.switch input:checked + .slider {
+  background: $ey;
+
+  &:before { transform: translateX(16px); }
+}
+
+// Documents grid
+.doc-block { margin-top: 4px; }
+
+.doc-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: $ts;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 8px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: $tp;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .12s;
+
+  input { accent-color: $ey; flex-shrink: 0; }
+
+  &:hover { background: $surf; border-color: $b0; }
+
+  &.doc-checked {
+    background: $ey-dim;
+    border-color: $ey-glow;
+    color: $tp;
+    font-weight: 500;
+  }
+}
+
+// ── Form footer ────────────────────────────────────────────────────────────────
+.form-foot {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid $b0;
+}
+
+.btn-ghost {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid $b1;
+  background: transparent;
+  font-family: $fb;
+  font-size: 12.5px;
+  color: $ts;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  &:hover { background: $surf; color: $tp; }
+}
+
+.btn-primary {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: $ey;
+  color: var(--ey-btn-text);
+  font-family: $fb;
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all .2s $ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(var(--c-ey-rgb), .3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(var(--ey-btn-text-rgb, 0,0,0), .3);
+  border-top-color: var(--ey-btn-text);
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 1200px) {
+  .fiscal-layout { grid-template-columns: 1.8fr 1fr; }
+}
+
+@media (max-width: 1000px) {
+  .fiscal-layout { grid-template-columns: 1fr; }
+  .fiscal-form { position: static; }
+  .page-wrap { padding: 20px 18px; }
+}
+
+@media (max-width: 640px) {
+  .table-toolbar { flex-direction: column; align-items: stretch; }
+  .search-box { min-width: unset; }
+  .form-row { grid-template-columns: 1fr; }
+  .doc-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,154 @@
+﻿@use '../../../../styles/tokens' as *;
+
+:host { display:block; }
+
+.da-left__steps {
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  z-index:1;
+  flex:1;
+  min-height:0;
+  margin-bottom:20px;
+}
+
+.da-left__step {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.da-left__step--clickable {
+  cursor:pointer;
+}
+
+.da-left__step-num {
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background: var(--bg-edge);
+  border:1px solid $b1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  color:$tt;
+  flex-shrink:0;
+  transition: background $fast, border-color $fast, box-shadow $fast, color $fast;
+}
+
+.da-left__step-num--ey {
+  background:$ey;
+  border-color:$ey;
+  color:#000;
+  box-shadow:0 0 0 4px rgba(255,230,0,.12);
+  font-weight:700;
+}
+
+.da-left__step--done .da-left__step-num {
+  background: rgba(34,197,94,.15);
+  border-color: rgba(34,197,94,.35);
+  color: #22C55E;
+}
+
+.da-left__step-info {
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+
+.da-left__step-title {
+  font-size:13px;
+  font-weight:600;
+  color:$tp;
+  line-height:1.3;
+}
+
+.da-left__step-sub {
+  font-size:11px;
+  color:$tt;
+  line-height:1.45;
+}
+
+.da-left__step--done .da-left__step-title { color:$ts; }
+
+.da-left__step-line {
+  width:1px;
+  height:16px;
+  background:$b1;
+  margin:6px 0 8px 11px;
+  transition: background $fast;
+}
+
+.da-left__step-line--done { background: rgba(34,197,94,.3); }
+
+// Stepper bar
+.da-stepper {
+  display:flex;
+  align-items:center;
+  width:100%;
+  max-width:900px;
+  margin-bottom:24px;
+
+  &__item {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+  }
+
+  &__item--clickable {
+    cursor:pointer;
+  }
+
+  &__dot {
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background: var(--bg-edge);
+    border:1px solid $b2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .3s;
+    position:relative;
+  }
+
+  &__label {
+    font-size:11px;
+    color:$tt;
+    white-space:nowrap;
+    font-weight:500;
+    transition:color .3s;
+  }
+
+  &__bar {
+    flex:1;
+    height:1px;
+    background:$b1;
+    margin:0 8px;
+    margin-bottom:18px;
+    transition:background .4s;
+
+    &--done { background: var(--c-ey); }
+  }
+
+  &__item--active {
+    .da-stepper__dot {
+      background: var(--c-ey-dim);
+      border-color: var(--b-ey);
+    }
+    .da-stepper__label { color:$tp; }
+  }
+
+  &__item--done {
+    .da-stepper__dot {
+      background: rgba(34,197,94,.15);
+      border-color: rgba(34,197,94,.3);
+      color:#22C55E;
+    }
+    .da-stepper__label { color:$ts; }
+  }
+}

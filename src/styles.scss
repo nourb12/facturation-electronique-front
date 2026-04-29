@@ -1,1 +1,574 @@
-/* You can add global styles to this file, and also import other style files */
+﻿@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+$fd: 'Playfair Display', Georgia, serif;
+$fb: 'DM Sans', sans-serif;
+$fm: 'JetBrains Mono', monospace;
+$ease: cubic-bezier(.16,1,.3,1);
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  TOKENS GLOBAUX
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+:root {
+  --font-display:#{$fd}; --font-body:#{$fb}; --font-ui:#{$fb}; --font-mono:#{$fm};
+  --fs-xs:11px; --fs-sm:13px; --fs-base:14px; --fs-md:15px; --fs-lg:17px; --fs-xl:20px;
+  --fs-2xl:24px; --fs-3xl:30px; --fs-4xl:38px;
+  --fw-light:300; --fw-normal:400; --fw-medium:500; --fw-semi:600; --fw-bold:700; --fw-black:900;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  --r-xs:4px; --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px; --r-2xl:28px; --r-full:9999px;
+  --t-fast:150ms #{$ease}; --t-base:260ms #{$ease}; --t-slow:420ms #{$ease};
+
+  --ok:#22C55E; --ok2:rgba(34,197,94,.10);
+  --warn:#F59E0B; --warn2:rgba(245,158,11,.10);
+  --err:#EF4444; --err2:rgba(239,68,68,.10);
+  --info:#3B82F6; --info2:rgba(59,130,246,.10);
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  DARK MODE (dÃƒÂ©faut)
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+:root,
+:root[data-theme="dark"] {
+  --c-ey:#FFE600; --c-ey-rgb:255,230,0; --c-ey-wash:#FFF9C2;
+  --c-ey-dim:rgba(255,230,0,.08);
+  --c-ey-soft:rgba(255,230,0,.14);
+  --c-ey-glow:rgba(255,230,0,.22);
+  --b-ey:rgba(255,230,0,.18);
+  --ey-capsule-color:var(--c-ey);
+  --ey-capsule-bg:rgba(255,230,0,.08);
+  --ey-capsule-border:rgba(255,230,0,.22);
+  --ey-capsule-dot:var(--c-ey);
+  --ey-btn-text:#0A0A0A;
+  --ey:#FFE600; --ey-rgb:255,230,0;
+  --ey-dim:rgba(255,230,0,.08); --ey-soft:rgba(255,230,0,.14);
+  --shadow-ey:0 0 0 1px rgba(255,230,0,.18),0 8px 32px rgba(255,230,0,.08);
+
+  --c-accent:#FFE600;
+  --c-accent-text:#0A0A0A;
+  --c-accent-soft:rgba(255,230,0,.12);
+  --c-accent-border:rgba(255,230,0,.30);
+
+  --bg-void:#0D1117;
+  --bg-abyss:#0A0E15;
+  --bg-depth:#0F1623;
+  --bg-surf:#141C2B;
+  --bg-card:#1A2235;
+  --bg-edge:#212D42;
+  --bg-ghost:#2A3651;
+
+  --b0:rgba(255,255,255,.03); --b1:rgba(255,255,255,.06);
+  --b2:rgba(255,255,255,.11); --b3:rgba(255,255,255,.20);
+  --b-subtle:rgba(255,255,255,.03); --b-default:rgba(255,255,255,.07); --b-strong:rgba(255,255,255,.14);
+
+  --tp:#E8EDF5; --ts:#8A9AB8; --tt:#4A5878; --tm:#2A3651;
+  --t-primary:#E8EDF5; --t-secondary:#8A9AB8; --t-tertiary:#4A5878;
+  --t-muted:#2A3651; --t-inverse:#0D1117;
+
+  // Sidebar sombre (dark)
+  --sidebar-bg:#0A0E15;
+  --sidebar-border:rgba(255,255,255,.07);
+  --sidebar-text:#E8EDF5;
+  --sidebar-text-act:#FFFFFF;
+  --sidebar-item-active-bg:rgba(255,230,0,.12);
+  --sidebar-item-active-border:#FFE600;
+  --sidebar-hover:rgba(255,255,255,.04);
+  --sidebar-section:#8A9AB8;
+
+  --input-bg:#141C2B; --input-border:rgba(255,255,255,.11);
+  --input-focus:rgba(255,230,0,.28); --input-text:#E8EDF5; --input-placeholder:#3A4A68;
+
+  --card-bg:#1A2235; --card-border:rgba(255,255,255,.07);
+  --card-shadow:0 4px 24px rgba(0,0,0,.5);
+
+  --header-bg:rgba(13,17,23,.97); --header-border:rgba(255,255,255,.07);
+  --modal-bg:#141C2B; --modal-overlay:rgba(0,0,0,.75);
+
+  --btn-ghost-text:#8A9AB8; --btn-ghost-border:rgba(255,255,255,.11); --btn-ghost-hover:rgba(255,255,255,.04);
+
+  --table-row-hover:rgba(255,255,255,.025);
+  --table-border:rgba(255,255,255,.06);
+  --table-header-bg:#0F1623;
+
+  --scrollbar-track:#0D1117; --scrollbar-thumb:#212D42;
+
+  --shadow-sm:0 1px 3px rgba(0,0,0,.5); --shadow-md:0 4px 16px rgba(0,0,0,.45);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.55); --shadow-xl:0 24px 80px rgba(0,0,0,.65);
+  --shadow-glow:0 0 40px rgba(255,230,0,.07);
+
+  --navbar-bg:#0A0E15;
+  --navbar-border:rgba(255,255,255,.07);
+  --navbar-shadow:0 1px 0 rgba(0,0,0,.30);
+
+  --accent-bar:#FFE600;
+  --selection-bg:#FFE600; --selection-text:#0A0A0A;
+  --focus-ring:#FFE600;
+
+  // Page content background (gris sombre pour faire ressortir les cartes)
+  --page-bg:#0D1117;
+  --page-content-bg:#0F1623;
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  LIGHT MODE Ã¢â‚¬â€ EY Yellow sur fond gris (lisible et premium)
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+:root[data-theme="light"] {
+
+  // Ã¢Å“â€¦ CORRECTION : Accent EY reste JAUNE en light
+  // Le jaune #FFE600 est illisible sur fond blanc MAIS lisible sur fond gris (#F0F2F5)
+  // Ã¢â€ â€™ fond de page = gris clair, cartes = blanc Ã¢â€ â€™ le jaune ressort parfaitement
+  --c-ey:#FFE600; --c-ey-rgb:255,230,0; --c-ey-wash:#FFFDE7;
+  --c-ey-dim:rgba(255,230,0,.10);
+  --c-ey-soft:rgba(255,230,0,.18);
+  --c-ey-glow:rgba(255,230,0,.30);
+  --b-ey:rgba(255,230,0,.35);
+  --ey-capsule-color:#6B7280;
+  --ey-capsule-bg:rgba(255,230,0,.07);
+  --ey-capsule-border:rgba(255,230,0,.18);
+  --ey-capsule-dot:#E6B800;
+  --ey-btn-text:#0A0A0A;
+  --ey:#FFE600; --ey-rgb:255,230,0;
+  --ey-dim:rgba(255,230,0,.10); --ey-soft:rgba(255,230,0,.18);
+  --shadow-ey:0 0 0 2px rgba(255,230,0,.40),0 4px 20px rgba(255,230,0,.20);
+
+  // Accent interactif = jaune
+  --c-accent:#FFE600;
+  --c-accent-text:#0A0A0A;
+  --c-accent-soft:rgba(255,230,0,.14);
+  --c-accent-border:rgba(255,230,0,.45);
+
+  // Ã¢Å“â€¦ Fond de page = gris moyen pour faire ressortir les cartes blanches et le jaune
+  --bg-void:#FFFFFF;         // fond page principal (gris neutre)
+  --bg-abyss:#FFFFFF;        // fond le plus profond
+  --bg-depth:#FFFFFF;        // profondeur intermÃƒÂ©diaire
+  --bg-surf:#FFFFFF;         // surfaces / cartes intÃƒÂ©rieures
+  --bg-card:#FFFFFF;         // cartes = blanc pur sur fond gris
+  --bg-edge:#D8DBE6;         // sÃƒÂ©parateurs
+  --bg-ghost:#F0F2F8;        // hover, ghost
+
+  // Bordures
+  --b0:rgba(0,0,0,.04); --b1:rgba(0,0,0,.07);
+  --b2:rgba(0,0,0,.11); --b3:rgba(0,0,0,.18);
+  --b-subtle:rgba(0,0,0,.04); --b-default:rgba(0,0,0,.08); --b-strong:rgba(0,0,0,.16);
+
+  // Ã¢Å“â€¦ Texte sombre sur fond gris/blanc Ã¢â‚¬â€ parfait
+  --tp:#111827; --ts:#6B7280; --tt:#9CA3AF; --tm:#D1D5DB;
+  --t-primary:#111827; --t-secondary:#6B7280; --t-tertiary:#9CA3AF;
+  --t-muted:#D1D5DB; --t-inverse:#FFFFFF;
+
+  // Sidebar clair (light)
+  --sidebar-bg:#F5F7FB;
+  --sidebar-border:#EDEFF5;
+  --sidebar-text:#111827;
+  --sidebar-text-act:#111827;
+  --sidebar-item-active-bg:rgba(255,230,0,.12);
+  --sidebar-item-active-border:#FFE600;
+  --sidebar-hover:#EDEFF5;
+  --sidebar-section:#9CA3AF;
+
+  // Inputs Ã¢â‚¬â€ fond blanc sur fond gris Ã¢â€ â€™ contraste propre
+  --input-bg:#FFFFFF; --input-border:rgba(0,0,0,.14);
+  --input-focus:rgba(255,230,0,.50); --input-text:#111827; --input-placeholder:#9CA3AF;
+
+  // Cartes Ã¢â‚¬â€ blanc sur fond gris Ã¢â€ â€™ belle profondeur visuelle
+  --card-bg:#FFFFFF; --card-border:rgba(0,0,0,.08);
+  --card-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.05);
+
+  // Header / modal
+  --header-bg:rgba(255,255,255,.97); --header-border:rgba(0,0,0,.08);
+  --modal-bg:#FFFFFF; --modal-overlay:rgba(0,0,0,.35);
+
+  // Bouton ghost
+  --btn-ghost-text:#4B5563; --btn-ghost-border:rgba(0,0,0,.12); --btn-ghost-hover:rgba(0,0,0,.04);
+
+  // Tableau
+  --table-row-hover:rgba(0,0,0,.025);
+  --table-border:rgba(0,0,0,.07);
+  --table-header-bg:#F5F6FA;
+
+  // Scrollbar
+  --scrollbar-track:#E8EAF0; --scrollbar-thumb:#C8CAD4;
+
+  // Ombres lÃƒÂ©gÃƒÂ¨res (fond gris = ombres subtiles suffisent)
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 4px 16px rgba(0,0,0,.07);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.09); --shadow-xl:0 24px 80px rgba(0,0,0,.11);
+  --shadow-glow:0 0 32px rgba(255,230,0,.18);
+
+  // Navbar dashboard Ã¢â‚¬â€ blanc avec ombre fine
+  --navbar-bg:#F5F7FB;
+  --navbar-border:#EDEFF5;
+  --navbar-shadow:0 1px 0 rgba(0,0,0,.04);
+
+  // Trait accent = jaune (visible sur fond gris)
+  --accent-bar:#FFE600;
+
+  // Selection / focus
+  --selection-bg:#FFE600; --selection-text:#0A0A0A;
+  --focus-ring:#FFE600;
+
+  // Page content background
+  --page-bg:#EDEEF2;
+  --page-content-bg:#F0F2F7;
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  RESET
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  font-family:var(--font-body); background:var(--bg-void); color:var(--tp);
+  line-height:1.6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  transition:background var(--t-base),color var(--t-base); min-height:100vh;
+}
+body[data-theme="light"] { background: #FFFFFF; }
+
+
+::-webkit-scrollbar { width:5px; height:5px; }
+
+::-webkit-scrollbar-track { background:var(--scrollbar-track); }
+
+::-webkit-scrollbar-thumb { background:var(--scrollbar-thumb); border-radius:3px; }
+a { color:inherit; text-decoration:none; }
+::selection { background:var(--selection-bg); color:var(--selection-text); }
+:focus-visible { outline:2px solid var(--focus-ring); outline-offset:2px; border-radius:4px; }
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  ANIMATIONS
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+@keyframes fadeUp    { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideRight{ from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+@keyframes spin      { to{transform:rotate(360deg)} }
+@keyframes shimmer   { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+//  COMPOSANTS GLOBAUX
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+
+.spinner {
+  width:20px; height:20px; border:2px solid var(--b2);
+  border-top-color:var(--c-ey); border-radius:50%;
+  animation:spin .65s linear infinite; flex-shrink:0;
+}
+
+.skeleton {
+  background:linear-gradient(90deg,var(--bg-edge) 0%,var(--bg-ghost) 50%,var(--bg-edge) 100%);
+  background-size:400px 100%; animation:shimmer 1.4s ease infinite; border-radius:var(--r-sm);
+}
+
+.ey-mark {
+  display:inline-flex; align-items:center; justify-content:center;
+  background:#FFE600; color:#0A0A0A; font-weight:900; border-radius:8px;
+  font-family:$fb; font-size:11px; letter-spacing:-.02em;
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Bouton primaire Ã¢â‚¬â€ jaune dans les deux modes Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.btn-primary {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:10px 20px; background:#FFE600; color:#0A0A0A;
+  border:none; border-radius:var(--r-md);
+  font-family:$fb; font-size:13.5px; font-weight:700; cursor:pointer;
+  transition:opacity 150ms,transform 150ms,box-shadow 150ms; white-space:nowrap;
+  &:hover { opacity:.88; transform:translateY(-1px); box-shadow:var(--shadow-ey); }
+  &:active { transform:translateY(0); opacity:1; }
+  &:disabled { opacity:.40; cursor:not-allowed; transform:none; }
+}
+
+.btn-secondary {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:10px 18px; background:var(--bg-card); color:var(--tp);
+  border:1px solid var(--b2); border-radius:var(--r-md);
+  font-family:$fb; font-size:13px; font-weight:600; cursor:pointer;
+  transition:all 150ms; white-space:nowrap;
+  &:hover { background:var(--bg-ghost); border-color:var(--b3); }
+  &:disabled { opacity:.40; cursor:not-allowed; }
+}
+
+.btn-ghost {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:9px 16px; background:transparent; color:var(--btn-ghost-text);
+  border:1px solid var(--btn-ghost-border); border-radius:var(--r-md);
+  font-family:$fb; font-size:13px; font-weight:600; cursor:pointer;
+  transition:all 150ms; white-space:nowrap;
+  &:hover { background:var(--btn-ghost-hover); color:var(--tp); border-color:var(--b2); }
+  &:disabled { opacity:.40; cursor:not-allowed; }
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Badges statut Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.badge {
+  display:inline-flex; align-items:center; padding:3px 9px;
+  border-radius:var(--r-full); font-size:10.5px; font-weight:700; white-space:nowrap;
+  &--ok      { background:rgba(34,197,94,.12);  color:#16a34a; }
+  &--warn    { background:rgba(245,158,11,.12);  color:#d97706; }
+  &--err     { background:rgba(239,68,68,.12);   color:#dc2626; }
+  &--info    { background:rgba(59,130,246,.12);  color:#2563eb; }
+  &--neutral { background:var(--b1);             color:var(--ts); }
+  &--ey      { background:#FFE600;               color:#0A0A0A; }
+}
+
+// Light mode: unify all standard badges to the same EY capsule treatment
+[data-theme="light"] {
+  .badge,
+  .badge.badge--ok,
+  .badge.badge--warn,
+  .badge.badge--err,
+  .badge.badge--info,
+  .badge.badge--neutral,
+  .badge.badge--ey,
+  .badge.badge-lg {
+    color:#1A1A1A;
+    background:rgba(242, 201, 76, 0.12);
+    border:1px solid rgba(242, 201, 76, 0.25);
+  }
+
+  .badge::before {
+    background:#E6B800;
+  }
+
+  .badge-dot {
+    background:#E6B800;
+  }
+}
+
+// Dark mode : badges plus visibles
+[data-theme="dark"] {
+  .badge--ok   { background:rgba(34,197,94,.15);   color:#4ade80; }
+  .badge--warn { background:rgba(245,158,11,.15);  color:#fbbf24; }
+  .badge--err  { background:rgba(239,68,68,.15);   color:#f87171; }
+  .badge--info { background:rgba(59,130,246,.15);  color:#60a5fa; }
+
+  body,
+  .ml-root,
+  .main-content,
+  .page-layout,
+  .page-wrap,
+  .page-shell,
+  .page-content,
+  .page-container {
+    background:var(--bg-void);
+    color:var(--tp);
+  }
+
+  .sidebar,
+  .topbar,
+  .navbar {
+    background:var(--navbar-bg) !important;
+    border-color:var(--navbar-border) !important;
+  }
+
+  .modal-box,
+  .table-box,
+  .table-card,
+  .box,
+  .card,
+  .panel,
+  .content-card,
+  .section-card,
+  .form-card,
+  .stats-card,
+  .summary-card,
+  .detail-card,
+  .widget,
+  .wizard-layout,
+  .right-panel,
+  .cat-card,
+  .doc-card,
+  .doc-upload,
+  .doc-file,
+  .corr-flag-check {
+    background:var(--bg-card) !important;
+    color:var(--tp);
+    border-color:var(--card-border) !important;
+  }
+
+  .page-title,
+  .topbar-title,
+  .section-title,
+  .modal-title,
+  .detail-section-title,
+  .box-title,
+  .card-title,
+  .info-section-title,
+  .cols-panel-title,
+  .perm-section-title,
+  .fp-section-title,
+  .hero-title,
+  .hero-title-inner,
+  .side-card-title,
+  .step-title,
+  .doc-card__title,
+  .rs-card-title,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color:var(--tp) !important;
+  }
+
+  .page-title em,
+  .topbar-title em,
+  .section-title em,
+  .modal-title em,
+  .hero-title em {
+    color:var(--c-ey) !important;
+  }
+
+  input,
+  textarea,
+  select {
+    background:var(--input-bg) !important;
+    color:var(--input-text) !important;
+    border-color:var(--input-border) !important;
+  }
+
+  option {
+    background:var(--bg-surf);
+    color:var(--tp);
+  }
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Table Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.tbl {
+  width:100%; border-collapse:collapse;
+  th {
+    padding:10px 14px; text-align:left; font-size:10.5px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.07em; color:var(--ts);
+    background:var(--table-header-bg); border-bottom:1px solid var(--table-border); white-space:nowrap;
+  }
+  td {
+    padding:11px 14px; font-size:13px; color:var(--tp);
+    border-bottom:1px solid var(--table-border); vertical-align:middle;
+  }
+  tr:last-child td { border-bottom:none; }
+  tbody tr { transition:background 140ms; &:hover { background:var(--table-row-hover); } }
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Input Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.inp {
+  width:100%; padding:9px 13px; background:var(--input-bg);
+  border:1px solid var(--input-border); border-radius:var(--r-md);
+  color:var(--input-text); font-family:$fb; font-size:13.5px; outline:none;
+  transition:border-color 180ms,box-shadow 180ms;
+  &::placeholder { color:var(--input-placeholder); }
+  &:focus {
+    border-color:#FFE600;
+    box-shadow:0 0 0 3px rgba(255,230,0,.20);
+  }
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Modal Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.modal-overlay {
+  position:fixed; inset:0; background:var(--modal-overlay);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  z-index:1000; display:flex; align-items:center; justify-content:center;
+  padding:16px; animation:fadeIn 200ms ease both;
+}
+.modal-box {
+  background:var(--modal-bg); border:1px solid var(--b2);
+  border-radius:18px; box-shadow:var(--shadow-xl);
+  animation:scaleIn 280ms #{$ease} both;
+  width:100%; max-width:540px; max-height:90vh; overflow-y:auto;
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Page header Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.page-header {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:24px; gap:16px; flex-wrap:wrap;
+}
+.page-title {
+  font-family:$fd; font-size:1.5rem; font-weight:900; color:var(--tp);
+  letter-spacing:-.025em; line-height:1.15;
+  em { font-style:italic; color:var(--c-ey); }
+}
+.page-desc { font-size:12.5px; color:var(--ts); margin-top:3px; }
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Section label Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.section-label {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--tt); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  &::before {
+    content:''; display:block; width:20px; height:2px;
+    background:#FFE600; border-radius:1px; flex-shrink:0;
+  }
+}
+
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Toast Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+.toast-container {
+  position:fixed; bottom:20px; right:20px; z-index:9999;
+  display:flex; flex-direction:column; gap:8px; pointer-events:none;
+}
+.toast {
+  padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500;
+  color:var(--tp); background:var(--bg-card); border:1px solid var(--b2);
+  box-shadow:var(--shadow-lg); animation:slideRight .28s #{$ease} both;
+  pointer-events:auto; display:flex; align-items:center; gap:10px; max-width:340px;
+  &--success { border-left:3px solid #22C55E; }
+  &--error   { border-left:3px solid #EF4444; }
+  &--warning { border-left:3px solid #F59E0B; }
+  &--info    { border-left:3px solid #3B82F6; }
+}
+
+.loading-state {
+  display:flex; align-items:center; justify-content:center;
+  gap:12px; padding:60px 20px; color:var(--ts); font-size:13px;
+}
+
+@media (max-width:768px) {
+  .modal-box { border-radius:14px; }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  i18n / RTL helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Use an Arabic-friendly font stack when the document lang is Arabic.
+html[lang="ar"] {
+  --font-body: 'Cairo', #{$fb};
+  --font-ui:   'Cairo', #{$fb};
+}
+
+html[dir="rtl"] body { direction: rtl; }
+
+// Sidebar: swap icon/label order + move the active marker to the right.
+html[dir="rtl"] .sb-item { flex-direction: row-reverse; }
+html[dir="rtl"] .sb-item--active::before {
+  left: auto !important;
+  right: 0 !important;
+  border-radius: 3px 0 0 3px !important;
+}
+
+// Forms (auth): keep trailing icons/buttons on the left in RTL.
+html[dir="rtl"] .form-label-row { flex-direction: row-reverse; }
+html[dir="rtl"] .form-input--pr {
+  padding-right: 14px !important;
+  padding-left: 90px !important;
+}
+html[dir="rtl"] .input-eye {
+  right: auto !important;
+  left: 12px !important;
+}
+
+// Arrows: flip directional icons for RTL where we rely on "→".
+html[dir="rtl"] .rs-card-arrow svg,
+html[dir="rtl"] .btn-arrow {
+  transform: scaleX(-1);
+}
+
+
+
+
+
+
+
+
+
+

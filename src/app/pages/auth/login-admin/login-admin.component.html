@@ -1,0 +1,178 @@
+
+<div class="auth-layout" [@pageIn]>
+
+  
+  <aside class="left-panel">
+    <div class="lp-orb lp-orb--1"></div>
+    <div class="lp-orb lp-orb--2"></div>
+
+    <a class="lp-logo" routerLink="/landing">
+      <div class="lp-mark">EY</div>
+      <div class="lp-wordmark">
+        
+        <span class="lp-sub">{{ 'APP.ADMIN_CONSOLE' | translate }}</span>
+      </div>
+    </a>
+
+    <div class="lp-content">
+      <div class="lp-badge">
+        <span class="lp-badge-dot"></span>
+        {{ 'AUTH.PANELS.ADMIN.BADGE' | translate }}
+      </div>
+
+      <h2 class="lp-headline">
+        {{ 'AUTH.PANELS.ADMIN.HEADLINE_A' | translate }}<br>
+        {{ 'AUTH.PANELS.ADMIN.HEADLINE_B' | translate }}<br>
+        <em>{{ 'AUTH.PANELS.ADMIN.HEADLINE_EM' | translate }}</em>
+      </h2>
+
+      <p class="lp-desc">
+        {{ 'AUTH.PANELS.ADMIN.DESC' | translate }}
+      </p>
+
+    </div>
+
+    <div class="lp-footer">
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot lp-footer-dot--ey"></span>
+        {{ 'TRUST.TWO_FACTOR_REQUIRED' | translate }}
+      </div>
+      <div class="lp-footer-item">
+        <span class="lp-footer-dot lp-footer-dot--ey"></span>
+        {{ 'TRUST.SESSIONS_AUDITED' | translate }}
+      </div>
+    </div>
+  </aside>
+
+  
+  <main class="right-panel">
+    <div class="rp-orb"></div>
+
+    <div class="form-wrap" [class.form-wrap--shake]="shake()">
+
+      
+      @if (!showOtp()) {
+
+        <div class="form-header">
+          <div class="form-eyebrow">{{ 'AUTH.ADMIN_LOGIN.EYEBROW' | translate }}</div>
+          <h1 class="form-title">
+            {{ 'AUTH.ADMIN_LOGIN.TITLE_A' | translate }}<br><em>{{ 'AUTH.ADMIN_LOGIN.TITLE_B' | translate }}</em>
+          </h1>
+          <p class="form-subtitle">{{ 'AUTH.ADMIN_LOGIN.SUBTITLE' | translate }}</p>
+        </div>
+
+        @if (errorMsg()) {
+          <div class="alert-error" [@fadeIn]>
+            <div class="alert-bar"></div>
+            {{ errorMsg() | translate }}
+          </div>
+        }
+
+        <div class="form-body">
+
+          <div class="form-group">
+            <label class="form-label" for="identifiant">
+              {{ 'AUTH.ADMIN_LOGIN.IDENT_LABEL' | translate }} <span class="form-req">·</span>
+            </label>
+            <input id="identifiant" class="form-input form-input--mono"
+              type="text" autocomplete="username"
+              [placeholder]="'AUTH.ADMIN_LOGIN.IDENT_PLACEHOLDER' | translate"
+              [(ngModel)]="form.identifiant"
+              [class.form-input--valid]="form.identifiant.length >= 3"/>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">
+              {{ 'AUTH.PASSWORD' | translate }} <span class="form-req">·</span>
+            </label>
+            <div class="input-wrap">
+              <input id="password" class="form-input form-input--pr"
+                [type]="showPassword() ? 'text' : 'password'"
+                autocomplete="current-password" [placeholder]="'AUTH.ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate"
+                [(ngModel)]="form.password"
+                [class.form-input--valid]="form.password.length >= 8"/>
+              <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
+                {{ showPassword() ? ('AUTH.LOGIN.HIDE' | translate) : ('AUTH.LOGIN.SHOW' | translate) }}
+              </button>
+            </div>
+          </div>
+
+          <div class="security-notice">
+            <div class="sn-bar"></div>
+            <div class="sn-text">
+              {{ 'AUTH.ADMIN_LOGIN.NOTICE' | translate }}
+            </div>
+          </div>
+
+          <button class="btn-submit"
+            [disabled]="!canSubmit || loading()"
+            (click)="onSubmit()">
+            @if (loading()) {
+              <span class="btn-spinner"></span>
+              {{ 'AUTH.VERIFYING' | translate }}
+            } @else {
+              {{ 'AUTH.ADMIN_LOGIN.CONTINUE' | translate }}
+            }
+          </button>
+
+        </div>
+      }
+
+      
+      @if (showOtp()) {
+
+        <div class="form-header" [@pageIn]>
+          <div class="form-eyebrow">{{ 'AUTH.ADMIN_OTP.EYEBROW' | translate }}</div>
+          <h1 class="form-title">
+            {{ 'AUTH.ADMIN_OTP.TITLE_A' | translate }}<br><em>{{ 'AUTH.ADMIN_OTP.TITLE_B' | translate }}</em>
+          </h1>
+          <p class="form-subtitle">
+            {{ 'AUTH.ADMIN_OTP.SUBTITLE' | translate }}
+          </p>
+        </div>
+
+        @if (errorMsg()) {
+          <div class="alert-error" [@fadeIn]>
+            <div class="alert-bar"></div>
+            {{ errorMsg() | translate }}
+          </div>
+        }
+
+        <div class="form-body">
+
+          <div class="form-group">
+            <label class="form-label" for="otp">{{ 'AUTH.ADMIN_OTP.OTP_LABEL' | translate }} <span class="form-req">·</span></label>
+            <input id="otp" class="form-input form-input--otp"
+              type="text" inputmode="numeric" maxlength="6"
+              autocomplete="one-time-code"
+              [placeholder]="'AUTH.ADMIN_OTP.OTP_PLACEHOLDER' | translate"
+              [(ngModel)]="form.otp"/>
+            <span class="form-hint">
+              {{ 'AUTH.ADMIN_OTP.OTP_HINT' | translate }}
+            </span>
+          </div>
+
+          <button class="btn-submit"
+            [disabled]="form.otp.length !== 6 || loading()"
+            (click)="verifyOtp()">
+            @if (loading()) {
+              <span class="btn-spinner"></span>
+              {{ 'AUTH.VERIFYING' | translate }}
+            } @else {
+              {{ 'AUTH.ADMIN_OTP.SUBMIT' | translate }}
+            }
+          </button>
+
+          <button class="btn-back" (click)="show2FA.set(false)">
+            {{ 'AUTH.ADMIN_OTP.BACK' | translate }}
+          </button>
+
+        </div>
+      }
+    </div>
+  </main>
+
+</div>
+
+
+

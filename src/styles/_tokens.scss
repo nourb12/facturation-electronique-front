@@ -1,0 +1,66 @@
+// src/styles/_tokens.scss
+// ================================================================
+//  CORRECTIONS :
+//  ✅ $ey et $accent pointent vers var(--c-ey) = jaune dans les DEUX modes
+//  ✅ --ey-btn-text = #0A0A0A dans les deux modes
+// ================================================================
+$fd: 'Playfair Display', Georgia, serif;
+$fb: 'DM Sans', sans-serif;
+$fm: 'JetBrains Mono', monospace;
+$ease: cubic-bezier(.16,1,.3,1);
+
+// ── Statuts (fixes, identiques dans les deux modes) ───────────────
+$ok:    #22C55E;  $ok2:   rgba(34,197,94,.10);
+$warn:  #F59E0B;  $warn2: rgba(245,158,11,.10);
+$err:   #EF4444;  $err2:  rgba(239,68,68,.10);
+$info:  #3B82F6;  $info2: rgba(59,130,246,.10);
+
+// ── Accent EY — JAUNE dans les deux modes ────────────────────────
+$ey:       var(--c-ey);          // #FFE600 dark ET light
+$ey-dim:   var(--c-ey-dim);
+$ey-soft:  var(--c-ey-soft);
+$ey-glow:  var(--c-ey-glow);
+$ey-text:  var(--ey-btn-text);   // #0A0A0A dans les deux modes
+
+// Accent générique (toujours jaune maintenant)
+$accent:        var(--c-accent);         // = var(--c-ey) = jaune
+$accent-text:   var(--c-accent-text);    // = #0A0A0A
+$accent-soft:   var(--c-accent-soft);
+$accent-border: var(--c-accent-border);
+
+// ── Fonds ─────────────────────────────────────────────────────────
+$void:  var(--bg-void);    // gris #EDEEF2 en light, noir #0D1117 en dark
+$surf:  var(--bg-surf);    // blanc en light, bleu-ardoise en dark
+$card:  var(--bg-card);    // blanc en light, bleu-ardoise en dark
+$edge:  var(--bg-edge);
+$ghost: var(--bg-ghost);
+$depth: var(--bg-depth);
+
+// ── Bordures ──────────────────────────────────────────────────────
+$b0:   var(--b0);
+$b1:   var(--b1);
+$b2:   var(--b2);
+$b3:   var(--b3);
+$b-ey: var(--b-ey);
+
+// ── Texte ─────────────────────────────────────────────────────────
+$tp: var(--tp);
+$ts: var(--ts);
+$tt: var(--tt);
+
+// ── Sidebar (TOUJOURS SOMBRE) ─────────────────────────────────────
+$sidebar-bg:           var(--sidebar-bg);           // toujours #0D1117
+$sidebar-border:       var(--sidebar-border);
+$sidebar-text:         var(--sidebar-text);
+$sidebar-text-act:     var(--sidebar-text-act);
+$sidebar-active-bg:    var(--sidebar-item-active-bg);
+$sidebar-active-bar:   var(--sidebar-item-active-border);  // toujours #FFE600
+
+// ── Transitions ───────────────────────────────────────────────────
+$fast: 150ms cubic-bezier(.16,1,.3,1);
+$base: 260ms cubic-bezier(.16,1,.3,1);
+$slow: 420ms cubic-bezier(.16,1,.3,1);
+
+// ── Rayons ────────────────────────────────────────────────────────
+$r-sm:   6px;  $r-md:  10px; $r-lg:  14px;
+$r-xl:   20px; $r-2xl: 28px; $r-full: 9999px;
