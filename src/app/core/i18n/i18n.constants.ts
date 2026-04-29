@@ -6,6 +6,7 @@ export const DEFAULT_LANG: AppLang = 'fr';
 // Split translations by functional area (keeps files small and maintainable).
 export const I18N_JSON_FILES = [
   'common',
+  'legacy',
   'landing',
   'glossary',
   'auth',

@@ -8,6 +8,7 @@ import {
 import { DEFAULT_LANG } from './i18n.constants';
 import { MultiJsonTranslateHttpLoader } from './multi-json-translate-http-loader';
 import { LanguageService } from '../services/language.service';
+import { LegacyAutoTranslateService } from '../services/legacy-auto-translate.service';
 
 class KeyMissingTranslationHandler implements MissingTranslationHandler {
   handle(params: MissingTranslationHandlerParams) {
@@ -33,8 +34,11 @@ export function provideI18n() {
     {
       provide: APP_INITIALIZER,
       multi: true,
-      deps: [LanguageService],
-      useFactory: (lang: LanguageService) => () => lang.init(),
+      deps: [LanguageService, LegacyAutoTranslateService],
+      useFactory: (lang: LanguageService, legacy: LegacyAutoTranslateService) => async () => {
+        await lang.init();
+        legacy.init();
+      },
     },
   ]);
 }

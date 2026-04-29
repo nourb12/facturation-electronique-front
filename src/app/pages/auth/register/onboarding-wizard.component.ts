@@ -1,12 +1,13 @@
 import {
   Component, OnInit, OnDestroy,
-  signal, computed,
+  signal, computed, inject,
   PLATFORM_ID, Inject
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { OnboardingStateService } from '../../../core/services/onboarding-state.service';
 import { AuthService, RegisterRequest } from '../../../core/services/auth.service';
 
@@ -18,9 +19,16 @@ export interface WizardStep {
 }
 
 export interface Category {
-  key:  string;
-  name: string;
-  desc: string;
+  key: string;
+  nameKey?: string;
+  descKey?: string;
+  customName?: string;
+  customDesc?: string;
+}
+
+interface SelectOption {
+  value: string;
+  labelKey: string;
 }
 
 export interface WizardForm {
@@ -95,16 +103,22 @@ const tagAnim = trigger('tagAnim', [
 @Component({
   selector:    'app-onboarding-wizard',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, RouterLink],
+  imports:     [CommonModule, FormsModule, RouterLink, TranslatePipe],
   host:        { class: 'wizard-host' },
   templateUrl: './onboarding-wizard.component.html',
   styleUrls:   ['./onboarding-wizard.component.scss'],
   animations:  [stepAnim, cardPop, fadeUp, tagAnim]
 })
 export class OnboardingWizardComponent implements OnInit, OnDestroy {
+  private translate = inject(TranslateService);
+  private langChangeSub = this.translate.onLangChange.subscribe(() => {
+    this.langVersion.update((value) => value + 1);
+    this.refresh();
+  });
 
   currentStep = signal<number>(1);
   animDir     = signal<'forward' | 'backward'>('forward');
+  private langVersion = signal(0);
 
   form: WizardForm = {
     prenom: '', nom: '', email: '', password: '', confirmPassword: '',
@@ -128,11 +142,11 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   private _tick = signal(0);
   refresh(): void { this._tick.update(n => n + 1); this.saveState(); }
 
-  readonly steps: WizardStep[] = [
-    { id: 1, label: 'Responsable Entreprise', icon: '1', desc: 'Identité, email, mot de passe' },
-    { id: 2, label: 'Profil Entreprise',      icon: '2', desc: 'Matricule fiscal, raison sociale' },
-    { id: 3, label: 'Responsable Financier',  icon: '3', desc: 'Nom, fonction, contact DGI' },
-    { id: 4, label: 'Catalogue',              icon: '4', desc: 'Min. 2 familles de produits / services' },
+    readonly steps: WizardStep[] = [
+    { id: 1, label: 'AUTH.ONBOARDING.STEPS.STEP1.LABEL', icon: '1', desc: 'AUTH.ONBOARDING.STEPS.STEP1.DESC' },
+    { id: 2, label: 'AUTH.ONBOARDING.STEPS.STEP2.LABEL', icon: '2', desc: 'AUTH.ONBOARDING.STEPS.STEP2.DESC' },
+    { id: 3, label: 'AUTH.ONBOARDING.STEPS.STEP3.LABEL', icon: '3', desc: 'AUTH.ONBOARDING.STEPS.STEP3.DESC' },
+    { id: 4, label: 'AUTH.ONBOARDING.STEPS.STEP4.LABEL', icon: '4', desc: 'AUTH.ONBOARDING.STEPS.STEP4.DESC' },
   ];
 
   progressPct = computed(() => Math.round((this.currentStep() / this.steps.length) * 100));
@@ -147,10 +161,10 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     return 'EY';
   });
 
-  cardRS       = computed(() => { this._tick(); return this.form.raisonSociale.trim() || 'Votre entreprise'; });
-  cardForme    = computed(() => { this._tick(); return this.form.formeJuridique || '-'; });
-  cardMF       = computed(() => { this._tick(); return this.form.matriculeFiscal.trim() || '- - - - - -'; });
-  cardCodePostal = computed(() => { this._tick(); return this.form.codePostal.trim() || '-'; });
+  cardRS       = computed(() => { this._tick(); return this.form.raisonSociale.trim() || this.t('AUTH.ONBOARDING.CARD.DEFAULT_COMPANY'); });
+  cardForme    = computed(() => { this._tick(); return this.optionLabel(this.formesJuridiques, this.form.formeJuridique) || this.t('AUTH.ONBOARDING.CARD.EMPTY'); });
+  cardMF       = computed(() => { this._tick(); return this.form.matriculeFiscal.trim() || this.t('AUTH.ONBOARDING.CARD.EMPTY'); });
+  cardCodePostal = computed(() => { this._tick(); return this.form.codePostal.trim() || this.t('AUTH.ONBOARDING.CARD.EMPTY'); });
   cardResp     = computed(() => {
     this._tick();
     const rp = this.form.respPrenom.trim();
@@ -160,8 +174,14 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     const fn = this.form.nom.trim();
     return fp ? `${fp} ${fn}`.trim() : '-';
   });
-  cardFonction = computed(() => { this._tick(); return this.form.respFonction || '-'; });
-  cardGouv     = computed(() => { this._tick(); return this.form.gouvernorat || '-'; });
+  cardFonction = computed(() => {
+    this._tick();
+    if (this.form.respFonction === 'Autre' && this.form.respFonctionAutre.trim()) {
+      return this.form.respFonctionAutre.trim();
+    }
+    return this.optionLabel(this.fonctions, this.form.respFonction) || this.t('AUTH.ONBOARDING.CARD.EMPTY');
+  });
+  cardGouv     = computed(() => { this._tick(); return this.optionLabel(this.gouvernorats, this.form.gouvernorat) || this.t('AUTH.ONBOARDING.CARD.EMPTY'); });
   cardCats     = computed(() => this.selectedCats());
   cardHasLogo  = computed(() => { this._tick(); return !!this.form.logoPreview; });
 
@@ -187,7 +207,13 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   passwordStrength = signal<0 | 1 | 2 | 3 | 4>(0);
 
   pwLabel = computed(() => {
-    const map = ['', 'Faible', 'Correct', 'Fort', 'Trés fort'];
+    const map = [
+      '',
+      this.t('PW_STRENGTH.WEAK'),
+      this.t('PW_STRENGTH.MEDIUM'),
+      this.t('PW_STRENGTH.STRONG'),
+      this.t('PW_STRENGTH.VERY_STRONG')
+    ];
     return this.form.password.length === 0 ? '' : map[this.passwordStrength()];
   });
   pwColor = computed(() => {
@@ -201,40 +227,70 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   step3Valid = signal(false);
 
   // -- Catégories ------------------------------------------------------------
-  readonly predefinedCats: Category[] = [
-    { key: 'info',       name: 'Produits informatiques', desc: 'Matériel, logiciels, licences' },
-    { key: 'conseil',    name: 'Services & Conseil',     desc: 'Prestations, missions, audits' },
-    { key: 'fourniture', name: 'Fournitures & bureau',   desc: 'Consommables, équipements' },
-    { key: 'formation',  name: 'Formation & e-Learning', desc: 'Modules, certifications' },
-    { key: 'btp',        name: 'Travaux & BTP',          desc: 'Construction, rénovation' },
-    { key: 'transport',  name: 'Transport & Logistique', desc: 'Livraison, fret, transit' },
-    { key: 'agro',       name: 'Agroalimentaire',        desc: 'Produits alimentaires, boissons' },
-    { key: 'sante',      name: 'Santé & Médical',        desc: 'Dispositifs, médicaments' },
-    { key: 'marketing',  name: 'Marketing & Com.',       desc: 'Publicité, design, médias' },
+    readonly predefinedCats: Category[] = [
+    { key: 'info',       nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.INFO.NAME',       descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.INFO.DESC' },
+    { key: 'conseil',    nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.CONSEIL.NAME',    descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.CONSEIL.DESC' },
+    { key: 'fourniture', nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.FOURNITURE.NAME', descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.FOURNITURE.DESC' },
+    { key: 'formation',  nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.FORMATION.NAME',  descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.FORMATION.DESC' },
+    { key: 'btp',        nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.BTP.NAME',        descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.BTP.DESC' },
+    { key: 'transport',  nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.TRANSPORT.NAME',  descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.TRANSPORT.DESC' },
+    { key: 'agro',       nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.AGRO.NAME',       descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.AGRO.DESC' },
+    { key: 'sante',      nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.SANTE.NAME',      descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.SANTE.DESC' },
+    { key: 'marketing',  nameKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.MARKETING.NAME',  descKey: 'AUTH.ONBOARDING.CATALOG.CATEGORIES.MARKETING.DESC' },
   ];
   selectedCats  = signal<Category[]>([]);
   customCatName = '';
   private _customIdx = 0;
 
   // -- Listes de référence ---------------------------------------------------
-  readonly formesJuridiques = [
-    'SARL', 'SA', 'SUARL', 'EI - Entrepreneur individuel',
-    'SNC', 'Association', 'Groupement', 'Autre',
+    readonly formesJuridiques: SelectOption[] = [
+    { value: 'SARL', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SARL' },
+    { value: 'SA', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SA' },
+    { value: 'SUARL', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SUARL' },
+    { value: 'EI - Entrepreneur individuel', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.EI' },
+    { value: 'SNC', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SNC' },
+    { value: 'Association', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.ASSOCIATION' },
+    { value: 'Groupement', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.GROUPEMENT' },
+    { value: 'Autre', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.OTHER' },
   ];
-  readonly gouvernorats = [
-    'Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Zaghouan',
-    'Bizerte', 'Béja', 'Jendouba', 'Le Kef', 'Siliana', 'Sousse',
-    'Monastir', 'Mahdia', 'Sfax', 'Kairouan', 'Kasserine', 'Sidi Bouzid',
-    'Gabés', 'Médenine', 'Tataouine', 'Gafsa', 'Tozeur', 'Kébili',
+  readonly gouvernorats: SelectOption[] = [
+    { value: 'Tunis', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.TUNIS' },
+    { value: 'Ariana', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.ARIANA' },
+    { value: 'Ben Arous', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.BEN_AROUS' },
+    { value: 'Manouba', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.MANOUBA' },
+    { value: 'Nabeul', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.NABEUL' },
+    { value: 'Zaghouan', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.ZAGHOUAN' },
+    { value: 'Bizerte', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.BIZERTE' },
+    { value: 'Beja', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.BEJA' },
+    { value: 'Jendouba', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.JENDOUBA' },
+    { value: 'Le Kef', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.KEF' },
+    { value: 'Siliana', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.SILIANA' },
+    { value: 'Sousse', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.SOUSSE' },
+    { value: 'Monastir', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.MONASTIR' },
+    { value: 'Mahdia', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.MAHDIA' },
+    { value: 'Sfax', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.SFAX' },
+    { value: 'Kairouan', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.KAIROUAN' },
+    { value: 'Kasserine', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.KASSERINE' },
+    { value: 'Sidi Bouzid', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.SIDI_BOUZID' },
+    { value: 'Gabes', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.GABES' },
+    { value: 'Medenine', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.MEDENINE' },
+    { value: 'Tataouine', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.TATAOUINE' },
+    { value: 'Gafsa', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.GAFSA' },
+    { value: 'Tozeur', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.TOZEUR' },
+    { value: 'Kebili', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.KEBILI' },
   ];
   readonly devises = [
     'TND', 'EUR', 'USD', 'GBP', 'MAD', 'DZD',
   ];
-  readonly fonctions = [
-    'Directeur Général (DG)', 'Directeur Financier (DAF)',
-    'Responsable Comptabilité', 'Gérant', 'PDG',
-    'Responsable Administratif et Financier',
-    'Fondateur / Co-fondateur', 'Autre',
+  readonly fonctions: SelectOption[] = [
+    { value: 'Directeur General (DG)', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.DG' },
+    { value: 'Directeur Financier (DAF)', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.DAF' },
+    { value: 'Responsable Comptabilite', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.ACCOUNTING_MANAGER' },
+    { value: 'Gerant', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.MANAGER' },
+    { value: 'PDG', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.CEO' },
+    { value: 'Responsable Administratif et Financier', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.ADMIN_FINANCE_MANAGER' },
+    { value: 'Fondateur / Co-fondateur', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.FOUNDER' },
+    { value: 'Autre', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ROLES.OTHER' },
   ];
 
   // -- Redirection succés ----------------------------------------------------
@@ -304,6 +360,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.saveState();
     this._clearTimers();
+    this.langChangeSub.unsubscribe();
     document.body.style.overflow = '';
   }
 
@@ -481,8 +538,8 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     const score = this.calcPasswordStrength(pw);
     this.passwordStrength.set(score);
     if (!pw.length)     { this.clearError('password'); return score; }
-    if (pw.length < 8)    this.setError('password', '8 caractéres minimum');
-    else if (score < 3)   this.setError('password', 'Mot de passe trop faible');
+    if (pw.length < 8)    this.setError('password', this.t('AUTH.ONBOARDING.VALIDATION.PASSWORD_MIN'));
+    else if (score < 3)   this.setError('password', this.t('AUTH.ONBOARDING.VALIDATION.PASSWORD_WEAK'));
     else                  this.clearError('password');
     return score;
   }
@@ -510,33 +567,33 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   validatePrenom(): void {
     this.form.prenom.trim().length > 1
       ? this.clearError('prenom')
-      : this.setError('prenom', 'Prénom requis (min 2 caractéres)');
+      : this.setError('prenom', this.t('AUTH.ONBOARDING.VALIDATION.FIRST_NAME_REQUIRED'));
     this.validateStep1();
   }
   validateNom(): void {
     this.form.nom.trim().length > 1
       ? this.clearError('nom')
-      : this.setError('nom', 'Nom requis (min 2 caractéres)');
+      : this.setError('nom', this.t('AUTH.ONBOARDING.VALIDATION.LAST_NAME_REQUIRED'));
     this.validateStep1();
   }
   validateEmail(): void {
     this.isEmailValid()
       ? this.clearError('email')
-      : this.setError('email', 'Email incomplet');
+      : this.setError('email', this.t('AUTH.ONBOARDING.VALIDATION.EMAIL_INVALID'));
     this.validateStep1();
   }
   validateTelephone(): void {
     this.phoneLen(this.form.telephone) >= 8
       ? this.clearError('telephone')
-      : this.setError('telephone', 'Téléphone incomplet');
+      : this.setError('telephone', this.t('AUTH.ONBOARDING.VALIDATION.PHONE_INVALID'));
     this.validateStep1();
   }
   validateConfirmPassword(): void {
     if (!this.form.password) { this.clearError('confirmPassword'); return; }
     if (!this.form.confirmPassword)
-      this.setError('confirmPassword', 'Confirmation requise');
+      this.setError('confirmPassword', this.t('AUTH.ONBOARDING.VALIDATION.CONFIRM_PASSWORD_REQUIRED'));
     else if (this.form.confirmPassword !== this.form.password)
-      this.setError('confirmPassword', 'Les mots de passe sont différents');
+      this.setError('confirmPassword', this.t('AUTH.ONBOARDING.VALIDATION.CONFIRM_PASSWORD_MISMATCH'));
     else
       this.clearError('confirmPassword');
     // NE PAS rappeler validateStep1 ici — déjà géré par onPasswordChange
@@ -545,7 +602,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   validateMatriculeFiscal(): void {
     this.isMatriculeFiscalValid()
       ? this.clearError('matriculeFiscal')
-      : this.setError('matriculeFiscal', 'Format attendu : 1495908/S ou 1234567A/B/M/000');
+      : this.setError('matriculeFiscal', this.t('AUTH.ACCESS_REQUEST.VALIDATION.MATRICULE_INVALID'));
     this.validateStep2();
   }
 
@@ -556,31 +613,31 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   validateFormeJuridique(): void {
     this.form.formeJuridique
       ? this.clearError('formeJuridique')
-      : this.setError('formeJuridique', 'Forme juridique requise');
+      : this.setError('formeJuridique', this.t('AUTH.ACCESS_REQUEST.VALIDATION.LEGAL_FORM_REQUIRED'));
     this.validateStep2();
   }
   validateRaisonSociale(): void {
     this.form.raisonSociale.trim().length > 2
       ? this.clearError('raisonSociale')
-      : this.setError('raisonSociale', 'Raison sociale requise');
+      : this.setError('raisonSociale', this.t('AUTH.ACCESS_REQUEST.VALIDATION.RAISON_SOCIALE_REQUIRED'));
     this.validateStep2();
   }
   validateNomEntreprise(): void {
     this.form.nomEntreprise.trim().length > 2
       ? this.clearError('nomEntreprise')
-      : this.setError('nomEntreprise', "Nom d'entreprise requis");
+      : this.setError('nomEntreprise', this.t('AUTH.ACCESS_REQUEST.VALIDATION.COMPANY_NAME_REQUIRED'));
     this.validateStep2();
   }
   validateAdresse(): void {
     this.form.adresse.trim().length > 5
       ? this.clearError('adresse')
-      : this.setError('adresse', 'Adresse requise');
+      : this.setError('adresse', this.t('AUTH.ACCESS_REQUEST.VALIDATION.ADDRESS_REQUIRED'));
     this.validateStep2();
   }
   validateGouvernorat(): void {
     this.form.gouvernorat
       ? this.clearError('gouvernorat')
-      : this.setError('gouvernorat', 'Gouvernorat requis');
+      : this.setError('gouvernorat', this.t('AUTH.ACCESS_REQUEST.VALIDATION.GOVERNORATE_REQUIRED'));
     this.validateStep2();
   }
 
@@ -588,52 +645,52 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   validateCodePostal(): void {
     /^\d{4}$/.test(this.form.codePostal.trim())
       ? this.clearError('codePostal')
-      : this.setError('codePostal', 'Code postal invalide (4 chiffres)');
+      : this.setError('codePostal', this.t('AUTH.ACCESS_REQUEST.VALIDATION.POSTAL_CODE_INVALID'));
     this.validateStep2();
   }
 
   validateSiteWeb(): void {
     this.isSiteWebValid()
       ? this.clearError('siteWeb')
-      : this.setError('siteWeb', 'URL invalide');
+      : this.setError('siteWeb', this.t('AUTH.ACCESS_REQUEST.VALIDATION.WEBSITE_INVALID'));
     this.validateStep2();
   }
 
   validateDevisePrincipale(): void {
     this.form.devisePrincipale.trim().length === 3
       ? this.clearError('devisePrincipale')
-      : this.setError('devisePrincipale', 'Devise requise (3 lettres)');
+      : this.setError('devisePrincipale', this.t('AUTH.ONBOARDING.VALIDATION.CURRENCY_REQUIRED'));
     this.validateStep2();
   }
 
   validateTelEntreprise(): void {
     this.phoneLen(this.form.telEntreprise) >= 8
       ? this.clearError('telEntreprise')
-      : this.setError('telEntreprise', 'Téléphone incomplet');
+      : this.setError('telEntreprise', this.t('AUTH.ACCESS_REQUEST.VALIDATION.COMPANY_PHONE_REQUIRED'));
     this.validateStep2();
   }
   validateRespPrenom(): void {
     this.form.respPrenom.trim().length > 1
       ? this.clearError('respPrenom')
-      : this.setError('respPrenom', 'Prénom requis');
+      : this.setError('respPrenom', this.t('AUTH.ACCESS_REQUEST.VALIDATION.FIRST_NAME_REQUIRED'));
     this.validateStep3();
   }
   validateRespNom(): void {
     this.form.respNom.trim().length > 1
       ? this.clearError('respNom')
-      : this.setError('respNom', 'Nom requis');
+      : this.setError('respNom', this.t('AUTH.ACCESS_REQUEST.VALIDATION.LAST_NAME_REQUIRED'));
     this.validateStep3();
   }
   validateRespFonction(): void {
     if (!this.form.respFonction) {
-      this.setError('respFonction', 'Fonction requise');
+      this.setError('respFonction', this.t('AUTH.ACCESS_REQUEST.VALIDATION.RESP_ROLE_REQUIRED'));
       this.clearError('respFonctionAutre');
     } else {
       this.clearError('respFonction');
       if (this.form.respFonction === 'Autre') {
         this.form.respFonctionAutre.trim().length > 2
           ? this.clearError('respFonctionAutre')
-          : this.setError('respFonctionAutre', 'Fonction requise');
+          : this.setError('respFonctionAutre', this.t('AUTH.ACCESS_REQUEST.VALIDATION.RESP_ROLE_OTHER_REQUIRED'));
       } else {
         this.clearError('respFonctionAutre');
       }
@@ -644,7 +701,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     if (this.form.respFonction === 'Autre') {
       this.form.respFonctionAutre.trim().length > 2
         ? this.clearError('respFonctionAutre')
-        : this.setError('respFonctionAutre', 'Fonction requise');
+        : this.setError('respFonctionAutre', this.t('AUTH.ACCESS_REQUEST.VALIDATION.RESP_ROLE_OTHER_REQUIRED'));
     } else {
       this.clearError('respFonctionAutre');
     }
@@ -653,7 +710,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
   validateRespTel(): void {
     this.phoneLen(this.form.respTel) >= 8
       ? this.clearError('respTel')
-      : this.setError('respTel', 'Numéro incomplet');
+      : this.setError('respTel', this.t('AUTH.ACCESS_REQUEST.VALIDATION.RESP_PHONE_REQUIRED'));
     this.validateStep3();
   }
 
@@ -665,11 +722,11 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
 
     // Validation : image, max 2 Mo
     if (!file.type.startsWith('image/')) {
-      this.setError('logo', 'Fichier image requis (jpg, png, svg...)');
+      this.setError('logo', this.t('AUTH.ACCESS_REQUEST.LOGO.ERRORS.IMAGE_REQUIRED'));
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      this.setError('logo', 'Taille max : 2 Mo');
+      this.setError('logo', this.t('AUTH.ACCESS_REQUEST.LOGO.ERRORS.SIZE'));
       return;
     }
 
@@ -680,7 +737,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
       this.clearError('logo');
       this.refresh();
     };
-    reader.onerror = () => this.setError('logo', 'Impossible de lire le fichier');
+    reader.onerror = () => this.setError('logo', this.t('AUTH.ACCESS_REQUEST.LOGO.ERRORS.READ_FAILED'));
     reader.readAsDataURL(file);
   }
 
@@ -701,12 +758,35 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     const name = this.customCatName.trim();
     if (!name) return;
     const key = 'custom_' + (++this._customIdx);
-    if (!this.selectedCats().some(c => c.name.toLowerCase() === name.toLowerCase())) {
-      this.selectedCats.update(list => [...list, { key, name, desc: 'Personnalisée' }]);
+    if (!this.selectedCats().some(c => this.categoryName(c).toLowerCase() === name.toLowerCase())) {
+      this.selectedCats.update(list => [...list, {
+        key,
+        customName: name,
+        customDesc: this.t('AUTH.ONBOARDING.CATALOG.CUSTOM_DESC'),
+      }]);
     }
     this.customCatName = '';
   }
   removeCat(key: string): void {
     this.selectedCats.update(list => list.filter(c => c.key !== key));
+  }
+
+  categoryName(cat: Category): string {
+    return cat.customName ?? (cat.nameKey ? this.t(cat.nameKey) : cat.key);
+  }
+
+  categoryDesc(cat: Category): string {
+    return cat.customDesc ?? (cat.descKey ? this.t(cat.descKey) : '');
+  }
+
+  optionLabel(options: SelectOption[], value: string): string {
+    if (!value) return '';
+    const option = options.find((entry) => entry.value === value);
+    return option ? this.t(option.labelKey) : value;
+  }
+
+  t(key: string, params?: Record<string, unknown>): string {
+    this.langVersion();
+    return this.translate.instant(key, params);
   }
 }

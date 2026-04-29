@@ -827,7 +827,7 @@ export class DemandeAccesComponent implements OnDestroy {
           validationMessage ||
           this.localize(err?.error?.message) ||
           this.localize(Array.isArray(err?.error?.errors) ? err.error.errors[0] : null) ||
-          this.t('ERRORS.GENERIC');
+          this.t('ERRORS.SERVER_ERROR');
         this.errors.update(e => ({ ...e, submit: msg }));
       }
     });

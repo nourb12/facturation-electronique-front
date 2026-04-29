@@ -16,24 +16,22 @@
       <div class="lp-mark">EY</div>
       <div class="lp-wordmark">
         <span class="lp-name">TunisFlow</span>
-        <span class="lp-sub">Facturation électronique certifiée</span>
+        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
       </div>
     </a>
 
     <div class="lp-promise">
       <div class="lp-badge">
         <span class="lp-badge-dot"></span>
-        TEIF 2026 - Certifié DGI
+        {{ 'APP.BADGE_TEIF_CERTIFIED' | translate }}
       </div>
       <h2 class="lp-headline">
-        Votre fiche<br><em>Entreprise.</em>
+        {{ 'AUTH.ONBOARDING.SIDEBAR.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.SIDEBAR.TITLE_EM' | translate }}</em>
       </h2>
-      <p class="lp-desc">
-        Complétez les informations et visualisez la structuration de votre identité fiscale.
-      </p>
+      <p class="lp-desc">{{ 'AUTH.ONBOARDING.SIDEBAR.DESC' | translate }}</p>
     </div>
 
-    <nav class="lp-steps" aria-label="étapes">
+    <nav class="lp-steps" [attr.aria-label]="'COMMON.STEPS_NAV' | translate">
       @for (step of steps; track step.id) {
         <div class="lp-step"
           [class.lp-step--active]="currentStep() === step.id"
@@ -54,7 +52,7 @@
             }
           </div>
           <div class="lp-step-info">
-            <div class="lp-step-label">{{ step.label }}</div>
+            <div class="lp-step-label">{{ step.label | translate }}</div>
           </div>
         </div>
       }
@@ -63,11 +61,11 @@
     <footer class="lp-trust">
       <div class="lp-trust-item">
         <div class="lp-trust-dot"></div>
-        <span>Données hébergées en Tunisie — AES-256</span>
+        <span>{{ 'AUTH.ONBOARDING.SIDEBAR.TRUST_HOSTING' | translate }}</span>
       </div>
       <div class="lp-trust-item">
         <div class="lp-trust-dot lp-trust-dot--ey"></div>
-        <span>Aucune carte bancaire requise</span>
+        <span>{{ 'AUTH.ONBOARDING.SIDEBAR.NO_CARD_REQUIRED' | translate }}</span>
       </div>
     </footer>
   </aside>
@@ -87,7 +85,7 @@
             [attr.aria-valuenow]="currentStep()"
             [attr.aria-valuemax]="steps.length">
             <div class="wiz-progress-meta">
-              <span class="wiz-progress-label">Étape {{ currentStep() }} sur {{ steps.length }}</span>
+              <span class="wiz-progress-label">{{ 'COMMON.STEP_OF' | translate:{ current: currentStep(), total: steps.length } }}</span>
               <span class="wiz-progress-pct">{{ progressPct() }}%</span>
             </div>
             <div class="wiz-progress-track">
@@ -99,44 +97,45 @@
         <!-- -------------------------------------------
              ÉTAPE 1 — Profil responsable entreprise
         --------------------------------------------- -->
+
         @if (currentStep() === 1) {
           <div class="step-pane" [@stepAnim]="animDir()">
             <header class="step-header">
-              <div class="step-eyebrow">Étape 1 — Profil responsable entreprise</div>
-              <h1 class="step-title">Créez votre<br><em>identifiant unique.</em></h1>
+              <div class="step-eyebrow">{{ 'AUTH.ONBOARDING.STEP1.EYEBROW' | translate }}</div>
+              <h1 class="step-title">{{ 'AUTH.ONBOARDING.STEP1.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.STEP1.TITLE_EM' | translate }}</em></h1>
             </header>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="s1-prenom">Prénom <span class="form-req">*</span></label>
+                <label class="form-label" for="s1-prenom">{{ 'AUTH.ACCESS_REQUEST.FIELDS.FIRST_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s1-prenom" class="form-input"
-                  type="text" autocomplete="given-name" placeholder="Mohamed"
+                  type="text" autocomplete="given-name" [placeholder]="'AUTH.ONBOARDING.STEP1.FIRST_NAME_PLACEHOLDER' | translate"
                   [(ngModel)]="form.prenom" (ngModelChange)="validatePrenom()"
                   [class.form-input--error]="hasError('prenom')"
                   [class.form-input--valid]="form.prenom.trim().length > 1 && !hasError('prenom')"/>
                 @if (hasError('prenom')) {
                   <span class="field-error">{{ getError('prenom') }}</span>
                 } @else if (form.prenom.trim().length > 1) {
-                  <span class="field-success">Prénom valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.FIRST_NAME_VALID' | translate }}</span>
                 }
               </div>
               <div class="form-group">
-                <label class="form-label" for="s1-nom">Nom <span class="form-req">*</span></label>
+                <label class="form-label" for="s1-nom">{{ 'AUTH.ACCESS_REQUEST.FIELDS.LAST_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s1-nom" class="form-input"
-                  type="text" autocomplete="family-name" placeholder="Ben Ali"
+                  type="text" autocomplete="family-name" [placeholder]="'AUTH.ONBOARDING.STEP1.LAST_NAME_PLACEHOLDER' | translate"
                   [(ngModel)]="form.nom" (ngModelChange)="validateNom()"
                   [class.form-input--error]="hasError('nom')"
                   [class.form-input--valid]="form.nom.trim().length > 1 && !hasError('nom')"/>
                 @if (hasError('nom')) {
                   <span class="field-error">{{ getError('nom') }}</span>
                 } @else if (form.nom.trim().length > 1) {
-                  <span class="field-success">Nom valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.LAST_NAME_VALID' | translate }}</span>
                 }
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s1-email">Email professionnel <span class="form-req">*</span></label>
+              <label class="form-label" for="s1-email">{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <span class="input-adorn-prefix">
                   <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
@@ -145,7 +144,7 @@
                   </svg>
                 </span>
                 <input id="s1-email" class="form-input form-input--padded"
-                  type="email" autocomplete="email" placeholder="vous@entreprise.tn"
+                  type="email" autocomplete="email" [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate"
                   [(ngModel)]="form.email" (ngModelChange)="validateEmail()"
                   [class.form-input--error]="hasError('email')"
                   [class.form-input--valid]="isEmailValid() && form.email.trim().length > 0 && !hasError('email')"/>
@@ -153,20 +152,20 @@
               @if (hasError('email')) {
                 <span class="field-error">{{ getError('email') }}</span>
               } @else if (isEmailValid() && form.email.trim().length > 0) {
-                <span class="field-success">Email valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.EMAIL_VALID' | translate }}</span>
               }
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s1-pw">Mot de passe <span class="form-req">*</span></label>
+              <label class="form-label" for="s1-pw">{{ 'AUTH.PASSWORD' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <input id="s1-pw" class="form-input form-input--padded-r"
                   [type]="showPassword() ? 'text' : 'password'"
-                  autocomplete="new-password" placeholder="Minimum 8 caractéres"
+                  autocomplete="new-password" [placeholder]="'AUTH.ONBOARDING.STEP1.PASSWORD_PLACEHOLDER' | translate"
                   [(ngModel)]="form.password" (ngModelChange)="onPasswordChange()"
                   [class.form-input--error]="hasError('password')"
                   [class.form-input--valid]="form.password.length >= 8 && !hasError('password')"/>
-                <button type="button" class="input-adorn-action" (click)="togglePassword()" aria-label="Afficher/masquer le mot de passe">
+                <button type="button" class="input-adorn-action" (click)="togglePassword()" [attr.aria-label]="(showPassword() ? 'AUTH.LOGIN.HIDE' : 'AUTH.LOGIN.SHOW') | translate">
                   @if (showPassword()) {
                     <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
                       <path d="M1 1l14 10M6.2 3.2A4 4 0 0111.8 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
@@ -195,20 +194,20 @@
               @if (hasError('password')) {
                 <span class="field-error">{{ getError('password') }}</span>
               } @else if (form.password.length >= 8 && !hasError('password')) {
-                <span class="field-success">Mot de passe valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.PASSWORD_VALID' | translate }}</span>
               }
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s1-cpw">Confirmer le mot de passe <span class="form-req">*</span></label>
+              <label class="form-label" for="s1-cpw">{{ 'AUTH.ONBOARDING.STEP1.CONFIRM_PASSWORD_LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <input id="s1-cpw" class="form-input form-input--padded-r"
                   [type]="isConfPwdVisible ? 'text' : 'password'"
-                  autocomplete="new-password" placeholder="Répétez votre mot de passe"
+                  autocomplete="new-password" [placeholder]="'AUTH.ONBOARDING.STEP1.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
                   [(ngModel)]="form.confirmPassword" (ngModelChange)="validateConfirmPassword()"
                   [class.form-input--error]="hasError('confirmPassword')"
                   [class.form-input--valid]="form.confirmPassword.length > 0 && form.confirmPassword === form.password && !hasError('confirmPassword')"/>
-                <button type="button" class="input-adorn-action" (click)="toggleConfPassword()" aria-label="Afficher/masquer la confirmation">
+                <button type="button" class="input-adorn-action" (click)="toggleConfPassword()" [attr.aria-label]="(isConfPwdVisible ? 'AUTH.LOGIN.HIDE' : 'AUTH.LOGIN.SHOW') | translate">
                   @if (isConfPwdVisible) {
                     <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
                       <path d="M1 1l14 10M6.2 3.2A4 4 0 0111.8 8.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
@@ -224,16 +223,16 @@
               @if (hasError('confirmPassword')) {
                 <span class="field-error">{{ getError('confirmPassword') }}</span>
               } @else if (form.confirmPassword.length > 0 && form.confirmPassword === form.password) {
-                <span class="field-success">Confirmation OK</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.CONFIRM_PASSWORD_VALID' | translate }}</span>
               }
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s1-tel">Téléphone mobile <span class="form-req">*</span></label>
+              <label class="form-label" for="s1-tel">{{ 'AUTH.ONBOARDING.STEP1.MOBILE_PHONE_LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
                 <input id="s1-tel" class="form-input form-input--padded"
-                  type="tel" placeholder="XX XXX XXX"
+                  type="tel" [placeholder]="'AUTH.ONBOARDING.STEP1.PHONE_PLACEHOLDER' | translate"
                   [(ngModel)]="form.telephone" (ngModelChange)="validateTelephone()"
                   [class.form-input--error]="hasError('telephone')"
                   [class.form-input--valid]="phoneLen(form.telephone) >= 8 && !hasError('telephone')"/>
@@ -241,7 +240,7 @@
               @if (hasError('telephone')) {
                 <span class="field-error">{{ getError('telephone') }}</span>
               } @else if (phoneLen(form.telephone) >= 8) {
-                <span class="field-success">Téléphone valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.PHONE_VALID' | translate }}</span>
               }
             </div>
 
@@ -256,16 +255,16 @@
                   </svg>
                 </span>
                 <span class="checkbox-text">
-                  J'accepte les <a class="link-ey" href="#" (click)="$event.preventDefault()">CGU</a>
-                  et la <a class="link-ey" href="#" (click)="$event.preventDefault()">politique de confidentialité</a>.
+                  {{ 'AUTH.ONBOARDING.STEP1.TERMS_PREFIX' | translate }} <a class="link-ey" href="#" (click)="$event.preventDefault()">{{ 'AUTH.ONBOARDING.STEP1.TERMS_CGU' | translate }}</a>
+                  {{ 'AUTH.ONBOARDING.STEP1.TERMS_MIDDLE' | translate }} <a class="link-ey" href="#" (click)="$event.preventDefault()">{{ 'AUTH.ONBOARDING.STEP1.TERMS_PRIVACY' | translate }}</a>{{ 'AUTH.ONBOARDING.STEP1.TERMS_SUFFIX' | translate }}
                 </span>
               </label>
             </div>
 
             <div class="step-actions">
-              <button class="btn-ghost" disabled aria-hidden="true">Retour</button>
+              <button class="btn-ghost" disabled aria-hidden="true">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
               <button class="btn-primary" [disabled]="!step1Valid()" (click)="nextStep()">
-                Continuer
+                {{ 'AUTH.ACCESS_REQUEST.CONTINUE' | translate }}
                 <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                   <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -274,26 +273,20 @@
           </div>
         }
 
-        <!-- -------------------------------------------
-             éTAPE 2 — Profil entreprise
-             FIX : logo upload UX + code postal
-        --------------------------------------------- -->
         @if (currentStep() === 2) {
           <div class="step-pane" [@stepAnim]="animDir()">
             <header class="step-header">
-              <div class="step-eyebrow">étape 2 — Profil entreprise</div>
-              <h1 class="step-title">Identité<br><em>fiscale et légale.</em></h1>
+              <div class="step-eyebrow">{{ 'AUTH.ONBOARDING.STEP2.EYEBROW' | translate }}</div>
+              <h1 class="step-title">{{ 'AUTH.ONBOARDING.STEP2.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.STEP2.TITLE_EM' | translate }}</em></h1>
             </header>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="s2-mf">
-                  Matricule fiscal <span class="form-req">*</span>
-                </label>
+                <label class="form-label" for="s2-mf">{{ 'AUTH.ACCESS_REQUEST.FIELDS.TAX_ID.LABEL' | translate }} <span class="form-req">*</span></label>
                 <div class="input-adorn">
                   <span class="input-adorn-prefix input-adorn-prefix--text">MF</span>
                   <input id="s2-mf" class="form-input form-input--padded"
-                    type="text" placeholder="1495908/S ou 1234567A/B/C/000"
+                    type="text" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.TAX_ID.PLACEHOLDER' | translate"
                     [(ngModel)]="form.matriculeFiscal" (ngModelChange)="validateMatriculeFiscal()"
                     [class.form-input--error]="hasError('matriculeFiscal')"
                     [class.form-input--valid]="isMatriculeFiscalValid() && !hasError('matriculeFiscal')"/>
@@ -301,19 +294,19 @@
                 @if (hasError('matriculeFiscal')) {
                   <span class="field-error">{{ getError('matriculeFiscal') }}</span>
                 } @else if (isMatriculeFiscalValid()) {
-                  <span class="field-success">Matricule valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.TAX_ID_VALID' | translate }}</span>
                 }
               </div>
               <div class="form-group">
-                <label class="form-label" for="s2-forme">Forme juridique <span class="form-req">*</span></label>
+                <label class="form-label" for="s2-forme">{{ 'AUTH.ACCESS_REQUEST.FIELDS.LEGAL_FORM.LABEL' | translate }} <span class="form-req">*</span></label>
                 <div class="select-wrap">
                   <select id="s2-forme" class="form-select"
                     [(ngModel)]="form.formeJuridique" (ngModelChange)="validateFormeJuridique()"
                     [class.form-input--error]="hasError('formeJuridique')"
                     [class.form-input--valid]="!!form.formeJuridique && !hasError('formeJuridique')">
-                    <option value="">Sélectionner...</option>
-                    @for (f of formesJuridiques; track f) {
-                      <option [value]="f">{{ f }}</option>
+                    <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.LEGAL_FORM.PLACEHOLDER' | translate }}</option>
+                    @for (f of formesJuridiques; track f.value) {
+                      <option [value]="f.value">{{ f.labelKey | translate }}</option>
                     }
                   </select>
                   <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
@@ -324,46 +317,43 @@
                 @if (hasError('formeJuridique')) {
                   <span class="field-error">{{ getError('formeJuridique') }}</span>
                 } @else if (form.formeJuridique) {
-                  <span class="field-success">Forme juridique valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.LEGAL_FORM_VALID' | translate }}</span>
                 }
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s2-rs">Raison sociale <span class="form-req">*</span></label>
+              <label class="form-label" for="s2-rs">{{ 'AUTH.ACCESS_REQUEST.FIELDS.BUSINESS_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
               <input id="s2-rs" class="form-input"
-                type="text" placeholder="Nom officiel enregistré au RNE"
+                type="text" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.BUSINESS_NAME.PLACEHOLDER' | translate"
                 [(ngModel)]="form.raisonSociale" (ngModelChange)="validateRaisonSociale()"
                 [class.form-input--error]="hasError('raisonSociale')"
                 [class.form-input--valid]="form.raisonSociale.trim().length > 2 && !hasError('raisonSociale')"/>
               @if (hasError('raisonSociale')) {
                 <span class="field-error">{{ getError('raisonSociale') }}</span>
               } @else if (form.raisonSociale.trim().length > 2) {
-                <span class="field-success">Raison sociale valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.BUSINESS_NAME_VALID' | translate }}</span>
               }
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s2-nom-ent">
-                Nom commercial <span class="form-req">*</span>
-              </label>
+              <label class="form-label" for="s2-nom-ent">{{ 'AUTH.ACCESS_REQUEST.FIELDS.COMPANY_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
               <input id="s2-nom-ent" class="form-input"
-                type="text" placeholder="Ex : Tech Solutions"
+                type="text" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.COMPANY_NAME.PLACEHOLDER' | translate"
                 [(ngModel)]="form.nomEntreprise" (ngModelChange)="validateNomEntreprise()"
                 [class.form-input--error]="hasError('nomEntreprise')"
                 [class.form-input--valid]="form.nomEntreprise.trim().length > 2 && !hasError('nomEntreprise')"/>
               @if (hasError('nomEntreprise')) {
                 <span class="field-error">{{ getError('nomEntreprise') }}</span>
               } @else if (form.nomEntreprise.trim().length > 2) {
-                <span class="field-success">Nom valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.COMPANY_NAME_VALID' | translate }}</span>
               }
             </div>
 
-            <!-- FIX: Logo upload avec UX compléte -->
             <div class="form-group">
               <label class="form-label" for="s2-logo">
-                Logo entreprise
-                <span class="form-hint-inline">(facultatif — jpg, png, svg · max 2 Mo)</span>
+                {{ 'AUTH.ACCESS_REQUEST.LOGO.LABEL' | translate }}
+                <span class="form-hint-inline">{{ 'AUTH.ACCESS_REQUEST.LOGO.HINT' | translate }}</span>
               </label>
               <div class="logo-upload">
                 @if (!form.logoPreview) {
@@ -375,8 +365,8 @@
                       </svg>
                     </div>
                     <div class="logo-upload-text">
-                      Cliquer pour choisir un fichier
-                      <span>jpg, png, svg — 2 Mo max</span>
+                      {{ 'AUTH.ACCESS_REQUEST.LOGO.PICK' | translate }}
+                      <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.PICK_HINT' | translate }}</span>
                     </div>
                     <input id="s2-logo" type="file" accept="image/*"
                       style="position:absolute;width:0;height:0;opacity:0"
@@ -384,12 +374,12 @@
                   </label>
                 } @else {
                   <div class="logo-preview">
-                    <img class="logo-preview-img" [src]="form.logoPreview" alt="Logo entreprise"/>
+                    <img class="logo-preview-img" [src]="form.logoPreview" [alt]="'AUTH.ACCESS_REQUEST.LOGO.ALT' | translate"/>
                     <div class="logo-preview-info">
-                      <strong>{{ form.logoFileName || 'logo.png' }}</strong>
-                      <span>Logo chargé avec succès</span>
+                      <strong>{{ form.logoFileName || ('AUTH.ACCESS_REQUEST.LOGO.DEFAULT_FILE' | translate) }}</strong>
+                      <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.UPLOADED' | translate }}</span>
                     </div>
-                    <button type="button" class="logo-remove" (click)="removeLogo()">Supprimer</button>
+                    <button type="button" class="logo-remove" (click)="removeLogo()">{{ 'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate }}</button>
                   </div>
                 }
               </div>
@@ -399,31 +389,30 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s2-adr">Adresse siège social <span class="form-req">*</span></label>
+              <label class="form-label" for="s2-adr">{{ 'AUTH.ACCESS_REQUEST.FIELDS.ADDRESS.LABEL' | translate }} <span class="form-req">*</span></label>
               <input id="s2-adr" class="form-input"
-                type="text" placeholder="Numéro, rue, avenue..."
+                type="text" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.ADDRESS.PLACEHOLDER' | translate"
                 [(ngModel)]="form.adresse" (ngModelChange)="validateAdresse()"
                 [class.form-input--error]="hasError('adresse')"
                 [class.form-input--valid]="form.adresse.trim().length > 5 && !hasError('adresse')"/>
               @if (hasError('adresse')) {
                 <span class="field-error">{{ getError('adresse') }}</span>
               } @else if (form.adresse.trim().length > 5) {
-                <span class="field-success">Adresse valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.ADDRESS_VALID' | translate }}</span>
               }
             </div>
 
-            <!-- FIX: gouvernorat + code postal côte à côte -->
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="s2-gov">Gouvernorat <span class="form-req">*</span></label>
+                <label class="form-label" for="s2-gov">{{ 'AUTH.ACCESS_REQUEST.FIELDS.GOVERNORATE.LABEL' | translate }} <span class="form-req">*</span></label>
                 <div class="select-wrap">
                   <select id="s2-gov" class="form-select"
                     [(ngModel)]="form.gouvernorat" (ngModelChange)="validateGouvernorat()"
                     [class.form-input--error]="hasError('gouvernorat')"
                     [class.form-input--valid]="!!form.gouvernorat && !hasError('gouvernorat')">
-                    <option value="">Gouvernorat...</option>
-                    @for (g of gouvernorats; track g) {
-                      <option [value]="g">{{ g }}</option>
+                    <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.GOVERNORATE.PLACEHOLDER' | translate }}</option>
+                    @for (g of gouvernorats; track g.value) {
+                      <option [value]="g.value">{{ g.labelKey | translate }}</option>
                     }
                   </select>
                   <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
@@ -434,49 +423,48 @@
                 @if (hasError('gouvernorat')) {
                   <span class="field-error">{{ getError('gouvernorat') }}</span>
                 } @else if (form.gouvernorat) {
-                  <span class="field-success">Gouvernorat valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.GOVERNORATE_VALID' | translate }}</span>
                 }
               </div>
 
-              <!-- FIX: Code postal ? NOUVEAU champ -->
               <div class="form-group">
-                <label class="form-label" for="s2-cp">Code postal <span class="form-req">*</span></label>
+                <label class="form-label" for="s2-cp">{{ 'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s2-cp" class="form-input"
-                  type="text" inputmode="numeric" maxlength="4" placeholder="ex : 1000"
+                  type="text" inputmode="numeric" maxlength="4" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.PLACEHOLDER' | translate"
                   [(ngModel)]="form.codePostal" (ngModelChange)="validateCodePostal()"
                   [class.form-input--error]="hasError('codePostal')"
                   [class.form-input--valid]="form.codePostal.trim().length === 4 && !hasError('codePostal')"/>
                 @if (hasError('codePostal')) {
                   <span class="field-error">{{ getError('codePostal') }}</span>
                 } @else if (form.codePostal.trim().length === 4) {
-                  <span class="field-success">Code postal valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.POSTAL_CODE_VALID' | translate }}</span>
                 }
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="s2-site">Site internet</label>
+                <label class="form-label" for="s2-site">{{ 'AUTH.ACCESS_REQUEST.FIELDS.WEBSITE.LABEL' | translate }}</label>
                 <input id="s2-site" class="form-input"
-                  type="url" placeholder="https://exemple.tn"
+                  type="url" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.WEBSITE.PLACEHOLDER' | translate"
                   [(ngModel)]="form.siteWeb" (ngModelChange)="validateSiteWeb()"
                   [class.form-input--error]="hasError('siteWeb')"
                   [class.form-input--valid]="form.siteWeb.trim().length > 0 && !hasError('siteWeb')"/>
                 @if (hasError('siteWeb')) {
                   <span class="field-error">{{ getError('siteWeb') }}</span>
                 } @else if (form.siteWeb.trim().length > 0) {
-                  <span class="field-success">Site valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.WEBSITE_VALID' | translate }}</span>
                 }
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="s2-devise">Devise principale <span class="form-req">*</span></label>
+                <label class="form-label" for="s2-devise">{{ 'AUTH.ACCESS_REQUEST.FIELDS.CURRENCY.LABEL' | translate }} <span class="form-req">*</span></label>
                 <div class="select-wrap">
                   <select id="s2-devise" class="form-select"
                     [(ngModel)]="form.devisePrincipale" (ngModelChange)="validateDevisePrincipale()"
                     [class.form-input--error]="hasError('devisePrincipale')"
                     [class.form-input--valid]="!!form.devisePrincipale && !hasError('devisePrincipale')">
-                    <option value="">Devise...</option>
+                    <option value="">{{ 'AUTH.ONBOARDING.STEP2.CURRENCY_PLACEHOLDER' | translate }}</option>
                     @for (d of devises; track d) {
                       <option [value]="d">{{ d }}</option>
                     }
@@ -489,17 +477,17 @@
                 @if (hasError('devisePrincipale')) {
                   <span class="field-error">{{ getError('devisePrincipale') }}</span>
                 } @else if (form.devisePrincipale) {
-                  <span class="field-success">Devise valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.CURRENCY_VALID' | translate }}</span>
                 }
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s2-tel">Téléphone entreprise <span class="form-req">*</span></label>
+              <label class="form-label" for="s2-tel">{{ 'AUTH.ACCESS_REQUEST.FIELDS.COMPANY_PHONE.LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
                 <input id="s2-tel" class="form-input form-input--padded"
-                  type="tel" placeholder="XX XXX XXX"
+                  type="tel" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.COMPANY_PHONE.PLACEHOLDER' | translate"
                   [(ngModel)]="form.telEntreprise" (ngModelChange)="validateTelEntreprise()"
                   [class.form-input--error]="hasError('telEntreprise')"
                   [class.form-input--valid]="phoneLen(form.telEntreprise) >= 8 && !hasError('telEntreprise')"/>
@@ -507,14 +495,14 @@
               @if (hasError('telEntreprise')) {
                 <span class="field-error">{{ getError('telEntreprise') }}</span>
               } @else if (phoneLen(form.telEntreprise) >= 8) {
-                <span class="field-success">Téléphone valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.COMPANY_PHONE_VALID' | translate }}</span>
               }
             </div>
 
             <div class="step-actions">
-              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-ghost" (click)="prevStep()">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
               <button class="btn-primary" [disabled]="!step2Valid()" (click)="nextStep()">
-                Continuer
+                {{ 'AUTH.ACCESS_REQUEST.CONTINUE' | translate }}
                 <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                   <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -523,55 +511,52 @@
           </div>
         }
 
-        <!-- -------------------------------------------
-             ÉTAPE 3 — Responsable légal (DGI)
-        --------------------------------------------- -->
         @if (currentStep() === 3) {
           <div class="step-pane" [@stepAnim]="animDir()">
             <header class="step-header">
-              <div class="step-eyebrow">Étape 3 — Responsable légal</div>
-              <h1 class="step-title">L'interlocuteur<br><em>DGI officiel.</em></h1>
+              <div class="step-eyebrow">{{ 'AUTH.ONBOARDING.STEP3.EYEBROW' | translate }}</div>
+              <h1 class="step-title">{{ 'AUTH.ONBOARDING.STEP3.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.STEP3.TITLE_EM' | translate }}</em></h1>
             </header>
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="s3-prenom">Prénom <span class="form-req">*</span></label>
+                <label class="form-label" for="s3-prenom">{{ 'AUTH.ACCESS_REQUEST.FIELDS.FIRST_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s3-prenom" class="form-input"
-                  type="text" placeholder="Sarra"
+                  type="text" [placeholder]="'AUTH.ONBOARDING.STEP3.FIRST_NAME_PLACEHOLDER' | translate"
                   [(ngModel)]="form.respPrenom" (ngModelChange)="validateRespPrenom()"
                   [class.form-input--error]="hasError('respPrenom')"
                   [class.form-input--valid]="form.respPrenom.trim().length > 1 && !hasError('respPrenom')"/>
                 @if (hasError('respPrenom')) {
                   <span class="field-error">{{ getError('respPrenom') }}</span>
                 } @else if (form.respPrenom.trim().length > 1) {
-                  <span class="field-success">Prénom valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.FIRST_NAME_VALID' | translate }}</span>
                 }
               </div>
               <div class="form-group">
-                <label class="form-label" for="s3-nom">Nom <span class="form-req">*</span></label>
+                <label class="form-label" for="s3-nom">{{ 'AUTH.ACCESS_REQUEST.FIELDS.LAST_NAME.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s3-nom" class="form-input"
-                  type="text" placeholder="Trabelsi"
+                  type="text" [placeholder]="'AUTH.ONBOARDING.STEP3.LAST_NAME_PLACEHOLDER' | translate"
                   [(ngModel)]="form.respNom" (ngModelChange)="validateRespNom()"
                   [class.form-input--error]="hasError('respNom')"
                   [class.form-input--valid]="form.respNom.trim().length > 1 && !hasError('respNom')"/>
                 @if (hasError('respNom')) {
                   <span class="field-error">{{ getError('respNom') }}</span>
                 } @else if (form.respNom.trim().length > 1) {
-                  <span class="field-success">Nom valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.LAST_NAME_VALID' | translate }}</span>
                 }
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s3-fn">Fonction officielle <span class="form-req">*</span></label>
+              <label class="form-label" for="s3-fn">{{ 'AUTH.ACCESS_REQUEST.FIELDS.OFFICIAL_ROLE.LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="select-wrap">
                 <select id="s3-fn" class="form-select"
                   [(ngModel)]="form.respFonction" (ngModelChange)="validateRespFonction()"
                   [class.form-input--error]="hasError('respFonction')"
                   [class.form-input--valid]="!!form.respFonction && !hasError('respFonction')">
-                  <option value="">Sélectionner votre titre...</option>
-                  @for (f of fonctions; track f) {
-                    <option [value]="f">{{ f }}</option>
+                  <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.OFFICIAL_ROLE.PLACEHOLDER' | translate }}</option>
+                  @for (f of fonctions; track f.value) {
+                    <option [value]="f.value">{{ f.labelKey | translate }}</option>
                   }
                 </select>
                 <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
@@ -582,32 +567,32 @@
               @if (hasError('respFonction')) {
                 <span class="field-error">{{ getError('respFonction') }}</span>
               } @else if (form.respFonction) {
-                <span class="field-success">Fonction valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.ROLE_VALID' | translate }}</span>
               }
             </div>
 
             @if (form.respFonction === 'Autre') {
               <div class="form-group">
-                <label class="form-label" for="s3-fn-other">Précisez la fonction <span class="form-req">*</span></label>
+                <label class="form-label" for="s3-fn-other">{{ 'AUTH.ACCESS_REQUEST.FIELDS.ROLE_OTHER.LABEL' | translate }} <span class="form-req">*</span></label>
                 <input id="s3-fn-other" class="form-input"
-                  type="text" placeholder="Ex : Directeur opérations"
+                  type="text" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.ROLE_OTHER.PLACEHOLDER' | translate"
                   [(ngModel)]="form.respFonctionAutre" (ngModelChange)="validateFonctionAutre()"
                   [class.form-input--error]="hasError('respFonctionAutre')"
                   [class.form-input--valid]="form.respFonctionAutre.trim().length > 2 && !hasError('respFonctionAutre')"/>
                 @if (hasError('respFonctionAutre')) {
                   <span class="field-error">{{ getError('respFonctionAutre') }}</span>
                 } @else if (form.respFonctionAutre.trim().length > 2) {
-                  <span class="field-success">Fonction valide</span>
+                  <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.OTHER_ROLE_VALID' | translate }}</span>
                 }
               </div>
             }
 
             <div class="form-group">
-              <label class="form-label" for="s3-tel">Téléphone <span class="form-req">*</span></label>
+              <label class="form-label" for="s3-tel">{{ 'AUTH.ACCESS_REQUEST.FIELDS.RESP_PHONE.LABEL' | translate }} <span class="form-req">*</span></label>
               <div class="input-adorn">
                 <span class="input-adorn-prefix input-adorn-prefix--text">+216</span>
                 <input id="s3-tel" class="form-input form-input--padded"
-                  type="tel" placeholder="XX XXX XXX"
+                  type="tel" [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.RESP_PHONE.PLACEHOLDER' | translate"
                   [(ngModel)]="form.respTel" (ngModelChange)="validateRespTel()"
                   [class.form-input--error]="hasError('respTel')"
                   [class.form-input--valid]="phoneLen(form.respTel) >= 8 && !hasError('respTel')"/>
@@ -615,21 +600,21 @@
               @if (hasError('respTel')) {
                 <span class="field-error">{{ getError('respTel') }}</span>
               } @else if (phoneLen(form.respTel) >= 8) {
-                <span class="field-success">Téléphone valide</span>
+                <span class="field-success">{{ 'AUTH.ONBOARDING.FEEDBACK.RESP_PHONE_VALID' | translate }}</span>
               }
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="s3-cin">CIN <span class="form-hint-inline">(facultatif)</span></label>
+              <label class="form-label" for="s3-cin">{{ 'AUTH.ONBOARDING.STEP3.CIN_LABEL' | translate }} <span class="form-hint-inline">{{ 'AUTH.ONBOARDING.STEP3.CIN_HINT' | translate }}</span></label>
               <input id="s3-cin" class="form-input"
-                type="text" placeholder="ex : 12345678"
+                type="text" [placeholder]="'AUTH.ONBOARDING.STEP3.CIN_PLACEHOLDER' | translate"
                 [(ngModel)]="form.cin" (ngModelChange)="refresh()"/>
             </div>
 
             <div class="step-actions">
-              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-ghost" (click)="prevStep()">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
               <button class="btn-primary" [disabled]="!step3Valid()" (click)="nextStep()">
-                Continuer
+                {{ 'AUTH.ACCESS_REQUEST.CONTINUE' | translate }}
                 <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                   <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -638,14 +623,11 @@
           </div>
         }
 
-        <!-- -------------------------------------------
-             éTAPE 4 — Catalogue
-        --------------------------------------------- -->
         @if (currentStep() === 4) {
           <div class="step-pane" [@stepAnim]="animDir()">
             <header class="step-header">
-              <div class="step-eyebrow">étape 4 — Catalogue</div>
-              <h1 class="step-title">Structurez votre<br><em>offre commerciale.</em></h1>
+              <div class="step-eyebrow">{{ 'AUTH.ONBOARDING.STEP4.EYEBROW' | translate }}</div>
+              <h1 class="step-title">{{ 'AUTH.ONBOARDING.STEP4.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.STEP4.TITLE_EM' | translate }}</em></h1>
             </header>
 
             <div class="cat-grid">
@@ -660,19 +642,19 @@
                         stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </div>
-                  <div class="cat-card-name">{{ cat.name }}</div>
-                  <div class="cat-card-desc">{{ cat.desc }}</div>
+                  <div class="cat-card-name">{{ categoryName(cat) }}</div>
+                  <div class="cat-card-desc">{{ categoryDesc(cat) }}</div>
                 </button>
               }
             </div>
 
             <div class="custom-cat">
               <input class="custom-cat-input" type="text"
-                placeholder="Ajouter une catégorie personnalisée..."
+                [placeholder]="'AUTH.ONBOARDING.STEP4.ADD_PLACEHOLDER' | translate"
                 [(ngModel)]="customCatName" (keydown.enter)="addCustomCat()"/>
               <button type="button" class="custom-cat-btn"
                 [disabled]="!customCatName.trim()" (click)="addCustomCat()">
-                Ajouter
+                {{ 'COMMON.ACTIONS.ADD' | translate }}
               </button>
             </div>
 
@@ -680,8 +662,8 @@
               <div class="cat-tags">
                 @for (cat of selectedCats(); track cat.key) {
                   <div class="cat-tag" [@tagAnim]>
-                    <span>{{ cat.name }}</span>
-                    <button type="button" class="cat-tag-remove" (click)="removeCat(cat.key)" [attr.aria-label]="'Retirer ' + cat.name">
+                    <span>{{ categoryName(cat) }}</span>
+                    <button type="button" class="cat-tag-remove" (click)="removeCat(cat.key)" [attr.aria-label]="('AUTH.ONBOARDING.STEP4.REMOVE' | translate) + ' ' + categoryName(cat)">
                       <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
                         <path d="M1 1l6 6M7 1L1 7" stroke="currentColor"
                           stroke-width="1.5" stroke-linecap="round"/>
@@ -696,11 +678,9 @@
               <div class="cat-notice-bar"></div>
               <span>
                 @if (selectedCats().length < 2) {
-                  Sélectionnez encore
-                  <strong>{{ 2 - selectedCats().length }} catégorie{{ selectedCats().length === 1 ? '' : 's' }}</strong>
-                  pour continuer
+                  {{ 'AUTH.ONBOARDING.STEP4.NEED_MORE' | translate:{ count: 2 - selectedCats().length } }}
                 } @else {
-                  <strong>{{ selectedCats().length }} catégories</strong> sélectionnées — vous pouvez finaliser
+                  {{ 'AUTH.ONBOARDING.STEP4.READY' | translate:{ count: selectedCats().length } }}
                 }
               </span>
             </div>
@@ -710,14 +690,14 @@
             }
 
             <div class="step-actions">
-              <button class="btn-ghost" (click)="prevStep()">Retour</button>
+              <button class="btn-ghost" (click)="prevStep()">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
               <button class="btn-primary"
                 [disabled]="selectedCats().length < 2 || loading()"
                 (click)="finishOnboarding()">
                 @if (loading()) {
-                  Création en cours...
+                  {{ 'AUTH.ONBOARDING.STEP4.CREATING' | translate }}
                 } @else {
-                  Créer mon espace
+                  {{ 'AUTH.ONBOARDING.STEP4.CREATE_SPACE' | translate }}
                   <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                     <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -727,9 +707,6 @@
           </div>
         }
 
-        <!-- -------------------------------------------
-             ÉTAPE 5 — SUCCÈS + REDIRECTION AUTO
-        --------------------------------------------- -->
         @if (currentStep() === 5) {
           <div class="success-pane" [@fadeUp]>
 
@@ -753,24 +730,20 @@
               </div>
             </div>
 
-            <h2 class="success-title">Votre espace<br><em>est prét.</em></h2>
+            <h2 class="success-title">{{ 'AUTH.ONBOARDING.SUCCESS.TITLE_A' | translate }}<br><em>{{ 'AUTH.ONBOARDING.SUCCESS.TITLE_EM' | translate }}</em></h2>
 
-            <p class="success-sub">
-              Bienvenue, <strong>{{ form.prenom }} {{ form.nom }}</strong>.
-              Votre compte <strong>{{ form.raisonSociale || form.nomEntreprise }}</strong>
-              est activé et conforme TEIF 2026.
-            </p>
+            <p class="success-sub">{{ 'AUTH.ONBOARDING.SUCCESS.SUBTITLE' | translate:{ fullName: (form.prenom + ' ' + form.nom).trim(), company: (form.raisonSociale || form.nomEntreprise) } }}</p>
 
             @if (selectedCats().length > 0) {
               <div class="success-cats">
                 @for (cat of selectedCats(); track cat.key) {
-                  <span class="success-cat-chip">{{ cat.name }}</span>
+                  <span class="success-cat-chip">{{ categoryName(cat) }}</span>
                 }
               </div>
             }
 
             <button class="btn-dashboard" (click)="goToDashboardNow()">
-              Accéder à mon tableau de bord
+              {{ 'AUTH.ONBOARDING.SUCCESS.DASHBOARD' | translate }}
               <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                 <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -782,19 +755,16 @@
                   [style.animation-duration]="redirectDelay + 'ms'">
                 </div>
               </div>
-              <span class="auto-redirect-text">
-                Redirection automatique dans
-                <strong class="auto-redirect-count">{{ redirectCountdown() }}s</strong>
-              </span>
+              <span class="auto-redirect-text">{{ 'AUTH.ONBOARDING.SUCCESS.AUTO_REDIRECT' | translate:{ seconds: redirectCountdown() } }}</span>
             </div>
 
           </div>
         }
-
       </div><!-- /rp-inner -->
     </div><!-- /form-col -->
 
-    <!-- -- CARTE LIVE (masquée sur succés) -- -->
+
+    <!-- -- CARTE LIVE (masquÃ©e sur succÃ©s) -- -->
     @if (currentStep() < 5) {
       <div class="card-col">
         <div class="live-card" @cardPop>
@@ -802,14 +772,14 @@
           <div class="lc-header">
             <div class="lc-logo-mark">
               @if (form.logoPreview) {
-                <img class="lc-logo-img" [src]="form.logoPreview" alt="Logo entreprise"/>
+                <img class="lc-logo-img" [src]="form.logoPreview" [alt]="'AUTH.ACCESS_REQUEST.LOGO.ALT' | translate"/>
               } @else {
                 EY
               }
             </div>
             <div class="lc-header-text">
               <div class="lc-brand">TunisFlow</div>
-              <div class="lc-sub">Fiche d'identification TEIF 2026</div>
+              <div class="lc-sub">{{ 'AUTH.ONBOARDING.CARD.SUBTITLE' | translate }}</div>
             </div>
             <div class="lc-status">
               <div class="lc-status-dot"></div>
@@ -820,7 +790,7 @@
           <div class="lc-avatar-zone">
             <div class="lc-avatar">
               @if (form.logoPreview) {
-                <img class="lc-avatar-logo" [src]="form.logoPreview" alt="Logo"/>
+                <img class="lc-avatar-logo" [src]="form.logoPreview" [alt]="'AUTH.ACCESS_REQUEST.LOGO.ALT' | translate"/>
               } @else {
                 {{ cardInitials() }}
               }
@@ -841,31 +811,31 @@
 
           <div class="lc-grid">
             <div class="lc-field">
-              <div class="lc-field-key">Matricule fiscal</div>
+              <div class="lc-field-key">{{ 'AUTH.ONBOARDING.CARD.TAX_ID' | translate }}</div>
               <div class="lc-field-val lc-mono" [class.lc-placeholder]="!form.matriculeFiscal.trim()">
                 {{ cardMF() }}
               </div>
             </div>
             <div class="lc-field">
-              <div class="lc-field-key">Gouvernorat</div>
+              <div class="lc-field-key">{{ 'AUTH.ONBOARDING.CARD.GOVERNORATE' | translate }}</div>
               <div class="lc-field-val" [class.lc-placeholder]="!form.gouvernorat">
                 {{ cardGouv() }}
               </div>
             </div>
             <div class="lc-field">
-              <div class="lc-field-key">Code postal</div>
+              <div class="lc-field-key">{{ 'AUTH.ONBOARDING.CARD.POSTAL_CODE' | translate }}</div>
               <div class="lc-field-val lc-mono" [class.lc-placeholder]="!form.codePostal.trim()">
                 {{ cardCodePostal() }}
               </div>
             </div>
             <div class="lc-field">
-              <div class="lc-field-key">Responsable légal</div>
+              <div class="lc-field-key">{{ 'AUTH.ONBOARDING.CARD.LEGAL_CONTACT' | translate }}</div>
               <div class="lc-field-val" [class.lc-placeholder]="!form.respPrenom && !form.prenom">
                 {{ cardResp() }}
               </div>
             </div>
             <div class="lc-field">
-              <div class="lc-field-key">Fonction</div>
+              <div class="lc-field-key">{{ 'AUTH.ONBOARDING.CARD.ROLE' | translate }}</div>
               <div class="lc-field-val" [class.lc-placeholder]="!form.respFonction">
                 {{ cardFonction() }}
               </div>
@@ -874,10 +844,10 @@
 
           @if (cardCats().length > 0) {
             <div class="lc-divider"></div>
-            <div class="lc-cats-label">Catégories & Produits</div>
+            <div class="lc-cats-label">{{ 'AUTH.ONBOARDING.CARD.CATEGORIES' | translate }}</div>
             <div class="lc-cats">
               @for (cat of cardCats(); track cat.key) {
-                <span class="lc-cat-chip" [@tagAnim]>{{ cat.name }}</span>
+                <span class="lc-cat-chip" [@tagAnim]>{{ categoryName(cat) }}</span>
               }
             </div>
           }
@@ -885,7 +855,7 @@
           <div class="lc-divider"></div>
 
           <div class="lc-score-row">
-            <span class="lc-score-label">Complétude du dossier</span>
+            <span class="lc-score-label">{{ 'AUTH.ONBOARDING.CARD.COMPLETENESS' | translate }}</span>
             <span class="lc-score-pct">{{ cardCompletePct() }}%</span>
           </div>
           <div class="lc-score-track">
@@ -906,11 +876,8 @@
 
         </div><!-- /live-card -->
 
-        <p class="card-hint">
-          Votre carte se complète au fur et à mesure de votre saisie
-        </p>
+        <p class="card-hint">{{ 'AUTH.ONBOARDING.CARD.HINT' | translate }}</p>
       </div>
     }
-
   </main>
 </div>
