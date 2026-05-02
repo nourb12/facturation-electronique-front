@@ -1,0 +1,252 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// ROLE CAPSULES - Système uniforme pour tous les rôles
+// ═══════════════════════════════════════════════════════════════════════════
+// Design inspiré de la capsule "CONNEXION · RESPONSABLE ENTREPRISE"
+// ═══════════════════════════════════════════════════════════════════════════
+
+.dt-bc,
+.role-capsule,
+.breadcrumb-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(.16,1,.3,1);
+  
+  // Couleurs par défaut (neutre)
+  background: rgba(var(--c-tuniflow-rgb), 0.08);
+  color: var(--ts);
+  border: 1px solid rgba(var(--c-tuniflow-rgb), 0.15);
+  
+  // Séparateur entre les parties
+  &::before {
+    content: '·';
+    font-weight: 400;
+    opacity: 0.5;
+    margin: 0 -2px;
+  }
+  
+  // Hover effect
+  &:hover {
+    background: rgba(var(--c-tuniflow-rgb), 0.12);
+    border-color: rgba(var(--c-tuniflow-rgb), 0.25);
+    transform: translateY(-1px);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VARIANTES PAR RÔLE
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Admin (Bleu)
+.dt-bc--admin,
+.role-capsule--admin {
+  background: rgba(59, 130, 246, 0.08);
+  color: #3B82F6;
+  border-color: rgba(59, 130, 246, 0.15);
+  
+  &:hover {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.25);
+  }
+}
+
+// Responsable Entreprise (Vert)
+.dt-bc--entreprise,
+.role-capsule--entreprise {
+  background: rgba(34, 197, 94, 0.08);
+  color: #22C55E;
+  border-color: rgba(34, 197, 94, 0.15);
+  
+  &:hover {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.25);
+  }
+}
+
+// Responsable Financier (Orange)
+.dt-bc--financier,
+.role-capsule--financier {
+  background: rgba(245, 158, 11, 0.08);
+  color: #F59E0B;
+  border-color: rgba(245, 158, 11, 0.15);
+  
+  &:hover {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.25);
+  }
+}
+
+// KYC / Vérification (Violet)
+.dt-bc--kyc,
+.role-capsule--kyc {
+  background: rgba(139, 92, 246, 0.08);
+  color: #8B5CF6;
+  border-color: rgba(139, 92, 246, 0.15);
+  
+  &:hover {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.25);
+  }
+}
+
+// Démo / Public (Jaune TuniFlow)
+.dt-bc--demo,
+.role-capsule--demo {
+  background: rgba(var(--c-tuniflow-rgb), 0.08);
+  color: var(--c-tuniflow);
+  border-color: rgba(var(--c-tuniflow-rgb), 0.15);
+  
+  &:hover {
+    background: rgba(var(--c-tuniflow-rgb), 0.12);
+    border-color: rgba(var(--c-tuniflow-rgb), 0.25);
+  }
+}
+
+// Audit / Sécurité (Rouge)
+.dt-bc--audit,
+.role-capsule--audit {
+  background: rgba(239, 68, 68, 0.08);
+  color: #EF4444;
+  border-color: rgba(239, 68, 68, 0.15);
+  
+  &:hover {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.25);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODE SOMBRE - Couleurs plus vives
+// ═══════════════════════════════════════════════════════════════════════════
+
+[data-theme="dark"] {
+  .dt-bc,
+  .role-capsule,
+  .breadcrumb-capsule {
+    background: rgba(var(--c-tuniflow-rgb), 0.10);
+    border-color: rgba(var(--c-tuniflow-rgb), 0.20);
+    
+    &:hover {
+      background: rgba(var(--c-tuniflow-rgb), 0.15);
+      border-color: rgba(var(--c-tuniflow-rgb), 0.30);
+    }
+  }
+  
+  // Admin
+  .dt-bc--admin,
+  .role-capsule--admin {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60A5FA;
+    border-color: rgba(59, 130, 246, 0.20);
+    
+    &:hover {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: rgba(59, 130, 246, 0.30);
+    }
+  }
+  
+  // Entreprise
+  .dt-bc--entreprise,
+  .role-capsule--entreprise {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ADE80;
+    border-color: rgba(34, 197, 94, 0.20);
+    
+    &:hover {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: rgba(34, 197, 94, 0.30);
+    }
+  }
+  
+  // Financier
+  .dt-bc--financier,
+  .role-capsule--financier {
+    background: rgba(245, 158, 11, 0.12);
+    color: #FBBF24;
+    border-color: rgba(245, 158, 11, 0.20);
+    
+    &:hover {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.30);
+    }
+  }
+  
+  // KYC
+  .dt-bc--kyc,
+  .role-capsule--kyc {
+    background: rgba(139, 92, 246, 0.12);
+    color: #A78BFA;
+    border-color: rgba(139, 92, 246, 0.20);
+    
+    &:hover {
+      background: rgba(139, 92, 246, 0.18);
+      border-color: rgba(139, 92, 246, 0.30);
+    }
+  }
+  
+  // Démo
+  .dt-bc--demo,
+  .role-capsule--demo {
+    background: rgba(var(--c-tuniflow-rgb), 0.12);
+    color: var(--c-tuniflow);
+    border-color: rgba(var(--c-tuniflow-rgb), 0.20);
+    
+    &:hover {
+      background: rgba(var(--c-tuniflow-rgb), 0.18);
+      border-color: rgba(var(--c-tuniflow-rgb), 0.30);
+    }
+  }
+  
+  // Audit
+  .dt-bc--audit,
+  .role-capsule--audit {
+    background: rgba(239, 68, 68, 0.12);
+    color: #F87171;
+    border-color: rgba(239, 68, 68, 0.20);
+    
+    &:hover {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.30);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VARIANTES DE TAILLE
+// ═══════════════════════════════════════════════════════════════════════════
+
+.dt-bc--sm,
+.role-capsule--sm {
+  padding: 4px 12px;
+  font-size: 10px;
+  gap: 6px;
+}
+
+.dt-bc--lg,
+.role-capsule--lg {
+  padding: 8px 20px;
+  font-size: 12px;
+  gap: 10px;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RESPONSIVE
+// ═══════════════════════════════════════════════════════════════════════════
+
+@media (max-width: 768px) {
+  .dt-bc,
+  .role-capsule,
+  .breadcrumb-capsule {
+    font-size: 10px;
+    padding: 5px 14px;
+    gap: 6px;
+  }
+}

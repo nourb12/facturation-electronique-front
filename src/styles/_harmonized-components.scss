@@ -1,0 +1,487 @@
+// =============================================================================
+// COMPOSANTS HARMONISÉS - TunisFlow Design System
+// =============================================================================
+// Ce fichier contient tous les composants UI standardisés pour garantir
+// une cohérence visuelle à travers toute l'application.
+// =============================================================================
+
+$ease: cubic-bezier(.16,1,.3,1);
+$fb: 'DM Sans', sans-serif;
+
+// -----------------------------------------------------------------------------
+// SYSTÈME DE BOUTONS UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 20px;
+  background: #FFE600;
+  color: #0A0A0A;
+  border: none;
+  border-radius: 10px;
+  font-family: $fb;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 260ms $ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: #FFF176;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(255, 230, 0, .35);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: .40;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  // Variantes de taille
+  &--sm {
+    padding: 7px 16px;
+    font-size: 12px;
+  }
+
+  &--lg {
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 18px;
+  background: var(--bg-card);
+  color: var(--tp);
+  border: 1px solid var(--b2);
+  border-radius: 10px;
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 260ms $ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-ghost);
+    border-color: var(--b3);
+  }
+
+  &:disabled {
+    opacity: .40;
+    cursor: not-allowed;
+  }
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: transparent;
+  color: var(--btn-ghost-text);
+  border: 1px solid var(--btn-ghost-border);
+  border-radius: 10px;
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 260ms $ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--btn-ghost-hover);
+    color: var(--tp);
+    border-color: var(--b2);
+  }
+
+  &:disabled {
+    opacity: .40;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SYSTÈME DE CARTES UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.card,
+.box,
+.content-card,
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--b1);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color 260ms $ease, transform 260ms $ease;
+
+  &:hover {
+    border-color: var(--b2);
+  }
+
+  // Variante petite carte
+  &--sm {
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  // Variante grande carte
+  &--lg {
+    border-radius: 20px;
+    padding: 24px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SYSTÈME DE BADGES UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 260ms $ease;
+
+  &--ok {
+    background: rgba(34, 197, 94, .12);
+    color: #16a34a;
+  }
+
+  &--warn {
+    background: rgba(245, 158, 11, .12);
+    color: #d97706;
+  }
+
+  &--err {
+    background: rgba(239, 68, 68, .12);
+    color: #dc2626;
+  }
+
+  &--info {
+    background: rgba(59, 130, 246, .12);
+    color: #2563eb;
+  }
+
+  &--neutral {
+    background: var(--b1);
+    color: var(--ts);
+  }
+
+  &--ey {
+    background: #FFE600;
+    color: #0A0A0A;
+  }
+
+  // Variante avec dot
+  &--with-dot::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  // Taille large
+  &--lg {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+}
+
+// Mode light - badges harmonisés
+[data-theme="light"] {
+  .badge {
+    &--ok {
+      background: rgba(34, 197, 94, .10);
+      color: #15803d;
+    }
+
+    &--warn {
+      background: rgba(245, 158, 11, .10);
+      color: #b45309;
+    }
+
+    &--err {
+      background: rgba(239, 68, 68, .10);
+      color: #b91c1c;
+    }
+
+    &--info {
+      background: rgba(59, 130, 246, .10);
+      color: #1d4ed8;
+    }
+  }
+}
+
+// Mode dark - badges plus visibles
+[data-theme="dark"] {
+  .badge {
+    &--ok {
+      background: rgba(34, 197, 94, .15);
+      color: #4ade80;
+    }
+
+    &--warn {
+      background: rgba(245, 158, 11, .15);
+      color: #fbbf24;
+    }
+
+    &--err {
+      background: rgba(239, 68, 68, .15);
+      color: #f87171;
+    }
+
+    &--info {
+      background: rgba(59, 130, 246, .15);
+      color: #60a5fa;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SYSTÈME D'INPUTS UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.inp,
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 260ms $ease, box-shadow 260ms $ease;
+
+  &::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  &:hover:not(:focus):not(:disabled) {
+    border-color: var(--b2);
+  }
+
+  &:focus {
+    border-color: rgba(255, 230, 0, .55);
+    box-shadow: 0 0 0 3px rgba(255, 230, 0, .12);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // États de validation
+  &--valid {
+    border-color: rgba(34, 197, 94, .35);
+
+    &:focus {
+      border-color: rgba(34, 197, 94, .55);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, .10);
+    }
+  }
+
+  &--error {
+    border-color: rgba(239, 68, 68, .45);
+
+    &:focus {
+      border-color: rgba(239, 68, 68, .65);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, .12);
+    }
+  }
+}
+
+// Select harmonisé
+.form-select {
+  width: 100%;
+  padding: 10px 36px 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 260ms $ease, box-shadow 260ms $ease;
+
+  &:focus {
+    border-color: rgba(255, 230, 0, .55);
+    box-shadow: 0 0 0 3px rgba(255, 230, 0, .12);
+  }
+
+  option {
+    background: var(--bg-surf);
+    color: var(--tp);
+  }
+}
+
+// Textarea harmonisé
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+// -----------------------------------------------------------------------------
+// SYSTÈME DE MODALS UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 260ms $ease both;
+}
+
+.modal-box,
+.modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--b2);
+  border-radius: 16px;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn 280ms $ease both;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--b1);
+}
+
+.modal-body {
+  padding: 18px 24px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--b1);
+}
+
+.modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--b1);
+  background: var(--b0);
+  color: var(--ts);
+  cursor: pointer;
+  transition: all 260ms $ease;
+
+  &:hover {
+    background: var(--b1);
+    color: var(--tp);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SYSTÈME DE TABLES UNIFIÉ
+// -----------------------------------------------------------------------------
+
+.tbl,
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--ts);
+    background: var(--table-header-bg);
+    border-bottom: 1px solid var(--table-border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 11px 14px;
+    font-size: 13px;
+    color: var(--tp);
+    border-bottom: 1px solid var(--table-border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr {
+    transition: background 260ms $ease;
+
+    &:hover {
+      background: var(--table-row-hover);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// ANIMATIONS
+// -----------------------------------------------------------------------------
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

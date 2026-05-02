@@ -379,7 +379,19 @@
                       <strong>{{ form.logoFileName || ('AUTH.ACCESS_REQUEST.LOGO.DEFAULT_FILE' | translate) }}</strong>
                       <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.UPLOADED' | translate }}</span>
                     </div>
-                    <button type="button" class="logo-remove" (click)="removeLogo()">{{ 'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate }}</button>
+                    <button
+                      type="button"
+                      class="logo-remove"
+                      (click)="removeLogo()"
+                      [attr.aria-label]="'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate"
+                      [attr.title]="'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                        <path d="M2.5 3.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M5.5 2h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M4 5.2v5.1c0 .7.5 1.2 1.2 1.2h3.6c.7 0 1.2-.5 1.2-1.2V5.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5.8 6.4v3.3M8.2 6.4v3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                   </div>
                 }
               </div>

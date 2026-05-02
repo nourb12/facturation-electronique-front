@@ -3,10 +3,10 @@
 
 
 
-$ey:      var(--c-ey);
-$ey-dim:  rgba(var(--c-ey-rgb),.07);
-$ey-glow: rgba(var(--c-ey-rgb),.18);
-$ey-mid:  rgba(var(--c-ey-rgb),.12);
+$tuniflow:      var(--c-tuniflow);
+$tuniflow-dim:  rgba(var(--c-tuniflow-rgb),.07);
+$tuniflow-glow: rgba(var(--c-tuniflow-rgb),.18);
+$tuniflow-mid:  rgba(var(--c-tuniflow-rgb),.12);
 
 $void:    var(--bg-void);
 $abyss:   var(--bg-abyss);
@@ -42,8 +42,8 @@ $fm: 'JetBrains Mono', monospace;
   50%      { opacity:1;  transform:scale(1.25); }
 }
 @keyframes pulseEY {
-  0%,100% { box-shadow: 0 0 0 0 rgba(var(--c-ey-rgb),0); }
-  50%      { box-shadow: 0 0 0 8px rgba(var(--c-ey-rgb),.07); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(var(--c-tuniflow-rgb),0); }
+  50%      { box-shadow: 0 0 0 8px rgba(var(--c-tuniflow-rgb),.07); }
 }
 @keyframes shimmer {
   0%   { transform: translateX(-100%); }
@@ -93,7 +93,7 @@ $fm: 'JetBrains Mono', monospace;
 }
 
 .nav-mark {
-  width: 34px; height: 34px; background: $ey;
+  width: 34px; height: 34px; background: $tuniflow;
   border-radius: 8px; display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,7 +143,7 @@ $fm: 'JetBrains Mono', monospace;
 .btn-ey-sm {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 7px 18px; font-size: 12.5px; font-weight: 700; color: #000;
-  background: $ey; border: none; border-radius: $r10;
+  background: $tuniflow; border: none; border-radius: $r10;
   text-decoration: none; transition: all $fast;
   position: relative; overflow: hidden;
   &::before {
@@ -152,8 +152,8 @@ $fm: 'JetBrains Mono', monospace;
     opacity: 0; transition: opacity $fast;
   }
   &:hover {
-    background: var(--c-ey-hover);
-    box-shadow: 0 4px 24px rgba(var(--c-ey-rgb),.35);
+    background: var(--c-tuniflow-hover);
+    box-shadow: 0 4px 24px rgba(var(--c-tuniflow-rgb),.35);
     transform: translateY(-1px);
     &::before { opacity: 1; }
   }
@@ -179,8 +179,8 @@ $fm: 'JetBrains Mono', monospace;
 .rs-grid-bg {
   position: absolute; inset: 0; pointer-events: none;
   background-image:
-    linear-gradient(rgba(var(--c-ey-rgb),.012) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--c-ey-rgb),.012) 1px, transparent 1px);
+    linear-gradient(rgba(var(--c-tuniflow-rgb),.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--c-tuniflow-rgb),.012) 1px, transparent 1px);
   background-size: 52px 52px;
 }
 
@@ -230,7 +230,7 @@ $fm: 'JetBrains Mono', monospace;
   justify-content: center;
   width: 34px; height: 34px;
   border-radius: 9px;
-  background: $ey;
+  background: $tuniflow;
   color: #000;
   font-size: 11px;
   font-weight: 900;
@@ -273,7 +273,7 @@ $fm: 'JetBrains Mono', monospace;
   &--1 {
     width: 500px; height: 500px;
     top: -15%; right: -10%;
-    background: radial-gradient(circle, rgba(var(--c-ey-rgb),.07) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(var(--c-tuniflow-rgb),.07) 0%, transparent 65%);
     animation: orbFloat 12s ease-in-out infinite;
   }
   &--2 {
@@ -285,7 +285,7 @@ $fm: 'JetBrains Mono', monospace;
   &--3 {
     width: 300px; height: 300px;
     top: 40%; left: 50%; transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(var(--c-ey-rgb),.03) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(var(--c-tuniflow-rgb),.03) 0%, transparent 65%);
     animation: orbFloat 18s ease-in-out infinite 2s;
   }
 }
@@ -328,7 +328,7 @@ $fm: 'JetBrains Mono', monospace;
 
 .rs-logo-mark {
   width: 36px; height: 36px;
-  background: $ey; border-radius: 9px;
+  background: $tuniflow; border-radius: 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -376,8 +376,8 @@ $fm: 'JetBrains Mono', monospace;
 
   em {
     font-style: italic;
-    color: var(--c-ey);
-    -webkit-text-fill-color: var(--c-ey);
+    color: var(--c-tuniflow);
+    -webkit-text-fill-color: var(--c-tuniflow);
     text-shadow: 0 1px 3px rgba(0,0,0,.18);
   }
 }
@@ -422,7 +422,7 @@ $fm: 'JetBrains Mono', monospace;
     content: '';
     position: absolute; top: 0; left: 0;
     width: 35%; height: 100%;
-    background: linear-gradient(90deg, transparent 0%, rgba(var(--c-ey-rgb),.025) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(var(--c-tuniflow-rgb),.025) 50%, transparent 100%);
     opacity: 0;
     transition: opacity $base;
     animation: shimmer 3s ease-in-out infinite;
@@ -433,7 +433,7 @@ $fm: 'JetBrains Mono', monospace;
     content: '';
     position: absolute; top: 0; right: 0;
     width: 100px; height: 100px;
-    background: radial-gradient(circle at 100% 0%, rgba(var(--c-ey-rgb),.12), transparent 65%);
+    background: radial-gradient(circle at 100% 0%, rgba(var(--c-tuniflow-rgb),.12), transparent 65%);
     opacity: 0;
     transition: opacity $base;
     pointer-events: none;
@@ -463,7 +463,7 @@ $fm: 'JetBrains Mono', monospace;
   }
 
   &:focus-visible {
-    outline: 2px solid $ey;
+    outline: 2px solid $tuniflow;
     outline-offset: 3px;
   }
 }
@@ -494,7 +494,7 @@ $fm: 'JetBrains Mono', monospace;
   bottom: -30px; left: -30px;
   width: 120px; height: 120px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--c-ey-rgb),.08), transparent 65%);
+  background: radial-gradient(circle, rgba(var(--c-tuniflow-rgb),.08), transparent 65%);
   opacity: 0;
   transition: opacity .4s $ease;
   pointer-events: none;
@@ -511,7 +511,7 @@ $fm: 'JetBrains Mono', monospace;
   text-decoration: none;
   transition: color $fast;
   display: inline-flex; align-items: center; gap: 4px;
-  &:hover { color: $ey; }
+  &:hover { color: $tuniflow; }
 }
 
 

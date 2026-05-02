@@ -1,0 +1,443 @@
+<!-- Navbar harmonisée avec landing -->
+<nav class="navbar" [class.scrolled]="scrolled">
+  <div class="nav-inner">
+    <a routerLink="/landing" class="nav-logo">
+      <span class="nav-name">TunisFlow</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a routerLink="/landing" fragment="accueil">{{ 'LANDING.NAV.HOME' | translate }}</a></li>
+      <li><a routerLink="/landing" fragment="features">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+      <li><a routerLink="/landing" fragment="contact">{{ 'LANDING.NAV.CONTACT' | translate }}</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <app-theme-toggle></app-theme-toggle>
+      <app-language-switcher></app-language-switcher>
+      <a routerLink="/landing" class="btn-ghost-sm">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right: 6px;">
+          <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ 'COMMON.BACK' | translate }}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="db-page">
+  <!-- HERO HEADER -->
+  <div class="db-hero">
+    <div class="db-hero-grid" aria-hidden="true"></div>
+    <div class="db-hero-content">
+      <div class="db-eyebrow">Planifier une démo</div>
+      <h1 class="db-title">
+        Réservez votre session<br>
+        <span class="db-title-highlight">démo gratuite</span>
+      </h1>
+      <p class="db-subtitle">
+        Découvrez EY-Factify en 30 minutes avec l'un de nos experts.<br>
+        Conformité TEIF 2026, facturation UBL 2.1, KYC automatisé.
+      </p>
+      <div class="db-trust-row">
+        <div class="db-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 1L1 4v3.5C1 10.2 3.5 12.1 6.5 12.5c3-.4 5.5-2.3 5.5-5V4L6.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M4.5 6.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          30 min · Gratuit
+        </div>
+        <div class="db-trust-sep">·</div>
+        <div class="db-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 4v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          Réponse en 24h
+        </div>
+        <div class="db-trust-sep">·</div>
+        <div class="db-trust-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1" y="1" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M4 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Aucun engagement
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="db-progress-wrap">
+    <div class="db-progress">
+      <div class="db-progress-step" [class.active]="currentStep() >= 1" [class.done]="currentStep() > 1">
+        <div class="db-progress-dot">
+          @if (currentStep() > 1) {
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          }
+          @else { 1 }
+        </div>
+        <span>Date & Heure</span>
+      </div>
+      <div class="db-progress-line" [class.active]="currentStep() > 1"></div>
+      <div class="db-progress-step" [class.active]="currentStep() >= 2" [class.done]="currentStep() > 2">
+        <div class="db-progress-dot">
+          @if (currentStep() > 2) {
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          }
+          @else { 2 }
+        </div>
+        <span>Vos informations</span>
+      </div>
+      <div class="db-progress-line" [class.active]="currentStep() > 2"></div>
+      <div class="db-progress-step" [class.active]="currentStep() >= 3">
+        <div class="db-progress-dot">3</div>
+        <span>Confirmation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="db-main">
+    <!-- ===== STEP 1 : CALENDAR ===== -->
+    @if (currentStep() === 1) {
+      <div class="db-card db-card--wide db-step-enter">
+        <div class="db-cal-layout">
+          <!-- Left: Info panel -->
+          <div class="db-cal-info">
+            <div class="db-session-badge">Session démo</div>
+            <h2 class="db-session-title">EY-Factify<br>Expert Session</h2>
+            <div class="db-session-meta">
+              <div class="db-meta-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M8 5v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                <span>30 minutes</span>
+              </div>
+              <div class="db-meta-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M5 1v2M11 1v2M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                <span>Lun–Ven, 09h–17h30</span>
+              </div>
+              <div class="db-meta-item">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 1.5L1.5 5v4C1.5 12.5 4.2 14.8 8 15.5c3.8-.7 6.5-3 6.5-6.5V5L8 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                </svg>
+                <span>Microsoft Teams</span>
+              </div>
+            </div>
+            <div class="db-session-features">
+              <div class="db-feat-item">
+                <div class="db-feat-icon">✓</div>
+                <span>Démonstration live de la plateforme</span>
+              </div>
+              <div class="db-feat-item">
+                <div class="db-feat-icon">✓</div>
+                <span>Questions / Réponses avec un expert</span>
+              </div>
+              <div class="db-feat-item">
+                <div class="db-feat-icon">✓</div>
+                <span>Conformité TEIF & intégration DGI</span>
+              </div>
+              <div class="db-feat-item">
+                <div class="db-feat-icon">✓</div>
+                <span>Module KYC & onboarding entreprise</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Calendar -->
+          <div class="db-cal-right">
+            <!-- Month nav -->
+            <div class="db-cal-header">
+              <button class="db-cal-nav" (click)="prevMonth()" aria-label="Mois précédent">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <span class="db-month-label">{{ monthLabel() }}</span>
+              <button class="db-cal-nav" (click)="nextMonth()" aria-label="Mois suivant">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Weekday headers -->
+            <div class="db-cal-weekdays">
+              @for (wd of weekdays; track wd) {
+                <div class="db-wd">{{ wd }}</div>
+              }
+            </div>
+
+            <!-- Days grid -->
+            <div class="db-cal-grid">
+              @for (day of calendarDays(); track day.date.toISOString()) {
+                <button
+                  class="db-day"
+                  [class.db-day--other]="!day.isCurrentMonth"
+                  [class.db-day--today]="day.isToday"
+                  [class.db-day--past]="day.isPast"
+                  [class.db-day--selected]="isSelectedDay(day)"
+                  [class.db-day--weekend]="day.isWeekend"
+                  [disabled]="!day.isCurrentMonth || day.isWeekend"
+                  (click)="selectDay(day)"
+                >
+                  {{ day.dayNum }}
+                </button>
+              }
+            </div>
+
+            <!-- Timezone -->
+            <div class="db-timezone">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M4 6.5c0-1.4 1.1-2.5 2.5-2.5M6.5 9c.8 0 1.5-.7 1.5-1.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+              </svg>
+              Heure de Tunis (GMT+1)
+            </div>
+          </div>
+
+          <!-- Time slots panel (shown when date selected) - NOW ON THE RIGHT -->
+          @if (selectedDate()) {
+            <div class="db-slots-panel db-step-enter">
+              <div class="db-slots-header">
+                <div class="db-slots-date">{{ selectedDateLabel() }}</div>
+                <div class="db-slots-hint">Sélectionnez un créneau</div>
+              </div>
+              <div class="db-slots-grid">
+                @for (slot of timeSlots(); track slot.time) {
+                  <button
+                    class="db-slot"
+                    [class.db-slot--unavailable]="!slot.available"
+                    [class.db-slot--selected]="selectedSlot() === slot.time"
+                    [disabled]="!slot.available"
+                    (click)="selectSlot(slot)"
+                  >
+                    {{ slot.time }}
+                    @if (!slot.available) { <span class="db-slot-taken">Réservé</span> }
+                  </button>
+                }
+              </div>
+              @if (selectedSlot()) {
+                <div class="db-slots-confirm db-step-enter">
+                  <div class="db-confirm-summary">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path d="M7 1L1 4.5v4C1 11.2 3.5 13 7 13.5c3.5-.5 6-2.3 6-5V4.5L7 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                    </svg>
+                    {{ selectedDateLabel() }} · {{ selectedSlot() }}
+                  </div>
+                  <button class="db-btn-ey db-btn-ey--full" (click)="proceedToForm()">
+                    Confirmer ce créneau <span>→</span>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ===== STEP 2 : FORM ===== -->
+    @if (currentStep() === 2) {
+      <div class="db-card db-step-enter">
+        <div class="db-form-header">
+          <button class="db-back-btn" (click)="backToCalendar()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Retour
+          </button>
+          <div class="db-form-slot-badge">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M4 1v2M9 1v2M1 6h11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            {{ selectedDateLabel() }} · {{ selectedSlot() }}
+          </div>
+        </div>
+
+        <h2 class="db-form-title">Vos informations</h2>
+        <p class="db-form-desc">Nous vous enverrons un lien Teams et un rappel par email.</p>
+
+        <form class="db-form" #bookingFormRef="ngForm" (ngSubmit)="submitBooking(bookingFormRef)" novalidate>
+          <div class="db-form-row">
+            <div class="db-field">
+              <label class="db-label" for="prenom">Prénom *</label>
+              <input
+                class="db-input"
+                id="prenom"
+                name="prenom"
+                type="text"
+                placeholder="Votre prénom"
+                [(ngModel)]="bookingForm.prenom"
+                required
+                #prenomCtrl="ngModel"
+                [class.db-input--error]="prenomCtrl.invalid && prenomCtrl.touched"
+              />
+            </div>
+            <div class="db-field">
+              <label class="db-label" for="nom">Nom *</label>
+              <input
+                class="db-input"
+                id="nom"
+                name="nom"
+                type="text"
+                placeholder="Votre nom"
+                [(ngModel)]="bookingForm.nom"
+                required
+                #nomCtrl="ngModel"
+                [class.db-input--error]="nomCtrl.invalid && nomCtrl.touched"
+              />
+            </div>
+          </div>
+
+          <div class="db-field">
+            <label class="db-label" for="email">Email professionnel *</label>
+            <input
+              class="db-input"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="contact@entreprise.tn"
+              [(ngModel)]="bookingForm.email"
+              required
+              email
+              #emailCtrl="ngModel"
+              [class.db-input--error]="emailCtrl.invalid && emailCtrl.touched"
+            />
+          </div>
+
+          <div class="db-form-row">
+            <div class="db-field">
+              <label class="db-label" for="entreprise">Entreprise *</label>
+              <input
+                class="db-input"
+                id="entreprise"
+                name="entreprise"
+                type="text"
+                placeholder="Nom de votre société"
+                [(ngModel)]="bookingForm.entreprise"
+                required
+                #entrepriseCtrl="ngModel"
+                [class.db-input--error]="entrepriseCtrl.invalid && entrepriseCtrl.touched"
+              />
+            </div>
+            <div class="db-field">
+              <label class="db-label" for="telephone">Téléphone</label>
+              <input
+                class="db-input"
+                id="telephone"
+                name="telephone"
+                type="tel"
+                placeholder="+216 XX XXX XXX"
+                [(ngModel)]="bookingForm.telephone"
+              />
+            </div>
+          </div>
+
+          <div class="db-field">
+            <label class="db-label" for="message">Message (optionnel)</label>
+            <textarea
+              class="db-input db-textarea"
+              id="message"
+              name="message"
+              placeholder="Décrivez votre besoin spécifique ou vos questions..."
+              rows="4"
+              [(ngModel)]="bookingForm.message"
+            ></textarea>
+          </div>
+
+          @if (submissionError()) {
+            <div class="db-error-banner">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M7 4.5v3M7 9.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              {{ submissionError() }}
+            </div>
+          }
+
+          <div class="db-form-actions">
+            <button type="button" class="db-btn-ghost" (click)="backToCalendar()">Annuler</button>
+            <button
+              type="submit"
+              class="db-btn-ey"
+              [disabled]="bookingFormRef.invalid || isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                <span class="db-spinner"></span> Envoi en cours...
+              } @else {
+                Confirmer la réservation →
+              }
+            </button>
+          </div>
+
+          <p class="db-form-legal">
+            En soumettant ce formulaire, vous acceptez que vos informations soient utilisées
+            pour planifier votre session de démonstration. Aucune donnée commerciale n'est transmise à des tiers.
+          </p>
+        </form>
+      </div>
+    }
+
+    <!-- ===== STEP 3 : CONFIRMATION ===== -->
+    @if (currentStep() === 3) {
+      <div class="db-card db-card--confirm db-step-enter">
+        <div class="db-confirm-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="16" stroke="var(--c-tuniflow, #FFE600)" stroke-width="1.5"/>
+            <path d="M11 18l5 5 9-9" stroke="var(--c-tuniflow, #FFE600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="db-confirm-title">Réservation confirmée !</h2>
+        <p class="db-confirm-desc">
+          Votre démo est planifiée pour le <strong>{{ selectedDateLabel() }}</strong>
+          à <strong>{{ selectedSlot() }}</strong>.<br><br>
+          Un email de confirmation avec le lien Microsoft Teams vous a été envoyé à
+          <strong>{{ bookingForm.email }}</strong>.
+        </p>
+        <div class="db-confirm-card">
+          <div class="db-confirm-row">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1.5" y="2" width="11" height="10.5" rx="2" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M4.5 1v2M9.5 1v2M1.5 6h11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <span>{{ selectedDateLabel() }} · {{ selectedSlot() }}</span>
+          </div>
+          <div class="db-confirm-row">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M7 4.5v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <span>30 minutes · Microsoft Teams</span>
+          </div>
+          <div class="db-confirm-row">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1.5 3h11l-5.5 5-5.5-5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M1.5 3v8h11V3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ bookingForm.email }}</span>
+          </div>
+        </div>
+        <div class="db-confirm-actions">
+          <button class="db-btn-ghost" (click)="bookAnother()">Planifier une autre session</button>
+          <a routerLink="/landing" class="db-btn-ey">Retour à l'accueil →</a>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Footer minimal -->
+  <footer class="db-footer">
+    <span>© {{ 2026 }} EY-Factify · Ernst & Young Tunisia</span>
+    <span>·</span>
+    <span>Plateforme de facturation électronique TEIF 2026</span>
+  </footer>
+</div>

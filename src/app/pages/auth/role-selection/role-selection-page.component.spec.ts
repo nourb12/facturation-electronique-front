@@ -38,7 +38,7 @@ describe('RoleSelectionPageComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/login/financier']);
   });
 
-  it('toggleTheme délègue au ThemeService', () => {
+  it('toggleTheme dÃ©lÃ¨gue au ThemeService', () => {
     const cmp = create();
     cmp.toggleTheme();
     expect(themeStub.toggle).toHaveBeenCalled();

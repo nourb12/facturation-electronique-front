@@ -90,6 +90,7 @@
         "DASHBOARD": "Dashboard",
         "COMPANIES": "Companies",
         "KYC_REQUESTS": "KYC requests",
+        "DEMO_REQUESTS": "Demo requests",
         "USERS": "Users",
         "INVOICES_GLOBAL": "All invoices",
         "AUDIT": "Audit log",

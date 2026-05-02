@@ -46,7 +46,7 @@ describe('LoginAdminComponent', () => {
     expect(authSpy.login).not.toHaveBeenCalled();
   });
 
-  it('active l’étape 2FA quand utilisateurId présent', () => {
+  it('active lâ€™Ã©tape 2FA quand utilisateurId prÃ©sent', () => {
     authSpy.login.and.returnValue(of({ utilisateurId: 'u1' } as any));
     const cmp = create();
     cmp.form = { identifiant: 'admin', password: '12345678', otp: '' } as any;
@@ -57,7 +57,7 @@ describe('LoginAdminComponent', () => {
     expect(cmp.userId2FA()).toBe('u1');
   });
 
-  it('rejette si rôle pas SuperAdmin', fakeAsync(() => {
+  it('rejette si rÃ´le pas SuperAdmin', fakeAsync(() => {
     authSpy.login.and.returnValue(of(authRes));
     currentRole = 'Admin';
     const cmp = create();
@@ -82,7 +82,7 @@ describe('LoginAdminComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/admin/dashboard']);
   });
 
-  it('verifyOtp avec mauvais rôle nettoie la session', fakeAsync(() => {
+  it('verifyOtp avec mauvais rÃ´le nettoie la session', fakeAsync(() => {
     authSpy.login2FA.and.returnValue(of(authRes));
     currentRole = 'Admin';
     const cmp = create();
@@ -110,7 +110,7 @@ describe('LoginAdminComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/admin/dashboard']);
   });
 
-  it('onSubmit gère erreur serveur', fakeAsync(() => {
+  it('onSubmit gÃ¨re erreur serveur', fakeAsync(() => {
     authSpy.login.and.returnValue(throwError(() => ({ error: { message: 'bad' } })));
     const cmp = create();
     cmp.form = { identifiant: 'admin', password: '12345678', otp: '' } as any;

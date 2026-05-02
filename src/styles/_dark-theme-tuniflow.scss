@@ -1,0 +1,643 @@
+// =============================================================================
+// DARK THEME - TuniFlow
+// =============================================================================
+// Couleurs pour un dark mode professionnel et lisible
+// =============================================================================
+
+// IMPORTANT: Ces couleurs doivent avoir la priorité absolue
+:root[data-theme="dark"] {
+  // ───────────────────────────────────────────────────────────────────────────
+  // COULEUR ACCENT TUNIFLOW YELLOW
+  // ───────────────────────────────────────────────────────────────────────────
+  --c-tuniflow: #FFE600;
+  --c-tuniflow-rgb: 255, 230, 0;
+  --c-tuniflow-wash: #FFF9C2;
+  --c-tuniflow-dim: rgba(255, 230, 0, .08);
+  --c-tuniflow-soft: rgba(255, 230, 0, .14);
+  --c-tuniflow-glow: rgba(255, 230, 0, .22);
+  --b-tuniflow: rgba(255, 230, 0, .18);
+  --c-tuniflow-hover: #FFF176;
+  
+  // Badge jaune vif
+  --tuniflow-capsule-color: #FFE600;
+  --tuniflow-capsule-bg: rgba(255, 230, 0, .08);
+  --tuniflow-capsule-border: rgba(255, 230, 0, .22);
+  --tuniflow-capsule-dot: #FFE600;
+  --tuniflow-btn-text: #0A0A0A;
+  
+  --tuniflow: #FFE600;
+  --tuniflow-rgb: 255, 230, 0;
+  --tuniflow-dim: rgba(255, 230, 0, .08);
+  --tuniflow-soft: rgba(255, 230, 0, .14);
+  --shadow-tuniflow: 0 0 0 1px rgba(255, 230, 0, .18), 0 8px 32px rgba(255, 230, 0, .08);
+
+  --c-accent: #FFE600;
+  --c-accent-text: #0A0A0A;
+  --c-accent-soft: rgba(255, 230, 0, .12);
+  --c-accent-border: rgba(255, 230, 0, .30);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // BACKGROUNDS - Gris-bleu foncés
+  // ───────────────────────────────────────────────────────────────────────────
+  --bg-void: #2E2E38;           // Fond principal
+  --bg-abyss: #25252E;          // Fond le plus profond
+  --bg-depth: #2E2E38;          // Profondeur intermédiaire
+  --bg-surf: #3A3A45;           // Surfaces
+  --bg-card: #3A3A45;           // Cartes (gris-bleu moyen, bien visible)
+  --bg-edge: #45454F;           // Séparateurs
+  --bg-ghost: #4A4A55;          // Hover, ghost
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // BORDURES - Plus visibles pour meilleure définition
+  // ───────────────────────────────────────────────────────────────────────────
+  --b0: rgba(255, 255, 255, .05);
+  --b1: rgba(255, 255, 255, .10);
+  --b2: rgba(255, 255, 255, .15);
+  --b3: rgba(255, 255, 255, .25);
+  --b-subtle: rgba(255, 255, 255, .05);
+  --b-default: rgba(255, 255, 255, .10);
+  --b-strong: rgba(255, 255, 255, .20);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // TEXTES - Haute lisibilité comme sur le site EY
+  // ───────────────────────────────────────────────────────────────────────────
+  --tp: #FFFFFF;                // Texte principal (blanc pur pour titres)
+  --ts: #D1D5DB;                // Texte secondaire (gris clair)
+  --tt: #9CA3AF;                // Texte tertiaire (gris moyen)
+  --tm: #6B7280;                // Texte muted (gris foncé)
+  
+  --t-primary: #FFFFFF;
+  --t-secondary: #D1D5DB;
+  --t-tertiary: #9CA3AF;
+  --t-muted: #6B7280;
+  --t-inverse: #0A0A0A;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // NAVBAR - Comme sur le site EY (gris-bleu foncé avec bonne séparation)
+  // ───────────────────────────────────────────────────────────────────────────
+  --navbar-bg: #3A3A45;
+  --navbar-border: rgba(255, 255, 255, .10);
+  --navbar-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // SIDEBAR
+  // ───────────────────────────────────────────────────────────────────────────
+  --sidebar-bg: #2E2E38;
+  --sidebar-border: rgba(255, 255, 255, .10);
+  --sidebar-text: #FFFFFF;
+  --sidebar-text-act: #FFFFFF;
+  --sidebar-item-active-bg: rgba(255, 230, 0, .15);
+  --sidebar-item-active-border: #FFE600;
+  --sidebar-hover: rgba(255, 255, 255, .08);
+  --sidebar-section: #D1D5DB;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // INPUTS
+  // ───────────────────────────────────────────────────────────────────────────
+  --input-bg: #3A3A45;
+  --input-border: rgba(255, 255, 255, .15);
+  --input-focus: rgba(255, 230, 0, .40);
+  --input-text: #FFFFFF;
+  --input-placeholder: #9CA3AF;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // CARTES
+  // ───────────────────────────────────────────────────────────────────────────
+  --card-bg: #3A3A45;
+  --card-border: rgba(255, 255, 255, .10);
+  --card-shadow: 0 4px 24px rgba(0, 0, 0, .4);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // HEADER & MODAL
+  // ───────────────────────────────────────────────────────────────────────────
+  --header-bg: rgba(58, 58, 69, .97);
+  --header-border: rgba(255, 255, 255, .10);
+  --modal-bg: #3A3A45;
+  --modal-overlay: rgba(0, 0, 0, .80);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // BOUTONS GHOST
+  // ───────────────────────────────────────────────────────────────────────────
+  --btn-ghost-text: #D1D5DB;
+  --btn-ghost-border: rgba(255, 255, 255, .15);
+  --btn-ghost-hover: rgba(255, 255, 255, .08);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // TABLES
+  // ───────────────────────────────────────────────────────────────────────────
+  --table-row-hover: rgba(255, 255, 255, .05);
+  --table-border: rgba(255, 255, 255, .10);
+  --table-header-bg: #2E2E38;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // SCROLLBAR
+  // ───────────────────────────────────────────────────────────────────────────
+  --scrollbar-track: #2E2E38;
+  --scrollbar-thumb: #4A4A55;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // OMBRES
+  // ───────────────────────────────────────────────────────────────────────────
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .35);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, .45);
+  --shadow-xl: 0 24px 80px rgba(0, 0, 0, .55);
+  --shadow-glow: 0 0 40px rgba(255, 230, 0, .10);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // ACCENT & SELECTION
+  // ───────────────────────────────────────────────────────────────────────────
+  --accent-bar: #FFE600;
+  --selection-bg: #FFE600;
+  --selection-text: #0A0A0A;
+  --focus-ring: #FFE600;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // PAGE BACKGROUNDS
+  // ───────────────────────────────────────────────────────────────────────────
+  --page-bg: #2E2E38;
+  --page-content-bg: #2E2E38;
+}
+
+// =============================================================================
+// RÈGLES SPÉCIFIQUES DARK MODE - PRIORITÉ ABSOLUE
+// =============================================================================
+
+[data-theme="dark"] {
+  // Forcer le background sur body et html
+  background: #2E2E38 !important;
+  color: #FFFFFF !important;
+
+  body {
+    background: #2E2E38 !important;
+    color: #FFFFFF !important;
+  }
+
+  // Tous les conteneurs principaux
+  .ml-root,
+  .main-content,
+  .page-layout,
+  .page-wrap,
+  .page-shell,
+  .page-content,
+  .page-container,
+  .dash-layout {
+    background: var(--bg-void) !important;
+    color: var(--tp);
+  }
+
+  // Navbar et sidebar
+  .sidebar,
+  .topbar,
+  .navbar,
+  .dash-topbar,
+  .nav-inner {
+    background: var(--navbar-bg) !important;
+    border-color: var(--navbar-border) !important;
+  }
+
+  // Toutes les cartes
+  .modal-box,
+  .table-box,
+  .table-card,
+  .box,
+  .card,
+  .panel,
+  .content-card,
+  .section-card,
+  .form-card,
+  .stats-card,
+  .summary-card,
+  .detail-card,
+  .widget,
+  .wizard-layout,
+  .right-panel,
+  .cat-card,
+  .doc-card,
+  .doc-upload,
+  .doc-file,
+  .corr-flag-check,
+  .kpi-card,
+  .feature-card,
+  .app-window {
+    background: var(--bg-card) !important;
+    color: var(--tp);
+    border-color: var(--card-border) !important;
+  }
+
+  // Tous les titres
+  .page-title,
+  .topbar-title,
+  .section-title,
+  .modal-title,
+  .detail-section-title,
+  .box-title,
+  .card-title,
+  .info-section-title,
+  .cols-panel-title,
+  .perm-section-title,
+  .fp-section-title,
+  .hero-title,
+  .hero-title-inner,
+  .side-card-title,
+  .step-title,
+  .doc-card__title,
+  .rs-card-title,
+  .dt-title,
+  .lp-headline,
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--tp) !important;
+  }
+
+  // Emphases dans les titres (jaune TuniFlow)
+  .page-title em,
+  .topbar-title em,
+  .section-title em,
+  .modal-title em,
+  .hero-title em,
+  .dt-title em {
+    color: var(--c-tuniflow) !important;
+  }
+
+  // Inputs et formulaires
+  input,
+  textarea,
+  select,
+  .form-input,
+  .inp {
+    background: var(--input-bg) !important;
+    color: var(--input-text) !important;
+    border-color: var(--input-border) !important;
+  }
+
+  // Options des selects
+  option {
+    background: var(--bg-surf);
+    color: var(--tp);
+  }
+
+  // Textes secondaires
+  .page-desc,
+  .box-sub,
+  .card-desc,
+  .hero-desc,
+  .lp-desc {
+    color: var(--ts) !important;
+  }
+
+  // Badges en dark mode - couleurs vives
+  .badge {
+    &--ok {
+      background: rgba(34, 197, 94, .15);
+      color: #4ade80;
+    }
+
+    &--warn {
+      background: rgba(245, 158, 11, .15);
+      color: #fbbf24;
+    }
+
+    &--err {
+      background: rgba(239, 68, 68, .15);
+      color: #f87171;
+    }
+
+    &--info {
+      background: rgba(59, 130, 246, .15);
+      color: #60a5fa;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RÈGLES GLOBALES - APPLICATION FORCÉE SUR TOUS LES COMPOSANTS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Tous les conteneurs de page
+  app-root,
+  app-landing,
+  app-dashboard,
+  app-categories,
+  app-produits,
+  app-clients,
+  app-factures,
+  app-devis,
+  app-avoirs,
+  app-paiements,
+  app-transactions,
+  app-rapports,
+  app-entreprise,
+  app-profil,
+  app-utilisateurs,
+  app-admin-dashboard,
+  app-admin-entreprises,
+  app-admin-utilisateurs,
+  app-admin-demandes-kyc,
+  app-admin-factures,
+  app-admin-audit,
+  app-admin-parametres,
+  app-demande-acces,
+  app-login-entreprise,
+  app-login-admin,
+  app-login-financier,
+  app-register,
+  app-forgot-password,
+  app-role-selection,
+  app-en-attente,
+  .page,
+  .page-container,
+  .page-content,
+  .page-wrapper,
+  .container,
+  .content,
+  .main,
+  .main-content,
+  .app-container {
+    background: var(--bg-void) !important;
+    color: var(--tp);
+  }
+
+  // Tous les wrappers et sections
+  section,
+  .section,
+  .section-content,
+  .content-wrapper,
+  .page-section,
+  .dashboard-section,
+  .form-section {
+    background: transparent !important;
+    color: var(--tp);
+  }
+
+  // Toutes les grilles et listes
+  .grid,
+  .list,
+  .table-wrapper,
+  .data-grid,
+  .items-grid,
+  .cards-grid {
+    background: transparent !important;
+  }
+
+  // Tous les formulaires
+  form,
+  .form,
+  .form-group,
+  .form-row,
+  .form-container,
+  fieldset {
+    background: transparent !important;
+    color: var(--tp);
+  }
+
+  // Tous les labels
+  label,
+  .label,
+  .form-label,
+  .input-label {
+    color: var(--tp) !important;
+  }
+
+  // Tous les paragraphes et textes
+  p,
+  span:not(.badge):not(.btn-arrow),
+  div:not([class*="bg-"]):not([class*="card"]):not([class*="box"]) {
+    color: inherit;
+  }
+
+  // Tous les liens
+  a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-ghost) {
+    color: var(--tp);
+    
+    &:hover {
+      color: var(--c-tuniflow);
+    }
+  }
+
+  // Toutes les listes
+  ul, ol {
+    color: var(--tp);
+  }
+
+  li {
+    color: inherit;
+  }
+
+  // Tous les headers de section
+  .section-header,
+  .page-header,
+  .content-header,
+  .panel-header,
+  .card-header {
+    background: transparent !important;
+    color: var(--tp);
+  }
+
+  // Tous les footers
+  .section-footer,
+  .page-footer,
+  .content-footer,
+  .panel-footer,
+  .card-footer {
+    background: transparent !important;
+    color: var(--ts);
+    border-color: var(--b1) !important;
+  }
+
+  // Tous les dividers
+  hr,
+  .divider,
+  .separator {
+    border-color: var(--b1) !important;
+    background: var(--b1) !important;
+  }
+
+  // Tous les overlays et modals
+  .overlay,
+  .backdrop,
+  .modal-backdrop {
+    background: var(--modal-overlay) !important;
+  }
+
+  // Tous les dropdowns et menus
+  .dropdown,
+  .dropdown-menu,
+  .menu,
+  .context-menu,
+  .select-dropdown {
+    background: var(--bg-card) !important;
+    border-color: var(--b2) !important;
+    color: var(--tp);
+  }
+
+  .dropdown-item,
+  .menu-item {
+    color: var(--tp);
+    
+    &:hover {
+      background: var(--bg-ghost) !important;
+    }
+  }
+
+  // Tous les tooltips
+  .tooltip,
+  .tooltip-content,
+  [role="tooltip"] {
+    background: var(--bg-card) !important;
+    color: var(--tp);
+    border-color: var(--b2) !important;
+  }
+
+  // Tous les popovers
+  .popover,
+  .popover-content {
+    background: var(--bg-card) !important;
+    color: var(--tp);
+    border-color: var(--b2) !important;
+  }
+
+  // Tous les accordions
+  .accordion,
+  .accordion-item,
+  .collapse-panel {
+    background: var(--bg-card) !important;
+    border-color: var(--b1) !important;
+  }
+
+  .accordion-header,
+  .collapse-header {
+    background: transparent !important;
+    color: var(--tp);
+  }
+
+  // Tous les tabs
+  .tabs,
+  .tab-list,
+  .nav-tabs {
+    background: transparent !important;
+    border-color: var(--b1) !important;
+  }
+
+  .tab,
+  .tab-item,
+  .nav-tab {
+    color: var(--ts);
+    
+    &.active,
+    &.selected {
+      color: var(--tp);
+      background: var(--bg-card) !important;
+      border-color: var(--c-tuniflow) !important;
+    }
+  }
+
+  // Tous les breadcrumbs
+  .breadcrumb,
+  .breadcrumb-list {
+    background: transparent !important;
+    color: var(--ts);
+  }
+
+  .breadcrumb-item {
+    color: var(--ts);
+    
+    &.active {
+      color: var(--tp);
+    }
+  }
+
+  // Tous les alerts et notifications
+  .alert,
+  .notification,
+  .message {
+    background: var(--bg-card) !important;
+    color: var(--tp);
+    border-color: var(--b2) !important;
+  }
+
+  // Tous les progress bars
+  .progress,
+  .progress-bar {
+    background: var(--bg-edge) !important;
+  }
+
+  .progress-fill,
+  .progress-value {
+    background: var(--c-tuniflow) !important;
+  }
+
+  // Tous les chips et tags
+  .chip,
+  .tag {
+    background: var(--bg-ghost) !important;
+    color: var(--tp);
+    border-color: var(--b2) !important;
+  }
+
+  // Tous les avatars et images avec background
+  .avatar,
+  .user-avatar,
+  .profile-pic {
+    background: var(--bg-ghost) !important;
+    border-color: var(--b2) !important;
+  }
+
+  // Tous les empty states
+  .empty-state,
+  .no-data,
+  .placeholder {
+    color: var(--tm);
+  }
+
+  // Tous les loaders et spinners
+  .loader,
+  .spinner,
+  .loading {
+    border-color: var(--b2) !important;
+    border-top-color: var(--c-tuniflow) !important;
+  }
+
+  // Badge "TEIF 2026" avec point plus doux
+  .badge,
+  .capsule,
+  .pill {
+    // Badge jaune standard (comme "TEIF 2026")
+    &:not([class*="--"]) {
+      background: var(--tuniflow-capsule-bg) !important;
+      color: var(--tuniflow-capsule-color) !important;
+      border: 1px solid var(--tuniflow-capsule-border) !important;
+    }
+  }
+
+  // Point dans le badge (plus doux)
+  .badge::before,
+  .badge-dot,
+  .capsule::before,
+  .pill::before {
+    background: var(--tuniflow-capsule-dot) !important;
+    opacity: 0.7;
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CORRECTION SPÉCIFIQUE POUR LE TEXTE SURLIGNÉ EN JAUNE
+// ═══════════════════════════════════════════════════════════════════════════
+[data-theme="dark"] {
+  // Texte surligné en jaune (ex: "suivi comptable", "gestion", etc.)
+  .hero-typewriter {
+    // Garder le fond jaune vif
+    background: #FFE600 !important;
+    // MAIS mettre le texte en BLANC pour qu'il soit visible
+    color: #FFFFFF !important;
+  }
+
+  .hero-typeword {
+    // Texte blanc sur fond jaune
+    color: #FFFFFF !important;
+  }
+
+  .hero-caret {
+    // Curseur blanc aussi
+    background: #FFFFFF !important;
+  }
+}

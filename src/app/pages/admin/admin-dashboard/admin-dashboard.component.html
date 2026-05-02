@@ -1,10 +1,10 @@
-ï»¿<div class="dash-layout">
+<div class="dash-layout">
 
   <header class="dash-topbar">
     <div class="dt-left">
       <div class="dt-title-block">
         <h1 class="dt-title">Console <em>admin</em></h1>
-        <span class="dt-bc">Vue dâ€™ensemble admin</span>
+        <span class="dt-bc">Vue d’ensemble admin</span>
       </div>
     </div>
     <div class="dt-center">
@@ -79,7 +79,7 @@
             <div class="kpi-title">Entreprises</div>
             <div class="kpi-value">{{ stats.entreprises }}</div>
             <div class="kpi-meta">
-              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">â†‘</span>+12%</span>
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">?</span>+12%</span>
               <span class="kpi-delta-label">30 jours</span>
             </div>
             <div class="kpi-sub">Actives plateforme</div>
@@ -95,10 +95,10 @@
             <div class="kpi-title">Utilisateurs</div>
             <div class="kpi-value">{{ stats.utilisateurs }}</div>
             <div class="kpi-meta">
-              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">â†‘</span>+4%</span>
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">?</span>+4%</span>
               <span class="kpi-delta-label">30 jours</span>
             </div>
-            <div class="kpi-sub">Tous rÃ´les</div>
+            <div class="kpi-sub">Tous rôles</div>
           </div>
         </div>
         <div class="kpi-card" (click)="router.navigate(['/admin/factures'])">
@@ -112,7 +112,7 @@
             <div class="kpi-title">Factures</div>
             <div class="kpi-value">{{ stats.factures }}</div>
             <div class="kpi-meta">
-              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">â†‘</span>+9%</span>
+              <span class="kpi-delta delta--up"><span class="kpi-delta-arrow">?</span>+9%</span>
               <span class="kpi-delta-label">30 jours</span>
             </div>
             <div class="kpi-sub">Cumul</div>
@@ -130,7 +130,7 @@
             <div class="kpi-title">Retards</div>
             <div class="kpi-value">{{ stats.retard }}</div>
             <div class="kpi-meta">
-              <span class="kpi-delta delta--down"><span class="kpi-delta-arrow">â†“</span>-2</span>
+              <span class="kpi-delta delta--down"><span class="kpi-delta-arrow">?</span>-2</span>
               <span class="kpi-delta-label">Cette semaine</span>
             </div>
             <div class="kpi-sub">En suivi</div>
@@ -181,7 +181,7 @@
 
         <div class="box box--donut">
           <div class="box-header">
-            <div class="box-title">RÃ©partition</div>
+            <div class="box-title">Répartition</div>
           </div>
           <div class="donut-wrapper">
             <svg class="donut-svg" viewBox="0 0 120 120">
@@ -195,7 +195,7 @@
             </svg>
             <div class="donut-center">
               <div class="donut-total">{{ stats.factures }}</div>
-              <div class="donut-label">Ã©lÃ©ments</div>
+              <div class="donut-label">éléments</div>
             </div>
           </div>
           <div class="donut-legend">
@@ -211,10 +211,10 @@
 
         <div class="box box--recent">
           <div class="box-header">
-            <div class="box-title">DerniÃ¨re activitÃ©</div>
+            <div class="box-title">Dernière activité</div>
           </div>
           @if (auditLog.length === 0) {
-            <div class="recent-empty">Aucune entrÃ©e</div>
+            <div class="recent-empty">Aucune entrée</div>
           }
           @for (a of auditLog; track a.action) {
             <div class="recent-row">

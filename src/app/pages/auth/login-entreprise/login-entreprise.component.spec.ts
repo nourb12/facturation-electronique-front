@@ -41,7 +41,7 @@ describe('LoginEntrepriseComponent', () => {
     expect(authSpy.login).not.toHaveBeenCalled();
   });
 
-  it('appelle login puis redirectAfterLogin en succès simple', () => {
+  it('appelle login puis redirectAfterLogin en succÃ¨s simple', () => {
     authSpy.login.and.returnValue(of(authRes));
     const cmp = create();
     cmp.form = { email: 'User@Mail.Com', password: '123456', remember: false };
@@ -54,7 +54,7 @@ describe('LoginEntrepriseComponent', () => {
     expect(cmp.show2FA()).toBeFalse();
   });
 
-  it('affiche étape 2FA quand la réponse contient utilisateurId', () => {
+  it('affiche Ã©tape 2FA quand la rÃ©ponse contient utilisateurId', () => {
     authSpy.login.and.returnValue(of({ utilisateurId: 'u1' } as any));
     const cmp = create();
     cmp.form = { email: 'u@a.b', password: '123456', remember: false };
@@ -66,7 +66,7 @@ describe('LoginEntrepriseComponent', () => {
     expect(authSpy.redirectAfterLogin).not.toHaveBeenCalled();
   });
 
-  it('affiche le message d’erreur en cas d’échec login', fakeAsync(() => {
+  it('affiche le message dâ€™erreur en cas dâ€™Ã©chec login', fakeAsync(() => {
     authSpy.login.and.returnValue(throwError(() => ({ error: { message: 'oops' } })));
     const cmp = create();
     cmp.form = { email: 'u@a.b', password: '123456', remember: false };

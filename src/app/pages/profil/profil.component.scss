@@ -1,18 +1,18 @@
-﻿
 
 
 
 
 
-$ey:    var(--c-ey);
+
+$tuniflow:    var(--c-tuniflow);
 $ok:    #22C55E;
 $err:   #EF4444;
 $info:  #3B82F6;
 $warn:  #F59E0B;
 
-$ey-dim:    rgba(var(--c-ey-rgb),.08);
-$ey-soft:   rgba(var(--c-ey-rgb),.14);
-$ey-glow:   rgba(var(--c-ey-rgb),.22);
+$tuniflow-dim:    rgba(var(--c-tuniflow-rgb),.08);
+$tuniflow-soft:   rgba(var(--c-tuniflow-rgb),.14);
+$tuniflow-glow:   rgba(var(--c-tuniflow-rgb),.22);
 $ok-bg:     rgba(34,197,94,.1);
 $err-bg:    rgba(239,68,68,.1);
 $info-bg:   rgba(59,130,246,.1);
@@ -41,7 +41,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 
 @keyframes fadeUp    { from { opacity:0; transform:translateY(16px) } to { opacity:1; transform:translateY(0) } }
 @keyframes fadeIn    { from { opacity:0 } to { opacity:1 } }
-@keyframes pulseEY   { 0%,100%{box-shadow:0 0 0 0 rgba(var(--c-ey-rgb),0)} 50%{box-shadow:0 0 0 12px rgba(var(--c-ey-rgb),.06)} }
+@keyframes pulseEY   { 0%,100%{box-shadow:0 0 0 0 rgba(var(--c-tuniflow-rgb),0)} 50%{box-shadow:0 0 0 12px rgba(var(--c-tuniflow-rgb),.06)} }
 @keyframes pulseDot  { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 @keyframes orbFloat  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-20px)} }
 @keyframes spin      { to{transform:rotate(360deg)} }
@@ -74,15 +74,15 @@ $ease: cubic-bezier(.16,1,.3,1);
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, $ey 30%, rgba(var(--c-ey-rgb),.4) 60%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, $tuniflow 30%, rgba(var(--c-tuniflow-rgb),.4) 60%, transparent 100%);
 }
 
 
 .hero-grid {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
   background-image:
-    linear-gradient(rgba(var(--c-ey-rgb),.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--c-ey-rgb),.015) 1px, transparent 1px);
+    linear-gradient(rgba(var(--c-tuniflow-rgb),.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--c-tuniflow-rgb),.015) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 0%, transparent 100%);
 }
@@ -91,7 +91,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 .hero-orb {
   position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); z-index: 0;
   animation: orbFloat 12s ease-in-out infinite;
-  &--1 { width:400px; height:400px; top:-15%; right:-5%;  background:radial-gradient(circle, rgba(var(--c-ey-rgb),.07) 0%, transparent 70%); }
+  &--1 { width:400px; height:400px; top:-15%; right:-5%;  background:radial-gradient(circle, rgba(var(--c-tuniflow-rgb),.07) 0%, transparent 70%); }
   &--2 { width:300px; height:300px; bottom:-10%; left:-5%; background:radial-gradient(circle, rgba(59,130,246,.05) 0%, transparent 70%); animation-delay:-4s; animation-direction:reverse; }
   &--3 { width:200px; height:200px; top:20%; left:40%;    background:radial-gradient(circle, rgba(34,197,94,.04) 0%, transparent 70%); animation-delay:-8s; }
 }
@@ -135,13 +135,13 @@ $ease: cubic-bezier(.16,1,.3,1);
 .hero-avatar {
   width: 56px; height: 56px;
   border-radius: 16px;
-  background: $ey;
+  background: $tuniflow;
   color: #000;
   font-family: $fd;
   font-size: 20px; font-weight: 900;
   display: flex; align-items: center; justify-content: center;
   animation: pulseEY 4s ease-in-out infinite;
-  box-shadow: 0 0 0 1px rgba(var(--c-ey-rgb),.3), 0 10px 30px rgba(var(--c-ey-rgb),.12);
+  box-shadow: 0 0 0 1px rgba(var(--c-tuniflow-rgb),.3), 0 10px 30px rgba(var(--c-tuniflow-rgb),.12);
   position: relative; z-index: 1;
 }
 
@@ -259,9 +259,9 @@ $ease: cubic-bezier(.16,1,.3,1);
   white-space: nowrap;
 
   &--active {
-    background: $ey; border-color: $ey; color: #000;
-    box-shadow: 0 4px 20px rgba(var(--c-ey-rgb),.3);
-    &:hover { background: var(--c-ey-hover); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(var(--c-ey-rgb),.4); }
+    background: $tuniflow; border-color: $tuniflow; color: #000;
+    box-shadow: 0 4px 20px rgba(var(--c-tuniflow-rgb),.3);
+    &:hover { background: var(--c-tuniflow-hover); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(var(--c-tuniflow-rgb),.4); }
   }
 
   &--loading { cursor: wait; opacity: .8; }
@@ -339,7 +339,7 @@ $ease: cubic-bezier(.16,1,.3,1);
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--ca, var(--c-ey)), transparent);
+    background: linear-gradient(90deg, transparent, var(--ca, var(--c-tuniflow)), transparent);
     opacity: .5;
   }
 }
@@ -356,7 +356,7 @@ $ease: cubic-bezier(.16,1,.3,1);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 
-  &--ey   { background: $ey-dim;  color: $ey;   border: 1px solid rgba(var(--c-ey-rgb),.15); }
+  &--ey   { background: $tuniflow-dim;  color: $tuniflow;   border: 1px solid rgba(var(--c-tuniflow-rgb),.15); }
   &--err  { background: $err-bg;  color: $err;  border: 1px solid rgba(239,68,68,.2); }
   &--info { background: $info-bg; color: $info; border: 1px solid rgba(59,130,246,.2); }
 }
@@ -367,7 +367,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 
 .card-accent-bar {
   width: 3px; height: 28px;
-  background: var(--ca, var(--c-ey));
+  background: var(--ca, var(--c-tuniflow));
   border-radius: 9999px;
   opacity: .5;
   flex-shrink: 0;
@@ -393,7 +393,7 @@ $ease: cubic-bezier(.16,1,.3,1);
   color: $ts; text-transform: uppercase; letter-spacing: .09em;
 }
 
-.req { color: $ey; }
+.req { color: $tuniflow; }
 
 .field-wrap {
   position: relative;
@@ -424,7 +424,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 
   &::placeholder { color: $tt; }
   &:hover:not(:focus) { border-color: $b2; }
-  &:focus { border-color: rgba(var(--c-ey-rgb),.3); box-shadow: 0 0 0 3px rgba(var(--c-ey-rgb),.06); }
+  &:focus { border-color: rgba(var(--c-tuniflow-rgb),.3); box-shadow: 0 0 0 3px rgba(var(--c-tuniflow-rgb),.06); }
 
   &--icon   { padding-left: 34px; }
   &--prefix { padding-left: 52px; }
@@ -475,7 +475,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 
 .pw-trigger-title { font-size: 13px; font-weight: 700; color: $ts; text-align: left; }
 .pw-trigger-sub   { font-size: 10.5px; color: $tt; margin-top: 2px; text-align: left; }
-.pw-trigger-cta   { font-size: 12px; font-weight: 600; color: $ey; white-space: nowrap; }
+.pw-trigger-cta   { font-size: 12px; font-weight: 600; color: $tuniflow; white-space: nowrap; }
 
 .pw-form {
   padding: 16px;
@@ -548,7 +548,7 @@ $ease: cubic-bezier(.16,1,.3,1);
   border-radius: 9999px; cursor: pointer; transition: all 250ms $ease;
   position: relative;
 
-  .toggle input:checked ~ & { background: $ey; border-color: $ey; }
+  .toggle input:checked ~ & { background: $tuniflow; border-color: $tuniflow; }
 }
 
 .toggle-thumb {
@@ -606,7 +606,7 @@ $ease: cubic-bezier(.16,1,.3,1);
   padding: 18px;
   animation: fadeUp .5s $ease both;
 
-  &--perms { background: linear-gradient(135deg, $surface 0%, rgba(var(--c-ey-rgb),.03) 100%); }
+  &--perms { background: linear-gradient(135deg, $surface 0%, rgba(var(--c-tuniflow-rgb),.03) 100%); }
 }
 
 .side-card-hd {
@@ -639,8 +639,8 @@ $ease: cubic-bezier(.16,1,.3,1);
   &:hover { background: $depth; }
 
   &--current {
-    background: rgba(var(--c-ey-rgb),.04);
-    border: 1px solid rgba(var(--c-ey-rgb),.1);
+    background: rgba(var(--c-tuniflow-rgb),.04);
+    border: 1px solid rgba(var(--c-tuniflow-rgb),.1);
     border-radius: 9px;
   }
 }

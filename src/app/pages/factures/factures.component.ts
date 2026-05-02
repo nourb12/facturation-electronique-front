@@ -184,6 +184,12 @@ export class FacturesComponent implements OnInit {
     this.clients().find(c => c.id === this._draft().clientId) ?? null
   );
 
+  logoFactureUrl = computed(() => {
+    const pdf = this.personnalisation()?.pdf;
+    if (pdf?.options?.showLogo === false) return '';
+    return pdf?.logoUrl || this.entreprise()?.logoUrl || '';
+  });
+
   clientsFiltres = computed(() => {
     const q = this.rechercheClient.toLowerCase().trim();
     if (!q) return this.clients().slice(0, 10);
@@ -266,7 +272,10 @@ export class FacturesComponent implements OnInit {
 
   private chargerPersonnalisation() {
     this.personnSvc.obtenir().subscribe({
-      next: p => this.personnalisation.set(p?.donnees ?? null),
+      next: p => {
+        this.personnalisation.set(p?.donnees ?? null);
+        this._draft.update(d => this.appliquerPersonnalisationAuDraft(d));
+      },
       error: () => {}
     });
   }
@@ -305,7 +314,7 @@ export class FacturesComponent implements OnInit {
             montantHt: l.montantHt ?? 0, montantTva: l.montantTva ?? 0, montantTtc: l.montantTtc ?? 0,
           }))
         }];
-        this._draft.set({
+        this._draft.set(this.appliquerPersonnalisationAuDraft({
           id: detail.id, numero: detail.numero, clientId: detail.clientId,
           typeFacture: detail.typeFacture ?? 'Facture', typeVente: detail.typeVente ?? '',
           devise: detail.devise ?? 'TND',
@@ -321,7 +330,7 @@ export class FacturesComponent implements OnInit {
           conditionsPaiement: detail.conditionsPaiement ?? '',
           etablissement: detail.etablissement ?? '', iban: detail.iban ?? '',
           bic: detail.bic ?? '', reference: detail.reference ?? '',
-        });
+        }));
         this.rechercheClient = this.clients().find(c => c.id === detail.clientId)?.nom ?? '';
         this.view.set('edit');
       },
@@ -471,9 +480,19 @@ export class FacturesComponent implements OnInit {
   }
 
   onDelaiChange(jours: number) {
+    const draft = this._draft();
+    const previousDefault = this.buildDefaultConditions(draft.delaiPaiement || 30);
+    const nextDefault = this.buildDefaultConditions(Number(jours) || 0);
     const d = new Date(this._draft().dateEmission);
     d.setDate(d.getDate() + Number(jours));
-    this._draft.update(dr => ({ ...dr, dateEcheance: d.toISOString().substring(0, 10) }));
+    this._draft.update(dr => ({
+      ...dr,
+      delaiPaiement: Number(jours),
+      dateEcheance: d.toISOString().substring(0, 10),
+      conditionsPaiement: !dr.conditionsPaiement || dr.conditionsPaiement === previousDefault
+        ? nextDefault
+        : dr.conditionsPaiement
+    }));
   }
 
   sauvegarderBrouillon() { this.soumettre(true); }
@@ -492,14 +511,29 @@ export class FacturesComponent implements OnInit {
       clientId: d.clientId, typeFacture: d.typeFacture, modePaiement: d.modePaiement,
       dateEcheance: new Date(d.dateEcheance).toISOString(),
       notes: d.notes || undefined, conditionsPaiement: d.conditionsPaiement || undefined,
-      devise: d.devise, brouillon, lignes,
+      devise: d.devise, reference: d.reference || undefined, brouillon, lignes,
     };
     const obs = d.id ? this.factureSvc.mettreAJour(d.id, req) : this.factureSvc.creer(req);
     obs.subscribe({
       next: (f: any) => {
-        this.saving.set(false);
-        this.toast.success(brouillon ? `Brouillon ${f.numero} enregistré.` : `Facture ${f.numero} finalisée.`);
-        this.retourListe();
+        if (brouillon) {
+          this.saving.set(false);
+          this.toast.success(`Brouillon ${f.numero} enregistr?.`);
+          this.retourListe();
+          return;
+        }
+
+        this.factureSvc.valider(f.id).subscribe({
+          next: (validated) => {
+            this.saving.set(false);
+            this.toast.success(`Facture ${validated.numero} finalis?e.`);
+            this.retourListe();
+          },
+          error: (err) => {
+            this.saving.set(false);
+            this.toast.error(err?.error?.message ?? 'Erreur validation.');
+          }
+        });
       },
       error: (err: any) => { this.saving.set(false); this.toast.error(err?.error?.message ?? 'Erreur sauvegarde.'); }
     });
@@ -676,15 +710,96 @@ export class FacturesComponent implements OnInit {
   }
 
   private draftVide(): FactureDraft {
+    const defaults = this.getDraftDefaultsFromPersonnalisation(this.today());
     return {
-      clientId:'', typeFacture:'Facture', typeVente:'', devise:'TND',
-      dateEmission: this.today(), dateEcheance: this.defaultEcheance(),
+      clientId:'', typeFacture:'Facture', typeVente:'', devise: defaults.devise,
+      dateEmission: this.today(), dateEcheance: defaults.dateEcheance,
       textLibre:'', titre:'', description:'', notes:'',
       sections: [{ id: this.uid(), titre:'Section 1', lignes:[this.nouvelleLigne()] }],
-      remiseGlobale:0, timbreFiscal:false, afficherMfClient:true, afficherIban:false,
-      activerRetenue:false, tauxRetenue:0, modePaiement:'Virement', delaiPaiement:30,
-      conditionsPaiement:'Paiement sous 30 jours', etablissement:'', iban:'', bic:'', reference:'',
+      remiseGlobale:0, timbreFiscal: defaults.timbreFiscal, afficherMfClient:true, afficherIban: defaults.afficherIban,
+      activerRetenue:false, tauxRetenue:0, modePaiement: defaults.modePaiement, delaiPaiement: defaults.delaiPaiement,
+      conditionsPaiement: defaults.conditionsPaiement, etablissement:'', iban: defaults.iban, bic:'', reference:'',
     };
+  }
+
+  private appliquerPersonnalisationAuDraft(draft: FactureDraft): FactureDraft {
+    const defaults = this.getDraftDefaultsFromPersonnalisation(draft.dateEmission || this.today());
+    return {
+      ...draft,
+      devise: draft.devise || defaults.devise,
+      dateEcheance: draft.dateEcheance || defaults.dateEcheance,
+      delaiPaiement: draft.delaiPaiement || defaults.delaiPaiement,
+      conditionsPaiement: draft.conditionsPaiement || defaults.conditionsPaiement,
+      modePaiement: draft.modePaiement || defaults.modePaiement,
+      timbreFiscal: draft.timbreFiscal || defaults.timbreFiscal,
+      afficherIban: draft.afficherIban || defaults.afficherIban,
+      iban: draft.iban || defaults.iban,
+    };
+  }
+
+  private getDraftDefaultsFromPersonnalisation(dateEmission: string) {
+    const personnalisation = this.personnalisation() ?? {};
+    const pdf = personnalisation.pdf ?? {};
+    const conditions = personnalisation.conditions ?? {};
+    const comptabilite = personnalisation.comptabilite ?? {};
+    const delaiPaiement = this.parsePositiveNumber(conditions.delaiPaiement, 30);
+
+    return {
+      devise: comptabilite.devise || conditions.devise || 'TND',
+      delaiPaiement,
+      dateEcheance: this.computeDateEcheance(dateEmission, delaiPaiement),
+      conditionsPaiement: this.buildDefaultConditions(delaiPaiement),
+      modePaiement: this.resolveDefaultModePaiement(),
+      timbreFiscal: !!pdf?.options?.showTimbre,
+      afficherIban: !!pdf?.options?.showIban,
+      iban: typeof pdf?.iban === 'string' ? pdf.iban : '',
+    };
+  }
+
+  private buildDefaultConditions(delaiPaiement: number): string {
+    const cgv = this.personnalisation()?.conditions?.cgv;
+    if (typeof cgv === 'string' && cgv.trim()) return cgv.trim();
+    return `Paiement sous ${delaiPaiement} jours`;
+  }
+
+  private resolveDefaultModePaiement(): string {
+    const modes = this.personnalisation()?.modesPaiement ?? [];
+    const activeMode = modes.find((mode: any) => mode?.actif) ?? null;
+    return this.toInvoiceMode(activeMode?.code, activeMode?.label);
+  }
+
+  private toInvoiceMode(code?: string, label?: string): string {
+    const normalizedCode = String(code ?? '').toUpperCase();
+    if (normalizedCode === 'ESP') return 'Especes';
+    if (normalizedCode === 'CHQ') return 'Cheque';
+    if (normalizedCode === 'LC') return 'Traite';
+    if (normalizedCode === 'ONLINE') return 'CarteBancaire';
+    if (normalizedCode === 'VIR') return 'Virement';
+
+    const normalizedLabel = this.normalizeModeLabel(label);
+    if (normalizedLabel.includes('espece')) return 'Especes';
+    if (normalizedLabel.includes('cheque')) return 'Cheque';
+    if (normalizedLabel.includes('traite') || normalizedLabel.includes('lettre')) return 'Traite';
+    if (normalizedLabel.includes('carte') || normalizedLabel.includes('ligne')) return 'CarteBancaire';
+    return 'Virement';
+  }
+
+  private normalizeModeLabel(value?: string): string {
+    return String(value ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  private parsePositiveNumber(value: unknown, fallback: number): number {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+  }
+
+  private computeDateEcheance(dateEmission: string, delaiPaiement: number): string {
+    const d = new Date(dateEmission || this.today());
+    d.setDate(d.getDate() + delaiPaiement);
+    return d.toISOString().substring(0, 10);
   }
 
   private nouvelleLigne(): LigneFactureDraft {

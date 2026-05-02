@@ -17,6 +17,13 @@ export const routes: Routes = [
       import('./pages/landing/landing.component').then(m => m.LandingComponent)
   },
 
+  // Route pour la réservation de démo
+  {
+    path: 'demande-demo',
+    loadComponent: () =>
+      import('./features/demo-booking/demo-booking.component').then(m => m.DemoBookingComponent)
+  },
+
 
   {
     path: 'role-selection',
@@ -235,6 +242,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/admin/admin-parametres/admin-parametres.component')
             .then(m => m.AdminParametresComponent)
+      },
+      {
+        path: 'demandes-demo',
+        loadComponent: () =>
+          import('./pages/admin/admin-demo-requests/admin-demo-requests.component')
+            .then(m => m.AdminDemoRequestsComponent)
       },
     ]
   },

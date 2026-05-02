@@ -1,0 +1,509 @@
+                     Tuniflow
+Plateforme intermédiaire TTN pour la gestion de
+ la facturation électronique et Suivi Comptable
+    conforme à la réglementation Tunisienne
+
+
+
+                Encadrant académique : Mme Essafi Sarra
+                Encadrant professionnel : Eya Ben Khater
+                Réalisé par : Nour Ben Mna
+                Entreprise d’accueil : EY – Département DE
+                Année : 2026
+     PRÉSENTATION DE
+01   L’ENTREPRISE D’ACCUEIL
+
+
+                          2
+01 - ENTREPRISE D’ACCUEIL
+
+
+
+
+                            Membre des Big Four & leader mondial de :
+                               -l’audit, du conseil, de la fiscalité et des transactions,
+                               -Accompagne les entreprises dans leur transformation
+                        et leur croissance
+
+
+                            Digital Engineering :
+                             -solutions digitales, transformation technologique et IA.
+
+
+
+
+   EY (Ernst & Young)
+
+
+
+
+                                                                                            3
+     CONTEXTE DU
+02
+     PROJET
+
+                   4
+02 -CONTEXTE DU PROJET
+
+
+
+
+   Transformation fiscale                                          Obligation légale à partir de Janvier 2026
+         en Tunisie
+
+            Cadre réglementaire strict                             Utilisation obligatoire du format TEIF
+
+
+                       Contraintes pour les                         Processus complexe et difficile à maîtriser
+                          entreprises
+
+                            Besoin d’une solution automatisée et    Automatiser et centraliser la gestion de la
+                                         sécurisée                  facturation et du suivi comptable
+
+
+
+
+                                                                                                                  5
+       CRITIQUE
+03
+     DE L’EXISTANT
+
+                     6
+03 - CURRENT SITUATION ANALYSIS
+
+
+
+
+           Swiver                                Iberis                               El-Fatoora
+
+
+
+
++    Agréée TTN (conformité officielle)
+                                            +   ERP modulaire complet
+                                                                         +    Conformité réglementaire native
+
+
+
+
+-                                           -                            -
+    Inscription ouverte (risque sécurité)           UX complexe                       Pas de workflow
+
+
+      Manque d’intelligence métier              faible conformité TEIF         Restreint à l’émission de factures
+
+
+
+     Absence de solutions concurrentes intégrant l’extraction automatique des factures papier
+                                                                                                                    7
+04   PROBLÉMATIQUE
+
+
+                     8
+04 - PROBLEM STATEMENT
+
+
+
+           1                      2                       3
+Absence de vérification      manque de                   Manque
+     d’identité             gouvernance et          d’automatisation
+                             de traçabilité            intelligente
+
+
+
+         Comment concevoir une plateforme de facturation
+         électronique sécurisée, gouvernée et intelligente ?
+
+
+
+                                                                       9
+     SOLUTION
+05
+     PROPOSÉE
+
+                10
+05 - SOLUTION PROPOSÉ
+
+
+
+                                                                              Plateforme TuniFlow
+
+
+
+                                                                         Collecte &          Validation &
+                                                                       traitement des          Contrôle
+                                                                          données
+
+                            Acquisition & Digitalisation des données                                        Transmission vers TTN
+
+
+
+
+         Données d’entrée                                              WorkFlow &            Analyse
+                                                                       Gouvernance           intelligente                                Decisions
+ Factures (papier / numérique)
+                                                                                                                         Contrôle fiscal & Enregistrement officiel
+ Données entreprise & clients
+                                                                                                                         Statut légal de la facture
+ Saisie utilisateur
+ Saisie utilisateur manuelle
+
+
+                                              Une facture n'est légale... que si elle est conforme
+
+
+
+
+                                                                                                                                                                     11
+     VALEUR
+05
+     AJOUTÉE
+
+               12
+05 - VALEUR AJOUTÉE
+
+
+
+
+                      Fonctionnalité    TuniFlow
+
+                      XML TEIF / DGI    ✅ Yes      ❌ No      ✅ Yes
+
+
+                      KYC               ✅ Yes      ❌ No      Partiel
+
+
+                      Suivi comptable   ✅ Yes      ✅ Yes     Partiel
+
+
+                      IA prédictive     ✅ Yes      ❌ No      ❌ No
+
+
+                      App mobile OCR    ✅ Yes      Partiel   ❌ No
+
+
+
+
+                                                                       13
+     TECHNOLOGIES
+06
+
+
+                    14
+06 - TECHNOLOGIES
+
+
+   Front End         Back End                  DATA & INFRA         IA & OCR
+
+
+   Angular17     ASP.NET Core (.NET 8)
+                                                 PostgreSQL     FastAPI (Python 3.11)
+
+
+  jsPDF / XLSX     JWT + BCrypt                   Docker           PaddleOCR
+
+
+  face-api.js    FluentValidation              GitHub Actions      Scikit-learn
+
+
+
+
+                                     Mobile
+
+
+                                     Flutter
+                                                                                        15
+     BESOINS
+07
+     FONCTIONNELS
+
+                    16
+07 - BESOINS FONCTIONNELS
+
+
+
+           1                        2                          3
+  Gestion Des Accès,           Gestion Des             Gestion Du Cycle De Vie
+  Utilisateurs Et KYC       Référentiels Métier       Des Factures Et Paiements
+
+
+                        4                         5
+                 Gestion de Suivi          Gestion IA OCR Et
+               Comptable, Reporting             Mobilité
+                   Et Pilotage
+
+
+                                                                              17
+     BESOINS
+08
+     NON FONCTIONNELS
+
+                    18
+04 - PROBLEM STATEMENT
+
+
+
+
+      Sécurité                      Conformité              Utilisabilité (UX/UI)
+
+
+
+
+                 Interopérabilité                  Scalabilité
+
+
+
+
+                             Traçabilité & Audit
+
+
+
+                                                                                    19
+     ARCHITECTURE
+09   LOGIQUE &
+     PHYSIQUE
+
+                    20
+09- ARCHITECTURE LOGIQUE
+
+
+
+ COUCHE 4
+Présentation        Angular            côté clien                       Transversal
+
+
+                                                             MailKit + SMTP             Notifications
+
+ COUCHE 3
+APPLICATION          .Net 8       API REST - Auth JWT -
+                                    Services métier
+
+                                                                                      Automatisation build,
+                                                             DevOps / CI-CD            test et déploiement
+
+
+  COUCHE 2
+  Domaine        Domaine Métier      Règles métier
+
+                                                             JWT / RBAC / 2FA          Contrôle d’accès
+
+
+
+
+                    Postgres
+  COUCHE 1
+Infrastructure                       Application sous test
+
+
+
+
+                                                                                                              21
+                                                      Mobile / Flutter
+
+
+
+
+      Users              HTTPS          Front End                                         Services Externes
+                                         Angular
+
+
+                                                                     DATA & IA SERVICES
+Responsable Entreprise                                                    Postgres
+
+
+                           REST API / HTTPS           ORM
+
+
+                                                                         ML Service
+Responsable Financier
+
+                                        Back End       REST /
+                                      ASP CORE.NET      JSON
+
+
+                                                                                               SMTP
+    Super Admin                                                          OCR Service
+                                       File Storage
+
+                                                                                             Twilio SMS
+    Navigateur
+
+                                                                                                              22
+     METHODOLOGIE &
+09   PLANIFICATION
+
+                      23
+09 - PLANIFICATION AGILE                                                              Sprints Scrum
+
+
+             Phase 1 :                            Phase 2 :                                 Phase 3 :                           Phase 4 :
+      fondation, sécurité et KYC   Gestion Du CDV Des Factures Et Paiements   Suivi Comptrable Dashboard & Reporting   IA, OCR mobile et déploiement
+           Sprints 1 + 2                    Sprints 3 + 4 + 5 + 6                         Sprints 7 + 8                 Sprints 9 + 10 + 11 + 12
+
+
+
+                                       Activités transversales :
+                                    Tests, CI/CD & Documentation
+
+
+
+
+       Objective                           Key Activities                               Deliverables                        Duration
+
+      Socle sécurisé de
+                                      Auth JWT/2FA · Rôles RBAC ·                      Plateforme sécurisée                     4 Weeks
+        la palteforme
+
+
+
+
+validation entreprises via KYC                                                             Pipeline KYC
+                                    Onboarding KYC · Scoring OCR
+          automatis
+
+
+
+                                                                                        Dashboard admin
+
+                                                                                                                                                       24
+09 - PLANIFICATION AGILE                                                    Sprints Scrum
+
+
+             Phase 1 :                         Phase 2 :                          Phase 3 :                           Phase 4 :
+      fondation, sécurité et KYC        Cycle de vie Des Factures   Suivi Comptrable Dashboard & Reporting   IA, OCR mobile et déploiement
+           Sprints 1 + 2                     Sprints 3 + 4                      Sprints 5 à 8                      Sprints 9 à 12
+
+
+
+                                      Activités transversales :
+                                   Tests, CI/CD & Documentation
+
+
+
+
+       Objective                        Key Activities                        Deliverables                        Duration
+
+ Cycle de vie facture complet             Workflow facture                   Module facturation ·                     4 Weeks
+
+
+
+
+conformité réglementaire TEIF                 XML TEIF                          XML validé XSD
+
+
+
+
+                                                                               Transmission TTN
+                                     Signature · Simulation TTN
+                                                                                                                                             25
+09 - PLANIFICATION AGILE                                             Sprints Scrum
+
+
+         Phase 1 :                      Phase 2 :                          Phase 3 :                           Phase 4 :
+  fondation, sécurité et KYC     Cycle de vie Des Factures   Suivi Comptrable Dashboard & Reporting   IA, OCR mobile et déploiement
+       Sprints 1 + 2                  Sprints 3 + 4                      Sprints 5 à 8                      Sprints 9 à 12
+
+
+                                                                  Activités transversales :
+                                                               Tests, CI/CD & Documentation
+
+
+
+
+   Objective                     Key Activities                        Deliverables                        Duration
+
+  Vision Financière                                                  journaux comptables
+                               Gestion De suivi Comptable                                                      8 Weeks
+                                                                 encaissements/décaissements
+
+
+
+
+                               Paiement & Relance auto                 Module paiements
+
+
+
+
+                                                                      Dashboard · Rapports
+                                   Rapports · Export
+                                                                           PDF/CSV
+                                                                                                                                      26
+09 - PLANIFICATION AGILE                                                          Sprints Scrum
+
+
+          Phase 1 :                           Phase 2 :                                 Phase 3 :                               Phase 4 :
+   fondation, sécurité et KYC   Cycle de vie Des Factures Electroniques   Suivi Comptrable Dashboard & Reporting       IA, OCR mobile et déploiement
+        Sprints 1 + 2                       Sprints 3 + 4                             Sprints 5 à 8                          Sprints 9 à 12
+
+
+
+                                                                                                                      Activités transversales :
+                                                                                                                   Tests, CI/CD & Documentation
+
+
+
+
+    Objective                          Key Activities                               Deliverables                            Duration
+
+ Intelligence prédictive                 ML scoring risque                            Score risque                              8 Weeks
+
+
+
+
+                                       OCR mobile Flutter                               App mobile
+         mobilité
+
+
+
+
+                                                                                   Plateforme déployée
+  mise en production                       Docker CI/CD
+                                                                                                                                                       27
+10   ETAT D’AVANCEMENT
+
+
+                     28
+      10 - ETAT D’AVANCEMENT
+
+
+       Phases                  Month 1    Month 2          Month 3       Month 4   Month 5     Month 6
+
+
+Phase 1 :
+fondation, sécurité et KYC      S1 & S2
+
+
+Phase 2 :
+Cycle de vie des factures                 S3 & S4
+electroniques
+
+
+Transversal Phase :
+Tests, CI/CD & Documentation                    S2 - S12
+
+
+Phase 3 :
+Suivi Comptrable                                                S5 -S8
+Dashboard & Reporting
+
+
+Phase 4 :
+IA, OCR mobile et                                                                    S8 -S12
+déploiement
+
+
+
+                                                                                                         29
+                                                                                                          29
+11   DIAGRAMME DE CAS
+     D’UTILISATION
+
+                        30
+31
+12   DEMO
+
+
+            32
+       Merci
+Pour votre Attention
+

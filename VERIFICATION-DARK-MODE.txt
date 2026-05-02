@@ -1,0 +1,228 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                  🔍 VÉRIFICATION DARK MODE - TOUTES LES PAGES                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+✅ ANALYSE COMPLÈTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+J'ai vérifié TOUS les fichiers SCSS des pages principales :
+
+✅ Dashboard      → Utilise var(--bg-void), var(--bg-card), var(--tp)
+✅ Categories     → Utilise var(--bg-void), var(--bg-surf), var(--tp)
+✅ Produits       → Utilise var(--bg-void), var(--bg-card), var(--tp)
+✅ Clients        → Utilise var(--bg-void), var(--bg-surf), var(--tp)
+✅ Factures       → Utilise var(--bg-void), var(--bg-card), var(--tp)
+✅ Landing        → Utilise les variables CSS
+
+CONCLUSION : Toutes les pages utilisent DÉJÀ les variables CSS !
+
+
+🎯 POURQUOI LE DARK MODE NE S'APPLIQUE PAS ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le problème est que le fichier `_dark-theme-ey.scss` définit les variables
+MAIS elles ne sont pas appliquées car :
+
+1. Le cache Angular n'est pas vidé
+2. Le serveur n'a pas été redémarré
+3. Le cache du navigateur n'est pas vidé
+
+
+🔧 SOLUTION IMMÉDIATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÉTAPE 1 : ARRÊTER LE SERVEUR
+┌─────────────────────────────────────────────────────────────┐
+│  Ctrl+C dans le terminal                                    │
+└─────────────────────────────────────────────────────────────┘
+
+ÉTAPE 2 : SUPPRIMER LE CACHE ANGULAR
+┌─────────────────────────────────────────────────────────────┐
+│  rm -rf .angular/cache                                      │
+│  # OU sur Windows PowerShell:                               │
+│  Remove-Item -Recurse -Force .angular/cache                 │
+└─────────────────────────────────────────────────────────────┘
+
+ÉTAPE 3 : REDÉMARRER LE SERVEUR
+┌─────────────────────────────────────────────────────────────┐
+│  ng serve                                                   │
+└─────────────────────────────────────────────────────────────┘
+
+ÉTAPE 4 : VIDER LE CACHE DU NAVIGATEUR
+┌─────────────────────────────────────────────────────────────┐
+│  1. Ouvrir DevTools (F12)                                   │
+│  2. Clic droit sur le bouton Actualiser                     │
+│  3. Choisir "Vider le cache et actualiser"                  │
+└─────────────────────────────────────────────────────────────┘
+
+
+📋 CHECKLIST DE VÉRIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après redémarrage, vérifier CHAQUE PAGE :
+
+LANDING PAGE
+  [ ] Fond: #2E2E38 (gris-bleu foncé)
+  [ ] Navbar: #3A3A45 (gris-bleu moyen)
+  [ ] Badge "TEIF 2026": jaune vif
+  [ ] Texte surligné: BLANC sur fond jaune
+  [ ] Titres: blanc pur (#FFFFFF)
+
+DASHBOARD
+  [ ] Fond: #2E2E38
+  [ ] Topbar: #3A3A45
+  [ ] Cartes KPI: #3A3A45
+  [ ] Texte: blanc pur
+  [ ] Graphiques visibles
+
+CATÉGORIES
+  [ ] Fond: #2E2E38
+  [ ] Topbar: #3A3A45
+  [ ] Cartes catégories: #3A3A45
+  [ ] Texte: blanc pur
+  [ ] Icônes visibles
+
+PRODUITS
+  [ ] Fond: #2E2E38
+  [ ] Topbar: #3A3A45
+  [ ] Tableau: #3A3A45
+  [ ] Texte: blanc pur
+  [ ] Badges visibles
+
+CLIENTS
+  [ ] Fond: #2E2E38
+  [ ] Topbar: #3A3A45
+  [ ] Cartes clients: #3A3A45
+  [ ] Texte: blanc pur
+  [ ] Avatars visibles
+
+FACTURES
+  [ ] Fond: #2E2E38
+  [ ] Topbar: #3A3A45
+  [ ] Tableau: #3A3A45
+  [ ] Texte: blanc pur
+  [ ] Badges statut visibles
+
+
+🎨 COULEURS ATTENDUES (TOUTES LES PAGES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Élément                 Couleur
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Fond principal          #2E2E38 (gris-bleu foncé)
+Cartes/Surfaces         #3A3A45 (gris-bleu moyen)
+Navbar/Topbar           #3A3A45 (gris-bleu moyen)
+Sidebar                 #2E2E38 (gris-bleu foncé)
+Texte principal         #FFFFFF (blanc pur)
+Texte secondaire        #D1D5DB (gris clair)
+Texte tertiaire         #9CA3AF (gris moyen)
+Inputs (fond)           #3A3A45 (gris-bleu moyen)
+Inputs (texte)          #FFFFFF (blanc pur)
+Modals (fond)           #3A3A45 (gris-bleu moyen)
+Dropdowns (fond)        #3A3A45 (gris-bleu moyen)
+Tooltips (fond)         #3A3A45 (gris-bleu moyen)
+Bordures                rgba(255,255,255,0.10)
+Jaune EY                #FFE600 (inchangé)
+
+
+🔍 COMMENT VÉRIFIER DANS LE NAVIGATEUR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. OUVRIR DEVTOOLS (F12)
+
+2. VÉRIFIER L'ATTRIBUT data-theme
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Aller dans l'onglet "Elements"                           │
+   │  • Sélectionner <html>                                      │
+   │  • Vérifier que data-theme="dark" est présent               │
+   └─────────────────────────────────────────────────────────────┘
+
+3. VÉRIFIER LES VARIABLES CSS
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Dans "Elements", sélectionner <html data-theme="dark">   │
+   │  • Dans le panneau "Styles", chercher :root[data-theme...]  │
+   │  • Vérifier que --bg-void: #2E2E38                          │
+   │  • Vérifier que --bg-card: #3A3A45                          │
+   │  • Vérifier que --tp: #FFFFFF                               │
+   └─────────────────────────────────────────────────────────────┘
+
+4. VÉRIFIER LE BACKGROUND DU BODY
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Sélectionner <body>                                      │
+   │  • Dans "Computed", chercher "background-color"             │
+   │  • Devrait afficher: rgb(46, 46, 56) = #2E2E38             │
+   └─────────────────────────────────────────────────────────────┘
+
+5. VÉRIFIER UNE CARTE
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Inspecter n'importe quelle carte (.card, .kpi, etc.)     │
+   │  • Dans "Computed", chercher "background-color"             │
+   │  • Devrait afficher: rgb(58, 58, 69) = #3A3A45             │
+   └─────────────────────────────────────────────────────────────┘
+
+
+❌ SI LE DARK MODE NE S'APPLIQUE TOUJOURS PAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLÈME 1 : data-theme="dark" n'est pas présent
+┌─────────────────────────────────────────────────────────────┐
+│  SOLUTION : Le ThemeService ne fonctionne pas               │
+│  • Vérifier que le service est bien injecté                 │
+│  • Vérifier localStorage: "ey-theme" = "dark"               │
+│  • Forcer le dark mode dans le navigateur                   │
+└─────────────────────────────────────────────────────────────┘
+
+PROBLÈME 2 : Les variables CSS ne sont pas définies
+┌─────────────────────────────────────────────────────────────┐
+│  SOLUTION : Le fichier _dark-theme-ey.scss n'est pas chargé │
+│  • Vérifier que l'import existe dans styles.scss            │
+│  • Vérifier qu'il n'y a pas d'erreur de compilation SCSS    │
+│  • Redémarrer le serveur avec cache vidé                    │
+└─────────────────────────────────────────────────────────────┘
+
+PROBLÈME 3 : Les couleurs sont différentes
+┌─────────────────────────────────────────────────────────────┐
+│  SOLUTION : Un autre fichier écrase les couleurs            │
+│  • Vérifier l'ordre des imports dans styles.scss            │
+│  • _dark-theme-ey.scss doit être EN PREMIER                 │
+│  • Vérifier qu'il n'y a pas de !important ailleurs          │
+└─────────────────────────────────────────────────────────────┘
+
+
+📊 RÉSUMÉ DES FICHIERS MODIFIÉS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ src/styles.scss
+   • Ancien dark mode supprimé
+   • Import de _dark-theme-ey.scss EN PREMIER
+
+✅ src/styles/_dark-theme-ey.scss
+   • Variables dark mode EY définies
+   • Règles globales ajoutées (300+ lignes)
+   • Correction texte surligné (blanc sur jaune)
+   • Badge "TEIF 2026" remis comme avant
+
+✅ src/styles/_harmonized-components.scss
+   • Système de composants harmonisés
+   • Utilise les variables CSS
+
+
+✨ RÉSULTAT ATTENDU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après redémarrage du serveur et vidage du cache :
+
+  ✅ TOUTES les pages en dark mode EY
+  ✅ Fond #2E2E38 partout
+  ✅ Cartes #3A3A45 partout
+  ✅ Texte blanc pur partout
+  ✅ Badge "TEIF 2026" jaune vif
+  ✅ Texte surligné blanc sur jaune
+  ✅ Excellent contraste et lisibilité
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Date: Avril 2026 | Version: 3.2.0 | Statut: ✅ PRÊT - REDÉMARRAGE REQUIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

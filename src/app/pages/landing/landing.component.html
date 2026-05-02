@@ -27,7 +27,7 @@
       <app-language-switcher></app-language-switcher>
       <a routerLink="/login/entreprise" class="btn-ghost-sm">{{ 'LANDING.CTA.SIGN_IN' | translate }}</a>
       <a routerLink="/demande-acces" class="btn-ey-sm">
-        {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }} <span class="btn-arrow">&#8594;</span>
+        {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }}
       </a>
     </div>
   </div>
@@ -44,8 +44,11 @@
         <span class="hero-title-line">
           <span class="hero-title-inner">{{ 'LANDING.HERO.TITLE_TOP' | translate }}</span>
         </span>
-        <span class="hero-title-line">
-          <span class="hero-title-inner hero-em">{{ 'LANDING.HERO.TITLE_HIGHLIGHT' | translate }}</span>
+        <span class="hero-title-line hero-title-line--typed">
+          <span class="hero-title-inner hero-typewriter" dir="auto">
+            <span class="hero-typeword">{{ heroTypedWord() }}</span>
+            <span class="hero-caret" aria-hidden="true"></span>
+          </span>
         </span>
         <span class="hero-title-line">
           <span class="hero-title-inner">{{ 'LANDING.HERO.TITLE_BOTTOM' | translate }}</span>
@@ -58,7 +61,7 @@
         <a routerLink="/demande-acces" class="btn-primary">
           {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} <span class="btn-arrow">&#8594;</span>
         </a>
-        <a href="#workflow" class="btn-outline" (click)="scrollToSection($event, 'workflow')">
+        <a routerLink="/demande-demo" class="btn-outline">
           {{ 'LANDING.CTA.SEE_DEMO' | translate }} <span class="btn-arrow">&#8594;</span>
         </a>
       </div>
@@ -107,7 +110,7 @@
           </div>
 
           <div class="preview-kpis">
-            <div class="preview-kpi preview-kpi--ey">
+            <div class="preview-kpi preview-kpi--tuniflow">
               <div class="pk-lbl">{{ 'LANDING.PREVIEW.KPI_TEIF' | translate }}</div>
               <div class="pk-val">100%</div>
               <div class="pk-delta up">{{ 'LANDING.PREVIEW.KPI_TEIF_STATUS' | translate }}</div>
@@ -298,7 +301,7 @@
                 cy="80"
                 r="68"
                 fill="none"
-                stroke="var(--c-ey)"
+                stroke="var(--c-tuniflow)"
                 stroke-width="8"
                 stroke-linecap="round"
                 stroke-dasharray="427.3"

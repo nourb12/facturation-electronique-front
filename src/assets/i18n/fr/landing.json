@@ -19,10 +19,16 @@
       "SEE_DEMO": "Voir le fonctionnement"
     },
     "HERO": {
-      "TITLE_TOP": "Automatisez votre",
-      "TITLE_HIGHLIGHT": "facturation électronique",
-      "TITLE_BOTTOM": "conforme TEIF 2026",
-      "DESC": "De la création à la transmission DGI, tout est automatisé, sécurisé et conforme."
+      "TITLE_TOP": "La plateforme de",
+      "TITLE_BOTTOM": "qu'il vous faut",
+      "DESC": "De la facturation électronique au suivi comptable, pilotez votre activité avec une plateforme unifiée, sécurisée et conforme.",
+      "WORDS": {
+        "INVOICING": "facturation électronique",
+        "ACCOUNTING": "suivi comptable",
+        "RISK": "analyse de risque",
+        "PURCHASING": "gestion d'achat",
+        "SALES": "gestion de vente"
+      }
     },
     "TRUST": {
       "COMPLIANT": "Conforme TEIF 2026",

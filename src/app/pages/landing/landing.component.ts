@@ -6,7 +6,7 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 
@@ -82,12 +82,19 @@ export class LandingComponent implements OnInit, OnDestroy {
   cursorY = 0;
   ringX = 0;
   ringY = 0;
+  heroTypedWord = signal('');
 
   private rafId?: number;
   private mx = 0;
   private my = 0;
   private statsAnimated = false;
   private statsRafId?: number;
+  private heroTimer?: number;
+  private heroWordIndex = 0;
+  private heroCharIndex = 0;
+  private heroDeleting = false;
+  private heroWords: string[] = [];
+  private langChangeSub?: { unsubscribe(): void };
   private observers: IntersectionObserver[] = [];
   private platformId = inject(PLATFORM_ID);
 
@@ -284,13 +291,16 @@ export class LandingComponent implements OnInit, OnDestroy {
   constructor(
     private el: ElementRef,
     private zone: NgZone,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+
+    this.initHeroTypewriter();
 
     this.zone.runOutsideAngular(() => {
       const loop = () => {
@@ -317,6 +327,11 @@ export class LandingComponent implements OnInit, OnDestroy {
       cancelAnimationFrame(this.statsRafId);
     }
 
+    if (this.heroTimer) {
+      clearTimeout(this.heroTimer);
+    }
+
+    this.langChangeSub?.unsubscribe();
     this.observers.forEach(observer => observer.disconnect());
     document.body.style.overflow = '';
   }
@@ -411,6 +426,89 @@ export class LandingComponent implements OnInit, OnDestroy {
     };
 
     this.statsRafId = requestAnimationFrame(render);
+  }
+
+  private initHeroTypewriter(): void {
+    this.syncHeroWords(true);
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => {
+      this.syncHeroWords(true);
+    });
+  }
+
+  private syncHeroWords(restart: boolean): void {
+    this.heroWords = [
+      this.translate.instant('LANDING.HERO.WORDS.INVOICING'),
+      this.translate.instant('LANDING.HERO.WORDS.ACCOUNTING'),
+      this.translate.instant('LANDING.HERO.WORDS.RISK'),
+      this.translate.instant('LANDING.HERO.WORDS.PURCHASING'),
+      this.translate.instant('LANDING.HERO.WORDS.SALES')
+    ].filter(word => typeof word === 'string' && word.trim().length > 0);
+
+    if (!this.heroWords.length) {
+      this.heroTypedWord.set('');
+      return;
+    }
+
+    if (!restart) {
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.heroTypedWord.set(this.heroWords[0]);
+      return;
+    }
+
+    this.heroWordIndex = 0;
+    this.heroCharIndex = 0;
+    this.heroDeleting = false;
+    this.heroTypedWord.set('');
+
+    if (this.heroTimer) {
+      clearTimeout(this.heroTimer);
+    }
+
+    this.scheduleHeroTick(220);
+  }
+
+  private scheduleHeroTick(delay: number): void {
+    if (this.heroTimer) {
+      clearTimeout(this.heroTimer);
+    }
+
+    this.heroTimer = window.setTimeout(() => this.tickHeroTyping(), delay);
+  }
+
+  private tickHeroTyping(): void {
+    const currentWord = this.heroWords[this.heroWordIndex] ?? '';
+    if (!currentWord) {
+      return;
+    }
+
+    if (this.heroDeleting) {
+      this.heroCharIndex = Math.max(0, this.heroCharIndex - 1);
+      this.heroTypedWord.set(currentWord.slice(0, this.heroCharIndex));
+
+      if (this.heroCharIndex === 0) {
+        this.heroDeleting = false;
+        this.heroWordIndex = (this.heroWordIndex + 1) % this.heroWords.length;
+        this.scheduleHeroTick(180);
+        return;
+      }
+
+      this.scheduleHeroTick(38);
+      return;
+    }
+
+    this.heroCharIndex = Math.min(currentWord.length, this.heroCharIndex + 1);
+    this.heroTypedWord.set(currentWord.slice(0, this.heroCharIndex));
+
+    if (this.heroCharIndex === currentWord.length) {
+      this.heroDeleting = true;
+      this.scheduleHeroTick(1400);
+      return;
+    }
+
+    this.scheduleHeroTick(82);
   }
 
   private initObservers(): void {

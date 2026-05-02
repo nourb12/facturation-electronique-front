@@ -19,10 +19,16 @@
       "SEE_DEMO": "See how it works"
     },
     "HERO": {
-      "TITLE_TOP": "Automate your",
-      "TITLE_HIGHLIGHT": "electronic invoicing",
-      "TITLE_BOTTOM": "with TEIF 2026 compliance",
-      "DESC": "From invoice creation to DGI transmission, everything is automated, secure, and compliant."
+      "TITLE_TOP": "The platform for",
+      "TITLE_BOTTOM": "your business needs",
+      "DESC": "From electronic invoicing to accounting follow-up, manage your activity through one secure and compliant platform.",
+      "WORDS": {
+        "INVOICING": "electronic invoicing",
+        "ACCOUNTING": "accounting follow-up",
+        "RISK": "risk analysis",
+        "PURCHASING": "purchasing management",
+        "SALES": "sales management"
+      }
     },
     "TRUST": {
       "COMPLIANT": "TEIF 2026 compliant",

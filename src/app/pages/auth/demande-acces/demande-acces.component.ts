@@ -56,15 +56,24 @@ export interface WizardStep {
   desc: string;
 }
 
-type Step = 'form' | 'confirmation';
+export type ProfileChoice = 'independant' | 'entreprise' | null;
+
+type RootStep = 'profile-choice' | 'form' | 'confirmation';
 
 // Champs requis par étape
-const STEP1_FIELDS: (keyof DemandeAccesForm)[] = [
+const STEP1_FIELDS_ENTREPRISE: (keyof DemandeAccesForm)[] = [
   'raisonSociale', 'matriculeFiscal', 'formeJuridique', 'nomEntreprise',
-  'adresse', 'gouvernorat', 'codePostal', 'telEntreprise'
+  'adresse', 'gouvernorat', 'codePostal', 'telEntreprise', 'respEmail'
 ];
-const STEP2_FIELDS: (keyof DemandeAccesForm)[] = [
+const STEP1_FIELDS_INDEPENDANT: (keyof DemandeAccesForm)[] = [
+  'raisonSociale', 'matriculeFiscal', 'formeJuridique', 'nomEntreprise',
+  'adresse', 'gouvernorat', 'telEntreprise'
+];
+const STEP2_FIELDS_ENTREPRISE: (keyof DemandeAccesForm)[] = [
   'respPrenom', 'respNom', 'respFonction', 'respEmail', 'respTel'
+];
+const STEP2_FIELDS_INDEPENDANT: (keyof DemandeAccesForm)[] = [
+  'codePostal', 'respPrenom', 'respNom', 'respFonction', 'respEmail', 'respTel'
 ];
 
 const DRAFT_KEY = 'da_draft_form';
@@ -135,15 +144,21 @@ export class DemandeAccesComponent implements OnDestroy {
   private http   = inject(HttpClient);
   private translate = inject(TranslateService);
 
-  step         = signal<Step>('form');
+  step         = signal<RootStep>('profile-choice');
+  profileChoice = signal<ProfileChoice>(null);
   currentStep  = signal<1 | 2 | 3>(1);
 
-  readonly steps: WizardStep[] = [
+  readonly stepsEntreprise: WizardStep[] = [
     { id: 1, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP1.LABEL', icon: '1', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP1.DESC' },
     { id: 2, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP2.LABEL', icon: '2', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP2.DESC' },
     { id: 3, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP3.LABEL', icon: '3', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP3.DESC' },
   ];
-  stepProgressPct = computed(() => Math.round((this.currentStep() / this.steps.length) * 100));
+  readonly stepsIndependant: WizardStep[] = [
+    { id: 1, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP1.LABEL', icon: '1', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP1.DESC' },
+    { id: 2, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP2_INDEPENDANT.LABEL', icon: '2', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP2_INDEPENDANT.DESC' },
+    { id: 3, label: 'AUTH.ACCESS_REQUEST.STEPS.STEP3.LABEL', icon: '3', desc: 'AUTH.ACCESS_REQUEST.STEPS.STEP3.DESC' },
+  ];
+  stepProgressPct = computed(() => Math.round((this.currentStep() / this.stepsForProfile().length) * 100));
   submitting   = signal(false);
   errors       = signal<Record<string, string>>({});
   dragTarget   = signal<string | null>(null);
@@ -153,6 +168,7 @@ export class DemandeAccesComponent implements OnDestroy {
   draftSavedAt = signal<Date | null>(null);
   draftAvailable = signal(false);
   copySuccess = signal(false);
+  activeDropdown = signal<string | null>(null);
   private documentsVersion = signal(0);
 
   form: DemandeAccesForm = {
@@ -195,6 +211,85 @@ export class DemandeAccesComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.draftTimer) clearTimeout(this.draftTimer);
     this.langChangeSub.unsubscribe();
+  }
+
+  stepsForProfile(): WizardStep[] {
+    return this.profileChoice() === 'independant'
+      ? this.stepsIndependant
+      : this.stepsEntreprise;
+  }
+
+  isDocumentStep(): boolean {
+    return this.profileChoice() === 'independant'
+      ? this.currentStep() === 3
+      : this.currentStep() === 3;
+  }
+
+  chooseProfile(profile: 'independant' | 'entreprise'): void {
+    this.profileChoice.set(profile);
+    this.currentStep.set(1);
+    this.step.set('form');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  backToProfileChoice(): void {
+    this.step.set('profile-choice');
+    this.currentStep.set(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  isDropdownOpen(name: string): boolean {
+    return this.activeDropdown() === name;
+  }
+
+  toggleDropdown(name: string): void {
+    this.activeDropdown.update(current => current === name ? null : name);
+  }
+
+  closeDropdowns(): void {
+    this.activeDropdown.set(null);
+  }
+
+  selectDropdownValue(field: keyof DemandeAccesForm, value: string, shouldValidate = true): void {
+    this.form[field] = value as never;
+    if (shouldValidate) {
+      this.validateField(field);
+    }
+    this.closeDropdowns();
+  }
+
+  selectSecteurActivite(value: string): void {
+    this.selectDropdownValue('raisonSociale', value);
+  }
+
+  clearSecteurActivite(): void {
+    this.form.raisonSociale = '';
+    this.validateField('raisonSociale');
+    this.closeDropdowns();
+  }
+
+  secteurActiviteLabel(): string {
+    const selected = this.secteursActivite.find(secteur => secteur.value === this.form.raisonSociale);
+    return selected ? this.t(selected.labelKey) : '';
+  }
+
+  formeJuridiqueLabel(): string {
+    const selected = this.formesJuridiques.find(item => item.value === this.form.formeJuridique);
+    return selected ? this.t(selected.labelKey) : '';
+  }
+
+  gouvernoratLabel(): string {
+    const selected = this.gouvernorats.find(item => item.value === this.form.gouvernorat);
+    return selected ? this.t(selected.labelKey) : '';
+  }
+
+  fonctionLabel(): string {
+    const selected = this.fonctions.find(item => item.value === this.form.respFonction);
+    return selected ? this.t(selected.labelKey) : '';
+  }
+
+  deviseLabel(): string {
+    return this.form.devisePrincipale || '';
   }
 
   // DRAFT (auto-save)
@@ -278,6 +373,20 @@ export class DemandeAccesComponent implements OnDestroy {
     { value: 'Association', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.ASSOCIATION' },
     { value: 'Groupement', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.GROUPEMENT' },
     { value: 'Autre', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.OTHER' },
+  ];
+  readonly secteursActivite: SelectOption[] = [
+    { value: 'Technologies & logiciels', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.TECH' },
+    { value: 'Commerce & distribution', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.COMMERCE' },
+    { value: 'Services professionnels', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.SERVICES' },
+    { value: 'Industrie & fabrication', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.INDUSTRY' },
+    { value: 'BTP & construction', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.CONSTRUCTION' },
+    { value: 'Santé & médical', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.HEALTH' },
+    { value: 'Education & formation', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.EDUCATION' },
+    { value: 'Transport & logistique', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.TRANSPORT' },
+    { value: 'Hôtellerie & restauration', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.HOSPITALITY' },
+    { value: 'Agroalimentaire', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.AGRO' },
+    { value: 'Marketing & communication', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.MARKETING' },
+    { value: 'Finance & assurance', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.ACTIVITY_SECTORS.FINANCE' },
   ];
   readonly gouvernorats: SelectOption[] = [
     { value: 'Tunis', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.GOVERNORATES.TUNIS' },
@@ -402,6 +511,18 @@ export class DemandeAccesComponent implements OnDestroy {
     }
   }
 
+  private step1Fields(): (keyof DemandeAccesForm)[] {
+    return this.profileChoice() === 'independant'
+      ? STEP1_FIELDS_INDEPENDANT
+      : STEP1_FIELDS_ENTREPRISE;
+  }
+
+  private step2Fields(): (keyof DemandeAccesForm)[] {
+    return this.profileChoice() === 'independant'
+      ? STEP2_FIELDS_INDEPENDANT
+      : STEP2_FIELDS_ENTREPRISE;
+  }
+
   // Navigation stepper
   goToStep(n: 1 | 2 | 3): void {
     const current = this.currentStep();
@@ -414,6 +535,17 @@ export class DemandeAccesComponent implements OnDestroy {
     }
 
     this.currentStep.set(n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  nextFromStep1(): void {
+    if (!this.validateStep(1)) return;
+    this.currentStep.set(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  goToPrevDocStep(): void {
+    this.currentStep.set(2);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -436,7 +568,11 @@ export class DemandeAccesComponent implements OnDestroy {
   /** Validation de toute l'étape */
   private validateStep(step: 1 | 2 | 3): boolean {
     const e: Record<string, string> = {};
-    const fields = step === 1 ? STEP1_FIELDS : step === 2 ? STEP2_FIELDS : [];
+    const fields = step === 1
+      ? this.step1Fields()
+      : step === 2
+        ? this.step2Fields()
+        : [];
     for (const key of fields) {
       this.runFieldValidation(key, this.form, e);
     }
@@ -465,7 +601,10 @@ export class DemandeAccesComponent implements OnDestroy {
   /** Validation complète avant submit */
   private validateAll(): boolean {
     const e: Record<string, string> = {};
-    for (const key of [...STEP1_FIELDS, ...STEP2_FIELDS]) {
+    for (const key of this.step1Fields()) {
+      this.runFieldValidation(key, this.form, e);
+    }
+    for (const key of this.step2Fields()) {
       this.runFieldValidation(key, this.form, e);
     }
     if (this.form.respFonction === 'Autre') {
@@ -800,12 +939,13 @@ export class DemandeAccesComponent implements OnDestroy {
     fd.append('telEntreprise',    this.form.telEntreprise);
     fd.append('devisePrincipale', this.form.devisePrincipale || 'TND');
     fd.append('email',            this.form.respEmail);
-    fd.append('telephone',        this.form.respTel);
+    fd.append('telephone',        this.form.respTel || this.form.telEntreprise);
     fd.append('respEmail',        this.form.respEmail);
     fd.append('respPrenom',       this.form.respPrenom);
     fd.append('respNom',          this.form.respNom);
     fd.append('respFonction',     this.form.respFonction);
-    fd.append('respTel',          this.form.respTel);
+    fd.append('respTel',          this.form.respTel || this.form.telEntreprise);
+    fd.append('profileType',      this.profileChoice() || 'entreprise');
     if (this.form.respFonction === 'Autre' && this.form.respFonctionAutre.trim()) {
       fd.append('respFonctionAutre', this.form.respFonctionAutre);
     }
@@ -859,10 +999,21 @@ export class DemandeAccesComponent implements OnDestroy {
     return this.matriculeFocused() || !!this.errors()['matriculeFiscal'];
   }
 
+  canContinueStep1(): boolean {
+    if (this.submitting()) return false;
+    const e: Record<string, string> = {};
+    for (const key of this.step1Fields()) {
+      this.runFieldValidation(key, this.form, e);
+    }
+    return Object.keys(e).length === 0;
+  }
+
   canContinue(step: 1 | 2): boolean {
     if (this.submitting()) return false;
     const e: Record<string, string> = {};
-    const fields = step === 1 ? STEP1_FIELDS : STEP2_FIELDS;
+    const fields = step === 1
+      ? this.step1Fields()
+      : this.step2Fields();
     for (const key of fields) {
       this.runFieldValidation(key, this.form, e);
     }
@@ -905,13 +1056,24 @@ export class DemandeAccesComponent implements OnDestroy {
     }
   }
 
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.closeDropdowns();
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscapeKey(): void {
+    this.closeDropdowns();
+  }
+
 
   // Utilitaires
   cardInitials(): string {
+    const nc = this.form.nomEntreprise.trim();
+    if (nc.length >= 2) return nc.slice(0, 2).toUpperCase();
     const rs = this.form.raisonSociale.trim();
     if (rs.length >= 2) return rs.slice(0, 2).toUpperCase();
     const rsOne = rs.length === 1 ? rs : '';
-    const nc = this.form.nomEntreprise.trim();
     if (rsOne || nc) return (rsOne + (nc[0] || '')).toUpperCase();
     const rp = this.form.respPrenom.trim();
     const rn = this.form.respNom.trim();

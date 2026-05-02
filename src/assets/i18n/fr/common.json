@@ -90,6 +90,7 @@
         "DASHBOARD": "Tableau de bord",
         "COMPANIES": "Entreprises",
         "KYC_REQUESTS": "Demandes KYC",
+        "DEMO_REQUESTS": "Demandes démo",
         "USERS": "Utilisateurs",
         "INVOICES_GLOBAL": "Factures globales",
         "AUDIT": "Journal d'audit",

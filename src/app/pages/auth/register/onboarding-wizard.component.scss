@@ -4,9 +4,9 @@
 // -----------------------------------------------------------------------------
 
 // -- Tokens -------------------------------------------------------------------
-$ey:      #FFE600;
-$ey-dim:  rgba(255,230,0,.07);
-$ey-glow: rgba(255,230,0,.18);
+$tuniflow:      #FFE600;
+$tuniflow-dim:  rgba(255,230,0,.07);
+$tuniflow-glow: rgba(255,230,0,.18);
 
 $void:    #000000;
 $abyss:   #050505;
@@ -163,7 +163,7 @@ $panel-w: 280px;
 
 .lp-mark {
   width: 34px; height: 34px;
-  background: $ey;
+  background: $tuniflow;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 900; color: #000;
@@ -221,7 +221,7 @@ $panel-w: 280px;
   em {
     font-style: italic;
     color: #0A0A0A;
-    background: $ey;
+    background: $tuniflow;
     padding: 0 .18em .06em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
@@ -269,7 +269,7 @@ $panel-w: 280px;
   background: $edge; border: 1px solid $b1; color: $tt;
 
   .lp-step--active & {
-    background: $ey; border-color: $ey; color: #000;
+    background: $tuniflow; border-color: $tuniflow; color: #000;
     box-shadow: 0 0 0 4px rgba(255,230,0,.12);
     font-size: 10px; font-weight: 700;
   }
@@ -293,7 +293,7 @@ $panel-w: 280px;
   text-transform: uppercase; letter-spacing: .06em;
   transition: color $fast;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  .lp-step--active & { color: $ey; }
+  .lp-step--active & { color: $tuniflow; }
   .lp-step--done &   { color: $ok; }
 }
 
@@ -430,7 +430,7 @@ $panel-w: 280px;
 
 .lc-logo-mark {
   width: 28px; height: 28px;
-  background: $ey; border-radius: 6px;
+  background: $tuniflow; border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   font-size: 9px; font-weight: 900; color: #000;
   flex-shrink: 0;
@@ -470,7 +470,7 @@ $panel-w: 280px;
 .lc-avatar {
   width: 56px; height: 56px;
   border-radius: 50%;
-  background: $ey; color: #000;
+  background: $tuniflow; color: #000;
   font-family: $fd;
   font-size: 18px; font-weight: 900;
   display: flex; align-items: center; justify-content: center;
@@ -542,23 +542,23 @@ $panel-w: 280px;
   padding: 3px 8px; border-radius: $r99;
   background: rgba(255,230,0,.08);
   border: 1px solid rgba(255,230,0,.18);
-  font-size: 10px; color: $ey; font-weight: 600;
+  font-size: 10px; color: $tuniflow; font-weight: 600;
 }
 
 .lc-score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .lc-score-label { font-size: 9px; font-weight: 700; color: $tt; text-transform: uppercase; letter-spacing: .07em; }
-.lc-score-pct   { font-family: $fm; font-size: 11px; color: $ey; font-weight: 700; }
+.lc-score-pct   { font-family: $fm; font-size: 11px; color: $tuniflow; font-weight: 700; }
 .lc-score-track { height: 3px; border-radius: $r99; background: $edge; overflow: hidden; }
 .lc-score-fill  {
   height: 100%;
-  background: linear-gradient(90deg, rgba(255,230,0,.5), $ey);
+  background: linear-gradient(90deg, rgba(255,230,0,.5), $tuniflow);
   border-radius: $r99;
   transition: width .5s $ease;
 }
 
 .lc-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
 .lc-footer-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: $tt; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
-.lc-dot { width: 5px; height: 5px; border-radius: 50%; &--green { background: $ok; } &--ey { background: $ey; } }
+.lc-dot { width: 5px; height: 5px; border-radius: 50%; &--green { background: $ok; } &--ey { background: $tuniflow; } }
 
 // -----------------------------------------------------------------------------
 // PROGRESS BAR GLOBALE
@@ -569,7 +569,7 @@ $panel-w: 280px;
 .wiz-progress-pct   { font-family: $fm; font-size: 11px; color: $tt; }
 .wiz-progress-track { height: 2px; background: $edge; border-radius: $r99; overflow: hidden; }
 .wiz-progress-fill  {
-  height: 100%; background: $ey; border-radius: $r99;
+  height: 100%; background: $tuniflow; border-radius: $r99;
   transition: width .6s $ease;
   position: relative;
   &::after {
@@ -602,7 +602,7 @@ $panel-w: 280px;
   em {
     font-style: italic;
     color: #0A0A0A;
-    background: $ey;
+    background: $tuniflow;
     padding: 0 .18em .06em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
@@ -617,7 +617,7 @@ $panel-w: 280px;
 .form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .form-group  { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .form-label  { font-size: 11px; font-weight: 700; color: $ts; text-transform: uppercase; letter-spacing: .08em; display: flex; align-items: center; gap: 5px; }
-.form-req    { color: $ey; font-size: 18px; line-height: .6; font-weight: 300; opacity: .8; }
+.form-req    { color: $tuniflow; font-size: 18px; line-height: .6; font-weight: 300; opacity: .8; }
 .form-hint   { font-size: 11px; color: $tt; line-height: 1.5; }
 .form-hint-inline { font-size: 10px; color: $tm; font-weight: 400; text-transform: none; letter-spacing: 0; }
 
@@ -632,7 +632,7 @@ $panel-w: 280px;
   &::placeholder { color: $tt; }
   &:hover:not(:focus) { border-color: $b2; }
   &:focus {
-    border-color: $ey-glow;
+    border-color: $tuniflow-glow;
     box-shadow: 0 0 0 3px rgba(255,230,0,.06);
     background: rgba(255,230,0,.012);
   }
@@ -686,7 +686,7 @@ $panel-w: 280px;
   -webkit-appearance: none; appearance: none;
   transition: border-color $fast, box-shadow $fast;
   option { background: #111; color: $tp; }
-  &:focus { border-color: $ey-glow; box-shadow: 0 0 0 3px rgba(255,230,0,.06); }
+  &:focus { border-color: $tuniflow-glow; box-shadow: 0 0 0 3px rgba(255,230,0,.06); }
 
   &.form-input--valid {
     border-color: rgba(34,197,94,.25);
@@ -771,12 +771,14 @@ $panel-w: 280px;
 }
 
 .logo-remove {
-  padding: 4px 10px;
-  font-family: $fb; font-size: 11px; font-weight: 600;
+  width: 30px; height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
   color: $err; background: rgba(239,68,68,.08);
   border: 1px solid rgba(239,68,68,.2); border-radius: $r8;
-  cursor: pointer; transition: all $fast; white-space: nowrap;
-  &:hover { background: rgba(239,68,68,.15); }
+  cursor: pointer; transition: all $fast; padding: 0; flex-shrink: 0;
+  &:hover { background: rgba(239,68,68,.15); transform: translateY(-1px); }
+
+  svg { display: block; }
 }
 
 // -- Password meter ------------------------------------------------------------
@@ -802,12 +804,12 @@ $panel-w: 280px;
   transition: all $fast; color: #000;
   svg { opacity: 0; transition: opacity $fast; }
   .checkbox-input:checked ~ & {
-    background: $ey; border-color: $ey; box-shadow: 0 0 0 3px rgba(255,230,0,.1);
+    background: $tuniflow; border-color: $tuniflow; box-shadow: 0 0 0 3px rgba(255,230,0,.1);
     svg { opacity: 1; }
   }
 }
 .checkbox-text { font-size: 13px; color: $ts; line-height: 1.6; }
-.link-ey { color: $ey; text-decoration: none; border-bottom: 1px solid rgba(255,230,0,.2); &:hover { border-color: $ey; } }
+.link-ey { color: $tuniflow; text-decoration: none; border-bottom: 1px solid rgba(255,230,0,.2); &:hover { border-color: $tuniflow; } }
 
 // -----------------------------------------------------------------------------
 // BOUTONS
@@ -820,7 +822,7 @@ $panel-w: 280px;
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px; padding: 12px 26px;
   font-family: $fb; font-size: 14px; font-weight: 700; color: #000;
-  background: $ey; border: none; border-radius: $r12;
+  background: $tuniflow; border: none; border-radius: $r12;
   cursor: pointer; transition: all $fast; flex: 1; justify-content: center;
   position: relative; overflow: hidden;
 
@@ -857,11 +859,11 @@ $panel-w: 280px;
     border-color: rgba(255,230,0,.35); background: rgba(255,230,0,.04);
     &::after { opacity: 1; }
     .cat-card-check { opacity: 1; transform: scale(1); }
-    .cat-card-name  { color: $ey; }
+    .cat-card-name  { color: $tuniflow; }
   }
   .cat-card-check {
     position: absolute; top: 8px; right: 8px; width: 16px; height: 16px;
-    border-radius: 50%; background: $ey; color: #000;
+    border-radius: 50%; background: $tuniflow; color: #000;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; transform: scale(.5); transition: all .22s $ease;
   }
@@ -873,7 +875,7 @@ $panel-w: 280px;
   display: flex; gap: 10px; align-items: center;
   padding: 11px 13px; background: $surface; border: 1px solid $b1;
   border-radius: $r12; margin-bottom: 14px;
-  &:focus-within { border-color: $ey-glow; }
+  &:focus-within { border-color: $tuniflow-glow; }
 }
 .custom-cat-input {
   flex: 1; background: none; border: none; outline: none;
@@ -882,7 +884,7 @@ $panel-w: 280px;
 }
 .custom-cat-btn {
   padding: 6px 14px; font-family: $fb; font-size: 12px; font-weight: 700;
-  color: #000; background: $ey; border: none; border-radius: $r8;
+  color: #000; background: $tuniflow; border: none; border-radius: $r8;
   cursor: pointer; white-space: nowrap; transition: all $fast;
   &:hover:not(:disabled) { background: #FFF176; }
   &:disabled { opacity: .3; cursor: not-allowed; }
@@ -893,14 +895,14 @@ $panel-w: 280px;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 4px 10px 4px 11px;
   background: rgba(255,230,0,.08); border: 1px solid rgba(255,230,0,.18);
-  border-radius: $r99; font-size: 11.5px; color: $ey; font-weight: 600;
+  border-radius: $r99; font-size: 11.5px; color: $tuniflow; font-weight: 600;
 }
 .cat-tag-remove {
   display: flex; align-items: center; justify-content: center;
   width: 14px; height: 14px; border-radius: 50%;
   background: rgba(255,230,0,.1); border: none; color: rgba(255,230,0,.7);
   cursor: pointer; transition: all $fast;
-  &:hover { background: rgba(255,230,0,.25); color: $ey; }
+  &:hover { background: rgba(255,230,0,.25); color: $tuniflow; }
 }
 
 .cat-notice {
@@ -980,7 +982,7 @@ $panel-w: 280px;
   background: rgba(255,230,0,.08);
   border: 1px solid rgba(255,230,0,.2);
   border-radius: $r99;
-  font-size: 11.5px; color: $ey; font-weight: 600;
+  font-size: 11.5px; color: $tuniflow; font-weight: 600;
   animation: chipPop .35s $ease both;
 
   @for $i from 1 through 10 {
@@ -993,7 +995,7 @@ $panel-w: 280px;
   gap: 8px; width: 100%; max-width: 400px;
   padding: 14px 28px;
   font-family: $fb; font-size: 15px; font-weight: 700; color: #000;
-  background: $ey; border: none; border-radius: $r14;
+  background: $tuniflow; border: none; border-radius: $r14;
   cursor: pointer; transition: all $fast;
   margin-bottom: 20px;
 
@@ -1025,7 +1027,7 @@ $panel-w: 280px;
 .auto-redirect-fill {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, rgba(255,230,0,.3), $ey);
+  background: linear-gradient(90deg, rgba(255,230,0,.3), $tuniflow);
   border-radius: $r99;
   transform-origin: left center;
   animation: redirectShrink linear forwards;
@@ -1040,7 +1042,7 @@ $panel-w: 280px;
 .auto-redirect-count {
   font-family: $fm;
   font-size: 13px;
-  color: $ey;
+  color: $tuniflow;
   font-weight: 700;
 }
 

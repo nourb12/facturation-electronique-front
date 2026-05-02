@@ -1,8 +1,8 @@
 // src/styles/_tokens.scss
 // ================================================================
 //  CORRECTIONS :
-//  ✅ $ey et $accent pointent vers var(--c-ey) = jaune dans les DEUX modes
-//  ✅ --ey-btn-text = #0A0A0A dans les deux modes
+//  ✅ $tuniflow et $accent pointent vers var(--c-tuniflow) = jaune dans les DEUX modes
+//  ✅ --tuniflow-btn-text = #0A0A0A dans les deux modes
 // ================================================================
 $fd: 'Playfair Display', Georgia, serif;
 $fb: 'DM Sans', sans-serif;
@@ -15,15 +15,15 @@ $warn:  #F59E0B;  $warn2: rgba(245,158,11,.10);
 $err:   #EF4444;  $err2:  rgba(239,68,68,.10);
 $info:  #3B82F6;  $info2: rgba(59,130,246,.10);
 
-// ── Accent EY — JAUNE dans les deux modes ────────────────────────
-$ey:       var(--c-ey);          // #FFE600 dark ET light
-$ey-dim:   var(--c-ey-dim);
-$ey-soft:  var(--c-ey-soft);
-$ey-glow:  var(--c-ey-glow);
-$ey-text:  var(--ey-btn-text);   // #0A0A0A dans les deux modes
+// ── Accent TuniFlow — JAUNE dans les deux modes ────────────────────────
+$tuniflow:       var(--c-tuniflow);          // #FFE600 dark ET light
+$tuniflow-dim:   var(--c-tuniflow-dim);
+$tuniflow-soft:  var(--c-tuniflow-soft);
+$tuniflow-glow:  var(--c-tuniflow-glow);
+$tuniflow-text:  var(--tuniflow-btn-text);   // #0A0A0A dans les deux modes
 
 // Accent générique (toujours jaune maintenant)
-$accent:        var(--c-accent);         // = var(--c-ey) = jaune
+$accent:        var(--c-accent);         // = var(--c-tuniflow) = jaune
 $accent-text:   var(--c-accent-text);    // = #0A0A0A
 $accent-soft:   var(--c-accent-soft);
 $accent-border: var(--c-accent-border);
@@ -41,7 +41,7 @@ $b0:   var(--b0);
 $b1:   var(--b1);
 $b2:   var(--b2);
 $b3:   var(--b3);
-$b-ey: var(--b-ey);
+$b-tuniflow: var(--b-tuniflow);
 
 // ── Texte ─────────────────────────────────────────────────────────
 $tp: var(--tp);

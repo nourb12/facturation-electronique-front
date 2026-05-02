@@ -1,0 +1,114 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                         🌙 DARK MODE EY - LISEZ-MOI                          ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+🎯 SITUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le dark mode EY est CORRECTEMENT CODÉ mais ne s'affiche pas car le cache Angular
+contient l'ancienne version des styles.
+
+✅ CODE : 100% CORRECT
+❌ CACHE : DOIT ÊTRE VIDÉ
+
+
+⚡ SOLUTION RAPIDE (2-3 MINUTES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Arrêter le serveur : Ctrl + C
+
+2. Supprimer le cache :
+   PowerShell : Remove-Item -Recurse -Force .angular/cache
+   Git Bash   : rm -rf .angular/cache
+
+3. Redémarrer le serveur : ng serve
+
+4. Vider le cache du navigateur :
+   F12 → Clic droit sur Actualiser → Vider le cache
+
+
+🤖 SCRIPTS AUTOMATIQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PowerShell : .\restart-with-cache-clear.ps1
+Git Bash   : ./restart-with-cache-clear.sh
+
+
+📚 DOCUMENTATION COMPLÈTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+13 fichiers créés pour vous aider :
+
+🚀 DÉMARRAGE RAPIDE :
+   • START-HERE.md              ⭐⭐⭐ COMMENCEZ ICI
+   • QUICK-START.md             ⭐⭐⭐ Solution en 30 secondes
+   • README-DARK-MODE.md        ⭐⭐⭐ README principal
+
+📚 GUIDES PRATIQUES :
+   • INSTRUCTIONS-RAPIDES.md    ⭐⭐⭐ Solution en 2-3 minutes
+   • GUIDE-VISUEL.md            ⭐⭐⭐ Guide visuel avec ASCII art
+   • REDEMARRAGE-DARK-MODE.md   ⭐⭐  Guide complet avec checklist
+
+🔬 DOCUMENTATION TECHNIQUE :
+   • DIAGNOSTIC-DARK-MODE.md    ⭐   Analyse technique complète
+   • README-SCRIPTS-REDEMARRAGE.md ⭐⭐ Documentation des scripts
+
+🗺️ NAVIGATION :
+   • INDEX-DARK-MODE.md         ⭐⭐  Index complet
+   • LISTE-FICHIERS-CREES.md    ⭐   Liste de tous les fichiers
+
+📝 RÉFÉRENCE :
+   • RESUME-SESSION.md          ⭐   Résumé de tout ce qui a été fait
+
+🤖 SCRIPTS :
+   • restart-with-cache-clear.ps1    Script PowerShell
+   • restart-with-cache-clear.sh     Script Bash
+
+
+🎯 PAR OÙ COMMENCER ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vous êtes pressé ?
+→ Ouvrir QUICK-START.md (30 secondes)
+
+Vous voulez une solution rapide ?
+→ Ouvrir INSTRUCTIONS-RAPIDES.md (2-3 minutes)
+
+Vous préférez un guide visuel ?
+→ Ouvrir GUIDE-VISUEL.md (5 minutes)
+
+Vous voulez utiliser les scripts ?
+→ Ouvrir README-SCRIPTS-REDEMARRAGE.md (2 minutes)
+
+Vous voulez tout comprendre ?
+→ Ouvrir START-HERE.md puis choisir votre méthode
+
+
+✅ RÉSULTAT ATTENDU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après avoir suivi l'une des méthodes, TOUTES LES PAGES afficheront le dark mode EY :
+
+✅ Fond : #2E2E38 (gris-bleu foncé)
+✅ Cartes : #3A3A45 (gris-bleu moyen)
+✅ Texte : #FFFFFF (blanc pur)
+✅ Badge "TEIF 2026" : Jaune vif
+✅ Texte surligné : Blanc sur fond jaune
+
+
+🎉 C'EST TOUT !
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le dark mode sera appliqué en 2-3 minutes maximum.
+
+Choisissez une méthode ci-dessus et suivez-la.
+
+Bonne chance ! 🚀
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Date : Avril 2026 | Version : 3.2.1 | Statut : ✅ PRÊT À L'EMPLOI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

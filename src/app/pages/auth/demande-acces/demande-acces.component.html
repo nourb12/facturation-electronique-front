@@ -1,4 +1,158 @@
-<div class="wizard-layout" [@pageIn]>
+<div class="da-root" [@pageIn]>
+  @if (step() === 'profile-choice') {
+    <div class="pc-layout">
+      <div class="pc-left">
+        <a class="pc-logo" routerLink="/landing">
+          <div class="lp-mark">EY</div>
+          <div class="lp-wordmark">
+            <span class="lp-name">TunisFlow</span>
+            <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
+          </div>
+        </a>
+
+        <h1 class="pc-title">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.TITLE' | translate }}</h1>
+        <p class="pc-desc">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.DESC' | translate }}</p>
+
+        <div class="pc-cards">
+          <button class="pc-card" type="button" (click)="chooseProfile('independant')">
+            <div class="pc-card-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M16 28V16" stroke="#FFE600" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16 16C16 16 10 14 8 8C12 8 16 12 16 16Z" fill="#FFE600" opacity=".7"/>
+                <path d="M16 16C16 16 22 14 24 8C20 8 16 12 16 16Z" fill="#FFE600"/>
+                <circle cx="16" cy="28" r="2" fill="#FFE600" opacity=".4"/>
+              </svg>
+            </div>
+            <div class="pc-card-text">
+              <span class="pc-card-label">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.INDEPENDANT' | translate }}</span>
+              <span class="pc-card-hint">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.INDEPENDANT_HINT' | translate }}</span>
+            </div>
+            <svg class="pc-card-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button class="pc-card" type="button" (click)="chooseProfile('entreprise')">
+            <div class="pc-card-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect x="6" y="14" width="8" height="10" rx="1.5" stroke="#FFE600" stroke-width="1.8"/>
+                <rect x="18" y="10" width="8" height="14" rx="1.5" stroke="#FFE600" stroke-width="1.8"/>
+                <path d="M4 26h24" stroke="#FFE600" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M10 14V10a6 6 0 0 1 6-6 6 6 0 0 1 6 6v4" stroke="#FFE600" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>
+              </svg>
+            </div>
+            <div class="pc-card-text">
+              <span class="pc-card-label">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.ENTREPRISE' | translate }}</span>
+              <span class="pc-card-hint">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.ENTREPRISE_HINT' | translate }}</span>
+            </div>
+            <svg class="pc-card-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="pc-login-hint">
+          {{ 'AUTH.ACCESS_REQUEST.ALREADY_ACCOUNT' | translate }}
+          <a routerLink="/login/entreprise" class="pc-link">{{ 'AUTH.SIGN_IN' | translate }}</a>
+        </p>
+      </div>
+
+      <div class="pc-right">
+        <div class="pc-right-inner">
+          <div class="pc-right-badge">
+            <span class="pc-right-badge-dot"></span>
+            {{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.RIGHT_BADGE' | translate }}
+          </div>
+
+          <p class="pc-value-headline">
+            {{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.VALUE_HEADLINE' | translate }}
+            <strong>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.VALUE_HEADLINE_BOLD' | translate }}</strong>
+          </p>
+
+          <div class="pc-feature-grid">
+            <div class="pc-feature-card">
+              <div class="pc-feature-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                  <path d="M3 11l4 4L19 5" stroke="#FFE600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="pc-feature-title">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_1_TITLE' | translate }}</span>
+              <span class="pc-feature-desc">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_1_DESC' | translate }}</span>
+            </div>
+
+            <div class="pc-feature-card">
+              <div class="pc-feature-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                  <circle cx="11" cy="11" r="9" stroke="#FFE600" stroke-width="1.8"/>
+                  <path d="M7 11l2.5 2.5L15 8" stroke="#FFE600" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="pc-feature-title">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_2_TITLE' | translate }}</span>
+              <span class="pc-feature-desc">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_2_DESC' | translate }}</span>
+            </div>
+
+            <div class="pc-feature-card">
+              <div class="pc-feature-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                  <rect x="2" y="3" width="18" height="16" rx="2" stroke="#FFE600" stroke-width="1.8"/>
+                  <path d="M6 8h10M6 12h7" stroke="#FFE600" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M16 15l2 2 3-3" stroke="#FFE600" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="pc-feature-title">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_3_TITLE' | translate }}</span>
+              <span class="pc-feature-desc">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_3_DESC' | translate }}</span>
+            </div>
+
+            <div class="pc-feature-card">
+              <div class="pc-feature-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 2L3 7v8l8 5 8-5V7z" stroke="#FFE600" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M11 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#FFE600" opacity=".5"/>
+                </svg>
+              </div>
+              <span class="pc-feature-title">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_4_TITLE' | translate }}</span>
+              <span class="pc-feature-desc">{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.FEATURE_4_DESC' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="pc-checklist">
+            <div class="pc-check-item">
+              <div class="pc-check-icon" aria-hidden="true">
+                <svg width="10" height="8" viewBox="0 0 12 10" fill="none">
+                  <path d="M1 5l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.CHECK_1' | translate }}</span>
+            </div>
+            <div class="pc-check-item">
+              <div class="pc-check-icon" aria-hidden="true">
+                <svg width="10" height="8" viewBox="0 0 12 10" fill="none">
+                  <path d="M1 5l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.CHECK_2' | translate }}</span>
+            </div>
+            <div class="pc-check-item">
+              <div class="pc-check-icon" aria-hidden="true">
+                <svg width="10" height="8" viewBox="0 0 12 10" fill="none">
+                  <path d="M1 5l3.5 3.5L11 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.CHECK_3' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="pc-closing-note">
+            <span>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.CLOSING' | translate }}</span>
+            <strong>{{ 'AUTH.ACCESS_REQUEST.PROFILE_CHOICE.CLOSING_STRONG' | translate }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (step() !== 'profile-choice') {
+    <div class="wizard-layout">
   <aside class="left-panel">
     <div class="lp-orb lp-orb--1" aria-hidden="true"></div>
     <div class="lp-orb lp-orb--2" aria-hidden="true"></div>
@@ -11,21 +165,28 @@
       </div>
     </a>
 
-    <div class="lp-promise">
-      <div class="lp-badge">
-        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_BADGE' | translate }}
-      </div>
-      <h2 class="lp-headline">
-        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_TITLE' | translate }}
-      </h2>
-      <p class="lp-desc">
-        {{ 'AUTH.ACCESS_REQUEST.SIDEBAR_DESC' | translate }}
-      </p>
+    <div class="lp-sensation">
+      @if (step() === 'confirmation') {
+        <p class="lp-sensation-quote" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.CONFIRM' | translate }}</p>
+        <p class="lp-sensation-sub" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.CONFIRM_SUB' | translate }}</p>
+      } @else if (currentStep() === 1) {
+        <p class="lp-sensation-quote" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP1' | translate }}</p>
+        <p class="lp-sensation-sub" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP1_SUB' | translate }}</p>
+      } @else if (currentStep() === 2 && profileChoice() === 'independant') {
+        <p class="lp-sensation-quote" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP2_INDEPENDANT' | translate }}</p>
+        <p class="lp-sensation-sub" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP2_INDEPENDANT_SUB' | translate }}</p>
+      } @else if (currentStep() === 2 && profileChoice() === 'entreprise') {
+        <p class="lp-sensation-quote" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP2' | translate }}</p>
+        <p class="lp-sensation-sub" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP2_SUB' | translate }}</p>
+      } @else if (isDocumentStep()) {
+        <p class="lp-sensation-quote" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP3' | translate }}</p>
+        <p class="lp-sensation-sub" [@slideUp]>{{ 'AUTH.ACCESS_REQUEST.SENSATION.STEP3_SUB' | translate }}</p>
+      }
     </div>
 
     <app-step-indicator
       mode="sidebar"
-      [steps]="steps"
+      [steps]="stepsForProfile()"
       [current]="currentStep()"
       (stepClick)="goToStep($event)">
     </app-step-indicator>
@@ -50,7 +211,7 @@
             <div class="rp-inner">
               <app-step-indicator
                 mode="bar"
-                [steps]="steps"
+                [steps]="stepsForProfile()"
                 [current]="currentStep()"
                 (stepClick)="goToStep($event)">
               </app-step-indicator>
@@ -97,8 +258,18 @@
                             <strong>{{ form.logoFileName || ('AUTH.ACCESS_REQUEST.LOGO.DEFAULT_FILE' | translate) }}</strong>
                             <span>{{ 'AUTH.ACCESS_REQUEST.LOGO.UPLOADED' | translate }}</span>
                           </div>
-                          <button type="button" class="logo-remove" (click)="removeLogo()">
-                            {{ 'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate }}
+                          <button
+                            type="button"
+                            class="logo-remove"
+                            (click)="removeLogo()"
+                            [attr.aria-label]="'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate"
+                            [attr.title]="'AUTH.ACCESS_REQUEST.LOGO.REMOVE' | translate">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                              <path d="M2.5 3.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                              <path d="M5.5 2h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                              <path d="M4 5.2v5.1c0 .7.5 1.2 1.2 1.2h3.6c.7 0 1.2-.5 1.2-1.2V5.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                              <path d="M5.8 6.4v3.3M8.2 6.4v3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                            </svg>
                           </button>
                         </div>
                       }
@@ -155,28 +326,51 @@
                       }
                     </div>
 
-                    <div class="form-group" [@fieldShake]="shakeField() === 'formeJuridique' ? 'error' : 'idle'">
+                    <div class="form-group form-group--dropdown" [class.form-group--open]="isDropdownOpen('formeJuridique')" [@fieldShake]="shakeField() === 'formeJuridique' ? 'error' : 'idle'">
                       <label class="form-label" for="formeJuridique">
                         {{ 'AUTH.ACCESS_REQUEST.FIELDS.LEGAL_FORM.LABEL' | translate }}
                         <span class="form-req">*</span>
                         @if (isFieldValid('formeJuridique')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
                       </label>
-                      <div class="select-wrap">
-                        <select
+                      <div
+                        class="modern-select"
+                        [class.modern-select--open]="isDropdownOpen('formeJuridique')"
+                        [class.modern-select--error]="errors()['formeJuridique']"
+                        [class.modern-select--valid]="!!form.formeJuridique && !errors()['formeJuridique']"
+                        (click)="$event.stopPropagation()">
+                        <button
                           id="formeJuridique"
-                          class="form-select"
-                          [(ngModel)]="form.formeJuridique"
-                          (ngModelChange)="validateField('formeJuridique')"
-                          [class.form-input--error]="errors()['formeJuridique']"
-                          [class.form-input--valid]="!!form.formeJuridique && !errors()['formeJuridique']">
-                          <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.LEGAL_FORM.PLACEHOLDER' | translate }}</option>
-                          @for (f of formesJuridiques; track f.value) {
-                            <option [value]="f.value">{{ f.labelKey | translate }}</option>
-                          }
-                        </select>
-                        <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
-                          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                          type="button"
+                          class="modern-select-trigger"
+                          [attr.aria-expanded]="isDropdownOpen('formeJuridique')"
+                          aria-haspopup="listbox"
+                          (click)="toggleDropdown('formeJuridique')">
+                          <span class="modern-select-value" [class.modern-select-value--placeholder]="!form.formeJuridique">
+                            {{ formeJuridiqueLabel() || ('AUTH.ACCESS_REQUEST.FIELDS.LEGAL_FORM.PLACEHOLDER' | translate) }}
+                          </span>
+                          <svg class="modern-select-caret" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M2 2l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+
+                        @if (isDropdownOpen('formeJuridique')) {
+                          <div class="modern-select-panel" role="listbox">
+                            @for (f of formesJuridiques; track f.value) {
+                              <button
+                                type="button"
+                                class="modern-select-option"
+                                [class.modern-select-option--selected]="form.formeJuridique === f.value"
+                                (click)="selectDropdownValue('formeJuridique', f.value); $event.stopPropagation()">
+                                <span>{{ f.labelKey | translate }}</span>
+                                @if (form.formeJuridique === f.value) {
+                                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                    <path d="M2.5 7.2l2.9 2.9L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg>
+                                }
+                              </button>
+                            }
+                          </div>
+                        }
                       </div>
                       @if (errors()['formeJuridique']) {
                         <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['formeJuridique'] }}</span>
@@ -184,22 +378,52 @@
                     </div>
                   </div>
 
-                  <div class="form-group" [@fieldShake]="shakeField() === 'raisonSociale' ? 'error' : 'idle'">
+                  <div class="form-group form-group--dropdown" [class.form-group--open]="isDropdownOpen('raisonSociale')" [@fieldShake]="shakeField() === 'raisonSociale' ? 'error' : 'idle'">
                     <label class="form-label" for="raisonSociale">
                       {{ 'AUTH.ACCESS_REQUEST.FIELDS.BUSINESS_NAME.LABEL' | translate }}
                       <span class="form-req">*</span>
                       @if (isFieldValid('raisonSociale')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
                     </label>
-                    <input
-                      id="raisonSociale"
-                      class="form-input"
-                      type="text"
-                      [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.BUSINESS_NAME.PLACEHOLDER' | translate"
-                      [(ngModel)]="form.raisonSociale"
-                      (blur)="validateField('raisonSociale')"
-                      (input)="validateField('raisonSociale')"
-                      [class.form-input--error]="errors()['raisonSociale']"
-                      [class.form-input--valid]="form.raisonSociale.trim().length > 2 && !errors()['raisonSociale']" />
+                    <div
+                      class="modern-select"
+                      [class.modern-select--open]="isDropdownOpen('raisonSociale')"
+                      [class.modern-select--error]="errors()['raisonSociale']"
+                      [class.modern-select--valid]="!!form.raisonSociale && !errors()['raisonSociale']"
+                      (click)="$event.stopPropagation()">
+                      <button
+                        id="raisonSociale"
+                        type="button"
+                        class="modern-select-trigger"
+                        [attr.aria-expanded]="isDropdownOpen('raisonSociale')"
+                        aria-haspopup="listbox"
+                        (click)="toggleDropdown('raisonSociale')">
+                        <span class="modern-select-value" [class.modern-select-value--placeholder]="!form.raisonSociale">
+                          {{ secteurActiviteLabel() || ('AUTH.ACCESS_REQUEST.FIELDS.BUSINESS_NAME.PLACEHOLDER' | translate) }}
+                        </span>
+                        <svg class="modern-select-caret" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                          <path d="M2 2l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+
+                      @if (isDropdownOpen('raisonSociale')) {
+                        <div class="modern-select-panel" role="listbox">
+                          @for (secteur of secteursActivite; track secteur.value) {
+                            <button
+                              type="button"
+                              class="modern-select-option"
+                              [class.modern-select-option--selected]="form.raisonSociale === secteur.value"
+                              (click)="selectSecteurActivite(secteur.value); $event.stopPropagation()">
+                              <span>{{ secteur.labelKey | translate }}</span>
+                              @if (form.raisonSociale === secteur.value) {
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                  <path d="M2.5 7.2l2.9 2.9L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                              }
+                            </button>
+                          }
+                        </div>
+                      }
+                    </div>
                     @if (errors()['raisonSociale']) {
                       <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['raisonSociale'] }}</span>
                     }
@@ -227,56 +451,81 @@
                   </div>
 
                   <div class="form-row">
-                    <div class="form-group" [@fieldShake]="shakeField() === 'gouvernorat' ? 'error' : 'idle'">
+                    <div class="form-group form-group--dropdown" [class.form-group--open]="isDropdownOpen('gouvernorat')" [@fieldShake]="shakeField() === 'gouvernorat' ? 'error' : 'idle'">
                       <label class="form-label" for="gouvernorat">
                         {{ 'AUTH.ACCESS_REQUEST.FIELDS.GOVERNORATE.LABEL' | translate }}
                         <span class="form-req">*</span>
                         @if (isFieldValid('gouvernorat')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
                       </label>
-                      <div class="select-wrap">
-                        <select
+                      <div
+                        class="modern-select"
+                        [class.modern-select--open]="isDropdownOpen('gouvernorat')"
+                        [class.modern-select--error]="errors()['gouvernorat']"
+                        [class.modern-select--valid]="!!form.gouvernorat && !errors()['gouvernorat']"
+                        (click)="$event.stopPropagation()">
+                        <button
                           id="gouvernorat"
-                          class="form-select"
-                          [(ngModel)]="form.gouvernorat"
-                          (ngModelChange)="validateField('gouvernorat')"
-                          [class.form-input--error]="errors()['gouvernorat']"
-                          [class.form-input--valid]="!!form.gouvernorat && !errors()['gouvernorat']">
-                          <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.GOVERNORATE.PLACEHOLDER' | translate }}</option>
-                          @for (g of gouvernorats; track g.value) {
-                            <option [value]="g.value">{{ g.labelKey | translate }}</option>
-                          }
-                        </select>
-                        <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
-                          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                          type="button"
+                          class="modern-select-trigger"
+                          [attr.aria-expanded]="isDropdownOpen('gouvernorat')"
+                          aria-haspopup="listbox"
+                          (click)="toggleDropdown('gouvernorat')">
+                          <span class="modern-select-value" [class.modern-select-value--placeholder]="!form.gouvernorat">
+                            {{ gouvernoratLabel() || ('AUTH.ACCESS_REQUEST.FIELDS.GOVERNORATE.PLACEHOLDER' | translate) }}
+                          </span>
+                          <svg class="modern-select-caret" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M2 2l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+
+                        @if (isDropdownOpen('gouvernorat')) {
+                          <div class="modern-select-panel" role="listbox">
+                            @for (g of gouvernorats; track g.value) {
+                              <button
+                                type="button"
+                                class="modern-select-option"
+                                [class.modern-select-option--selected]="form.gouvernorat === g.value"
+                                (click)="selectDropdownValue('gouvernorat', g.value); $event.stopPropagation()">
+                                <span>{{ g.labelKey | translate }}</span>
+                                @if (form.gouvernorat === g.value) {
+                                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                    <path d="M2.5 7.2l2.9 2.9L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg>
+                                }
+                              </button>
+                            }
+                          </div>
+                        }
                       </div>
                       @if (errors()['gouvernorat']) {
                         <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['gouvernorat'] }}</span>
                       }
                     </div>
 
-                    <div class="form-group" [@fieldShake]="shakeField() === 'codePostal' ? 'error' : 'idle'">
-                      <label class="form-label" for="codePostal">
-                        {{ 'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.LABEL' | translate }}
-                        <span class="form-req">*</span>
-                        @if (isFieldValid('codePostal')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
-                      </label>
-                      <input
-                        id="codePostal"
-                        class="form-input"
-                        type="text"
-                        inputmode="numeric"
-                        maxlength="4"
-                        [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.PLACEHOLDER' | translate"
-                        [(ngModel)]="form.codePostal"
-                        (input)="onNumericInput($event, 'codePostal')"
-                        (blur)="validateField('codePostal')"
-                        [class.form-input--error]="errors()['codePostal']"
-                        [class.form-input--valid]="form.codePostal.trim().length === 4 && !errors()['codePostal']" />
-                      @if (errors()['codePostal']) {
-                        <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['codePostal'] }}</span>
-                      }
-                    </div>
+                    @if (profileChoice() !== 'independant') {
+                      <div class="form-group" [@fieldShake]="shakeField() === 'codePostal' ? 'error' : 'idle'">
+                        <label class="form-label" for="codePostal">
+                          {{ 'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.LABEL' | translate }}
+                          <span class="form-req">*</span>
+                          @if (isFieldValid('codePostal')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
+                        </label>
+                        <input
+                          id="codePostal"
+                          class="form-input"
+                          type="text"
+                          inputmode="numeric"
+                          maxlength="4"
+                          [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.PLACEHOLDER' | translate"
+                          [(ngModel)]="form.codePostal"
+                          (input)="onNumericInput($event, 'codePostal')"
+                          (blur)="validateField('codePostal')"
+                          [class.form-input--error]="errors()['codePostal']"
+                          [class.form-input--valid]="form.codePostal.trim().length === 4 && !errors()['codePostal']" />
+                        @if (errors()['codePostal']) {
+                          <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['codePostal'] }}</span>
+                        }
+                      </div>
+                    }
                   </div>
 
                   <div class="form-row">
@@ -301,17 +550,43 @@
                       }
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group form-group--dropdown" [class.form-group--open]="isDropdownOpen('devisePrincipale')">
                       <label class="form-label" for="devisePrincipale">{{ 'AUTH.ACCESS_REQUEST.FIELDS.CURRENCY.LABEL' | translate }}</label>
-                      <div class="select-wrap">
-                        <select id="devisePrincipale" class="form-select" [(ngModel)]="form.devisePrincipale">
-                          @for (d of devises; track d) {
-                            <option [value]="d">{{ d }}</option>
-                          }
-                        </select>
-                        <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
-                          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                      <div
+                        class="modern-select"
+                        [class.modern-select--open]="isDropdownOpen('devisePrincipale')"
+                        (click)="$event.stopPropagation()">
+                        <button
+                          id="devisePrincipale"
+                          type="button"
+                          class="modern-select-trigger"
+                          [attr.aria-expanded]="isDropdownOpen('devisePrincipale')"
+                          aria-haspopup="listbox"
+                          (click)="toggleDropdown('devisePrincipale')">
+                          <span class="modern-select-value">{{ deviseLabel() }}</span>
+                          <svg class="modern-select-caret" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                            <path d="M2 2l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+
+                        @if (isDropdownOpen('devisePrincipale')) {
+                          <div class="modern-select-panel" role="listbox">
+                            @for (d of devises; track d) {
+                              <button
+                                type="button"
+                                class="modern-select-option"
+                                [class.modern-select-option--selected]="form.devisePrincipale === d"
+                                (click)="selectDropdownValue('devisePrincipale', d, false); $event.stopPropagation()">
+                                <span>{{ d }}</span>
+                                @if (form.devisePrincipale === d) {
+                                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                    <path d="M2.5 7.2l2.9 2.9L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg>
+                                }
+                              </button>
+                            }
+                          </div>
+                        }
                       </div>
                     </div>
                   </div>
@@ -341,9 +616,34 @@
                     }
                   </div>
 
+                  @if (profileChoice() !== 'independant') {
+                    <div class="form-group" [@fieldShake]="shakeField() === 'respEmail' ? 'error' : 'idle'">
+                      <label class="form-label" for="respEmailStep1">
+                        {{ 'AUTH.ACCESS_REQUEST.FIELDS.RESP_EMAIL.LABEL' | translate }}
+                        <span class="form-req">*</span>
+                        @if (isFieldValid('respEmail')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
+                      </label>
+                      <input
+                        id="respEmailStep1"
+                        class="form-input"
+                        type="email"
+                        [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.RESP_EMAIL.PLACEHOLDER' | translate"
+                        [(ngModel)]="form.respEmail"
+                        (blur)="validateField('respEmail')"
+                        (input)="validateField('respEmail')"
+                        [class.form-input--error]="errors()['respEmail']"
+                        [class.form-input--valid]="form.respEmail.trim().length > 0 && !errors()['respEmail']" />
+                      @if (errors()['respEmail']) {
+                        <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respEmail'] }}</span>
+                      }
+                    </div>
+                  }
+
                   <div class="step-actions step-actions--full">
-                    <button class="btn-ghost" disabled aria-hidden="true">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
-                    <button class="btn-primary" [disabled]="!canContinue(1)" (click)="goToStep(2)">
+                    <button class="btn-ghost" type="button" (click)="backToProfileChoice()">
+                      {{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}
+                    </button>
+                    <button class="btn-primary" [disabled]="!canContinueStep1()" (click)="nextFromStep1()">
                       {{ 'AUTH.ACCESS_REQUEST.CONTINUE' | translate }}
                       <svg class="btn-arrow" width="16" height="12" viewBox="0 0 16 12" fill="none">
                         <path d="M1 6h14M9 1l6 5-6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -356,12 +656,48 @@
               @if (step() === 'form' && currentStep() === 2) {
                 <div class="step-pane" [@slideUp]>
                   <header class="step-header">
-                    <div class="step-eyebrow">{{ 'AUTH.ACCESS_REQUEST.STEP2_EYEBROW' | translate }}</div>
+                    <div class="step-eyebrow">
+                      @if (profileChoice() === 'independant') {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP2_INDEPENDANT_EYEBROW' | translate }}
+                      } @else {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP2_EYEBROW' | translate }}
+                      }
+                    </div>
                     <h1 class="step-title">
-                      {{ 'AUTH.ACCESS_REQUEST.STEP2_TITLE_A' | translate }}
-                      <em>{{ 'AUTH.ACCESS_REQUEST.STEP2_TITLE_EM' | translate }}</em>
+                      @if (profileChoice() === 'independant') {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP2_INDEPENDANT_TITLE_A' | translate }}
+                        <em>{{ 'AUTH.ACCESS_REQUEST.STEP2_INDEPENDANT_TITLE_EM' | translate }}</em>
+                      } @else {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP2_TITLE_A' | translate }}
+                        <em>{{ 'AUTH.ACCESS_REQUEST.STEP2_TITLE_EM' | translate }}</em>
+                      }
                     </h1>
                   </header>
+
+                  @if (profileChoice() === 'independant') {
+                    <div class="form-group" [@fieldShake]="shakeField() === 'codePostal' ? 'error' : 'idle'">
+                      <label class="form-label" for="codePostal">
+                        {{ 'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.LABEL' | translate }}
+                        <span class="form-req">*</span>
+                        @if (isFieldValid('codePostal')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
+                      </label>
+                      <input
+                        id="codePostal"
+                        class="form-input"
+                        type="text"
+                        inputmode="numeric"
+                        maxlength="4"
+                        [placeholder]="'AUTH.ACCESS_REQUEST.FIELDS.POSTAL_CODE.PLACEHOLDER' | translate"
+                        [(ngModel)]="form.codePostal"
+                        (input)="onNumericInput($event, 'codePostal')"
+                        (blur)="validateField('codePostal')"
+                        [class.form-input--error]="errors()['codePostal']"
+                        [class.form-input--valid]="form.codePostal.trim().length === 4 && !errors()['codePostal']" />
+                      @if (errors()['codePostal']) {
+                        <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['codePostal'] }}</span>
+                      }
+                    </div>
+                  }
 
                   <div class="form-row">
                     <div class="form-group" [@fieldShake]="shakeField() === 'respPrenom' ? 'error' : 'idle'">
@@ -407,28 +743,51 @@
                     </div>
                   </div>
 
-                  <div class="form-group" [@fieldShake]="shakeField() === 'respFonction' ? 'error' : 'idle'">
+                  <div class="form-group form-group--dropdown" [class.form-group--open]="isDropdownOpen('respFonction')" [@fieldShake]="shakeField() === 'respFonction' ? 'error' : 'idle'">
                     <label class="form-label" for="respFonction">
                       {{ 'AUTH.ACCESS_REQUEST.FIELDS.OFFICIAL_ROLE.LABEL' | translate }}
                       <span class="form-req">*</span>
                       @if (isFieldValid('respFonction')) { <span class="label-check" aria-hidden="true">&#10003;</span> }
                     </label>
-                    <div class="select-wrap">
-                      <select
+                    <div
+                      class="modern-select"
+                      [class.modern-select--open]="isDropdownOpen('respFonction')"
+                      [class.modern-select--error]="errors()['respFonction']"
+                      [class.modern-select--valid]="!!form.respFonction && !errors()['respFonction']"
+                      (click)="$event.stopPropagation()">
+                      <button
                         id="respFonction"
-                        class="form-select"
-                        [(ngModel)]="form.respFonction"
-                        (ngModelChange)="validateField('respFonction')"
-                        [class.form-input--error]="errors()['respFonction']"
-                        [class.form-input--valid]="!!form.respFonction && !errors()['respFonction']">
-                        <option value="">{{ 'AUTH.ACCESS_REQUEST.FIELDS.OFFICIAL_ROLE.PLACEHOLDER' | translate }}</option>
-                        @for (f of fonctions; track f.value) {
-                          <option [value]="f.value">{{ f.labelKey | translate }}</option>
-                        }
-                      </select>
-                      <svg class="select-caret" width="10" height="6" viewBox="0 0 10 6">
-                        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
+                        type="button"
+                        class="modern-select-trigger"
+                        [attr.aria-expanded]="isDropdownOpen('respFonction')"
+                        aria-haspopup="listbox"
+                        (click)="toggleDropdown('respFonction')">
+                        <span class="modern-select-value" [class.modern-select-value--placeholder]="!form.respFonction">
+                          {{ fonctionLabel() || ('AUTH.ACCESS_REQUEST.FIELDS.OFFICIAL_ROLE.PLACEHOLDER' | translate) }}
+                        </span>
+                        <svg class="modern-select-caret" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                          <path d="M2 2l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+
+                      @if (isDropdownOpen('respFonction')) {
+                        <div class="modern-select-panel" role="listbox">
+                          @for (f of fonctions; track f.value) {
+                            <button
+                              type="button"
+                              class="modern-select-option"
+                              [class.modern-select-option--selected]="form.respFonction === f.value"
+                              (click)="selectDropdownValue('respFonction', f.value); $event.stopPropagation()">
+                              <span>{{ f.labelKey | translate }}</span>
+                              @if (form.respFonction === f.value) {
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                  <path d="M2.5 7.2l2.9 2.9L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                              }
+                            </button>
+                          }
+                        </div>
+                      }
                     </div>
                     @if (errors()['respFonction']) {
                       <span class="field-error" aria-live="polite" aria-atomic="true">{{ errors()['respFonction'] }}</span>
@@ -518,10 +877,16 @@
                 </div>
               }
 
-              @if (step() === 'form' && currentStep() === 3) {
+              @if (step() === 'form' && isDocumentStep()) {
                 <div class="step-pane" [@slideUp]>
                   <header class="step-header">
-                    <div class="step-eyebrow">{{ 'AUTH.ACCESS_REQUEST.STEP3_EYEBROW' | translate }}</div>
+                    <div class="step-eyebrow">
+                      @if (profileChoice() === 'independant') {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP_DOCS_INDEPENDANT_EYEBROW' | translate }}
+                      } @else {
+                        {{ 'AUTH.ACCESS_REQUEST.STEP3_EYEBROW' | translate }}
+                      }
+                    </div>
                     <h1 class="step-title">
                       {{ 'AUTH.ACCESS_REQUEST.STEP3_TITLE_A' | translate }}
                       <em>{{ 'AUTH.ACCESS_REQUEST.STEP3_TITLE_EM' | translate }}</em>
@@ -635,7 +1000,7 @@
                   </div>
 
                   <div class="step-actions step-actions--submit">
-                    <button class="btn-ghost" (click)="goToStep(2)">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
+                    <button class="btn-ghost" (click)="goToPrevDocStep()">{{ 'AUTH.ACCESS_REQUEST.BACK' | translate }}</button>
                     <div class="submit-block">
                       <button class="btn-primary submit-block__button" [disabled]="!canSubmit()" (click)="submit()">
                         @if (submitting()) {
@@ -678,7 +1043,7 @@
                 </div>
                 <div class="success-brand-copy">
                   <span class="success-brand-name">
-                    {{ form.raisonSociale || form.nomEntreprise || ('AUTH.ACCESS_REQUEST.CONFIRM.DEFAULT_COMPANY' | translate) }}
+                    {{ form.nomEntreprise || form.raisonSociale || ('AUTH.ACCESS_REQUEST.CONFIRM.DEFAULT_COMPANY' | translate) }}
                   </span>
                   <span class="success-brand-sub">{{ 'AUTH.ACCESS_REQUEST.CONFIRM.BRAND_SUB' | translate }}</span>
                 </div>
@@ -758,4 +1123,6 @@
       }
     </div>
   </main>
+    </div>
+  }
 </div>

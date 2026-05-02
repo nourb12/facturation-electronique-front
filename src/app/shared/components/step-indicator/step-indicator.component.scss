@@ -1,4 +1,4 @@
-﻿@use '../../../../styles/tokens' as *;
+@use '../../../../styles/tokens' as *;
 
 :host { display:block; }
 
@@ -38,8 +38,8 @@
 }
 
 .da-left__step-num--ey {
-  background:$ey;
-  border-color:$ey;
+  background:$tuniflow;
+  border-color:$tuniflow;
   color:#000;
   box-shadow:0 0 0 4px rgba(255,230,0,.12);
   font-weight:700;
@@ -132,13 +132,13 @@
     margin-bottom:18px;
     transition:background .4s;
 
-    &--done { background: var(--c-ey); }
+    &--done { background: var(--c-tuniflow); }
   }
 
   &__item--active {
     .da-stepper__dot {
-      background: var(--c-ey-dim);
-      border-color: var(--b-ey);
+      background: var(--c-tuniflow-dim);
+      border-color: var(--b-tuniflow);
     }
     .da-stepper__label { color:$tp; }
   }

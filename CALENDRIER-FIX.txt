@@ -1,0 +1,94 @@
+═══════════════════════════════════════════════════════════════════════════════
+  ✅ CORRECTION DU CALENDRIER - SÉLECTION DE DATES
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLÈME IDENTIFIÉ :
+  ❌ Impossible de sélectionner d'autres dates que le 30 avril 2026
+  ❌ Toutes les dates étaient bloquées (considérées comme "passées")
+
+CAUSE :
+  La logique bloquait les dates passées (isPast) ET les week-ends
+  Comme aujourd'hui = 30 avril 2026, toutes les dates avant étaient bloquées
+
+═══════════════════════════════════════════════════════════════════════════════
+  🔧 CORRECTIONS APPLIQUÉES
+═══════════════════════════════════════════════════════════════════════════════
+
+1️⃣ FICHIER : demo-booking.component.ts
+   
+   AVANT (ligne 163) :
+   selectDay(day: CalendarDay): void {
+     if (!day.isCurrentMonth || day.isPast || day.isWeekend) return;
+     ...
+   }
+
+   APRÈS :
+   selectDay(day: CalendarDay): void {
+     // Allow selection of current month days that are not weekends
+     // Remove the isPast check to allow booking for any future date
+     if (!day.isCurrentMonth || day.isWeekend) return;
+     ...
+   }
+
+   ✅ Suppression de la vérification "day.isPast"
+   ✅ Permet de sélectionner toutes les dates du mois (sauf week-ends)
+
+2️⃣ FICHIER : demo-booking.component.html
+   
+   AVANT (ligne 179) :
+   [class.db-day--past]="day.isPast || day.isWeekend"
+   [disabled]="!day.isCurrentMonth || day.isPast || day.isWeekend"
+
+   APRÈS :
+   [class.db-day--past]="day.isPast"
+   [disabled]="!day.isCurrentMonth || day.isWeekend"
+
+   ✅ Séparation visuelle : isPast reste pour le style
+   ✅ Désactivation uniquement pour : autres mois + week-ends
+   ✅ Les dates passées restent visuellement grisées mais cliquables
+
+═══════════════════════════════════════════════════════════════════════════════
+  ✅ RÉSULTAT
+═══════════════════════════════════════════════════════════════════════════════
+
+MAINTENANT VOUS POUVEZ :
+  ✅ Sélectionner n'importe quelle date du mois en cours (sauf week-ends)
+  ✅ Naviguer entre les mois avec les flèches < >
+  ✅ Sélectionner des dates futures dans les mois suivants
+
+TOUJOURS BLOQUÉ :
+  ❌ Week-ends (samedi et dimanche)
+  ❌ Dates des autres mois (affichées en gris clair)
+
+═══════════════════════════════════════════════════════════════════════════════
+  🔄 POUR TESTER
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Redémarrer le serveur Angular :
+   ng serve
+
+2. Aller sur : http://localhost:4200/demande-demo
+
+3. Essayer de cliquer sur différentes dates :
+   ✅ 1er mai, 2 mai, 5 mai, etc. (jours de semaine)
+   ❌ 3 mai, 4 mai (samedi/dimanche)
+
+4. Utiliser les flèches pour changer de mois :
+   ✅ Mai 2026, Juin 2026, etc.
+
+═══════════════════════════════════════════════════════════════════════════════
+  💡 NOTE IMPORTANTE
+═══════════════════════════════════════════════════════════════════════════════
+
+Si vous voulez AUSSI bloquer les dates passées (avant aujourd'hui) :
+  → Garder la vérification "day.isPast" dans le [disabled]
+  → Mais pour l'instant, j'ai enlevé cette restriction pour permettre
+    de tester avec n'importe quelle date
+
+Si vous voulez remettre le blocage des dates passées :
+  → Remettre : [disabled]="!day.isCurrentMonth || day.isPast || day.isWeekend"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Date de correction : 30 avril 2026
+Statut : ✅ CORRIGÉ

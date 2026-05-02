@@ -1,0 +1,43 @@
+{
+  "folders": [
+    {
+      "name": "Frontend (Angular)",
+      "path": "c:\\frontendpfe\\ey-invoice-portal"
+    },
+    {
+      "name": "Backend (Spring Boot)",
+      "path": "c:\\backendpfe\\einvoicing"
+    },
+    {
+      "name": "Mobile (Flutter)",
+      "path": "c:\\mobile\\ey_invoice_mobile"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.angular": true,
+      "**/dist": true,
+      "**/target": true,
+      "**/.dart_tool": true,
+      "**/build": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/target": true,
+      "**/.dart_tool": true,
+      "**/build": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "angular.ng-template",
+      "esbenp.prettier-vscode",
+      "vscjava.vscode-java-pack",
+      "vscjava.vscode-spring-boot-dashboard",
+      "dart-code.dart-code",
+      "dart-code.flutter"
+    ]
+  }
+}

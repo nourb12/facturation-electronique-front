@@ -8,11 +8,16 @@
     </div>
     <div class="header-actions">
       @if (selectedIds.size > 0) {
-        <button class="btn-danger-ghost" type="button" (click)="deleteSelected()">
+        <button
+          class="btn-danger-ghost btn-danger-ghost--icon"
+          type="button"
+          (click)="deleteSelected()"
+          [attr.title]="'COMMON.ACTIONS.DELETE' | translate"
+          [attr.aria-label]="'COMMON.ACTIONS.DELETE' | translate">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <path d="M2 3.5h9M5 3.5V2.5h3v1M4 3.5l.5 7h4l.5-7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          {{ 'COMMON.ACTIONS.DELETE' | translate }} ({{ selectedIds.size }})
+          <span>{{ selectedIds.size }}</span>
         </button>
       }
     </div>

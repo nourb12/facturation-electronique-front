@@ -1,4 +1,4 @@
-ï»¿<div class="dash-layout">
+<div class="dash-layout">
 
   <header class="dash-topbar">
     <div class="dt-left">
@@ -15,7 +15,7 @@
             <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </span>
-        <input type="text" placeholder="Nom, prÃ©nom ou email..." [(ngModel)]="q" (input)="filter()" />
+        <input type="text" placeholder="Nom, prénom ou email..." [(ngModel)]="q" (input)="filter()" />
       </div>
     </div>
     <div class="dt-right">
@@ -25,7 +25,7 @@
   <main class="dash-content">
 
     @if (loading()) {
-      <div class="dash-loading"><div class="dash-spinner"></div><span>Chargementâ€¦</span></div>
+      <div class="dash-loading"><div class="dash-spinner"></div><span>Chargement…</span></div>
     }
 
     @if (!loading()) {
@@ -86,7 +86,7 @@
         <div class="box-header">
           <div>
             <div class="box-title">Liste des utilisateurs</div>
-            <div class="box-sub">{{ filtered.length }} rÃ©sultat(s)</div>
+            <div class="box-sub">{{ filtered.length }} résultat(s)</div>
           </div>
         </div>
 
@@ -95,7 +95,7 @@
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
             </svg>
-            Aucun utilisateur trouvÃ©
+            Aucun utilisateur trouvé
           </div>
         }
 
@@ -107,16 +107,27 @@
               <div class="lr-title">{{ u.prenom }} {{ u.nom }}</div>
               <div class="lr-meta">
                 <span>{{ u.email }}</span>
-                @if (u.entrepriseNom) { <span>Â· {{ u.entrepriseNom }}</span> }
+                @if (u.entrepriseNom) { <span>· {{ u.entrepriseNom }}</span> }
               </div>
             </div>
             <div class="lr-right">
               <span class="badge" [ngClass]="getBadge(u.statut)">{{ u.statut }}</span>
               <div class="lr-actions">
                 <button class="btn btn-ghost btn-sm" [disabled]="saving()" (click)="toggle(u)">
-                  {{ u.statut === 'Actif' ? 'Suspendre' : 'RÃ©activer' }}
+                  {{ u.statut === 'Actif' ? 'Suspendre' : 'Réactiver' }}
                 </button>
-                <button class="btn btn-danger btn-sm" (click)="supprimer(u)">Supprimer</button>
+                <button
+                  class="btn btn-danger btn-sm btn-icon"
+                  (click)="supprimer(u)"
+                  title="Supprimer"
+                  aria-label="Supprimer">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.5 3.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M5.5 2h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M4 5.2v5.1c0 .7.5 1.2 1.2 1.2h3.6c.7 0 1.2-.5 1.2-1.2V5.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5.8 6.4v3.3M8.2 6.4v3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>

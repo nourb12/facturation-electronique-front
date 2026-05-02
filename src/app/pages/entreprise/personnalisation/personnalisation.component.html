@@ -387,7 +387,7 @@
                     </td>
                     <td>
                       @if (tax.systeme) {
-                        <span class="font-mono ft-bold" [style.color]="'var(--c-ey)'">{{ tax.taux }}%</span>
+                        <span class="font-mono ft-bold" [style.color]="'var(--c-tuniflow)'">{{ tax.taux }}%</span>
                       } @else {
                         <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="tax.taux"
                                min="0" max="100" step="0.1" (ngModelChange)="markDirty()"/>
@@ -469,7 +469,7 @@
                     </td>
                     <td>
                       @if (r.systeme) {
-                        <span class="font-mono ft-bold" [style.color]="'var(--c-ey)'">{{ r.taux }}%</span>
+                        <span class="font-mono ft-bold" [style.color]="'var(--c-tuniflow)'">{{ r.taux }}%</span>
                       } @else {
                         <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="r.taux"
                                min="0" max="100" step="0.5" (ngModelChange)="markDirty()"/>
@@ -978,7 +978,7 @@
             </td>
             <td>
               @if (c.docs > 0) {
-                <span class="badge badge--ey">{{ c.docs }} doc(s)</span>
+                <span class="badge badge--tuniflow">{{ c.docs }} doc(s)</span>
               } @else {
                 <span class="badge badge--neutral">0 document</span>
               }

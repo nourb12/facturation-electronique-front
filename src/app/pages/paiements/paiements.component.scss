@@ -1,10 +1,10 @@
-$ey-yellow   : #FFE600;
-$ey-black    : #1A1A1A;
-$ey-dark     : #2B2B2B;
-$ey-surface  : #F5F5F5;
-$ey-border   : #E0E0E0;
-$ey-muted    : #888;
-$ey-text     : #1A1A1A;
+$tuniflow-yellow   : #FFE600;
+$tuniflow-black    : #1A1A1A;
+$tuniflow-dark     : #2B2B2B;
+$tuniflow-surface  : #F5F5F5;
+$tuniflow-border   : #E0E0E0;
+$tuniflow-muted    : #888;
+$tuniflow-text     : #1A1A1A;
 
 $ok-bg       : #E8F5E9; $ok-text    : #2E7D32;
 $info-bg     : #E3F2FD; $info-text  : #1565C0;
@@ -44,13 +44,13 @@ $fb          : 'DM Sans', sans-serif;
   font-size   : 1.6rem;
   font-weight : 900;
   letter-spacing: -.02em;
-  color       : $ey-black;
+  color       : $tuniflow-black;
   margin      : 0 0 4px;
 
   em {
     font-style  : italic;
     font-weight : 900;
-    color       : $ey-yellow;
+    color       : $tuniflow-yellow;
   }
 }
 
@@ -68,14 +68,14 @@ $fb          : 'DM Sans', sans-serif;
   font-family : $fb;
   font-size   : 13px;
   font-weight : 600;
-  color       : $ey-muted;
+  color       : $tuniflow-muted;
   background  : transparent;
-  border      : 1px solid $ey-border;
+  border      : 1px solid $tuniflow-border;
   border-radius: 10px;
   cursor      : pointer;
   transition  : all .15s;
 
-  &:hover  { background: #f4f4f6; color: $ey-black; }
+  &:hover  { background: #f4f4f6; color: $tuniflow-black; }
 }
 
 
@@ -87,7 +87,7 @@ $fb          : 'DM Sans', sans-serif;
 
 .mini-kpi {
   background    : #fff;
-  border        : 1px solid $ey-border;
+  border        : 1px solid $tuniflow-border;
   border-radius : 6px;
   padding       : 16px 18px;
   display       : flex;
@@ -97,13 +97,13 @@ $fb          : 'DM Sans', sans-serif;
   overflow      : hidden;
 
   &--accent {
-    background    : $ey-black;
-    border-color  : $ey-black;
+    background    : $tuniflow-black;
+    border-color  : $tuniflow-black;
 
     .mk-label { color: rgba(255,255,255,.55); }
 
     .mk-val {
-      color    : $ey-yellow;
+      color    : $tuniflow-yellow;
       font-size: 20px;
 
       small {
@@ -132,7 +132,7 @@ $fb          : 'DM Sans', sans-serif;
 .mk-label {
   font-size  : 11px;
   font-weight: 500;
-  color      : $ey-muted;
+  color      : $tuniflow-muted;
   text-transform: uppercase;
   letter-spacing: .4px;
 }
@@ -140,7 +140,7 @@ $fb          : 'DM Sans', sans-serif;
 .mk-val {
   font-size  : 22px;
   font-weight: 700;
-  color      : $ey-black;
+  color      : $tuniflow-black;
   line-height: 1;
 
   &.mk--ok   { color: $ok-text;   font-size: 18px; }
@@ -160,24 +160,24 @@ $fb          : 'DM Sans', sans-serif;
   align-items : center;
   gap         : 8px;
   background  : #fff;
-  border      : 1px solid $ey-border;
+  border      : 1px solid $tuniflow-border;
   border-radius: 4px;
   padding     : 0 12px;
   height      : 36px;
   width       : 300px;
-  color       : $ey-muted;
+  color       : $tuniflow-muted;
   transition  : border-color .15s;
 
   &:focus-within {
-    border-color: $ey-black;
-    color       : $ey-black;
+    border-color: $tuniflow-black;
+    color       : $tuniflow-black;
   }
 
   input {
     border     : none;
     outline    : none;
     font-size  : 13px;
-    color      : $ey-text;
+    color      : $tuniflow-text;
     background : transparent;
     width      : 100%;
 
@@ -192,15 +192,15 @@ $fb          : 'DM Sans', sans-serif;
   justify-content: center;
   gap            : 12px;
   padding        : 60px;
-  color          : $ey-muted;
+  color          : $tuniflow-muted;
   font-size      : 13px;
 }
 
 .loading-spinner {
   width        : 20px;
   height       : 20px;
-  border       : 2px solid $ey-border;
-  border-top   : 2px solid $ey-black;
+  border       : 2px solid $tuniflow-border;
+  border-top   : 2px solid $tuniflow-black;
   border-radius: 50%;
   animation    : spin .7s linear infinite;
 }
@@ -210,7 +210,7 @@ $fb          : 'DM Sans', sans-serif;
 
 .table-box {
   background    : #fff;
-  border        : 1px solid $ey-border;
+  border        : 1px solid $tuniflow-border;
   border-radius : 6px;
   overflow      : hidden;
 }
@@ -221,7 +221,7 @@ $fb          : 'DM Sans', sans-serif;
   font-size      : 13px;
 
   thead tr {
-    background  : $ey-black;
+    background  : $tuniflow-black;
   }
 
   thead th {
@@ -234,11 +234,11 @@ $fb          : 'DM Sans', sans-serif;
     letter-spacing: .5px;
     white-space : nowrap;
 
-    &:first-child { color: $ey-yellow; }
+    &:first-child { color: $tuniflow-yellow; }
   }
 
   tbody tr {
-    border-bottom : 1px solid $ey-border;
+    border-bottom : 1px solid $tuniflow-border;
     transition    : background .12s;
 
     &:last-child  { border-bottom: none; }
@@ -247,7 +247,7 @@ $fb          : 'DM Sans', sans-serif;
 
   tbody td {
     padding    : 11px 14px;
-    color      : $ey-text;
+    color      : $tuniflow-text;
     vertical-align: middle;
   }
 }
@@ -256,9 +256,9 @@ $fb          : 'DM Sans', sans-serif;
 .pay-num {
   font-weight   : 600;
   font-size     : 12px;
-  color         : $ey-black;
+  color         : $tuniflow-black;
   background    : #F5F5F5;
-  border        : 1px solid $ey-border;
+  border        : 1px solid $tuniflow-border;
   border-radius : 3px;
   padding       : 2px 7px;
   font-family   : 'Courier New', monospace;
@@ -266,34 +266,34 @@ $fb          : 'DM Sans', sans-serif;
 
 .pay-montant {
   font-weight : 700;
-  color       : $ey-black;
+  color       : $tuniflow-black;
 }
 
 .pay-devise {
   font-size   : 11px;
-  color       : $ey-muted;
+  color       : $tuniflow-muted;
   margin-left : 3px;
   font-weight : 500;
 }
 
 .pay-ref,
 .pay-banque {
-  color     : $ey-muted;
+  color     : $tuniflow-muted;
   font-size : 12px;
 }
 
 .pay-date {
   font-size  : 12px;
-  color      : $ey-text;
+  color      : $tuniflow-text;
   white-space: nowrap;
 
-  &.muted { color: $ey-muted; }
+  &.muted { color: $tuniflow-muted; }
 }
 
 .empty-row {
   text-align : center;
   padding    : 48px !important;
-  color      : $ey-muted;
+  color      : $tuniflow-muted;
 
   display        : flex;
   align-items    : center;
@@ -315,7 +315,7 @@ $fb          : 'DM Sans', sans-serif;
   &--ok      { background: $ok-bg;      color: $ok-text;    }
   &--info    { background: $info-bg;    color: $info-text;  }
   &--warn    { background: $warn-bg;    color: $warn-text;  }
-  &--ey      { background: $ey-yellow;  color: $ey-black;   }
+  &--ey      { background: $tuniflow-yellow;  color: $tuniflow-black;   }
   &--neutral { background: $neutral-bg; color: $neutral-text;}
 }
 
@@ -331,10 +331,10 @@ $fb          : 'DM Sans', sans-serif;
 .pg-btn {
   width         : 32px;
   height        : 32px;
-  border        : 1px solid $ey-border;
+  border        : 1px solid $tuniflow-border;
   border-radius : 4px;
   background    : #fff;
-  color         : $ey-black;
+  color         : $tuniflow-black;
   display       : flex;
   align-items   : center;
   justify-content: center;
@@ -342,9 +342,9 @@ $fb          : 'DM Sans', sans-serif;
   transition    : border-color .15s, background .15s;
 
   &:hover:not(:disabled) {
-    border-color: $ey-black;
-    background  : $ey-black;
-    color       : $ey-yellow;
+    border-color: $tuniflow-black;
+    background  : $tuniflow-black;
+    color       : $tuniflow-yellow;
   }
 
   &:disabled {
@@ -355,7 +355,7 @@ $fb          : 'DM Sans', sans-serif;
 
 .pg-info {
   font-size  : 12px;
-  color      : $ey-muted;
+  color      : $tuniflow-muted;
   font-weight: 500;
 }
 

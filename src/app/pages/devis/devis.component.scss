@@ -1,7 +1,7 @@
 
-$ey: var(--c-ey); $ey-dim: rgba(var(--c-ey-rgb),.08); $ey-glow: rgba(var(--c-ey-rgb),.18);
+$tuniflow: var(--c-tuniflow); $tuniflow-dim: rgba(var(--c-tuniflow-rgb),.08); $tuniflow-glow: rgba(var(--c-tuniflow-rgb),.18);
 $surf: var(--bg-surf); $card: var(--bg-card);
-$b0: var(--b0); $b1: var(--b1); $b2: var(--b2); $b-ey: var(--b-ey);
+$b0: var(--b0); $b1: var(--b1); $b2: var(--b2); $b-tuniflow: var(--b-tuniflow);
 $tp: var(--tp); $ts: var(--ts); $tt: var(--tt);
 $ok: #22C55E; $ok2: rgba(34,197,94,.1);
 $warn: #F59E0B; $warn2: rgba(245,158,11,.1);
@@ -24,16 +24,16 @@ $fm: 'JetBrains Mono',monospace;
   background:var(--navbar-bg); border:1px solid var(--navbar-border);
   box-shadow:var(--navbar-shadow); border-radius:14px; padding:16px 20px; margin-bottom:20px;
 }
-.page-title { font-family:$fd; font-size:1.6rem; font-weight:900; letter-spacing:-.02em; em { color:$ey; font-style:italic } }
+.page-title { font-family:$fd; font-size:1.6rem; font-weight:900; letter-spacing:-.02em; em { color:$tuniflow; font-style:italic } }
 .page-desc  { font-size:12px; color:$ts; margin-top:4px }
 .header-actions { display:flex; gap:8px }
 
 .btn-primary {
   display:flex; align-items:center; gap:7px; padding:10px 18px;
-  background:$ey; border:none; border-radius:10px;
-  font-family:$fb; font-size:13px; font-weight:700; color:var(--ey-btn-text); cursor:pointer;
+  background:$tuniflow; border:none; border-radius:10px;
+  font-family:$fb; font-size:13px; font-weight:700; color:var(--tuniflow-btn-text); cursor:pointer;
   transition:all .15s;
-  &:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 4px 20px rgba(var(--c-ey-rgb),.35) }
+  &:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 4px 20px rgba(var(--c-tuniflow-rgb),.35) }
   &:disabled { opacity:.4; cursor:not-allowed; transform:none }
 }
 .btn-secondary {
@@ -45,9 +45,9 @@ $fm: 'JetBrains Mono',monospace;
 }
 .btn-ghost {
   display:flex; align-items:center; gap:7px; padding:10px 16px;
-  background:transparent; border:1px solid $b-ey; border-radius:10px;
-  font-family:$fb; font-size:13px; font-weight:600; color:$ey; cursor:pointer;
-  transition:all .15s; &:hover { background:$ey-dim }
+  background:transparent; border:1px solid $b-tuniflow; border-radius:10px;
+  font-family:$fb; font-size:13px; font-weight:600; color:$tuniflow; cursor:pointer;
+  transition:all .15s; &:hover { background:$tuniflow-dim }
 }
 
 
@@ -58,7 +58,7 @@ $fm: 'JetBrains Mono',monospace;
 }
 .mk-label { font-size:10.5px; color:$ts; font-weight:600; text-transform:uppercase; letter-spacing:.06em }
 .mk-val   { font-family:$fm; font-size:14px; font-weight:700 }
-.mk--ey   { color:$ey }
+.mk--ey   { color:$tuniflow }
 .mk--ok   { color:$ok }
 .mk--warn { color:$warn }
 .mk--err  { color:$err }
@@ -75,7 +75,7 @@ $fm: 'JetBrains Mono',monospace;
   display:flex; align-items:center; gap:5px; padding:7px 12px; border-radius:8px;
   font-size:12px; font-weight:600; color:$ts; border:1px solid transparent; background:none; cursor:pointer; transition:all .15s;
   &:hover  { background:$b0; color:$tp }
-  &.active { background:$ey-dim; color:$ey; border-color:$b-ey }
+  &.active { background:$tuniflow-dim; color:$tuniflow; border-color:$b-tuniflow }
 }
 .filter-count { font-family:$fm; font-size:9px; font-weight:700; padding:1px 5px; border-radius:99px; background:$b1; color:$ts }
 
@@ -85,7 +85,7 @@ $fm: 'JetBrains Mono',monospace;
   padding:48px; color:$ts; font-size:14px;
 }
 .loading-spinner {
-  width:20px; height:20px; border:2px solid $b1; border-top-color:$ey;
+  width:20px; height:20px; border:2px solid $b1; border-top-color:$tuniflow;
   border-radius:50%; animation:spin .7s linear infinite;
 }
 
@@ -106,7 +106,7 @@ $fm: 'JetBrains Mono',monospace;
 }
 .empty-row { text-align:center; color:$ts; padding:40px !important }
 
-.ft-id     { font-family:$fm; font-size:11.5px; color:$ey; font-weight:700 }
+.ft-id     { font-family:$fm; font-size:11.5px; color:$tuniflow; font-weight:700 }
 .ft-num    { font-family:$fm; font-size:12px; text-align:right }
 .ft-bold   { font-weight:700; color:$tp }
 .ft-muted  { color:$ts }
@@ -119,7 +119,7 @@ $fm: 'JetBrains Mono',monospace;
 
 .ft-client-cell { display:flex; align-items:center; gap:10px }
 .ft-client-init {
-  width:28px; height:28px; border-radius:8px; background:$ey-dim; color:$ey;
+  width:28px; height:28px; border-radius:8px; background:$tuniflow-dim; color:$tuniflow;
   display:flex; align-items:center; justify-content:center;
   font-size:10px; font-weight:800; flex-shrink:0;
 }
@@ -137,7 +137,7 @@ $fm: 'JetBrains Mono',monospace;
   &--err     { background:$err2;  color:$err   }
   &--info    { background:rgba(59,130,246,.1); color:$info }
   &--neutral { background:$b1;    color:$ts    }
-  &--ey      { background:$ey-dim; color:$ey   }
+  &--ey      { background:$tuniflow-dim; color:$tuniflow   }
 }
 
 
@@ -147,7 +147,7 @@ $fm: 'JetBrains Mono',monospace;
   display:flex; align-items:center; justify-content:center; transition:all .15s;
   &--ghost { background:$b0; color:$ts;   &:hover { background:$b1; color:$tp   } }
   &--ok    { background:$ok2; color:$ok;  &:hover { background:rgba(34,197,94,.2) } }
-  &--ey    { background:$ey-dim; color:$ey; &:hover { background:rgba(var(--c-ey-rgb),.18) } }
+  &--ey    { background:$tuniflow-dim; color:$tuniflow; &:hover { background:rgba(var(--c-tuniflow-rgb),.18) } }
   &--info  { background:$info2; color:$info; &:hover { background:rgba(59,130,246,.2) } }
   &--err   { background:$err2; color:$err; &:hover { background:rgba(239,68,68,.2) } }
 }
@@ -170,7 +170,7 @@ $fm: 'JetBrains Mono',monospace;
   padding:20px 24px 16px; border-bottom:1px solid $b1;
   position:sticky; top:0; background:var(--modal-bg); z-index:2;
 }
-.modal-title { font-family:$fd; font-size:1.3rem; font-weight:900; em { color:$ey; font-style:italic } }
+.modal-title { font-family:$fd; font-size:1.3rem; font-weight:900; em { color:$tuniflow; font-style:italic } }
 .modal-sub   { font-size:12px; color:$ts; margin-top:4px }
 .modal-close {
   width:28px; height:28px; border-radius:8px; border:1px solid $b1;
@@ -194,13 +194,13 @@ $fm: 'JetBrains Mono',monospace;
   border-radius:10px; color:var(--input-text); font-family:$fb; font-size:13px; outline:none;
   transition:border .15s, box-shadow .15s;
   &::placeholder { color:var(--input-placeholder) }
-  &:focus { border-color:$ey; box-shadow:0 0 0 3px rgba(var(--c-ey-rgb),.14) }
+  &:focus { border-color:$tuniflow; box-shadow:0 0 0 3px rgba(var(--c-tuniflow-rgb),.14) }
 }
 .form-select {
   padding:10px 14px; background:var(--input-bg); border:1px solid var(--input-border);
   border-radius:10px; color:var(--input-text); font-family:$fb; font-size:13px; outline:none;
   appearance:none; cursor:pointer;
-  &:focus { border-color:$ey; box-shadow:0 0 0 3px rgba(var(--c-ey-rgb),.14) }
+  &:focus { border-color:$tuniflow; box-shadow:0 0 0 3px rgba(var(--c-tuniflow-rgb),.14) }
 }
 .form-textarea { resize:vertical; min-height:60px }
 .req { color:$err; margin-left:2px }
@@ -212,9 +212,9 @@ $fm: 'JetBrains Mono',monospace;
 }
 .lignes-title { font-size:11.5px; font-weight:700; color:$ts; text-transform:uppercase; letter-spacing:.06em }
 .btn-add-ligne {
-  padding:5px 12px; background:$ey-dim; border:1px solid $b-ey;
-  border-radius:8px; color:$ey; font-size:12px; font-weight:700; cursor:pointer;
-  transition:all .15s; &:hover { background:rgba(var(--c-ey-rgb),.16) }
+  padding:5px 12px; background:$tuniflow-dim; border:1px solid $b-tuniflow;
+  border-radius:8px; color:$tuniflow; font-size:12px; font-weight:700; cursor:pointer;
+  transition:all .15s; &:hover { background:rgba(var(--c-tuniflow-rgb),.16) }
 }
 .ligne-row {
   display:flex; align-items:center; gap:8px; margin-bottom:8px;
@@ -226,7 +226,7 @@ $fm: 'JetBrains Mono',monospace;
 .ligne-small       { width:70px; flex:0 0 70px; text-align:right }
 .ligne-medium      { width:100px; flex:0 0 100px }
 .ligne-tva         { width:80px; flex:0 0 80px; font-size:12px }
-.ligne-total       { font-family:$fm; font-size:12px; font-weight:700; color:$ey; width:90px; text-align:right; flex-shrink:0 }
+.ligne-total       { font-family:$fm; font-size:12px; font-weight:700; color:$tuniflow; width:90px; text-align:right; flex-shrink:0 }
 .ligne-del {
   width:24px; height:24px; border-radius:6px; border:1px solid $err2;
   background:none; color:$err; font-size:16px; cursor:pointer; flex-shrink:0;
@@ -244,7 +244,7 @@ $fm: 'JetBrains Mono',monospace;
   &.totaux-ttc { padding-top:8px; border-top:1px solid $b1; margin-top:4px }
 }
 .totaux-val { font-family:$fm; font-weight:700; color:$tp }
-.totaux-ey  { color:$ey; font-size:16px }
+.totaux-ey  { color:$tuniflow; font-size:16px }
 
 
 .detail-summary {
@@ -252,7 +252,7 @@ $fm: 'JetBrains Mono',monospace;
 }
 .ds-item {
   padding:12px 16px; background:$b0; border-radius:10px; border:1px solid $b1;
-  &--ey   { border-color:$b-ey; background:$ey-dim }
+  &--ey   { border-color:$b-tuniflow; background:$tuniflow-dim }
   &--warn { border-color:rgba(245,158,11,.2) }
 }
 .ds-label { font-size:10.5px; color:$ts; font-weight:600; text-transform:uppercase; letter-spacing:.06em }
@@ -264,7 +264,7 @@ $fm: 'JetBrains Mono',monospace;
   display:flex; align-items:flex-start; gap:12px; padding:8px 0; border-bottom:1px solid $b0;
   &:last-child { border-bottom:none }
 }
-.hist-action { font-size:12px; font-weight:700; color:$ey; min-width:120px; flex-shrink:0 }
+.hist-action { font-size:12px; font-weight:700; color:$tuniflow; min-width:120px; flex-shrink:0 }
 .hist-detail { font-size:12px; color:$ts; flex:1 }
 .hist-date   { font-size:11px; color:$tt; font-family:$fm; white-space:nowrap; flex-shrink:0 }
 

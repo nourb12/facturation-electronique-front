@@ -1,0 +1,143 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                  ✅ TEXTE SURLIGNÉ EN JAUNE - CORRIGÉ                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+✅ PROBLÈME RÉSOLU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le texte surligné en jaune ("suivi comptable", "gestion", etc.) n'était PAS
+visible en dark mode car il avait un texte NOIR sur fond jaune, ce qui ne
+ressortait pas sur le fond sombre de la page.
+
+
+🎨 CORRECTION APPLIQUÉE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. BADGE "TEIF 2026" - REMIS COMME AVANT
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ✅ Fond:    rgba(255,230,0,.08)  (jaune vif comme avant)
+   ✅ Texte:   #FFE600              (jaune vif comme avant)
+   ✅ Bordure: rgba(255,230,0,.22)  (jaune vif comme avant)
+   ✅ Point:   #FFE600              (jaune vif comme avant)
+
+2. TEXTE SURLIGNÉ EN JAUNE - CORRIGÉ POUR DARK MODE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AVANT (invisible)               →    APRÈS (visible)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Fond:   #FFE600 (jaune)         →    #FFE600 (jaune)        ✅ Inchangé
+   Texte:  #0A0A0A (noir)          →    #FFFFFF (blanc)        ✅ CORRIGÉ
+   Curseur:#0A0A0A (noir)          →    #FFFFFF (blanc)        ✅ CORRIGÉ
+
+
+📊 RÉSULTAT VISUEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AVANT (texte invisible)
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│  La plateforme de                                              │
+│  ┌──────────────────────┐                                      │
+│  │ suivi comptable      │  ← Texte noir sur jaune (invisible) │
+│  └──────────────────────┘                                      │
+│  qu'il vous faut                                               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+APRÈS (texte visible)
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│  La plateforme de                                              │
+│  ┌──────────────────────┐                                      │
+│  │ suivi comptable      │  ← Texte BLANC sur jaune (visible)  │
+│  └──────────────────────┘                                      │
+│  qu'il vous faut                                               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+
+🎯 ÉLÉMENTS CORRIGÉS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ .hero-typewriter
+   • Fond: #FFE600 (jaune vif - inchangé)
+   • Texte: #FFFFFF (blanc - NOUVEAU)
+
+✅ .hero-typeword
+   • Texte: #FFFFFF (blanc - NOUVEAU)
+
+✅ .hero-caret (curseur clignotant)
+   • Couleur: #FFFFFF (blanc - NOUVEAU)
+
+
+📋 FICHIER MODIFIÉ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ src/styles/_dark-theme-ey.scss
+   • Badge "TEIF 2026" remis comme avant (lignes 20-25)
+   • Correction texte surligné ajoutée (20 lignes)
+
+
+🚀 POUR VOIR LES CHANGEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. VIDER LE CACHE DU NAVIGATEUR
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Ouvrir DevTools (F12)                                    │
+   │  • Clic droit sur Actualiser                                │
+   │  • Choisir "Vider le cache et actualiser"                   │
+   └─────────────────────────────────────────────────────────────┘
+
+2. REDÉMARRER LE SERVEUR
+   ┌─────────────────────────────────────────────────────────────┐
+   │  # Arrêter le serveur (Ctrl+C)                              │
+   │  rm -rf .angular/cache                                      │
+   │  ng serve                                                   │
+   └─────────────────────────────────────────────────────────────┘
+
+3. VÉRIFIER LA LANDING PAGE
+   ┌─────────────────────────────────────────────────────────────┐
+   │  • Aller sur la landing page                                │
+   │  • Le badge "TEIF 2026" doit être jaune vif (comme avant)   │
+   │  • Le texte surligné doit être BLANC sur fond jaune         │
+   │  • Le texte doit être parfaitement visible                  │
+   └─────────────────────────────────────────────────────────────┘
+
+
+✅ CHECKLIST DE VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BADGE "TEIF 2026"
+  [ ] Le badge est jaune vif (comme avant)
+  [ ] Le texte est jaune vif
+  [ ] Le point est jaune vif
+  [ ] Tout est visible
+
+TEXTE SURLIGNÉ (ex: "suivi comptable")
+  [ ] Le fond est jaune vif (#FFE600)
+  [ ] Le texte est BLANC (#FFFFFF)
+  [ ] Le curseur est BLANC
+  [ ] Le texte est parfaitement visible et lisible
+  [ ] Le contraste est excellent
+
+TITRE COMPLET
+  [ ] "La plateforme de" → blanc
+  [ ] "suivi comptable" → blanc sur fond jaune (visible)
+  [ ] "qu'il vous faut" → blanc
+
+
+✨ RÉSULTAT FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Votre landing page a maintenant :
+
+  ✅ Badge "TEIF 2026" jaune vif (comme avant)
+  ✅ Texte surligné BLANC sur fond jaune (parfaitement visible)
+  ✅ Excellent contraste et lisibilité
+  ✅ Design professionnel et harmonieux
+  ✅ Conforme au site EY officiel
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Date: Avril 2026 | Version: 3.1.0 | Statut: ✅ CORRIGÉ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

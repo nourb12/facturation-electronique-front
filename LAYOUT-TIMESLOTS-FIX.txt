@@ -1,0 +1,152 @@
+═══════════════════════════════════════════════════════════════════════════════
+  ✅ MODIFICATION DU LAYOUT - CRÉNEAUX HORAIRES À DROITE
+═══════════════════════════════════════════════════════════════════════════════
+
+DEMANDE :
+  Mettre la partie choix des créneaux horaires à droite du calendrier
+  au lieu d'en dessous
+
+═══════════════════════════════════════════════════════════════════════════════
+  🔧 MODIFICATIONS APPLIQUÉES
+═══════════════════════════════════════════════════════════════════════════════
+
+1️⃣ FICHIER : demo-booking.component.scss
+
+   AVANT :
+   Layout en 2 colonnes : [Info Panel] [Calendrier]
+   Créneaux horaires en dessous du calendrier
+
+   APRÈS :
+   Layout en 3 colonnes : [Info Panel] [Calendrier] [Créneaux Horaires]
+
+   CHANGEMENTS CSS :
+   ✅ .db-cal-layout : grid-template-columns: 280px 1fr 320px
+   ✅ .db-cal-right : ajout border-right pour séparation visuelle
+   ✅ .db-slots-panel : 
+      - Nouveau style vertical avec scroll
+      - Background gris clair (var(--bg-depth))
+      - Max-height: 600px avec overflow-y: auto
+      - Scrollbar personnalisée (jaune EY)
+   ✅ .db-slots-grid : 2 colonnes au lieu de auto-fill
+   ✅ .db-slots-header : layout vertical (flex-direction: column)
+   ✅ .db-slots-confirm : layout vertical avec bouton pleine largeur
+   ✅ Responsive : 
+      - < 1024px : retour à 2 colonnes (calendrier + info)
+      - < 768px : 1 colonne (mobile)
+
+2️⃣ FICHIER : demo-booking.component.html
+
+   AVANT :
+   <div class="db-cal-layout">
+     [Info Panel]
+     [Calendrier]
+   </div>
+   @if (selectedDate()) {
+     <div class="db-slots-panel">...</div>
+   }
+
+   APRÈS :
+   <div class="db-cal-layout">
+     [Info Panel]
+     [Calendrier]
+     @if (selectedDate()) {
+       <div class="db-slots-panel">...</div>
+     }
+   </div>
+
+   CHANGEMENTS HTML :
+   ✅ Panel des créneaux déplacé DANS le db-cal-layout
+   ✅ Devient la 3ème colonne du grid
+   ✅ Bouton "Confirmer" : ajout classe db-btn-ey--full (pleine largeur)
+
+═══════════════════════════════════════════════════════════════════════════════
+  ✅ RÉSULTAT VISUEL
+═══════════════════════════════════════════════════════════════════════════════
+
+DESKTOP (> 1024px) :
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  ┌──────────┐  ┌─────────────────┐  ┌──────────────────┐                  │
+│  │          │  │                 │  │                  │                  │
+│  │   Info   │  │   Calendrier    │  │  Créneaux        │                  │
+│  │   Panel  │  │                 │  │  Horaires        │                  │
+│  │          │  │   [Grille de    │  │                  │                  │
+│  │  • 30min │  │    dates]       │  │  ┌────┐ ┌────┐  │                  │
+│  │  • Teams │  │                 │  │  │09:00│ │09:30│  │                  │
+│  │  • Live  │  │                 │  │  └────┘ └────┘  │                  │
+│  │          │  │                 │  │  ┌────┐ ┌────┐  │                  │
+│  │          │  │                 │  │  │10:00│ │10:30│  │                  │
+│  │          │  │                 │  │  └────┘ └────┘  │                  │
+│  │          │  │                 │  │                  │                  │
+│  │          │  │                 │  │  [Scroll...]     │                  │
+│  │          │  │                 │  │                  │                  │
+│  │          │  │                 │  │  ┌─────────────┐ │                  │
+│  │          │  │                 │  │  │  Confirmer  │ │                  │
+│  │          │  │                 │  │  └─────────────┘ │                  │
+│  └──────────┘  └─────────────────┘  └──────────────────┘                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+   280px           Flexible (1fr)         320px
+
+TABLET (< 1024px) :
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ┌──────────┐  ┌─────────────────┐                                         │
+│  │   Info   │  │   Calendrier    │                                         │
+│  └──────────┘  └─────────────────┘                                         │
+│  ┌──────────────────────────────────┐                                      │
+│  │      Créneaux Horaires           │                                      │
+│  │  (en dessous, grille auto-fill)  │                                      │
+│  └──────────────────────────────────┘                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+MOBILE (< 768px) :
+┌─────────────────────────────────────┐
+│  ┌───────────────────────────────┐  │
+│  │       Info Panel              │  │
+│  └───────────────────────────────┘  │
+│  ┌───────────────────────────────┐  │
+│  │       Calendrier              │  │
+│  └───────────────────────────────┘  │
+│  ┌───────────────────────────────┐  │
+│  │    Créneaux Horaires          │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+  🎨 AMÉLIORATIONS VISUELLES
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Panel des créneaux avec fond gris clair distinct
+✅ Scroll vertical avec scrollbar personnalisée (jaune EY)
+✅ Grille 2 colonnes pour les créneaux (plus compact)
+✅ Header vertical avec date + hint
+✅ Bouton de confirmation pleine largeur
+✅ Séparation visuelle avec border-right sur le calendrier
+✅ Animation d'entrée (db-step-enter) conservée
+✅ Responsive fluide avec breakpoints adaptés
+
+═══════════════════════════════════════════════════════════════════════════════
+  🔄 POUR TESTER
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Redémarrer le serveur Angular :
+   ng serve
+
+2. Aller sur : http://localhost:4200/demande-demo
+
+3. Sélectionner une date dans le calendrier
+
+4. Observer :
+   ✅ Les créneaux horaires apparaissent à DROITE du calendrier
+   ✅ Scroll vertical si beaucoup de créneaux
+   ✅ Grille 2 colonnes pour les heures
+   ✅ Bouton "Confirmer" pleine largeur en bas
+
+5. Tester le responsive :
+   - Réduire la fenêtre < 1024px : créneaux passent en dessous
+   - Réduire < 768px : tout en colonne verticale
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Date de modification : 30 avril 2026
+Statut : ✅ LAYOUT MODIFIÉ - CRÉNEAUX À DROITE

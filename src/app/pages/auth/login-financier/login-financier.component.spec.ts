@@ -39,14 +39,14 @@ describe('LoginFinancierComponent', () => {
 
   const create = () => TestBed.createComponent(LoginFinancierComponent).componentInstance;
 
-  it('n’appelle pas login si formulaire invalide', () => {
+  it('nâ€™appelle pas login si formulaire invalide', () => {
     const cmp = create();
     cmp.form = { email: 'bad', password: '123', entrepriseCode: '' } as any;
     cmp.onSubmit();
     expect(authSpy.login).not.toHaveBeenCalled();
   });
 
-  it('redirige vers dashboard quand rôle autorisé', () => {
+  it('redirige vers dashboard quand rÃ´le autorisÃ©', () => {
     authSpy.login.and.returnValue(of(authRes));
     currentRole = 'ResponsableFinancier';
     const cmp = create();
@@ -57,7 +57,7 @@ describe('LoginFinancierComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 
-  it('refuse accès si rôle non autorisé', fakeAsync(() => {
+  it('refuse accÃ¨s si rÃ´le non autorisÃ©', fakeAsync(() => {
     authSpy.login.and.returnValue(of(authRes));
     currentRole = 'ResponsableCommercial';
     const cmp = create();
@@ -71,7 +71,7 @@ describe('LoginFinancierComponent', () => {
     expect(router.navigate).not.toHaveBeenCalled();
   }));
 
-  it('passe en mode 2FA quand utilisateurId est renvoyé', () => {
+  it('passe en mode 2FA quand utilisateurId est renvoyÃ©', () => {
     authSpy.login.and.returnValue(of({ utilisateurId: 'u2' } as any));
     const cmp = create();
     cmp.form = { email: 'u@a.b', password: '123456', entrepriseCode: '' } as any;

@@ -82,8 +82,8 @@ $fm: 'JetBrains Mono', monospace;
 
 .sb-badge {
   margin:6px 0 12px; padding:7px 10px;
-  background:rgba(var(--c-ey-rgb),0.10); border:1px solid rgba(var(--c-ey-rgb),0.18);
-  border-radius:10px; font-family:$fm; font-size:9px; color:var(--c-ey);
+  background:rgba(var(--c-tuniflow-rgb),0.10); border:1px solid rgba(var(--c-tuniflow-rgb),0.18);
+  border-radius:10px; font-family:$fm; font-size:9px; color:var(--c-tuniflow);
   display:flex; align-items:center; gap:6px; letter-spacing:0.08em; font-weight:700;
   text-transform:uppercase; position:relative; z-index:1;
 }

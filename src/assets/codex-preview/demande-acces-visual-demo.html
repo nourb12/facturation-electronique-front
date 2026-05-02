@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preview visuelle - Demande d'acces</title>
+  <style>
+    :root {
+      --ey: #ffe600;
+      --ey-soft: rgba(255, 230, 0, 0.12);
+      --ey-border: rgba(255, 230, 0, 0.28);
+      --ink: #111827;
+      --ink-soft: #667085;
+      --line: #e5e7eb;
+      --card: #ffffff;
+      --bg: #f6f7fb;
+      --deep: #0d3d2e;
+      --green: #00a878;
+      --green-soft: rgba(0, 168, 120, 0.12);
+      --shadow: 0 22px 70px rgba(17, 24, 39, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
+      padding: 28px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 28px;
+      align-self: start;
+      background: linear-gradient(180deg, #ffffff, #fbfbfd);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--ey-soft);
+      border: 1px solid var(--ey-border);
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d6b300;
+      flex: 0 0 auto;
+    }
+
+    .sidebar h1 {
+      margin: 18px 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 38px;
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .sidebar p {
+      margin: 0 0 16px;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+    }
+
+    .source-card {
+      padding: 14px 14px 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .source-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .source-card span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 12px;
+      word-break: break-word;
+    }
+
+    .preview-column {
+      display: grid;
+      gap: 28px;
+    }
+
+    .preview-block {
+      background: linear-gradient(180deg, #ffffff, #fcfcfd);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .preview-title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .preview-note {
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .screen {
+      background: #fff;
+      border: 1px solid #eaecf0;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .screen-choice {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 540px;
+    }
+
+    .choice-left {
+      padding: 44px;
+      background: #fff;
+    }
+
+    .logo-row, .wizard-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--ey);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .wordmark strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    .wordmark span {
+      display: block;
+      margin-top: 2px;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .choice-left h2, .wizard-main h2, .confirm-main h2 {
+      margin: 34px 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 46px;
+      line-height: .98;
+      letter-spacing: -.05em;
+    }
+
+    .choice-left p {
+      margin: 0 0 22px;
+      color: var(--ink-soft);
+      max-width: 460px;
+    }
+
+    .choice-card-list {
+      display: grid;
+      gap: 14px;
+      max-width: 460px;
+    }
+
+    .choice-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px;
+      border: 1px solid #dfe4ea;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.03);
+    }
+
+    .choice-card-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mini-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #effcf7;
+      border: 1px solid #d7f7ea;
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .choice-card strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .choice-card span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .choice-right {
+      background: var(--deep);
+      color: #fff;
+      padding: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .choice-right h3 {
+      margin: 0 0 20px;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 500;
+    }
+
+    .choice-right strong { font-weight: 800; }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .value-card {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      min-height: 94px;
+    }
+
+    .value-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .value-card span,
+    .check-list span {
+      font-size: 13px;
+      color: rgba(255,255,255,.76);
+    }
+
+    .check-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .wizard-screen, .confirm-screen {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 660px;
+    }
+
+    .wizard-side, .confirm-side {
+      background: linear-gradient(180deg, #f8f9fc, #f2f5fb);
+      border-right: 1px solid #eceff5;
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quote-box {
+      margin: 22px 0 22px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,230,0,.08);
+      border: 1px solid rgba(255,230,0,.18);
+    }
+
+    .quote-box strong {
+      display: block;
+      margin-bottom: 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .quote-box span,
+    .side-trust span,
+    .step-mini span {
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .step-mini-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .step-mini {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #d8dde6;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+      background: #fff;
+      color: #111;
+      flex: 0 0 auto;
+    }
+
+    .step-num.active {
+      border-color: rgba(255, 230, 0, 0.55);
+      background: rgba(255, 230, 0, 0.18);
+    }
+
+    .side-trust {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .side-trust-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .dot.ey { background: #d6b300; }
+
+    .wizard-main, .confirm-main {
+      padding: 28px 34px 34px;
+    }
+
+    .top-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      color: #667085;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #edf1f5;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .bar > div {
+      width: 34%;
+      height: 100%;
+      background: linear-gradient(90deg, #ffea57, #ffe600);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #667085;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .fake-input {
+      height: 56px;
+      border-radius: 16px;
+      border: 1px solid #dde3ea;
+      background: #fff;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      color: #98a2b3;
+      font-size: 15px;
+    }
+
+    .upload {
+      min-height: 88px;
+      border: 1px dashed #cfd6de;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+    }
+
+    .upload-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid #dbe2ea;
+      background: #f8fafc;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      color: #667085;
+    }
+
+    .upload strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .upload span {
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .btn-ghost, .btn-primary {
+      height: 54px;
+      border-radius: 16px;
+      padding: 0 22px;
+      border: 1px solid #d7dde6;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      border-color: #f1d900;
+      background: linear-gradient(180deg, #ffea35, #ffe000);
+      color: #111;
+      box-shadow: 0 12px 28px rgba(255, 230, 0, 0.16);
+    }
+
+    .confirm-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+
+    .confirm-card {
+      width: min(720px, 100%);
+      padding: 28px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid #eaecf0;
+      box-shadow: 0 20px 50px rgba(17, 24, 39, 0.06);
+    }
+
+    .confirm-card h2 { margin-top: 22px; }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff5a8, #ffe600);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .brand-copy span {
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .confirm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .ref-box, .timeline-box {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #e8ebf0;
+      background: #fbfcfe;
+    }
+
+    .ref-box label, .timeline-box label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #667085;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .ref-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px dashed #d7dde6;
+      background: #fff;
+    }
+
+    .ref-line strong {
+      font-family: Consolas, monospace;
+      font-size: 18px;
+    }
+
+    .copy-btn {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid #d7dde6;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .timeline-node {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid #d8dde6;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .timeline-node.done {
+      background: rgba(0,168,120,.12);
+      border-color: rgba(0,168,120,.24);
+      color: var(--green);
+    }
+
+    .timeline-node.wait {
+      background: rgba(255,230,0,.14);
+      border-color: rgba(255,230,0,.32);
+      color: #8a7300;
+    }
+
+    .timeline-copy strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .timeline-copy span {
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .center-action {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 1180px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .screen-choice,
+      .wizard-screen,
+      .confirm-screen,
+      .confirm-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 16px; gap: 18px; }
+      .choice-left,
+      .choice-right,
+      .wizard-main,
+      .confirm-main,
+      .wizard-side,
+      .confirm-side { padding: 20px; }
+      .form-row,
+      .value-grid { grid-template-columns: 1fr; }
+      .choice-left h2,
+      .wizard-main h2,
+      .confirm-main h2 { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <aside class="sidebar">
+      <div class="eyebrow">Preview isolee</div>
+      <h1>Demonstration visuelle</h1>
+      <p>
+        Cette page ne touche pas ton composant Angular actuel. Elle montre
+        simplement a quoi vont ressembler les 3 gros etats visibles des fichiers
+        que tu m'as donnes.
+      </p>
+
+      <div class="source-list">
+        <div class="source-card">
+          <strong>1. HTML</strong>
+          <span>demande-acces.component (1).html</span>
+        </div>
+        <div class="source-card">
+          <strong>2. TypeScript</strong>
+          <span>demande-acces.component (1).ts</span>
+        </div>
+        <div class="source-card">
+          <strong>3. SCSS additions</strong>
+          <span>demande-acces-additions.scss</span>
+        </div>
+      </div>
+    </aside>
+
+    <section class="preview-column">
+      <div class="preview-block">
+        <div class="preview-header">
+          <div class="preview-title">Etat 1 - Choix du profil</div>
+          <div class="preview-note">Ecran d'entree type Pennylane</div>
+        </div>
+        <div class="screen screen-choice">
+          <div class="choice-left">
+            <div class="logo-row">
+              <div class="mark">EY</div>
+              <div class="wordmark">
+                <strong>TunisFlow</strong>
+                <span>Facturation electronique certifiee</span>
+              </div>
+            </div>
+            <h2>Parlez-nous de votre entreprise.</h2>
+            <p>Choisissez votre profil pour demarrer un parcours plus clair, plus rapide et mieux adapte a votre organisation.</p>
+            <div class="choice-card-list">
+              <div class="choice-card">
+                <div class="choice-card-left">
+                  <div class="mini-icon">I</div>
+                  <div>
+                    <strong>Independant</strong>
+                    <span>Parcours simplifie et documents essentiels</span>
+                  </div>
+                </div>
+                <strong>&rarr;</strong>
+              </div>
+              <div class="choice-card">
+                <div class="choice-card-left">
+                  <div class="mini-icon">E</div>
+                  <div>
+                    <strong>Entreprise</strong>
+                    <span>Workflow complet avec responsable legal</span>
+                  </div>
+                </div>
+                <strong>&rarr;</strong>
+              </div>
+            </div>
+          </div>
+          <div class="choice-right">
+            <div>
+              <h3>Un onboarding <strong>plus simple, plus rassurant</strong> et plus clair des le premier ecran.</h3>
+              <div class="value-grid">
+                <div class="value-card">
+                  <strong>Conforme TEIF</strong>
+                  <span>Parcours calibre pour la conformite DGI.</span>
+                </div>
+                <div class="value-card">
+                  <strong>Gain de temps</strong>
+                  <span>Documents demandes au bon moment.</span>
+                </div>
+                <div class="value-card">
+                  <strong>KYC cadre</strong>
+                  <span>Informations entreprise et responsable distinctes.</span>
+                </div>
+                <div class="value-card">
+                  <strong>UX plus pro</strong>
+                  <span>Choix du profil tres lisible avant le formulaire.</span>
+                </div>
+              </div>
+              <div class="check-list">
+                <span>✓ Demarrage guide</span>
+                <span>✓ Zero confusion entre independant et entreprise</span>
+                <span>✓ Ecran premium et plus rassurant</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-block">
+        <div class="preview-header">
+          <div class="preview-title">Etat 2 - Wizard formulaire</div>
+          <div class="preview-note">Sidebar + progression + formulaire propre</div>
+        </div>
+        <div class="screen wizard-screen">
+          <aside class="wizard-side">
+            <div class="wizard-logo">
+              <div class="mark">EY</div>
+              <div class="wordmark">
+                <strong style="font-size:20px;">TunisFlow</strong>
+                <span>Facturation electronique certifiee</span>
+              </div>
+            </div>
+            <div class="quote-box">
+              <strong>Chaque detail compte.</strong>
+              <span>Un parcours plus rassurant, avec des messages de contexte a chaque etape.</span>
+            </div>
+            <div class="step-mini-list">
+              <div class="step-mini">
+                <div class="step-num active">1</div>
+                <div><strong>Informations entreprise</strong><br><span>Identite legale et coordonnees</span></div>
+              </div>
+              <div class="step-mini">
+                <div class="step-num">2</div>
+                <div><strong>Responsable legal</strong><br><span>Contact principal de l'entreprise</span></div>
+              </div>
+              <div class="step-mini">
+                <div class="step-num">3</div>
+                <div><strong>Documents justificatifs</strong><br><span>Pieces requises pour validation KYC</span></div>
+              </div>
+            </div>
+            <div class="side-trust">
+              <div class="side-trust-item"><span class="dot"></span><span>Donnees chiffrees AES-256</span></div>
+              <div class="side-trust-item"><span class="dot ey"></span><span>Conforme TEIF 2026</span></div>
+            </div>
+          </aside>
+          <main class="wizard-main">
+            <div class="top-progress">
+              <span>Etape 1 sur 3</span>
+              <span>33%</span>
+            </div>
+            <div class="bar"><div></div></div>
+            <div class="eyebrow">Etape 1 - Informations entreprise</div>
+            <h2>Informations de l'entreprise.</h2>
+            <div class="form-grid">
+              <div class="field">
+                <label>Logo entreprise</label>
+                <div class="upload">
+                  <div class="upload-icon">+</div>
+                  <div>
+                    <strong>Cliquer pour choisir un fichier</strong>
+                    <span>jpg, png, svg - 2 Mo max</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Nom commercial</label>
+                <div class="fake-input">Ex : Tech Solutions</div>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Matricule fiscal</label>
+                  <div class="fake-input">Ex : 1495908/S ou 1234567A/B/M/00C</div>
+                </div>
+                <div class="field">
+                  <label>Forme juridique</label>
+                  <div class="fake-input">Selectionner...</div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Raison sociale</label>
+                <div class="fake-input">Nom officiel enregistre au RNE</div>
+              </div>
+              <div class="actions">
+                <button class="btn-ghost">Retour</button>
+                <button class="btn-primary">Continuer &rarr;</button>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <div class="preview-block">
+        <div class="preview-header">
+          <div class="preview-title">Etat 3 - Confirmation finale</div>
+          <div class="preview-note">Reference dossier + timeline + retour connexion</div>
+        </div>
+        <div class="screen confirm-screen">
+          <aside class="confirm-side">
+            <div class="wizard-logo">
+              <div class="mark">EY</div>
+              <div class="wordmark">
+                <strong style="font-size:20px;">TunisFlow</strong>
+                <span>Facturation electronique certifiee</span>
+              </div>
+            </div>
+            <div class="quote-box">
+              <strong>Votre dossier est lance.</strong>
+              <span>Le panneau gauche reste propre, compact et rassurant jusqu'a la fin du parcours.</span>
+            </div>
+            <div class="side-trust">
+              <div class="side-trust-item"><span class="dot"></span><span>Donnees chiffrees AES-256</span></div>
+              <div class="side-trust-item"><span class="dot ey"></span><span>Conforme TEIF 2026</span></div>
+            </div>
+          </aside>
+          <main class="confirm-main">
+            <div class="confirm-card">
+              <div class="eyebrow">Demande envoyee</div>
+              <div class="brand-row">
+                <div class="brand-logo">VT</div>
+                <div class="brand-copy">
+                  <strong>Voyageur Tech</strong>
+                  <span>Dossier en cours d'examen</span>
+                </div>
+              </div>
+              <h2>Bienvenue, votre demande est en cours.</h2>
+              <p style="margin:0;color:#667085;max-width:620px;">Vous recevrez vos identifiants par email apres validation. L'ecran final devient plus professionnel avec une reference claire et un suivi lisible.</p>
+
+              <div class="confirm-grid">
+                <div class="ref-box">
+                  <label>Reference dossier</label>
+                  <div class="ref-line">
+                    <strong>MZN-1238567-2026</strong>
+                    <button class="copy-btn">Copier</button>
+                  </div>
+                </div>
+                <div class="timeline-box">
+                  <label>Suivi de votre demande</label>
+                  <div class="timeline">
+                    <div class="timeline-item">
+                      <div class="timeline-node done">✓</div>
+                      <div class="timeline-copy">
+                        <strong>Dossier soumis</strong>
+                        <span>Recu le 30/04/2026</span>
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-node wait">•</div>
+                      <div class="timeline-copy">
+                        <strong>Examen en cours</strong>
+                        <span>Delai estime : 48h ouvrables</span>
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-node">3</div>
+                      <div class="timeline-copy">
+                        <strong>Acces accorde</strong>
+                        <span>Email avec identifiants</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="center-action">
+                <button class="btn-primary">Retour a la connexion &rarr;</button>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

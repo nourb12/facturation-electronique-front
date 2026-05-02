@@ -63,7 +63,7 @@ interface LangOption {
       align-items: center;
       gap: 8px;
       cursor: pointer;
-      transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+      transition: background var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
     }
 
     :root[data-theme="light"] .lang-btn {
@@ -77,15 +77,14 @@ interface LangOption {
     }
 
     .lang-btn:hover {
-      border-color: rgba(255,230,0,.55);
-      box-shadow: 0 0 0 3px rgba(255,230,0,.18);
-      transform: translateY(-1px);
+      border-color: rgba(17,24,39,.12);
+      background: rgba(255,255,255,.96);
     }
 
     .lang-btn:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(255,230,0,.35);
-      border-color: rgba(255,230,0,.65);
+      box-shadow: 0 0 0 3px rgba(17,24,39,.08);
+      border-color: rgba(17,24,39,.18);
     }
 
     .flag {
@@ -101,6 +100,7 @@ interface LangOption {
       font-size: 12px;
       opacity: .75;
       margin-top: 1px;
+      color: var(--ts, #6B7280);
     }
 
     .menu {
@@ -139,28 +139,36 @@ interface LangOption {
       align-items: center;
       gap: 12px;
       cursor: pointer;
-      transition: background var(--t-fast), transform var(--t-fast);
+      transition: background var(--t-fast), box-shadow var(--t-fast);
       text-align: left;
     }
 
     .item:hover {
-      background: rgba(255,230,0,.10);
-      transform: translateY(-1px);
+      background: rgba(15,23,42,.04);
     }
 
     .item.active {
-      background: rgba(255,230,0,.14);
-      box-shadow: inset 0 0 0 1px rgba(255,230,0,.35);
+      background: rgba(15,23,42,.05);
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,.08);
     }
 
     .label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--tp, #111827);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ts, #6B7280);
     }
 
     :root:not([data-theme="light"]) .label {
       color: rgba(255,255,255,.92);
+    }
+
+    :root:not([data-theme="light"]) .item:hover {
+      background: rgba(255,255,255,.06);
+    }
+
+    :root:not([data-theme="light"]) .item.active {
+      background: rgba(255,255,255,.07);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
     }
   `]
 })
