@@ -368,7 +368,6 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       ],
       quantiteMode: 'simple',
       enteteText: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
-      footerText: '',
       enteteImageUrl: '',
       sigImageUrl: '',
       cachetUrl: '',
