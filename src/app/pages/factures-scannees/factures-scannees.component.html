@@ -1,0 +1,162 @@
+<div class="page-wrap page-layout">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'SCANNED_INVOICES.TITLE' | translate }}</h1>
+      <p class="page-desc">{{ 'SCANNED_INVOICES.SUBTITLE' | translate:{ total: total() } }}</p>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="page-filters">
+    <div class="search-box">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+        <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text"
+             [placeholder]="'SCANNED_INVOICES.FILTERS.SEARCH_PLACEHOLDER' | translate"
+             [ngModel]="search()" (ngModelChange)="search.set($event); onFilterChange()"/>
+    </div>
+
+    <select class="form-select" [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)">
+      <option value="All">{{ 'SCANNED_INVOICES.FILTERS.TYPE_ALL' | translate }}</option>
+      @for (t of typeOptions(); track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- CONTENT -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <span>{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+  } @else {
+    @if (visibleRows().length === 0) {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="6" y="8" width="36" height="28" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16h24M12 24h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p>{{ 'SCANNED_INVOICES.EMPTY' | translate }}</p>
+      </div>
+    } @else {
+      <div class="cards-grid">
+        @for (t of visibleRows(); track t.id) {
+          <div class="card-item">
+            <!-- Preview -->
+            <div class="card-preview" (click)="openDocument(t)" [class.clickable]="!!t.documentLie?.url">
+              @if (t.documentLie?.url) {
+                @if (isImageDocument(t)) {
+                  <img class="preview-img" [src]="$any(t.documentLie).url" alt="document"/>
+                } @else if (isPdfDocument(t)) {
+                  <div class="preview-file">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                      <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      <path d="M20 4v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="file-name">{{ t.documentLie?.fileName || 'document.pdf' }}</span>
+                  </div>
+                } @else {
+                  <div class="preview-file">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                      <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      <path d="M20 4v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="file-name">{{ t.documentLie?.fileName || 'document' }}</span>
+                  </div>
+                }
+              } @else {
+                <div class="preview-empty">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+                  </svg>
+                  <span>{{ 'SCANNED_INVOICES.NO_FILE' | translate }}</span>
+                </div>
+              }
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+              <div class="card-header">
+                <div class="card-type">{{ t.documentType || '—' }}</div>
+                <div class="card-confidence" [class.high]="(t.ocrOverallConfidence ?? 0) >= 0.8">
+                  {{ formatConfidence(t.ocrOverallConfidence) }}
+                </div>
+              </div>
+
+              <div class="card-content">
+                <h3 class="card-title">{{ t.libelle }}</h3>
+                @if (t.tiersNom) {
+                  <p class="card-meta">{{ t.tiersNom }}</p>
+                }
+                <p class="card-meta">{{ t.date | date:'dd/MM/yyyy' }} • {{ formatAmount(t.montant) }} {{ t.devise }}</p>
+                @if (t.missingFieldKeys.length) {
+                  <div class="card-warning">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path d="M7 1l6 11H1L7 1z" stroke="currentColor" stroke-width="1.2"/>
+                      <path d="M7 5v3M7 10v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>{{ 'SCANNED_INVOICES.MISSING_FIELDS' | translate:{ count: t.missingFieldKeys.length } }}</span>
+                  </div>
+                }
+              </div>
+
+              <div class="card-actions">
+                <button class="btn-secondary" type="button" (click)="openDocument(t)" [disabled]="!t.documentLie?.url">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  {{ 'SCANNED_INVOICES.ACTIONS.OPEN' | translate }}
+                </button>
+                <button class="btn-primary" type="button" (click)="confirmer(t)" [disabled]="actionLoading() === t.id">
+                  @if (actionLoading() === t.id) {
+                    <span class="spinner-mini"></span>
+                  } @else {
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  }
+                  {{ 'SCANNED_INVOICES.ACTIONS.CONFIRM' | translate }}
+                </button>
+                <button class="btn-secondary" type="button"
+                        (click)="signer(t)"
+                        [disabled]="!canSign(t) || actionLoading() === t.id">
+                  @if (actionLoading() === t.id) {
+                    <span class="spinner-mini"></span>
+                  } @else {
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <path d="M2 11l3-3m5-5l-8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                  }
+                  {{ 'SCANNED_INVOICES.ACTIONS.SIGN' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination-bar">
+        <button class="btn-secondary" type="button" (click)="prevPage()" [disabled]="page() <= 1">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M8 2L3 6.5l5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ 'COMMON.PREVIOUS' | translate }}
+        </button>
+        <div class="pagination-info">
+          <span>{{ page() }}</span> / <span>{{ Math.ceil((total() || 0) / parPage) }}</span>
+        </div>
+        <button class="btn-secondary" type="button" (click)="nextPage()" [disabled]="page() >= Math.ceil((total() || 0)/parPage)">
+          {{ 'COMMON.NEXT' | translate }}
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M5 2l5 4.5-5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    }
+  }
+</div>
