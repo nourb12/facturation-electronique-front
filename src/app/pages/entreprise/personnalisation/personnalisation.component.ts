@@ -1,5 +1,5 @@
 import {
-  Component, signal, computed, inject, OnInit, ViewChild, ElementRef
+  Component, signal, computed, inject, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -32,6 +32,13 @@ export const sectionIn = trigger('sectionIn', [
       style({ opacity: 0, transform: 'translateX(8px)' }),
       animate('200ms cubic-bezier(.16,1,.3,1)', style({ opacity: 1, transform: 'translateX(0)' }))
     ], { optional: true })
+  ])
+]);
+
+export const tabIn = trigger('tabIn', [
+  transition(':enter', [
+    style({ opacity: 0, transform: 'translateX(6px)' }),
+    animate('200ms cubic-bezier(.16,1,.3,1)', style({ opacity: 1, transform: 'translateX(0)' }))
   ])
 ]);
 
@@ -78,6 +85,44 @@ interface Webhook {
   id: number; url: string; events: string[]; lastCall: Date | null; lastStatus: number | null; actif: boolean;
 }
 
+// --- PDF INTERFACES -----------------------------------------------
+interface PdfColonne {
+  key: string;
+  label: string;
+  visible: boolean;
+  largeur: number | null;
+  ordre: number;
+}
+
+interface PdfVariable {
+  label: string;
+  token: string;
+  groupe: string;
+}
+
+interface PdfData {
+  logoUrl: string;
+  primaryColor: string;
+  font: string;
+  paperSize: string;
+  matriculeFiscal: string;
+  rne: string;
+  rc: string;
+  iban: string;
+  modeles: Record<string, string>;
+  colonnes: PdfColonne[];
+  quantiteMode: string;
+  enteteTexte: string;
+  piedDePageTexte: string;
+  enteteImageUrl: string;
+  signatureUrl: string;
+  signatureActive: boolean;
+  hashActive: boolean;
+  options: Record<string, boolean>;
+  langue: string;
+  arrondi: string;
+}
+
 // --- COMPONENT ------------------------------------------------
 @Component({
   selector: 'app-personnalisation',
@@ -85,9 +130,9 @@ interface Webhook {
   imports: [CommonModule, FormsModule, CatFilterPipe],
   templateUrl: './personnalisation.component.html',
   styleUrls: ['./personnalisation.component.scss'],
-  animations: [pageIn, sectionIn]
+  animations: [pageIn, sectionIn, tabIn]
 })
-export class PersonnalisationComponent implements OnInit {
+export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private api = inject(PersonnalisationApiService);
   private toast = inject(ToastService);
@@ -97,11 +142,24 @@ export class PersonnalisationComponent implements OnInit {
 
 
   @ViewChild('logoInput') logoInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('enteteInput') enteteInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('sigCanvas') sigCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('enteteRef') enteteRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('piedRef') piedRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('sigImportInput') sigImportInput!: ElementRef<HTMLInputElement>;
 
   activeSectionKey = signal<string>('numerotation');
   saving = signal(false);
   isDirty = signal(false);
   catSearch = '';
+
+  // --- PDF SECTION SIGNALS ----------------------------------------
+  pdfActiveTab = signal<string>('modeles');
+  dragIndex: number | null = null;
+  sigMode = signal<'draw' | 'type' | 'import'>('draw');
+  sigTyped = '';
+  private ctx: CanvasRenderingContext2D | null = null;
+  private drawing = false;
 
   // --- NAV GROUPS ---------------------------------------------
   navGroups = [
@@ -137,6 +195,83 @@ export class PersonnalisationComponent implements OnInit {
         { key: 'webhooks', label: 'Webhooks', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3" cy="7" r="2"/><circle cx="11" cy="3" r="2"/><circle cx="11" cy="11" r="2"/><path d="M5 7q4 0 4-4M5 7q4 0 4 4"/></svg>' },
       ]
     }
+  ];
+
+  // --- PDF TABS & MODELS ------------------------------------------
+  pdfTabs = [
+    { key: 'modeles',     label: 'Modèles PDF',           icon: 'ti-layout-grid' },
+    { key: 'identite',    label: 'Identité visuelle',      icon: 'ti-palette' },
+    { key: 'mise-en-page',label: 'Mise en page',           icon: 'ti-columns' },
+    { key: 'entete',      label: 'En-tête & Pied de page', icon: 'ti-align-left' },
+    { key: 'signature',   label: 'Cachet & Signature',     icon: 'ti-writing-sign' },
+    { key: 'options',     label: 'Affichage PDF',          icon: 'ti-adjustments-horizontal' },
+  ];
+
+  modelesDisponibles = [
+    { key: 'standard', label: 'Standard',  description: 'Mise en page classique et professionnelle' },
+    { key: 'compact',  label: 'Compact',   description: 'Lignes condensées, moins de blanc' },
+    { key: 'oak',      label: 'Oak',       description: 'Bandeau coloré en en-tête' },
+    { key: 'cold',     label: 'Cold',      description: 'Épuré, minimaliste' },
+    { key: 'ticket',   label: 'Ticket',    description: 'Format reçu, impression thermique' },
+  ];
+
+  pdfTypesDocuments = [
+    { key: 'facture',           label: 'Facture',              icon: 'ti-file-invoice',   color: '#E8C84A' },
+    { key: 'devis',             label: 'Devis',                icon: 'ti-file-description',color: '#3B82F6' },
+    { key: 'avoir',             label: 'Avoir / Note de crédit',icon: 'ti-file-minus',     color: '#EF4444' },
+    { key: 'bon_commande',      label: 'Bon de commande',       icon: 'ti-clipboard-list', color: '#22C55E' },
+    { key: 'proforma',          label: 'Facture proforma',      icon: 'ti-file-text',      color: '#8B5CF6' },
+    { key: 'bon_livraison',     label: 'Bon de livraison',      icon: 'ti-truck',          color: '#F59E0B' },
+    { key: 'bon_sortie',        label: 'Bon de sortie',         icon: 'ti-arrow-bar-up',   color: '#0EA5E9' },
+    { key: 'paiement_recu',     label: 'Paiements reçus',       icon: 'ti-cash',           color: '#10B981' },
+    { key: 'paiement_emis',     label: 'Paiements émis',        icon: 'ti-cash-banknote',  color: '#EC4899' },
+    { key: 'ordre_fabrication', label: 'Ordre de fabrication',  icon: 'ti-tool',           color: '#F97316' },
+  ];
+
+  variablesEntete: PdfVariable[] = [
+    { label: 'Nom entreprise',       token: '{{entreprise.nom}}',             groupe: 'Entreprise' },
+    { label: 'Adresse',              token: '{{entreprise.adresse}}',          groupe: 'Entreprise' },
+    { label: 'Ville',                token: '{{entreprise.ville}}',            groupe: 'Entreprise' },
+    { label: 'Téléphone',            token: '{{entreprise.telephone}}',        groupe: 'Entreprise' },
+    { label: 'E-mail',               token: '{{entreprise.email}}',            groupe: 'Entreprise' },
+    { label: 'Site web',             token: '{{entreprise.site_web}}',         groupe: 'Entreprise' },
+    { label: 'Matricule fiscal',     token: '{{entreprise.matricule_fiscal}}', groupe: 'Entreprise' },
+    { label: 'Numéro de facture',    token: '{{document.numero}}',             groupe: 'Document' },
+    { label: 'Date du document',     token: '{{document.date}}',               groupe: 'Document' },
+    { label: 'Date d\'échéance',     token: '{{document.echeance}}',           groupe: 'Document' },
+    { label: 'Total TTC',            token: '{{document.total_ttc}}',          groupe: 'Document' },
+    { label: 'Référence commande',   token: '{{document.reference}}',          groupe: 'Document' },
+  ];
+
+  variablesPied: PdfVariable[] = [
+    { label: 'IBAN bancaire',        token: '{{entreprise.iban}}',             groupe: 'Entreprise' },
+    { label: 'RIB bancaire',         token: '{{entreprise.rib}}',              groupe: 'Entreprise' },
+    { label: 'Nom entreprise',       token: '{{entreprise.nom}}',              groupe: 'Entreprise' },
+    { label: 'Taux pénalité retard', token: '{{conditions.penalite_retard}}',  groupe: 'Conditions' },
+    { label: 'Délai de paiement',    token: '{{conditions.delai_paiement}}',   groupe: 'Conditions' },
+    { label: 'Conditions générales', token: '{{conditions.cgv}}',              groupe: 'Conditions' },
+    { label: 'Numéro de facture',    token: '{{document.numero}}',             groupe: 'Document' },
+    { label: 'Date du document',     token: '{{document.date}}',               groupe: 'Document' },
+  ];
+
+  groupesEntete = ['Entreprise', 'Document'];
+  groupesPied   = ['Entreprise', 'Conditions', 'Document'];
+
+  optionsAffichage = [
+    { key: 'showLogo',            label: 'Logo de l\'entreprise',            hint: 'En haut à gauche de chaque document' },
+    { key: 'showAdresseFactu',    label: 'Adresse de facturation',           hint: 'Coordonnées du client destinataire' },
+    { key: 'showAdresseLivraison',label: 'Adresse de livraison',             hint: 'Si différente de l\'adresse de facturation' },
+    { key: 'showPhotosArticles',  label: 'Photos des articles',              hint: 'Miniature image sur chaque ligne' },
+    { key: 'showDescArticles',    label: 'Description des articles',         hint: 'Texte descriptif sous chaque ligne' },
+    { key: 'showIban',            label: 'Détails bancaires (IBAN / RIB)',   hint: 'Facilite le virement bancaire' },
+    { key: 'showQrCode',          label: 'QR code de vérification',          hint: 'Conformité facture électronique TEIF' },
+  ];
+
+  optionsMentions = [
+    { key: 'showTimbre',          label: 'Timbre fiscal automatique',        hint: '1 DT si TTC ≥ 1 000 DT (LF 2024)' },
+    { key: 'showMentionArrete',   label: 'Arrêtée la somme de…',             hint: 'Montant en toutes lettres (DGI)' },
+    { key: 'cgvSurFacture',       label: 'Conditions générales sur facture', hint: 'CGV imprimées en bas de page' },
+    { key: 'mentionExoneration',  label: 'Mention exonération TVA',          hint: 'Motif affiché si taux 0%' },
   ];
 
   activeSection = computed(() => {
@@ -215,7 +350,31 @@ export class PersonnalisationComponent implements OnInit {
     pdf: {
       logoUrl: '', primaryColor: '#E8C84A', font: 'Helvetica', paperSize: 'A4',
       matriculeFiscal: '', rne: '', rc: '', iban: '', footerText: '',
-      options: { showLogo: true, showSignature: true, showTimbre: true, showMentionArrete: true, showIban: true, showQrCode: false }
+      options: { showLogo: true, showSignature: true, showTimbre: true, showMentionArrete: true, showIban: true, showQrCode: false },
+      // Extended PDF data
+      modeles: {
+        facture: 'standard', devis: 'standard', avoir: 'standard', bon_commande: 'standard',
+        proforma: 'standard', bon_livraison: 'compact', bon_sortie: 'compact',
+        paiement_recu: 'compact', paiement_emis: 'compact', ordre_fabrication: 'standard'
+      },
+      colonnes: [
+        { key: 'reference',  label: 'Référence',      visible: true,  largeur: null, ordre: 1 },
+        { key: 'article',    label: 'Article',         visible: true,  largeur: null, ordre: 2 },
+        { key: 'quantite',   label: 'Quantité',        visible: true,  largeur: null, ordre: 3 },
+        { key: 'prix_unit',  label: 'Prix unitaire',   visible: true,  largeur: null, ordre: 4 },
+        { key: 'taxe',       label: 'Taxe',            visible: false, largeur: null, ordre: 5 },
+        { key: 'remise',     label: 'Remise',          visible: false, largeur: null, ordre: 6 },
+        { key: 'total_ttc',  label: 'Total TTC',       visible: true,  largeur: null, ordre: 7 },
+      ],
+      quantiteMode: 'simple',
+      enteteTexte: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
+      piedDePageTexte: '',
+      enteteImageUrl: '',
+      signatureUrl: '',
+      signatureActive: true,
+      hashActive: true,
+      langue: 'fr',
+      arrondi: 'non'
     },
     typesDocuments: [
       { key: 'facture',      label: 'Facture',          description: 'Document comptable principal (Art. 18 CTVA)', color: '#E8C84A', prefix: 'FAC', seqKey: 'facture',      defaultTva: 19, delaiPaiement: 30, actif: true  },
@@ -746,8 +905,199 @@ export class PersonnalisationComponent implements OnInit {
     alert(`Test envoyé à ${w.url}`);
   }
 
+  // --- PDF METHODS ─────────────────────────────────────────────
+  setPdfTab(key: string) { this.pdfActiveTab.set(key); }
+
+  setModele(typeKey: string, modeleKey: string) {
+    this.data.pdf.modeles[typeKey] = modeleKey;
+    this.markDirty();
+  }
+
+  setModeleAllTypes(modeleKey: string) {
+    this.pdfTypesDocuments.forEach(t => this.data.pdf.modeles[t.key] = modeleKey);
+    this.markDirty();
+  }
+
+  triggerEnteteUpload() { this.enteteInput?.nativeElement.click(); }
+  triggerSigImportUpload() { this.sigImportInput?.nativeElement.click(); }
+
+  onEnteteImageChange(ev: Event) {
+    const file = (ev.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => { this.data.pdf.enteteImageUrl = e.target?.result as string; this.markDirty(); };
+    reader.readAsDataURL(file);
+  }
+
+  onSigImageChange(ev: Event) {
+    const file = (ev.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => { this.data.pdf.signatureUrl = e.target?.result as string; this.markDirty(); };
+    reader.readAsDataURL(file);
+  }
+
+  // Drag & drop colonnes
+  onDragStart(index: number) { this.dragIndex = index; }
+
+  onDragOver(event: DragEvent, index: number) {
+    event.preventDefault();
+    if (this.dragIndex === null || this.dragIndex === index) return;
+    const moved = this.data.pdf.colonnes.splice(this.dragIndex, 1)[0];
+    this.data.pdf.colonnes.splice(index, 0, moved);
+    this.dragIndex = index;
+    this.markDirty();
+  }
+
+  onDragEnd() { this.dragIndex = null; }
+
+  addColonnePersonnalisee() {
+    this.data.pdf.colonnes.push({
+      key: 'custom_' + Date.now(),
+      label: 'Colonne personnalisée',
+      visible: true,
+      largeur: null,
+      ordre: this.data.pdf.colonnes.length + 1
+    });
+    this.markDirty();
+  }
+
+  removeColonne(index: number) {
+    this.data.pdf.colonnes.splice(index, 1);
+    this.markDirty();
+  }
+
+  isCustomColonne(col: PdfColonne): boolean {
+    return col.key.startsWith('custom_');
+  }
+
+  // Variables insertion
+  insererVariableEntete(v: PdfVariable) {
+    const el = this.enteteRef?.nativeElement;
+    if (!el) {
+      this.data.pdf.enteteTexte += v.token;
+      this.markDirty();
+      return;
+    }
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && el.contains(sel.anchorNode)) {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(v.token));
+      range.collapse(false);
+    } else {
+      el.innerText = (el.innerText || '') + v.token;
+    }
+    this.data.pdf.enteteTexte = el.innerText;
+    this.markDirty();
+  }
+
+  insererVariablePied(v: PdfVariable) {
+    const el = this.piedRef?.nativeElement;
+    if (!el) {
+      this.data.pdf.piedDePageTexte += v.token;
+      this.markDirty();
+      return;
+    }
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && el.contains(sel.anchorNode)) {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(v.token));
+      range.collapse(false);
+    } else {
+      el.innerText = (el.innerText || '') + v.token;
+    }
+    this.data.pdf.piedDePageTexte = el.innerText;
+    this.markDirty();
+  }
+
+  getVarsParGroupe(vars: PdfVariable[], groupe: string): PdfVariable[] {
+    return vars.filter(v => v.groupe === groupe);
+  }
+
+  // Signature canvas
+  ngAfterViewInit() {
+    this.initCanvas();
+  }
+
+  private initCanvas() {
+    const canvas = this.sigCanvas?.nativeElement;
+    if (!canvas) return;
+    canvas.width  = canvas.offsetWidth  || 360;
+    canvas.height = canvas.offsetHeight || 130;
+    this.ctx = canvas.getContext('2d');
+    if (!this.ctx) return;
+    this.ctx.strokeStyle = '#1a1a1a';
+    this.ctx.lineWidth   = 2;
+    this.ctx.lineCap     = 'round';
+    this.ctx.lineJoin    = 'round';
+
+    const start = (e: MouseEvent | TouchEvent) => {
+      this.drawing = true;
+      const { x, y } = this.getPos(canvas, e);
+      this.ctx!.beginPath();
+      this.ctx!.moveTo(x, y);
+    };
+    const move = (e: MouseEvent | TouchEvent) => {
+      if (!this.drawing) return;
+      e.preventDefault();
+      const { x, y } = this.getPos(canvas, e);
+      this.ctx!.lineTo(x, y);
+      this.ctx!.stroke();
+    };
+    const stop = () => {
+      this.drawing = false;
+      this.data.pdf.signatureUrl = canvas.toDataURL();
+      this.markDirty();
+    };
+
+    canvas.addEventListener('mousedown',  start as any);
+    canvas.addEventListener('mousemove',  move  as any);
+    canvas.addEventListener('mouseup',    stop);
+    canvas.addEventListener('mouseleave', stop);
+    canvas.addEventListener('touchstart', start as any, { passive: false });
+    canvas.addEventListener('touchmove',  move  as any, { passive: false });
+    canvas.addEventListener('touchend',   stop);
+  }
+
+  private getPos(canvas: HTMLCanvasElement, e: MouseEvent | TouchEvent): { x: number; y: number } {
+    const rect = canvas.getBoundingClientRect();
+    if (e instanceof TouchEvent) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: (e as MouseEvent).clientX - rect.left, y: (e as MouseEvent).clientY - rect.top };
+  }
+
+  clearCanvas() {
+    const canvas = this.sigCanvas?.nativeElement;
+    if (canvas && this.ctx) {
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.data.pdf.signatureUrl = '';
+      this.markDirty();
+    }
+  }
+
+  setSigMode(mode: 'draw' | 'type' | 'import') {
+    this.sigMode.set(mode);
+  }
+
+  setPdfLangue(l: string) {
+    this.data.pdf.langue = l;
+    this.markDirty();
+  }
+
+  setPdfArrondi(a: string) {
+    this.data.pdf.arrondi = a;
+    this.markDirty();
+  }
+
   ngOnInit() {
     this.defaultData = this.clone(this.data);
     this.load();
+  }
+
+  ngOnDestroy() {
+    // Cleanup if needed
   }
 }

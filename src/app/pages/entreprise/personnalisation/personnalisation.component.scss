@@ -903,3 +903,452 @@ $fm: 'JetBrains Mono',monospace;
   .two-col-layout { grid-template-columns: 1fr; }
   .cards-grid { grid-template-columns: 1fr; }
 }
+
+
+// ─── PDF TABS BAR ────────────────────────────────────────────────────────────
+.pdf-tabs {
+  display: flex;
+  gap: 4px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 8px 10px;
+  flex-wrap: wrap;
+}
+
+.pdf-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  border: none;
+  background: none;
+  font-family: $fb;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: $ts;
+  cursor: pointer;
+  transition: all .13s;
+
+  i { font-size: 14px; opacity: .7; }
+
+  &:hover { background: $b0; color: $tp; }
+
+  &.active {
+    background: $tuniflow-dim;
+    color: $tuniflow;
+    font-weight: 700;
+    border: 1px solid $b-tuniflow;
+    i { opacity: 1; }
+  }
+}
+
+// ─── TAB BODY ────────────────────────────────────────────────────────────────
+.tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+// ─── BLOCK ROW ────────────────────────────────────────────────────────────────
+.block-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+}
+
+.block-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: $ts;
+  white-space: nowrap;
+}
+
+// ─── MODELES ─────────────────────────────────────────────────────────────────
+.modele-type-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 12px;
+  flex-wrap: wrap;
+}
+
+.modele-type-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 180px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $tp;
+}
+
+.type-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  i { font-size: 15px; }
+}
+
+.modele-choices {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.modele-chip {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid $b2;
+  background: none;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 500;
+  color: $ts;
+  cursor: pointer;
+  transition: all .13s;
+
+  &:hover { background: $b0; color: $tp; }
+
+  &.active {
+    background: $tuniflow-dim;
+    color: $tuniflow;
+    border-color: $b-tuniflow;
+    font-weight: 700;
+  }
+}
+
+// ─── COLOR PREVIEW BAR ────────────────────────────────────────────────────────
+.color-preview-bar {
+  height: 4px;
+  border-radius: 99px;
+  transition: background .2s;
+}
+
+// ─── COLONNES DRAG & DROP ─────────────────────────────────────────────────────
+.colonnes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.colonne-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: $b0;
+  border: 1px solid $b0;
+  border-radius: 9px;
+  cursor: grab;
+  transition: all .13s;
+  user-select: none;
+
+  &:hover { border-color: $b1; }
+  &.dragging { opacity: .5; border: 1px dashed $tuniflow; }
+}
+
+.drag-handle {
+  font-size: 16px;
+  color: $tt;
+  cursor: grab;
+  &:active { cursor: grabbing; }
+}
+
+.col-label {
+  flex: 1;
+  font-size: 13px;
+  color: $tp;
+}
+
+.col-label-input {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+// ─── ÉDITEUR CHAMP LIBRE (en-tête / pied de page) ────────────────────────────
+.editor-field {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 9px;
+  color: var(--input-text);
+  font-family: $fb;
+  font-size: 13px;
+  line-height: 1.6;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 12px;
+  transition: border .15s, box-shadow .15s;
+
+  &:focus { border-color: $tuniflow; box-shadow: 0 0 0 3px rgba(var(--c-tuniflow-rgb), .13); }
+
+  &:empty::before {
+    content: attr(data-placeholder);
+    color: var(--input-placeholder);
+    pointer-events: none;
+  }
+}
+
+// ─── VARIABLES CHIPS (pied de page / en-tête) ─────────────────────────────────
+.var-groupe-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: $tt;
+  margin: 10px 0 5px;
+}
+
+.vars-chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.var-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid $b2;
+  background: $b0;
+  font-family: $fb;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $ts;
+  cursor: pointer;
+  transition: all .13s;
+  i { font-size: 10px; }
+  &:hover { background: $tuniflow-dim; color: $tuniflow; border-color: $b-tuniflow; }
+}
+
+// ─── SIGNATURE STUDIO ─────────────────────────────────────────────────────────
+.sig-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.sig-studio {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.sig-studio-header {
+  display: flex;
+  border-bottom: 1px solid $b0;
+}
+
+.sig-tab {
+  flex: 1;
+  padding: 10px 8px;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 500;
+  color: $ts;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-bottom: 2px solid transparent;
+  transition: all .13s;
+  i { font-size: 13px; }
+
+  &:hover { color: $tp; background: $b0; }
+  &.active { color: $tuniflow; border-bottom-color: $tuniflow; background: $tuniflow-dim; }
+}
+
+.sig-canvas {
+  display: block;
+  width: 100%;
+  height: 160px;
+  background: var(--input-bg);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.sig-type-zone {
+  padding: 16px;
+}
+
+.sig-type-input {
+  margin-bottom: 12px;
+}
+
+.sig-type-preview {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-style: italic;
+  color: $tp;
+  text-align: center;
+  padding: 12px;
+  border-bottom: 1.5px solid $b2;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sig-import-zone {
+  margin: 12px;
+  border-radius: 9px;
+}
+
+.sig-footer {
+  padding: 10px 12px;
+  border-top: 1px solid $b0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  background: $b0;
+}
+
+// ─── SIGNATURE PREVIEW PANEL ──────────────────────────────────────────────────
+.sig-preview-panel {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.sig-doc-mock {
+  background: var(--input-bg);
+  border: 1px solid $b1;
+  border-radius: 10px;
+  padding: 14px;
+  overflow: hidden;
+}
+
+.sig-doc-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.sig-doc-line {
+  height: 6px;
+  background: $b1;
+  border-radius: 3px;
+  &.long  { width: 100%; }
+  &.med   { width: 75%; }
+  &.short { width: 50%; }
+}
+
+.sig-doc-divider {
+  height: 1px;
+  background: $b1;
+  margin: 4px 0;
+}
+
+.sig-doc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid $b0;
+}
+
+.sig-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+}
+
+.sig-img-preview {
+  max-height: 48px;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+.sig-typed-preview {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+  color: $tp;
+  text-align: center;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.sig-empty-hint {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  i { font-size: 28px; color: $tt; }
+}
+
+.sig-underline {
+  width: 100%;
+  height: 1px;
+  background: $b2;
+  margin: 4px 0;
+}
+
+.sig-zone-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: $tt;
+}
+
+.hash-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hash-badge {
+  font-family: $fm;
+  font-size: 9px;
+  color: $ts;
+  background: $b0;
+  border: 1px solid $b1;
+  border-radius: 5px;
+  padding: 3px 7px;
+  word-break: break-all;
+  text-align: center;
+}
+
+// ─── RESPONSIVE PDF ───────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+  .sig-layout     { grid-template-columns: 1fr; }
+  .pdf-tabs       { gap: 2px; }
+  .pdf-tab        { font-size: 11.5px; padding: 6px 8px; }
+}
+
+@media (max-width: 600px) {
+  .modele-type-row { flex-direction: column; align-items: flex-start; }
+}
