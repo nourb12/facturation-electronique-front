@@ -101,6 +101,7 @@ export class ProduitApiService extends ApiService {
   mettreAJour(id: string, req: any)     { return this.http.put<ProduitDto>(`${this.url}/${id}`, req); }
   desactiver(id: string)                { return this.http.post(`${this.url}/${id}/desactiver`, {}); }
   reactiver(id: string)                 { return this.http.post(`${this.url}/${id}/reactiver`, {}); }
+  supprimer(id: string)                 { return this.http.delete(`${this.url}/${id}`); }
 }
 
 @Injectable({ providedIn: 'root' })
@@ -111,6 +112,7 @@ export class CategorieApiService extends ApiService {
   creer(req: { nom: string; description?: string }) { return this.http.post<CategorieDto>(this.url, req); }
   mettreAJour(id: string, req: any)      { return this.http.put<CategorieDto>(`${this.url}/${id}`, req); }
   desactiver(id: string)                 { return this.http.post(`${this.url}/${id}/desactiver`, {}); }
+  supprimer(id: string)                  { return this.http.delete(`${this.url}/${id}`); }
 }
 
 

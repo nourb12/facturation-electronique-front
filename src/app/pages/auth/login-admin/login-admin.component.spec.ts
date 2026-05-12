@@ -67,7 +67,7 @@ describe('LoginAdminComponent', () => {
     tick(600);
 
     expect(authSpy.clearSession).toHaveBeenCalled();
-    expect(cmp.errorMsg()).toContain('administrateurs');
+    expect(cmp.errorMsg()).toBe('ERRORS.ADMIN_ONLY');
     expect(router.navigate).not.toHaveBeenCalled();
   }));
 

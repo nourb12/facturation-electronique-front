@@ -1,18 +1,83 @@
 {
   "DASHBOARD": {
     "TITLE": "Tableau de bord",
+    "TITLE_ENTREPRISE": "Dashboard entreprise",
+    "BREADCRUMB": "Vue d'ensemble",
     "WELCOME": "Bienvenue",
+    "SEARCH_PLACEHOLDER": "Rechercher une facture, client...",
+    "NEW_INVOICE": "Nouvelle facture",
+    "LOADING": "Chargement du tableau de bord...",
+    "NOTIFICATIONS": "Notifications",
+    "MARK_ALL_READ": "Tout lire",
+    "NO_NOTIFICATIONS": "Aucune notification",
+    "ALERT": "Alerte",
+    "VIEW": "Voir",
     "KPI": {
       "INVOICES_MONTH": "Factures ce mois",
       "REVENUE_MONTH": "Chiffre d'affaires",
       "PENDING": "En attente",
       "OVERDUE": "En retard",
-      "COMPLIANCE": "Conformité TEIF"
+      "COMPLIANCE": "Conformité TEIF",
+      "CUMUL": "Cumul",
+      "ALL_ROLES": "Tous rôles",
+      "ACTIVE_PLATFORM": "Actives plateforme",
+      "MONITORING": "En suivi",
+      "DAYS_30": "30 jours",
+      "THIS_WEEK": "Cette semaine"
     },
     "SECTIONS": {
-      "RECENT_INVOICES": "Factures récentes",
+      "RECENT_INVOICES": "Dernières factures",
       "QUICK_ACTIONS": "Actions rapides",
-      "STATS": "Statistiques"
+      "STATS": "Statistiques",
+      "REVENUE_EVOLUTION": "Évolution du chiffre d'affaires",
+      "INVOICE_DISTRIBUTION": "Répartition des factures",
+      "FINANCIAL_INDICATORS": "Indicateurs financiers"
+    },
+    "CHART": {
+      "NO_DATA": "Aucune donnée d'évolution disponible",
+      "INVOICES": "factures",
+      "ELEMENTS": "éléments"
+    },
+    "RECENT": {
+      "VIEW_ALL": "Voir tout",
+      "NO_INVOICES": "Aucune facture pour le moment"
+    },
+    "FINANCIAL": {
+      "COLLECTION_RATE": "Taux d'encaissement",
+      "COMPLIANCE_RATE": "Taux conformité TEIF",
+      "OVERDUE_INVOICES": "Factures en retard",
+      "TOTAL_ISSUED": "Total émis",
+      "COLLECTED": "Encaissé",
+      "PENDING": "En attente",
+      "INVOICES_COUNT": "facture(s)"
+    },
+    "MODAL": {
+      "NEW_INVOICE_TITLE": "Nouvelle facture",
+      "NEW_INVOICE_SUB": "Renseignez les informations de la facture",
+      "INVOICE_NUMBER": "Numéro facture",
+      "ISSUE_DATE": "Date d'émission",
+      "CLIENT": "Client",
+      "SELECT_CLIENT": "Sélectionner un client",
+      "FISCAL_ID": "Matricule fiscal",
+      "INVOICE_TYPE": "Type de facture",
+      "PAYMENT_MODE": "Mode de paiement",
+      "TOTAL_HT": "Total HT",
+      "VAT": "TVA",
+      "FISCAL_STAMP": "Timbre fiscal",
+      "TOTAL_TTC": "Total TTC",
+      "DUE_DATE": "Date d'échéance",
+      "REFERENCE": "Référence",
+      "NOTE": "Note",
+      "CANCEL": "Annuler",
+      "SAVE": "Enregistrer la facture",
+      "REQUIRED": "*",
+      "PLACEHOLDER": {
+        "INVOICE_NUMBER": "FAC-2026-001",
+        "FISCAL_ID": "1495908/S ou 0000000X/X/X/000",
+        "REFERENCE": "Bon de commande...",
+        "NOTE": "Détails additionnels..."
+      }
     }
   }
 }
+

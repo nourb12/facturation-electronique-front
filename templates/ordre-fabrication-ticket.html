@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordre de Fabrication Ticket</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 80mm;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border: 2px dashed #ccc;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ccc;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 8px;
+        }
+        .invoice-title {
+            font-size: 12px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 5px;
+        }
+        .invoice-number {
+            font-size: 10px;
+            color: #666;
+        }
+        .party {
+            margin-bottom: 15px;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+        .party-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .items {
+            margin-bottom: 15px;
+            border-top: 1px dashed #ccc;
+            border-bottom: 1px dashed #ccc;
+            padding: 10px 0;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+        .item-name {
+            font-weight: 700;
+        }
+        .item-details {
+            font-size: 9px;
+            color: #666;
+            margin-left: 10px;
+        }
+        .totals {
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .total-row.grand {
+            font-size: 14px;
+            font-weight: 900;
+            border-top: 2px solid #000;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #999;
+            border-top: 2px dashed #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-title">ORDRE FABRICATION</div>
+            <div class="invoice-number">OF-2021-004</div>
+            <div class="invoice-number">06/11/2021</div>
+        </div>
+
+        <div class="party">
+            <div class="party-title">ATELIER:</div>
+            Birou Suite<br>
+            La Marsa, Tunisie<br>
+            M.F.: 1729801/F
+        </div>
+
+        <div class="party">
+            <div class="party-title">RESPONSABLE:</div>
+            Chef de Production<br>
+            Département Production<br>
+            Birou Suite
+        </div>
+
+        <div class="items">
+            <div class="item">
+                <div>
+                    <div class="item-name">Produit Fini A</div>
+                    <div class="item-details">50 unités</div>
+                </div>
+                <div>5j</div>
+            </div>
+            <div class="item">
+                <div>
+                    <div class="item-name">Produit Fini B</div>
+                    <div class="item-details">30 unités</div>
+                </div>
+                <div>7j</div>
+            </div>
+            <div class="item">
+                <div>
+                    <div class="item-name">Produit Fini C</div>
+                    <div class="item-details">20 unités</div>
+                </div>
+                <div>10j</div>
+            </div>
+        </div>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total Qté</span>
+                <span>100 unités</span>
+            </div>
+            <div class="total-row grand">
+                <span>DÉLAI</span>
+                <span>10 jours</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Ordre de fabrication<br>
+            Document non contractuel
+        </div>
+    </div>
+</body>
+</html>

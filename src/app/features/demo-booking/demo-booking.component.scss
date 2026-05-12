@@ -57,9 +57,6 @@ $fm: 'JetBrains Mono', monospace;
 // NAV (harmonisée avec landing)
 // ============================================================
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
   padding: 10px 24px 0;
   transition: padding $base;
 
@@ -795,6 +792,35 @@ $fm: 'JetBrains Mono', monospace;
     opacity: .5;
     cursor: not-allowed;
     transform: none;
+  }
+}
+
+.db-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 24px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ts, #555);
+  background: transparent;
+  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border-radius: $r12;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all $fast;
+  font-family: $fb;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    color: var(--tp, #0A0A0A);
+    background: var(--bg-ghost, rgba(0,0,0,.04));
+    border-color: var(--b2, rgba(0,0,0,.18));
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
   }
 }
 

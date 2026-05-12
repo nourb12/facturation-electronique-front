@@ -3,6 +3,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
 import { DashboardApiService, ClientService, ClientDto } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionApiService } from '../../core/services/transaction-api.service';
@@ -21,7 +22,7 @@ type EvolutionPoint = {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, DecimalPipe],
+  imports: [CommonModule, FormsModule, RouterLink, DecimalPipe, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: [
@@ -377,6 +378,17 @@ export class DashboardComponent implements OnInit {
       Payee: 'ok', PartiellemntPayee: 'warn', Annulee: 'neutral'
     };
     return map[statut] ?? 'neutral';
+  }
+
+  statutLabelKey(statut: string): string {
+    const map: Record<string, string> = {
+      Brouillon:'FACTURES.STATUS.DRAFT', Validee:'FACTURES.STATUS.VALIDATED',
+      Conforme:'FACTURES.STATUS.COMPLIANT', Transmise:'FACTURES.STATUS.SENT',
+      Acceptee:'FACTURES.STATUS.ACCEPTED', Rejetee:'FACTURES.STATUS.REJECTED',
+      Payee:'FACTURES.STATUS.PAID', PartiellemementPayee:'FACTURES.STATUS.PARTIALLY_PAID',
+      Annulee:'FACTURES.STATUS.CANCELLED',
+    };
+    return map[statut] ?? statut;
   }
 
   toggleNotifs()   { this.showNotifs = !this.showNotifs; }

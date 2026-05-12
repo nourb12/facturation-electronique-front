@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bon de Commande Cold</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            color: white;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .invoice-number {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .party {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .party-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .party-details {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        thead {
+            background: rgba(255,255,255,0.2);
+        }
+        th {
+            padding: 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: white;
+        }
+        th:last-child, td:last-child {
+            text-align: right;
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        td {
+            padding: 14px 12px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.95);
+        }
+        .totals {
+            margin-left: auto;
+            width: 350px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: white;
+        }
+        .total-row.grand-total {
+            font-size: 20px;
+            font-weight: 900;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-info">
+                <div class="invoice-title">BON DE COMMANDE</div>
+                <div class="invoice-number">BC-2021-015</div>
+                <div class="invoice-number">2021-11-06</div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">Commandé par</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna<br>
+                    La Marsa, Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">Fournisseur</div>
+                <div class="party-name">Fournisseur XYZ</div>
+                <div class="party-details">
+                    1234567/A<br>
+                    15, Avenue Habib Bourguiba<br>
+                    2000 Tunis, Tunisie
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Référence</th>
+                    <th>P.U.</th>
+                    <th>Qté</th>
+                    <th>Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ordinateur portable</td>
+                    <td>REF-001</td>
+                    <td>2500.000</td>
+                    <td>5</td>
+                    <td>12500.000</td>
+                </tr>
+                <tr>
+                    <td>Écran 24 pouces</td>
+                    <td>REF-002</td>
+                    <td>450.000</td>
+                    <td>10</td>
+                    <td>4500.000</td>
+                </tr>
+                <tr>
+                    <td>Clavier sans fil</td>
+                    <td>REF-003</td>
+                    <td>85.000</td>
+                    <td>10</td>
+                    <td>850.000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total HT</span>
+                <span>17.850.000 TND</span>
+            </div>
+            <div class="total-row">
+                <span>TVA 19%</span>
+                <span>3.391.500 TND</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total TTC</span>
+                <span>21.241.500 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Document généré électroniquement
+        </div>
+    </div>
+</body>
+</html>

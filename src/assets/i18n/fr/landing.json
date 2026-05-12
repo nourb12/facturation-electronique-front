@@ -10,6 +10,8 @@
       "SECURITY": "Sécurité",
       "WHY": "Pourquoi TunisFlow",
       "AUDIENCE": "Entreprises concernées",
+      "MOBILE": "Mobile",
+      "PRICING": "Tarifs",
       "CONTACT": "Contact"
     },
     "CTA": {
@@ -188,6 +190,14 @@
           "TITLE": "Score conformité temps réel",
           "DESC": "Un score de conformité TEIF est calculé en continu sur chaque facture. Vous savez toujours où vous en êtes."
         }
+      }
+    },
+    "TOP": {
+      "ITEMS": {
+        "COMPANIES": "Entreprises tunisiennes concernées",
+        "FINE": "Amende maximale par facture",
+        "TTN_RATE": "Factures via TTN / TEIF",
+        "EFFECTIVE_DATE": "Date d'entrée en vigueur"
       }
     },
     "AUDIENCE": {

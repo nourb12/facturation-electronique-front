@@ -15,6 +15,9 @@
     "ACCOUNT_INACTIVE": "Your account is inactive. Contact the administrator.",
     "INVALID_TOKEN": "Invalid session. Please sign in again.",
     "INVALID_OTP": "Invalid or expired OTP code.",
-    "ACCESS_DENIED": "Access denied."
+    "ACCESS_DENIED": "Access denied.",
+    "ADMIN_ONLY": "Access is reserved for administrators.",
+    "FINANCIER_ONLY": "Access is reserved for financial managers.",
+    "INSUFFICIENT_ROLE": "Your role cannot access this area."
   }
 }

@@ -29,17 +29,17 @@
             <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.2"/>
             <path d="M5.5 3v2.5l1.5 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
-          <span>Dernière connexion : <span class="font-medium text-[var(--tp)]">Aujourd'hui à 09:14</span> · Chrome · Tunis, TN</span>
+          <span>DerniÃ©re connexion : <span class="font-medium text-[var(--tp)]">Aujourd'hui Ã© 09:14</span> Ã© Chrome Ã© Tunis, TN</span>
         </div>
         <div class="mt-1 text-[11px] text-[var(--tt)]">
-          {{ form.poste }} <span class="mx-1">·</span> {{ form.departement }}
+          {{ form.poste }} <span class="mx-1">Ã©</span> {{ form.departement }}
         </div>
         <div class="mt-2 flex flex-wrap gap-2">
           <span class="inline-flex items-center rounded-full border border-[var(--b2)] bg-[var(--b1)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--ts)]">
             {{ form.role }}
           </span>
           <span class="inline-flex items-center rounded-full border border-[var(--b-tuniflow)] bg-[var(--c-tuniflow-dim)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--c-tuniflow)]" *ngIf="form.deuxFA">
-            ?? 2FA activé
+            ?? 2FA activÃ©
           </span>
         </div>
       </div>
@@ -60,7 +60,7 @@
         <svg *ngIf="!saving()" width="12" height="12" viewBox="0 0 12 12" fill="none">
           <path d="M2 6.5l2.5 2.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        {{ saving() ? 'Enregistrement…' : 'Enregistrer' }}
+        {{ saving() ? 'EnregistrementÃ©' : 'Enregistrer' }}
       </button>
     </div>
   </div>
@@ -69,11 +69,11 @@
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 rounded-2xl border border-[var(--b1)] bg-[var(--bg-depth)] p-4">
     <div class="flex flex-col items-center text-center gap-2">
       <div class="text-[1.5rem] font-semibold text-[var(--tp)] font-[var(--font-mono)] leading-none">47</div>
-      <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--tt)] leading-tight">Factures<br>émises</div>
+      <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--tt)] leading-tight">Factures<br>Ã©mises</div>
     </div>
     <div class="flex flex-col items-center text-center gap-2">
       <div class="text-[1.5rem] font-semibold text-[var(--tp)] font-[var(--font-mono)] leading-none">24</div>
-      <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--tt)] leading-tight">Clients<br>gérés</div>
+      <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--tt)] leading-tight">Clients<br>gÃ©rÃ©s</div>
     </div>
     <div class="flex flex-col items-center text-center gap-2">
       <div class="text-[1.5rem] font-semibold text-[var(--ok)] font-[var(--font-mono)] leading-none">9/9</div>
@@ -93,12 +93,12 @@
       <section class="rounded-2xl border border-[var(--b1)] bg-[var(--bg-surf)] shadow-[var(--shadow-sm)] p-6 space-y-6">
         <div>
           <div class="text-[13px] font-semibold text-[var(--tp)]">Informations personnelles</div>
-          <div class="text-[11px] text-[var(--tt)]">Identité et coordonnées</div>
+          <div class="text-[11px] text-[var(--tt)]">IdentitÃ© et coordonnÃ©es</div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Prénom <span class="text-[var(--c-tuniflow)]">*</span></label>
+            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">PrÃ©nom <span class="text-[var(--c-tuniflow)]">*</span></label>
             <input type="text" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="form.prenom" (ngModelChange)="marquerModifie()"/>
           </div>
           <div class="flex flex-col gap-1.5">
@@ -118,7 +118,7 @@
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Téléphone</label>
+            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">TÃ©lÃ©phone</label>
             <div class="relative">
               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-[var(--ts)] font-[var(--font-mono)]">+216</span>
               <input type="tel" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] pl-14 pr-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] font-[var(--font-mono)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="form.telephone" (ngModelChange)="marquerModifie()"/>
@@ -131,10 +131,10 @@
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Département</label>
+            <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">DÃ©partement</label>
             <div class="relative">
               <select class="h-10 w-full appearance-none rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 pr-9 text-[13px] text-[var(--input-text)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="form.departement" (ngModelChange)="marquerModifie()">
-                <option>Direction</option><option>Finance</option><option>Comptabilité</option>
+                <option>Direction</option><option>Finance</option><option>ComptabilitÃ©</option>
                 <option>Ressources humaines</option><option>Commercial</option><option>Informatique</option>
               </select>
               <svg class="pointer-events-none absolute right-3 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--tt)]" viewBox="0 0 10 6" fill="none">
@@ -147,7 +147,7 @@
             <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Langue d'interface</label>
             <div class="relative">
               <select class="h-10 w-full appearance-none rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 pr-9 text-[13px] text-[var(--input-text)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="form.langue" (ngModelChange)="marquerModifie()">
-                <option>Français</option><option>???????</option><option>English</option>
+                <option>FranÃ©ais</option><option>???????</option><option>English</option>
               </select>
               <svg class="pointer-events-none absolute right-3 top-1/2 h-3 w-3 -translate-y-1/2 text-[var(--tt)]" viewBox="0 0 10 6" fill="none">
                 <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
@@ -157,10 +157,10 @@
         </div>
       </section>
 
-      <!-- Sécurité -->
+      <!-- SÃ©curitÃ© -->
       <section class="rounded-2xl border border-[var(--b1)] bg-[var(--bg-surf)] shadow-[var(--shadow-sm)] p-6 space-y-6">
         <div>
-          <div class="text-[13px] font-semibold text-[var(--tp)]">Sécurité du compte</div>
+          <div class="text-[13px] font-semibold text-[var(--tp)]">SÃ©curitÃ© du compte</div>
           <div class="text-[11px] text-[var(--tt)]">Mot de passe et authentification</div>
         </div>
 
@@ -179,7 +179,7 @@
               </div>
               <div>
                 <div class="text-[13px] font-semibold text-[var(--ts)]">Mot de passe</div>
-                <div class="text-[11px] text-[var(--tt)]">Dernière modification il y a 42 jours</div>
+                <div class="text-[11px] text-[var(--tt)]">DerniÃ©re modification il y a 42 jours</div>
               </div>
             </div>
             <span class="text-[11px] font-semibold text-[var(--c-tuniflow)]">Modifier ?</span>
@@ -188,17 +188,17 @@
           <div class="p-4 space-y-4" *ngIf="changePasswordMode">
             <div class="flex flex-col gap-1.5">
               <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Mot de passe actuel</label>
-              <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.actuel" placeholder="••••••••••"/>
+              <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.actuel" placeholder="Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©"/>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col gap-1.5">
                 <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Nouveau mot de passe</label>
-                <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.nouveau" placeholder="••••••••••"/>
+                <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.nouveau" placeholder="Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©"/>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label class="text-[11px] font-semibold uppercase tracking-wider text-[var(--ts)]">Confirmer</label>
-                <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.confirmer" placeholder="••••••••••"/>
+                <input type="password" class="h-10 w-full rounded-lg border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-[13px] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:border-[var(--c-tuniflow)] focus:outline-none focus:ring-4 focus:ring-[var(--c-tuniflow-soft)]" [(ngModel)]="passwords.confirmer" placeholder="Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©Ã©"/>
               </div>
             </div>
 
@@ -237,7 +237,7 @@
               <span class="text-lg">??</span>
               <div>
                 <div class="text-[13px] font-semibold text-[var(--tp)]">Double authentification (2FA)</div>
-                <div class="text-[11px] text-[var(--tt)]">Code OTP requis à chaque connexion</div>
+                <div class="text-[11px] text-[var(--tt)]">Code OTP requis Ã© chaque connexion</div>
               </div>
             </div>
             <label class="relative inline-flex items-center">
@@ -252,7 +252,7 @@
               <span class="text-lg">??</span>
               <div>
                 <div class="text-[13px] font-semibold text-[var(--tp)]">Alertes de connexion</div>
-                <div class="text-[11px] text-[var(--tt)]">Email sur appareil inconnu détecté</div>
+                <div class="text-[11px] text-[var(--tt)]">Email sur appareil inconnu dÃ©tectÃ©</div>
               </div>
             </div>
             <label class="relative inline-flex items-center">
@@ -264,10 +264,10 @@
         </div>
       </section>
 
-      <!-- Préférences -->
+      <!-- PrÃ©fÃ©rences -->
       <section class="rounded-2xl border border-[var(--b1)] bg-[var(--bg-surf)] shadow-[var(--shadow-sm)] p-6 space-y-6">
         <div>
-          <div class="text-[13px] font-semibold text-[var(--tp)]">Préférences</div>
+          <div class="text-[13px] font-semibold text-[var(--tp)]">PrÃ©fÃ©rences</div>
           <div class="text-[11px] text-[var(--tt)]">Notifications et alertes</div>
         </div>
 
@@ -296,7 +296,7 @@
       <section class="rounded-2xl border border-[var(--b1)] bg-[var(--bg-surf)] shadow-[var(--shadow-sm)] p-5 space-y-4">
         <div class="flex items-center justify-between">
           <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--ts)]">Sessions actives</div>
-          <button class="text-[11px] font-semibold text-[var(--err)] px-2 py-1 rounded-md transition hover:bg-[var(--err2)]" (click)="revoquerToutesSessions()">Tout révoquer</button>
+          <button class="text-[11px] font-semibold text-[var(--err)] px-2 py-1 rounded-md transition hover:bg-[var(--err2)]" (click)="revoquerToutesSessions()">Tout rÃ©voquer</button>
         </div>
 
         <div class="space-y-2">
@@ -307,7 +307,7 @@
             </div>
             <div class="min-w-0 flex-1">
               <div class="text-[13px] font-semibold text-[var(--tp)] truncate">{{ s.device }}</div>
-              <div class="text-[10px] font-[var(--font-mono)] text-[var(--tt)] mt-0.5">{{ s.lieu }} · {{ s.date }}</div>
+              <div class="text-[10px] font-[var(--font-mono)] text-[var(--tt)] mt-0.5">{{ s.lieu }} Ã© {{ s.date }}</div>
             </div>
             <span class="inline-flex items-center gap-1 rounded-full border border-[var(--ok2)] bg-[var(--ok2)] px-2 py-1 text-[10px] font-semibold text-[var(--ok)]" *ngIf="s.current">? Actuel</span>
             <button class="h-7 w-7 rounded-md border border-[var(--err2)] text-[var(--err)] flex items-center justify-center transition hover:bg-[var(--err2)]" *ngIf="!s.current" (click)="revoquerSession(s)">
@@ -319,7 +319,7 @@
 
       <!-- Activity -->
       <section class="rounded-2xl border border-[var(--b1)] bg-[var(--bg-surf)] shadow-[var(--shadow-sm)] p-5 space-y-4">
-        <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--ts)]">Activité récente</div>
+        <div class="text-[11px] font-semibold uppercase tracking-widest text-[var(--ts)]">ActivitÃ© rÃ©cente</div>
 
         <div class="space-y-4">
           <div class="flex gap-3" *ngFor="let log of activiteLogs; let last = last">

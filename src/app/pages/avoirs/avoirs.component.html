@@ -1,90 +1,135 @@
-<div class="page-layout" [@pageIn]>
+<div class="fc-root" [@pageIn]>
 
-  
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Gestion des <em>avoirs</em></h1>
-      <p class="page-desc">{{ filteredFactures().length }} avoirs · {{ stats()?.totalBrouillons ?? 0 }} brouillons</p>
+  <header class="dash-topbar">
+    <div class="dt-left">
+      <div class="dt-title-block">
+        <h1 class="dt-title">Gestion des avoirs</h1>
+        <span class="dt-bc">{{ filteredFactures().length }} avoirs · {{ stats()?.totalBrouillons ?? 0 }} brouillon(s)</span>
+      </div>
     </div>
-    <div class="header-actions">
-      <button class="btn-secondary" (click)="exportCSV()">Exporter CSV</button>
+    <div class="dt-right">
+      <button class="btn-ghost" (click)="exportCSV()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M4 7l2.5 2.5L9 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 11h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        CSV
+      </button>
+      <button class="btn-primary" (click)="openModal()">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Nouvel avoir
+      </button>
+    </div>
+  </header>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--cash">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1.5" y="3" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/>
+          <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Ce mois</div>
+        <div class="kpi-value">{{ (stats()?.montantTotalMois ?? 0) | number:'1.3-3' }} <span class="kpi-currency">TND</span></div>
+        <div class="kpi-sub">Avoirs émis</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--shield">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5l5 2v4.5c0 3-2.2 5.7-5 6.5-2.8-.8-5-3.5-5-6.5V3.5l5-2z" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Encaissé</div>
+        <div class="kpi-value kpi-value--ok">{{ (stats()?.montantEncaisseMois ?? 0) | number:'1.3-3' }} <span class="kpi-currency">TND</span></div>
+        <div class="kpi-sub">Ce mois</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--file">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 2h5l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 2v3h3" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">En attente</div>
+        <div class="kpi-value kpi-value--warn">{{ (stats()?.montantEnAttente ?? 0) | number:'1.3-3' }} <span class="kpi-currency">TND</span></div>
+        <div class="kpi-sub">À encaisser</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--alert">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M8 6v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="8" cy="12" r=".7" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">En retard</div>
+        <div class="kpi-value kpi-value--err">{{ stats()?.totalEnRetard ?? 0 }}</div>
+        <div class="kpi-sub">Avoir(s)</div>
+      </div>
     </div>
   </div>
 
-  
-  <div class="mini-kpis">
-    <div class="mini-kpi">
-      <span class="mk-label">Total avoirs ce mois</span>
-      <span class="mk-val mk--ey">{{ (stats()?.montantTotalMois ?? 0) | number:'1.3-3' }} TND</span>
-    </div>
-    <div class="mini-kpi">
-      <span class="mk-label">Payé</span>
-      <span class="mk-val mk--ok">{{ (stats()?.montantEncaisseMois ?? 0) | number:'1.3-3' }} TND</span>
-    </div>
-    <div class="mini-kpi">
-      <span class="mk-label">En attente</span>
-      <span class="mk-val mk--warn">{{ (stats()?.montantEnAttente ?? 0) | number:'1.3-3' }} TND</span>
-    </div>
-    <div class="mini-kpi">
-      <span class="mk-label">En retard</span>
-      <span class="mk-val mk--err">{{ stats()?.totalEnRetard ?? 0 }} avoirs</span>
-    </div>
-  </div>
-
-  
-  <div class="filters-bar">
-    <div class="search-box">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-        <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
-        <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <input type="text" placeholder="Chercher par N°, client…" [(ngModel)]="searchQuery"/>
-    </div>
-    <div class="filter-tabs">
-      @for (s of statuts; track s.key) {
-        <button class="filter-tab" [class.active]="activeStatut===s.key" (click)="setStatut(s.key)">
-          {{ s.label }}
-          <span class="filter-count">{{ s.count }}</span>
-        </button>
-      }
+  <div class="box" style="margin-bottom: 16px;">
+    <div class="filters-bar">
+      <div class="search-box">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Chercher par N°, client…" [(ngModel)]="searchQuery"/>
+      </div>
+      <div class="filter-tabs">
+        @for (s of statuts; track s.key) {
+          <button type="button" class="filter-tab" [class.active]="activeStatut===s.key" (click)="setStatut(s.key)">
+            {{ s.label }}
+            @if (s.count > 0) { <span class="filter-count">{{ s.count }}</span> }
+          </button>
+        }
+      </div>
     </div>
   </div>
 
-  
   @if (loading()) {
-    <div class="loading-state">
-      <div class="loading-spinner"></div>
+    <div class="dash-loading">
+      <div class="dash-spinner"></div>
       <span>Chargement des avoirs…</span>
     </div>
   }
 
-  
   @if (!loading()) {
-    <div class="table-box">
+    <div class="box">
       <table class="ft-table">
         <thead>
           <tr>
             <th>N° Avoir</th>
             <th>Client</th>
-            <th>Total HT</th>
-            <th>TVA</th>
-            <th>Total TTC</th>
+            <th class="th-right">Total HT</th>
+            <th class="th-right">TVA</th>
+            <th class="th-right">Total TTC</th>
             <th>Échéance</th>
             <th>Statut</th>
-            <th>Actions</th>
+            <th class="th-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           @if (filteredFactures().length === 0) {
             <tr>
-              <td colspan="8" class="empty-row">
-                Aucun avoir trouvé
+              <td colspan="8" class="empty-cell">
+                <div class="recent-empty">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="24" height="28" rx="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/><path d="M10 10h12M10 15h12M10 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".4"/></svg>
+                  <span>Aucun avoir trouvé</span>
+                </div>
               </td>
             </tr>
           }
           @for (f of filteredFactures(); track f.id) {
-            <tr [@rowIn] [class.retard]="f.estEnRetard">
-              <td><span class="ft-id">{{ f.numero }}</span></td>
+            <tr class="ft-row" [@rowIn] [class.retard]="f.estEnRetard">
+              <td><span class="rr-num">{{ f.numero }}</span></td>
               <td>
                 <div class="ft-client-cell">
                   <div class="ft-client-init">{{ f.clientNom.substring(0,2).toUpperCase() }}</div>
@@ -94,17 +139,15 @@
                   </div>
                 </div>
               </td>
-              <td class="ft-num">{{ f.totalHt | number:'1.3-3' }}</td>
-              <td class="ft-num ft-muted">{{ f.totalTva | number:'1.3-3' }}</td>
-              <td class="ft-num ft-bold">{{ f.totalTtc | number:'1.3-3' }} {{ f.devise }}</td>
+              <td class="td-num">{{ f.totalHt | number:'1.3-3' }}</td>
+              <td class="td-num">{{ f.totalTva | number:'1.3-3' }}</td>
+              <td class="td-num td-bold">{{ f.totalTtc | number:'1.3-3' }} {{ f.devise }}</td>
               <td class="ft-date" [class.ft-retard]="f.estEnRetard">
                 {{ f.dateEcheance | date:'dd/MM/yy' }}
                 @if (f.estEnRetard) { <span class="retard-badge">Retard</span> }
               </td>
               <td>
-                <span class="badge" [ngClass]="'badge--' + getStatutClass(f.statut)">
-                  <span class="badge-dot"></span>{{ f.statut }}
-                </span>
+                <span class="badge" [ngClass]="'badge--' + getStatutClass(f.statut)">{{ statutLabelKey(f.statut) | translate }}</span>
               </td>
               <td>
                 <div class="ft-actions">
@@ -125,7 +168,7 @@
                     </button>
                   }
 @if (f.statut === 'Validee' && !f.xmlGenere) {
-                    <button class="act-btn act-btn--tuniflow" (click)="genererXml(f)" title="Générer XML TEIF">
+                    <button class="act-btn act-btn--ey" (click)="genererXml(f)" title="Générer XML TEIF">
                       <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                         <path d="M2 4l3-3 3 3M5 1v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
                         <path d="M1 10h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
@@ -135,7 +178,7 @@
 
                   
                   @if (f.statut === 'Validee' && f.xmlGenere) {
-                    <button class="act-btn act-btn--tuniflow" (click)="validerTeif(f)" title="Valider conformité TEIF">
+                    <button class="act-btn act-btn--ey" (click)="validerTeif(f)" title="Valider conformité TEIF">
                       <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                         <path d="M6.5 1L1.5 3v4c0 2.5 2.2 4.3 5 5 2.8-.7 5-2.5 5-5V3L6.5 1z" stroke="currentColor" stroke-width="1.3"/>
                         <path d="M4 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -145,7 +188,7 @@
 
                   
                   @if (f.statut === 'Conforme') {
-                    <button class="act-btn act-btn--tuniflow" (click)="signer(f)" title="Signer">
+                    <button class="act-btn act-btn--ey" (click)="signer(f)" title="Signer">
                       <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                         <path d="M2 10l2-1 6.5-6.5-1-1L3 8l-1 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
                       </svg>
@@ -228,8 +271,8 @@
             <div class="form-group">
               <label class="form-label">Mode de paiement</label>
               <select class="form-select" [(ngModel)]="newFacture.modePaiement">
-                @for (m of modePaiementOptions; track m) {
-                  <option [value]="m">{{ m }}</option>
+                @for (m of modePaiementOptions; track m.value) {
+                  <option [value]="m.value">{{ m.labelKey | translate }}</option>
                 }
               </select>
             </div>
@@ -318,8 +361,8 @@
             <div class="form-group">
               <label class="form-label">Mode</label>
               <select class="form-select" [(ngModel)]="paiementForm.mode">
-                @for (m of modePaiementOptions; track m) {
-                  <option [value]="m">{{ m }}</option>
+                @for (m of modePaiementOptions; track m.value) {
+                  <option [value]="m.value">{{ m.labelKey | translate }}</option>
                 }
               </select>
             </div>
@@ -360,7 +403,7 @@
           </div>
           <div style="display:flex;gap:8px;align-items:center">
             <span class="badge" [ngClass]="'badge--' + getStatutClass(selectedFacture()?.statut ?? '')">
-              {{ selectedFacture()?.statut }}
+              {{ statutLabelKey(selectedFacture()?.statut ?? '') | translate }}
             </span>
             <button class="modal-close" (click)="closeDetail()">×</button>
           </div>

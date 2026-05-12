@@ -3,7 +3,7 @@
   <!-- --- HEADER --- -->
   <div class="page-header">
     <div>
-      <h1 class="page-title">Paramètres de <em>personnalisation</em></h1>
+      <h1 class="page-title">Paramètres de personnalisation</h1>
       <p class="page-desc">Configuration globale · {{ activeSection().label }}</p>
     </div>
     <div class="header-actions">
@@ -48,7 +48,7 @@
       @if (activeSectionKey() === 'numerotation') {
         <div class="section-body">
           <div class="section-intro">
-            <h2 class="section-title">Séquences de <em>numérotation</em></h2>
+            <h2 class="section-title">Séquences de numérotation</h2>
             <p class="section-desc">Définissez le format des numéros pour chaque type de document (obligatoire conformité DGI Tunisie).</p>
           </div>
 
@@ -56,8 +56,79 @@
             @for (seq of data.sequences; track seq.type) {
               <div class="setting-card">
                 <div class="setting-card-head">
-                  <span class="sc-icon" [style.background]="seq.color + '18'" [style.color]="seq.color">
-                    <span [innerHTML]="seq.icon"></span>
+                  <span class="sc-icon" [style.background]="seq.color + '22'" [style.color]="seq.color">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" [attr.stroke]="seq.color">
+                      <ng-container [ngSwitch]="seq.type">
+                        <!-- Facture -->
+                        <g *ngSwitchCase="'facture'">
+                          <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.4"/>
+                          <line x1="6" y1="6" x2="12" y2="6" stroke-width="1.4" stroke-linecap="round"/>
+                          <line x1="6" y1="9" x2="12" y2="9" stroke-width="1.4" stroke-linecap="round"/>
+                          <line x1="6" y1="12" x2="9" y2="12" stroke-width="1.4" stroke-linecap="round"/>
+                        </g>
+                        <!-- Devis -->
+                        <g *ngSwitchCase="'devis'">
+                          <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.4"/>
+                          <line x1="6" y1="6" x2="12" y2="6" stroke-width="1.4" stroke-linecap="round"/>
+                          <line x1="6" y1="9" x2="10" y2="9" stroke-width="1.4" stroke-linecap="round"/>
+                          <circle cx="11" cy="12" r="2" stroke-width="1.4"/>
+                        </g>
+                        <!-- Avoir / Note de crédit -->
+                        <g *ngSwitchCase="'avoir'">
+                          <path d="M14 9H6M6 9l3-3M6 9l3 3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.4"/>
+                        </g>
+                        <!-- Bon de commande -->
+                        <g *ngSwitchCase="'bon_commande'">
+                          <path d="M4 3h7l4 4v8H4V3z" stroke-width="1.4" stroke-linejoin="round"/>
+                          <path d="M11 3v4h4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                          <line x1="7" y1="10" x2="12" y2="10" stroke-width="1.3" stroke-linecap="round"/>
+                          <line x1="7" y1="13" x2="10" y2="13" stroke-width="1.3" stroke-linecap="round"/>
+                        </g>
+                        <!-- Facture proforma -->
+                        <g *ngSwitchCase="'proforma'">
+                          <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.4"/>
+                          <path d="M6 6h6M6 9h6M6 12h3" stroke-width="1.3" stroke-linecap="round"/>
+                          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        </g>
+                        <!-- Bon de livraison -->
+                        <g *ngSwitchCase="'bon_livraison'">
+                          <rect x="2" y="6" width="10" height="8" rx="1.5" stroke-width="1.4"/>
+                          <path d="M12 8h3l2 3v3h-3" stroke-width="1.4" stroke-linejoin="round"/>
+                          <circle cx="5" cy="15" r="1.5" stroke-width="1.4"/>
+                          <circle cx="14" cy="15" r="1.5" stroke-width="1.4"/>
+                        </g>
+                        <!-- Bon de sortie -->
+                        <g *ngSwitchCase="'bon_sortie'">
+                          <rect x="3" y="3" width="12" height="12" rx="2" stroke-width="1.4"/>
+                          <path d="M9 7v5M7 10l2 2 2-2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <!-- Paiements reçus -->
+                        <g *ngSwitchCase="'paiement_recu'">
+                          <circle cx="9" cy="9" r="7" stroke-width="1.4"/>
+                          <path d="M6 9l2 2 4-4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <!-- Paiements émis -->
+                        <g *ngSwitchCase="'paiement_emis'">
+                          <circle cx="9" cy="9" r="7" stroke-width="1.4"/>
+                          <path d="M9 6v6M6 9h6" stroke-width="1.5" stroke-linecap="round"/>
+                        </g>
+                        <!-- Ordre de fabrication -->
+                        <g *ngSwitchCase="'ordre_fabrication'">
+                          <rect x="3" y="5" width="12" height="10" rx="2" stroke-width="1.4"/>
+                          <path d="M6 2v5M12 2v5M3 8h12" stroke-width="1.4" stroke-linecap="round"/>
+                          <line x1="6" y1="11" x2="6" y2="11.5" stroke-width="1.5" stroke-linecap="round"/>
+                          <line x1="9" y1="11" x2="9" y2="11.5" stroke-width="1.5" stroke-linecap="round"/>
+                          <line x1="12" y1="11" x2="12" y2="11.5" stroke-width="1.5" stroke-linecap="round"/>
+                        </g>
+                        <!-- Default -->
+                        <g *ngSwitchDefault>
+                          <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.4"/>
+                          <line x1="6" y1="6" x2="12" y2="6" stroke-width="1.4"/>
+                          <line x1="6" y1="9" x2="12" y2="9" stroke-width="1.4"/>
+                        </g>
+                      </ng-container>
+                    </svg>
                   </span>
                   <div>
                     <div class="sc-title">{{ seq.label }}</div>
@@ -65,51 +136,52 @@
                   </div>
                 </div>
                 <div class="sc-fields">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label">Préfixe</label>
-                      <input class="form-input" [(ngModel)]="seq.prefix" placeholder="FAC" (ngModelChange)="markDirty()" maxlength="6"/>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Séparateur</label>
-                      <select class="form-select" [(ngModel)]="seq.sep" (ngModelChange)="markDirty()">
-                        <option value="-">Tiret  —</option>
-                        <option value="/">Slash  /</option>
-                        <option value="_">Underscore _</option>
-                        <option value="">Aucun</option>
-                      </select>
-                    </div>
+                  <!-- Titre -->
+                  <div class="form-group">
+                    <label class="form-label">Titre</label>
+                    <input class="form-input" [(ngModel)]="seq.label" (ngModelChange)="markDirty()" placeholder="Facture"/>
                   </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label">Inclure année</label>
-                      <select class="form-select" [(ngModel)]="seq.includeYear" (ngModelChange)="markDirty()">
-                        <option [ngValue]="true">Oui (AAAA)</option>
-                        <option [ngValue]="false">Non</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Nb chiffres</label>
-                      <select class="form-select" [(ngModel)]="seq.digits" (ngModelChange)="markDirty()">
-                        <option [ngValue]="4">4 — ex: 0001</option>
-                        <option [ngValue]="5">5 — ex: 00001</option>
-                        <option [ngValue]="6">6 — ex: 000001</option>
-                      </select>
-                    </div>
+                  
+                  <!-- Préfixe -->
+                  <div class="form-group">
+                    <label class="form-label">Préfixe</label>
+                    <input class="form-input" [(ngModel)]="seq.prefix" placeholder="FAC" (ngModelChange)="markDirty()" maxlength="6"/>
                   </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label">Prochain numéro</label>
-                      <input class="form-input font-mono" type="number" [(ngModel)]="seq.nextNum" min="1" (ngModelChange)="markDirty()"/>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Remise à zéro</label>
-                      <select class="form-select" [(ngModel)]="seq.reset" (ngModelChange)="markDirty()">
-                        <option value="annuelle">Annuelle</option>
-                        <option value="continue">Continue</option>
-                        <option value="mensuelle">Mensuelle</option>
-                      </select>
-                    </div>
+                  
+                  <!-- Séparateur -->
+                  <div class="form-group">
+                    <label class="form-label">Séparateur</label>
+                    <select class="form-select" [(ngModel)]="seq.sep" (ngModelChange)="markDirty()">
+                      <option value="-">Tiret  —</option>
+                      <option value="/">Slash  /</option>
+                      <option value="_">Underscore _</option>
+                      <option value="">Aucun</option>
+                    </select>
+                  </div>
+                  
+                  <!-- Séquence dynamique -->
+                  <div class="form-group">
+                    <label class="form-label">Séquence dynamique</label>
+                    <input class="form-input font-mono" value="YYYY" disabled style="background: var(--bg-edge); cursor: not-allowed;"/>
+                  </div>
+                  
+                  <!-- Numéro suivant -->
+                  <div class="form-group">
+                    <label class="form-label">Numéro suivant</label>
+                    <input class="form-input font-mono" type="text" [value]="formatNextNumber(seq)" 
+                           (input)="updateNextNumber(seq, $any($event.target).value)" 
+                           (ngModelChange)="markDirty()" 
+                           placeholder="00001"/>
+                  </div>
+                  
+                  <!-- Commentaire explicatif -->
+                  <div class="seq-update-note">
+                    <label class="seq-checkbox">
+                      <input type="checkbox" (change)="toggleSequenceUpdate(seq, $any($event.target).checked)"/>
+                      <span class="seq-checkbox-box"></span>
+                    </label>
+                    <i class="ti ti-info-circle"></i>
+                    <span>Mettre à jour tout(e) {{ seq.label.toLowerCase() }}(s) pour utiliser le format de séquence de numérotation ci-dessus</span>
                   </div>
                 </div>
               </div>
@@ -415,7 +487,7 @@
                       @if (!tax.systeme) {
                         <button class="act-btn act-btn--err" (click)="removeTaxe(tax.id)">
                           <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                         </button>
                       }
@@ -508,7 +580,7 @@
                       @if (!r.systeme) {
                         <button class="act-btn act-btn--err" (click)="removeRetenue(r.id)">
                           <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                         </button>
                       }
@@ -690,7 +762,7 @@
                       @if (!m.systeme) {
                         <button class="act-btn act-btn--err" (click)="removeModePaiement(m.id)">
                           <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                         </button>
                       }
@@ -920,7 +992,7 @@
                         </button>
                         <button class="act-btn act-btn--err" (click)="removeWebhook(w.id)">
                           <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                            <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                         </button>
                       </div>
@@ -986,7 +1058,7 @@
             <td>
               <button class="act-btn act-btn--err" (click)="removeCategory(type, c.id)" [disabled]="c.docs > 0">
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                  <path d="M2 2l7 7M9 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
             </td>

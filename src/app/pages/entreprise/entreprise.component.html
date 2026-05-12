@@ -2,7 +2,6 @@
 
   <header class="topbar">
     <div class="topbar-left">
-      <div class="topbar-eyemark">EY</div>
       <div>
         <h1 class="topbar-title">Profil fiscal de l'entreprise</h1>
         <span class="topbar-bc">Completez les informations pour generer une identite fiscale conforme TEIF</span>
@@ -12,14 +11,16 @@
       @if (saved) {
         <div class="save-toast" [@fadeIn]>Modifications enregistrees</div>
       }
-      <button class="btn-save" (click)="save()" [disabled]="saving()">Enregistrer</button>
+      <button class="btn-save btn-yellow" (click)="save()" [disabled]="saving()">Enregistrer</button>
     </div>
   </header>
 
   <div class="page-content">
     <div class="profile-grid">
 
+      <!-- ═══════════════════ FORM PANEL ═══════════════════ -->
       <section class="form-panel">
+
         <div class="form-head">
           <div class="form-head-left">
             <div class="step-kicker">Etape {{ activeStepIndex + 1 }} / 4</div>
@@ -46,6 +47,8 @@
         </div>
 
         <div class="step-content" [@fadeIn]>
+
+          <!-- ──────────── ETAPE 1 : IDENTITE ──────────── -->
           @if (activeStepIndex === 0) {
             <div class="section-card">
               <div class="section-head">
@@ -61,8 +64,6 @@
                     [class.is-error]="showError('raisonSociale')" [class.is-valid]="isFieldValid('raisonSociale')"/>
                   @if (showError('raisonSociale')) {
                     <div class="field-msg field-msg--error">{{ fieldError('raisonSociale') }}</div>
-                  } @else if (isFieldValid('raisonSociale')) {
-                    <div class="field-msg field-msg--ok">Raison sociale valide</div>
                   }
                 </div>
                 <div class="field">
@@ -97,7 +98,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="field-grid">
                 <div class="field">
                   <label class="field-label">Date de creation</label>
@@ -113,11 +113,11 @@
               <div class="field">
                 <label class="field-label">Libelle activite</label>
                 <input class="field-input" type="text" [value]="activiteLabel" disabled />
-                <div class="field-msg field-msg--info">Libelle mis a jour automatiquement</div>
               </div>
             </div>
           }
 
+          <!-- ──────────── ETAPE 2 : COORDONNEES ──────────── -->
           @if (activeStepIndex === 1) {
             <div class="section-card">
               <div class="section-head">
@@ -134,7 +134,6 @@
                   <div class="field-msg field-msg--error">{{ fieldError('adresse') }}</div>
                 }
               </div>
-
               <div class="field-grid">
                 <div class="field">
                   <label class="field-label">Code postal</label>
@@ -146,12 +145,8 @@
                   <select class="field-input" [(ngModel)]="entreprise.gouvernorat" (ngModelChange)="onFieldChange('gouvernorat')">
                     @for (g of gouvernorats; track g) { <option [value]="g">{{ g }}</option> }
                   </select>
-                  @if (showError('gouvernorat')) {
-                    <div class="field-msg field-msg--error">{{ fieldError('gouvernorat') }}</div>
-                  }
                 </div>
               </div>
-
               <div class="field-grid">
                 <div class="field">
                   <label class="field-label">Telephone mobile <span class="req">*</span></label>
@@ -161,8 +156,6 @@
                     [class.is-error]="showError('telephone')" [class.is-valid]="isFieldValid('telephone')"/>
                   @if (showError('telephone')) {
                     <div class="field-msg field-msg--error">{{ fieldError('telephone') }}</div>
-                  } @else if (isFieldValid('telephone')) {
-                    <div class="field-msg field-msg--ok">Numero valide</div>
                   }
                 </div>
                 <div class="field">
@@ -173,12 +166,9 @@
                     [class.is-error]="showError('email')" [class.is-valid]="isFieldValid('email')"/>
                   @if (showError('email')) {
                     <div class="field-msg field-msg--error">{{ fieldError('email') }}</div>
-                  } @else if (isFieldValid('email')) {
-                    <div class="field-msg field-msg--ok">Email valide</div>
                   }
                 </div>
               </div>
-
               <div class="field-grid">
                 <div class="field">
                   <label class="field-label">Site web</label>
@@ -194,23 +184,22 @@
             </div>
           }
 
+          <!-- ──────────── ETAPE 3 : FISCAL ──────────── -->
           @if (activeStepIndex === 2) {
             <div class="section-card">
               <div class="section-head">
                 <div class="section-title">Fiscal</div>
-                <div class="section-hint">Informations fiscales indispensables</div>
+                <div class="section-hint">Information fiscale</div>
               </div>
               <div class="field-grid">
                 <div class="field field--critical">
                   <label class="field-label">Matricule fiscal <span class="req">*</span></label>
-          <input class="field-input" type="text" placeholder="1495908/S ou 0000000X/X/X/000"
+                  <input class="field-input" type="text" placeholder="1495908/S ou 0000000X/X/X/000"
                     [(ngModel)]="entreprise.matriculeFiscal"
                     (ngModelChange)="onFieldChange('matriculeFiscal')" (blur)="markTouched('matriculeFiscal')"
                     [class.is-error]="showError('matriculeFiscal')" [class.is-valid]="isFieldValid('matriculeFiscal')"/>
                   @if (showError('matriculeFiscal')) {
                     <div class="field-msg field-msg--error">{{ fieldError('matriculeFiscal') }}</div>
-                  } @else if (isFieldValid('matriculeFiscal')) {
-                    <div class="field-msg field-msg--ok">Matricule valide</div>
                   }
                 </div>
                 <div class="field">
@@ -219,7 +208,6 @@
                     [(ngModel)]="entreprise.numRNE" (ngModelChange)="onFieldChange('numRNE')"/>
                 </div>
               </div>
-
               <div class="field-grid">
                 <div class="field">
                   <label class="field-label">Regime TVA <span class="req">*</span></label>
@@ -237,48 +225,460 @@
                   </select>
                 </div>
               </div>
-              <div class="info-banner">
-                <span class="info-banner-label">TEIF 2026</span>
-                Toute facture emise a partir du 1er janvier 2026 doit etre transmise a la DGI via TEIF.
-              </div>
             </div>
           }
 
+          <!-- ──────────── ETAPE 4 : CONFORMITE TEIF ──────────── -->
           @if (activeStepIndex === 3) {
-            <div class="section-card">
-              <div class="section-head">
-                <div class="section-title">Conformite TEIF</div>
-                <div class="section-hint">Activez les criteres pour atteindre la conformite</div>
+
+            <!-- ════════ 1. SIGNATURE NUMERIQUE ════════ -->
+            <div class="teif-accordion-card" [class.is-ok]="getEntrepriseValue('teifSignature')">
+              <div class="teif-acc-header" (click)="toggleTeifItem('teifSignature')">
+                <div class="teif-acc-icon teif-acc-icon--blue">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div class="teif-acc-info">
+                  <span class="teif-acc-label">Signature numerique</span>
+                  <span class="teif-acc-detail">Certificat DGI valide — obligatoire TEIF</span>
+                </div>
+                <div class="teif-acc-right">
+                  @if (getEntrepriseValue('teifSignature')) {
+                    <span class="status-pill status-pill--ok">OK</span>
+                  } @else {
+                    <span class="status-pill status-pill--warn">Requis</span>
+                  }
+                  <svg class="chevron-icon" [class.open]="expandedTeifItem === 'teifSignature'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
               </div>
-              <div class="teif-checklist">
-                @for (item of teifItems; track item.key) {
-                  <div class="teif-row" [class.is-ok]="getEntrepriseValue(item.key)">
-                    <div>
-                      <div class="teif-label">{{ item.label }}</div>
-                      <div class="teif-detail">{{ item.detail }}</div>
-                    </div>
-                    <label class="toggle">
-                      <input type="checkbox"
-                        [ngModel]="getEntrepriseValue(item.key)"
-                        (ngModelChange)="onTeifToggle(item.key, $event)"/>
-                      <span class="toggle-track"><span class="toggle-thumb"></span></span>
-                    </label>
+
+              @if (expandedTeifItem === 'teifSignature') {
+                <div class="teif-acc-body" [@slideDown]>
+
+                  <div class="sig-type-intro">
+                    <p class="sig-type-intro-text">Choisissez le support de votre signature electronique delivree par la DGI ou l'ANCE (Agence Nationale de Certification Electronique).</p>
                   </div>
-                }
+
+                  <!-- Choix du type -->
+                  <div class="sig-type-grid">
+                    <div class="sig-type-card" [class.selected]="signatureType === 'digiToken'" (click)="selectSignatureType('digiToken')">
+                      <div class="sig-type-icon sig-type-icon--blue">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12m0 0V2m0 10H2m10 0h10"/></svg>
+                      </div>
+                      <span class="sig-type-name">DigiToken</span>
+                      <span class="sig-type-sub">Cle USB physique ATT</span>
+                      <span class="sig-type-badge sig-type-badge--blue">USB / Hardware</span>
+                    </div>
+                    <div class="sig-type-card" [class.selected]="signatureType === 'certificatFichier'" (click)="selectSignatureType('certificatFichier')">
+                      <div class="sig-type-icon sig-type-icon--green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                      </div>
+                      <span class="sig-type-name">Certificat fichier</span>
+                      <span class="sig-type-sub">Fichier .p12 ou .pfx DGI</span>
+                      <span class="sig-type-badge sig-type-badge--green">.p12 / .pfx</span>
+                    </div>
+                    <div class="sig-type-card" [class.selected]="signatureType === 'clePrivee'" (click)="selectSignatureType('clePrivee')">
+                      <div class="sig-type-icon sig-type-icon--amber">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                      </div>
+                      <span class="sig-type-name">Cle privee RSA</span>
+                      <span class="sig-type-sub">Paire de cles RSA 2048</span>
+                      <span class="sig-type-badge sig-type-badge--amber">RSA / PEM</span>
+                    </div>
+                  </div>
+
+                  <!-- ── DigiToken ── -->
+                  @if (signatureType === 'digiToken') {
+                    <div class="sig-form-block" [@slideDown]>
+                      <div class="sig-steps-list">
+                        <div class="sig-step" [class.done]="true"><span class="sig-step-num done">1</span><span>Brancher la cle USB DigiToken sur votre ordinateur</span></div>
+                        <div class="sig-step" [class.done]="true"><span class="sig-step-num done">2</span><span>Installer le driver DigiToken fourni par l'ATT (si pas encore fait)</span></div>
+                        <div class="sig-step" [class.done]="digiTokenConnected"><span class="sig-step-num" [class.done]="digiTokenConnected">3</span><span>Saisir le code PIN de votre cle ci-dessous</span></div>
+                        <div class="sig-step" [class.done]="digiTokenConnected"><span class="sig-step-num" [class.done]="digiTokenConnected">4</span><span>La plateforme detecte le certificat automatiquement</span></div>
+                      </div>
+
+                      @if (!digiTokenConnected) {
+                        <div class="sig-input-row">
+                          <div class="field" style="flex:1">
+                            <label class="field-label">Code PIN DigiToken</label>
+                            <input class="field-input" type="password" placeholder="••••••••"
+                              [(ngModel)]="digiTokenPin" maxlength="8"/>
+                          </div>
+                          <button class="btn-primary btn-yellow" (click)="connectDigiToken()" [disabled]="digiTokenConnecting || !digiTokenPin">
+                            @if (digiTokenConnecting) { Connexion... } @else { Connecter le DigiToken }
+                          </button>
+                        </div>
+                      } @else {
+                        <div class="sig-success-banner">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          DigiToken connecte avec succes. Certificat DGI charge.
+                        </div>
+                      }
+
+                      <div class="sig-info-note sig-info-note--blue">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Le code PIN a ete remis lors du retrait de la cle a l'ATT (Agence Nationale de Certification Electronique), Tunis.
+                      </div>
+                    </div>
+                  }
+
+                  <!-- ── Certificat fichier ── -->
+                  @if (signatureType === 'certificatFichier') {
+                    <div class="sig-form-block" [@slideDown]>
+                      <div class="sig-steps-list">
+                        <div class="sig-step" [class.done]="true"><span class="sig-step-num done">1</span><span>Aller a la DGI avec votre matricule fiscal pour obtenir le certificat</span></div>
+                        <div class="sig-step" [class.done]="true"><span class="sig-step-num done">2</span><span>Recevoir le fichier .p12 ou .pfx par email officiel DGI</span></div>
+                        <div class="sig-step" [class.done]="!!certFileName"><span class="sig-step-num" [class.done]="!!certFileName">3</span><span>Uploader le fichier ci-dessous</span></div>
+                        <div class="sig-step" [class.done]="certValidated"><span class="sig-step-num" [class.done]="certValidated">4</span><span>Saisir le mot de passe et valider</span></div>
+                      </div>
+
+                      <!-- Upload zone -->
+                      @if (!certFileName) {
+                        <label class="upload-zone">
+                          <input type="file" accept=".p12,.pfx" (change)="onCertFileSelected($event)" style="display:none"/>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                          <span class="upload-zone-label">Glisser votre fichier ici ou cliquer pour choisir</span>
+                          <span class="upload-zone-hint">Formats acceptes : .p12, .pfx</span>
+                        </label>
+                      } @else {
+                        <div class="cert-file-row">
+                          <div class="cert-file-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                          </div>
+                          <div style="flex:1">
+                            <p class="cert-file-name">{{ certFileName }}</p>
+                            @if (certExpiry) {
+                              <p class="cert-file-expiry">Expire le {{ certExpiry }}</p>
+                            }
+                          </div>
+                          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" (click)="certFileName = null">Changer</button>
+                        </div>
+                      }
+
+                      @if (certFileName && !certValidated) {
+                        <div class="sig-input-row">
+                          <div class="field" style="flex:1">
+                            <label class="field-label">Mot de passe du certificat</label>
+                            <input class="field-input" type="password" placeholder="••••••••"
+                              [(ngModel)]="certPassword"/>
+                          </div>
+                          <button class="btn-primary btn-yellow" (click)="validateCertificat()" [disabled]="certValidating || !certPassword">
+                            @if (certValidating) { Validation... } @else { Valider le certificat }
+                          </button>
+                        </div>
+                      }
+
+                      @if (certValidated) {
+                        <div class="sig-success-banner">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          Certificat valide. Expire le {{ certExpiry }}.
+                        </div>
+                      }
+
+                      <div class="sig-info-note sig-info-note--amber">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Ne partagez jamais votre fichier .p12 ni son mot de passe. Conservez une copie offline securisee.
+                      </div>
+                    </div>
+                  }
+
+                  <!-- ── Cle privee RSA ── -->
+                  @if (signatureType === 'clePrivee') {
+                    <div class="sig-form-block" [@slideDown]>
+                      <div class="sig-steps-list">
+                        <div class="sig-step"><span class="sig-step-num">1</span><span>Generer une paire de cles RSA 2048 bits via OpenSSL : <code class="code-inline">openssl genrsa -out private.pem 2048</code></span></div>
+                        <div class="sig-step"><span class="sig-step-num">2</span><span>Soumettre votre cle publique a la DGI pour obtenir un certificat signe</span></div>
+                        <div class="sig-step" [class.done]="!!clePriveeFileName"><span class="sig-step-num" [class.done]="!!clePriveeFileName">3</span><span>Uploader la cle privee (.pem)</span></div>
+                        <div class="sig-step" [class.done]="!!certRsaFileName"><span class="sig-step-num" [class.done]="!!certRsaFileName">4</span><span>Uploader le certificat signe (.crt) recu de la DGI</span></div>
+                      </div>
+
+                      <div class="rsa-upload-grid">
+                        <label class="upload-zone upload-zone--small">
+                          <input type="file" accept=".pem" (change)="onClePriveeSelected($event)" style="display:none"/>
+                          @if (!clePriveeFileName) {
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                            <span class="upload-zone-label">Cle privee .pem</span>
+                          } @else {
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span class="upload-zone-label" style="color:var(--ok);">{{ clePriveeFileName }}</span>
+                          }
+                        </label>
+                        <label class="upload-zone upload-zone--small">
+                          <input type="file" accept=".crt,.cer" (change)="onCertRsaSelected($event)" style="display:none"/>
+                          @if (!certRsaFileName) {
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                            <span class="upload-zone-label">Certificat DGI .crt</span>
+                          } @else {
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span class="upload-zone-label" style="color:var(--ok);">{{ certRsaFileName }}</span>
+                          }
+                        </label>
+                      </div>
+
+                      @if (rsaValidated) {
+                        <div class="sig-success-banner">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          Paire de cles RSA validee et prete a l'emploi.
+                        </div>
+                      }
+
+                      <div class="sig-info-note sig-info-note--red">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Usage avancé. Recommande aux equipes techniques gerant leur propre infrastructure cryptographique.
+                      </div>
+                    </div>
+                  }
+
+                </div>
+              }
+            </div>
+
+            <!-- ════════ 2. ARCHIVAGE LEGAL ════════ -->
+            <div class="teif-accordion-card is-ok">
+              <div class="teif-acc-header" (click)="toggleTeifItem('teifArchivage')">
+                <div class="teif-acc-icon teif-acc-icon--green">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+                </div>
+                <div class="teif-acc-info">
+                  <span class="teif-acc-label">Archivage legal</span>
+                  <span class="teif-acc-detail">10 ans de conservation — gere automatiquement</span>
+                </div>
+                <div class="teif-acc-right">
+                  <span class="status-pill status-pill--ok">OK</span>
+                  <svg class="chevron-icon" [class.open]="expandedTeifItem === 'teifArchivage'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
               </div>
-              <div class="field-msg field-msg--info">Les mises a jour sont visibles en temps reel dans le panneau TEIF.</div>
+              @if (expandedTeifItem === 'teifArchivage') {
+                <div class="teif-acc-body" [@slideDown]>
+                  <div class="auto-feature-banner">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Gere automatiquement par la plateforme — aucune action requise
+                  </div>
+                  <div class="archive-info-grid">
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">10 ans</span>
+                      <span class="archive-info-key">Duree de conservation legale</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">AES-256</span>
+                      <span class="archive-info-key">Chiffrement des archives</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">Serveurs TN</span>
+                      <span class="archive-info-key">Hebergement en Tunisie</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">Art. 62</span>
+                      <span class="archive-info-key">Code de la fiscalite TEIF</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- ════════ 3. HORODATAGE ════════ -->
+            <div class="teif-accordion-card is-ok">
+              <div class="teif-acc-header" (click)="toggleTeifItem('teifHorodatage')">
+                <div class="teif-acc-icon teif-acc-icon--green">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="teif-acc-info">
+                  <span class="teif-acc-label">Horodatage</span>
+                  <span class="teif-acc-detail">Serveur de temps qualifie — automatique</span>
+                </div>
+                <div class="teif-acc-right">
+                  <span class="status-pill status-pill--ok">OK</span>
+                  <svg class="chevron-icon" [class.open]="expandedTeifItem === 'teifHorodatage'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              @if (expandedTeifItem === 'teifHorodatage') {
+                <div class="teif-acc-body" [@slideDown]>
+                  <div class="auto-feature-banner">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Applique automatiquement a chaque facture emise
+                  </div>
+                  <div class="archive-info-grid">
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">RFC 3161</span>
+                      <span class="archive-info-key">Standard d'horodatage</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">ANCE TN</span>
+                      <span class="archive-info-key">Autorite de certification</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">&lt; 2 sec</span>
+                      <span class="archive-info-key">Temps de reponse moyen</span>
+                    </div>
+                    <div class="archive-info-item">
+                      <span class="archive-info-val">100%</span>
+                      <span class="archive-info-key">Disponibilite garantie</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- ════════ 4. TESTS TEIF ════════ -->
+            <div class="teif-accordion-card" [class.is-ok]="getEntrepriseValue('teifSandbox')">
+              <div class="teif-acc-header" (click)="toggleTeifItem('teifSandbox')">
+                <div class="teif-acc-icon" [class.teif-acc-icon--amber]="!getEntrepriseValue('teifSandbox')" [class.teif-acc-icon--green]="getEntrepriseValue('teifSandbox')">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div class="teif-acc-info">
+                  <span class="teif-acc-label">Tests TEIF</span>
+                  <span class="teif-acc-detail">Envoi en pre-production DGI requis avant mise en production</span>
+                </div>
+                <div class="teif-acc-right">
+                  @if (getEntrepriseValue('teifSandbox')) {
+                    <span class="status-pill status-pill--ok">OK</span>
+                  } @else {
+                    <span class="status-pill status-pill--warn">En attente</span>
+                  }
+                  <svg class="chevron-icon" [class.open]="expandedTeifItem === 'teifSandbox'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              @if (expandedTeifItem === 'teifSandbox') {
+                <div class="teif-acc-body" [@slideDown]>
+                  <div class="sandbox-intro">
+                    <p>Avant de passer en production, la DGI exige un envoi test reussi sur son environnement de pre-production (sandbox). Ce test verifie la signature, l'horodatage et la structure XML de vos factures.</p>
+                  </div>
+
+                  @if (!getEntrepriseValue('teifSandbox')) {
+                    <div class="sandbox-prereq">
+                      <div class="sandbox-prereq-item" [class.ok]="getEntrepriseValue('teifSignature')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Signature numerique {{ getEntrepriseValue('teifSignature') ? 'configuree' : 'requise avant le test' }}
+                      </div>
+                      <div class="sandbox-prereq-item" [class.ok]="getEntrepriseValue('teifHorodatage')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Horodatage actif
+                      </div>
+                    </div>
+
+                    <button class="btn-sandbox" (click)="lancerTestSandbox()"
+                      [disabled]="sandboxRunning || !getEntrepriseValue('teifSignature')">
+                      @if (sandboxRunning) {
+                        <span class="spinner"></span> Envoi en cours...
+                      } @else {
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Lancer le test TEIF en pre-production
+                      }
+                    </button>
+
+                    @if (!getEntrepriseValue('teifSignature')) {
+                      <p class="field-msg field-msg--error" style="margin-top:8px;">Configurez d'abord la signature numerique avant de lancer le test.</p>
+                    }
+                  }
+
+                  @if (sandboxLog.length > 0) {
+                    <div class="sandbox-log">
+                      @for (line of sandboxLog; track line) {
+                        <div class="sandbox-log-line">
+                          <span class="sandbox-log-prompt">&gt;</span> {{ line }}
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  @if (sandboxResult === 'success') {
+                    <div class="sig-success-banner" style="margin-top:12px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Test TEIF reussi. Reponse DGI : ACCEPTE. Vous etes pret pour la production.
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- ════════ 5. SURVEILLANCE ════════ -->
+            <div class="teif-accordion-card" [class.is-ok]="getEntrepriseValue('teifSurveille')">
+              <div class="teif-acc-header" (click)="toggleTeifItem('teifSurveille')">
+                <div class="teif-acc-icon" [class.teif-acc-icon--red]="!getEntrepriseValue('teifSurveille')" [class.teif-acc-icon--green]="getEntrepriseValue('teifSurveille')">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+                <div class="teif-acc-info">
+                  <span class="teif-acc-label">Surveillance</span>
+                  <span class="teif-acc-detail">Alertes email en cas de rejet ou d'expiration</span>
+                </div>
+                <div class="teif-acc-right">
+                  @if (getEntrepriseValue('teifSurveille')) {
+                    <span class="status-pill status-pill--ok">OK</span>
+                  } @else {
+                    <span class="status-pill status-pill--warn">Non configure</span>
+                  }
+                  <svg class="chevron-icon" [class.open]="expandedTeifItem === 'teifSurveille'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              @if (expandedTeifItem === 'teifSurveille') {
+                <div class="teif-acc-body" [@slideDown]>
+                  @if (!surveillanceEmailConfirmed) {
+                    <div class="field" style="margin-bottom:12px;">
+                      <label class="field-label">Email de surveillance</label>
+                      <input class="field-input" type="email" placeholder="Ex: comptable@entreprise.tn"
+                        [(ngModel)]="surveillanceEmail"/>
+                      <div class="field-msg">Vous recevrez des alertes sur cette adresse</div>
+                    </div>
+
+                    <div class="alert-types-grid">
+                      <label class="alert-type-item">
+                        <input type="checkbox" [(ngModel)]="surveillanceAlerts.rejet" class="alert-checkbox"/>
+                        <div class="alert-type-content">
+                          <span class="alert-type-name">Rejet DGI</span>
+                          <span class="alert-type-desc">Facture refusee par la DGI</span>
+                        </div>
+                      </label>
+                      <label class="alert-type-item">
+                        <input type="checkbox" [(ngModel)]="surveillanceAlerts.expiration" class="alert-checkbox"/>
+                        <div class="alert-type-content">
+                          <span class="alert-type-name">Expiration certificat</span>
+                          <span class="alert-type-desc">30 jours avant expiration</span>
+                        </div>
+                      </label>
+                      <label class="alert-type-item">
+                        <input type="checkbox" [(ngModel)]="surveillanceAlerts.erreurEnvoi" class="alert-checkbox"/>
+                        <div class="alert-type-content">
+                          <span class="alert-type-name">Erreur d'envoi</span>
+                          <span class="alert-type-desc">Probleme de connexion DGI</span>
+                        </div>
+                      </label>
+                    </div>
+
+                    <button class="btn-primary btn-yellow" style="margin-top:14px; width:100%;" (click)="confirmerSurveillance()">
+                      Confirmer la configuration des alertes
+                    </button>
+                  } @else {
+                    <div class="sig-success-banner">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Alertes actives sur {{ surveillanceEmail }}
+                    </div>
+                    <div class="surv-active-tags">
+                      @if (surveillanceAlerts.rejet) { <span class="surv-tag">Rejet DGI</span> }
+                      @if (surveillanceAlerts.expiration) { <span class="surv-tag">Expiration certificat</span> }
+                      @if (surveillanceAlerts.erreurEnvoi) { <span class="surv-tag">Erreur envoi</span> }
+                    </div>
+                    <button class="btn-secondary" style="margin-top:10px; font-size:12px;" (click)="resetSurveillance()">Modifier</button>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="field-msg field-msg--info" style="margin-top:4px;">
+              Les mises a jour sont visibles en temps reel dans le panneau TEIF.
             </div>
           }
         </div>
 
         <div class="form-actions">
-          <button class="btn-secondary" (click)="prevStep()" [disabled]="activeStepIndex === 0">Retour</button>
-          <button class="btn-primary" (click)="nextStep()" [disabled]="saving()">
+          @if (activeStepIndex !== 0) {
+            <button class="btn-secondary" (click)="prevStep()">Retour</button>
+          }
+          <button class="btn-primary btn-yellow" (click)="nextStep()" [disabled]="saving()">
             @if (activeStepIndex === steps.length - 1) { Enregistrer } @else { Continuer }
           </button>
         </div>
       </section>
 
+      <!-- ═══════════════════ ASIDE TEIF ═══════════════════ -->
       <aside class="teif-panel">
         <div class="teif-card" [class.pulse]="statusPulse">
           <div class="teif-head">
@@ -288,7 +688,6 @@
             </div>
             <span class="teif-badge" [ngClass]="teifLevelClass">{{ teifLevelLabel }}</span>
           </div>
-
           <div class="score-block" [class.pulse]="scorePulse">
             <div class="score-ring">
               <svg width="84" height="84" viewBox="0 0 84 84">
@@ -301,14 +700,9 @@
             </div>
             <div class="score-meta">
               <div class="score-label">Score de conformite TEIF</div>
-              <div class="score-status" [ngClass]="teifLevelClass">{{ teifLevelLabel }}</div>
             </div>
           </div>
-
-          <div class="score-bar">
-            <span [style.width.%]="teifScore" [style.background]="teifColor"></span>
-          </div>
-
+          <div class="score-bar"><span [style.width.%]="teifScore" [style.background]="teifColor"></span></div>
           <div class="rec-box">
             <div class="rec-title">Recommandations</div>
             @if (teifRecommendations.length === 0) {
@@ -319,7 +713,6 @@
             }
           </div>
         </div>
-
         <div class="teif-live">
           <div class="teif-live-title">Etat en temps reel</div>
           @for (item of teifItems; track item.key) {
@@ -332,6 +725,7 @@
           }
         </div>
       </aside>
+
     </div>
   </div>
 </div>

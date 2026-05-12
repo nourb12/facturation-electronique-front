@@ -27,6 +27,18 @@ interface TaxeForm {
         style({ opacity: 0, transform: 'translateY(8px)' }),
         animate('380ms cubic-bezier(.16,1,.3,1)', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
+    ]),
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('200ms ease', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('slideUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px) scale(0.95)' }),
+        animate('250ms cubic-bezier(.16,1,.3,1)', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+      ])
     ])
   ]
 })
@@ -37,6 +49,8 @@ export class TaxesComponent implements OnInit {
   taxes = signal<TaxeDto[]>([]);
   loading = signal(true);
   saving = signal(false);
+  deleting = signal(false);
+  deleteConfirm: TaxeDto | null = null;
 
   searchQuery = '';
   showColumns = false;
@@ -243,5 +257,38 @@ export class TaxesComponent implements OnInit {
       default:
         return 'ACCOUNTING.TAXES.TYPE_DESC.VAT';
     }
+  }
+
+  confirmDelete(taxe: TaxeDto) {
+    this.deleteConfirm = taxe;
+  }
+
+  cancelDelete() {
+    this.deleteConfirm = null;
+  }
+
+  deleteConfirmed() {
+    if (!this.deleteConfirm || this.deleting()) return;
+
+    const id = this.deleteConfirm.id;
+    this.deleting.set(true);
+
+    this.api.supprimer(id).subscribe({
+      next: () => {
+        this.deleting.set(false);
+        this.taxes.update(list => list.filter(t => t.id !== id));
+        this.toast.successKey('ACCOUNTING.TAXES.TOAST.DELETED');
+        this.deleteConfirm = null;
+        
+        // Ajuster la page si nécessaire
+        if (this.pagedRows().length === 0 && this.page > 1) {
+          this.page -= 1;
+        }
+      },
+      error: (err) => {
+        this.deleting.set(false);
+        this.toast.errorKey(err?.error?.message ?? 'ERRORS.GENERIC');
+      }
+    });
   }
 }

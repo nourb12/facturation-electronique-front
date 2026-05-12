@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   FactureApiService, FactureDto, ListeFacturesDto,
   StatistiquesFacturesDto, ClientService, ClientDto,
@@ -16,7 +17,7 @@ import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCo
 @Component({
   selector: 'app-devis',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './devis.component.html',
   styleUrls: ['./devis.component.scss'],
   animations: [
@@ -115,7 +116,13 @@ export class DevisComponent implements OnInit {
   ];
 
   readonly typeFactureOptions   = ['Proforma'];
-  readonly modePaiementOptions  = ['Virement', 'Cheque', 'Especes', 'CarteBancaire', 'Traite'];
+  readonly modePaiementOptions = [
+    { value: 'Virement',      labelKey: 'INVOICE.PAYMENT_MODES.BANK_TRANSFER' },
+    { value: 'Cheque',        labelKey: 'INVOICE.PAYMENT_MODES.CHECK' },
+    { value: 'Especes',       labelKey: 'INVOICE.PAYMENT_MODES.CASH' },
+    { value: 'CarteBancaire', labelKey: 'INVOICE.PAYMENT_MODES.CARD' },
+    { value: 'Traite',        labelKey: 'INVOICE.PAYMENT_MODES.BILL_OF_EXCHANGE' },
+  ] as const;
 
 
   filteredFactures = computed(() => {
@@ -164,14 +171,55 @@ export class DevisComponent implements OnInit {
         this.total.set(res.total);
         this.loading.set(false);
         this.updateStatutCounts();
+        this.calculateStats();
       },
       error: () => this.loading.set(false)
     });
 
-    this.factureSvc.statistiques().subscribe({ next: s => this.stats.set(s) });
-
     this.clientSvc.lister(1, 200, true).subscribe({ next: res => this.clients.set(res.items) });
     this.produitSvc.lister(1, 200, undefined, true).subscribe({ next: res => this.produits.set(res.items) });
+  }
+
+  private calculateStats() {
+    const devis = this.factures();
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    let montantTotalMois = 0;
+    let montantEncaisseMois = 0;
+    let montantEnAttente = 0;
+    let totalEnRetard = 0;
+
+    devis.forEach(d => {
+      const dateEmission = d.dateEmission ? new Date(d.dateEmission) : null;
+      const isCurrentMonth = dateEmission && 
+        dateEmission.getMonth() === currentMonth && 
+        dateEmission.getFullYear() === currentYear;
+
+      if (isCurrentMonth) {
+        montantTotalMois += d.totalTtc || 0;
+        if (d.statut === 'Payee') {
+          montantEncaisseMois += d.totalTtc || 0;
+        }
+      }
+
+      if (d.statut === 'Acceptee' || d.statut === 'PartiellemementPayee') {
+        montantEnAttente += d.montantRestant || d.totalTtc || 0;
+      }
+
+      if (d.estEnRetard) {
+        totalEnRetard++;
+      }
+    });
+
+    this.stats.set({
+      montantTotalMois,
+      montantEncaisseMois,
+      montantEnAttente,
+      totalEnRetard,
+      totalBrouillons: devis.filter(d => d.statut === 'Brouillon').length,
+    } as any);
   }
 
   private updateStatutCounts() {
@@ -261,6 +309,7 @@ export class DevisComponent implements OnInit {
         this.factures.update(list => [f, ...list]);
         this.total.update(v => v + 1);
         this.updateStatutCounts();
+        this.calculateStats();
         this.closeModal();
         this.toast.success(`Devis ${f.numero} créé.`);
       },
@@ -468,6 +517,17 @@ export class DevisComponent implements OnInit {
       Payee: 'ok', PartiellemementPayee: 'warn', Annulee: 'neutral'
     };
     return map[statut] ?? 'neutral';
+  }
+
+  statutLabelKey(statut: string): string {
+    const map: Record<string, string> = {
+      Brouillon:'FACTURES.STATUS.DRAFT', Validee:'FACTURES.STATUS.VALIDATED',
+      Conforme:'FACTURES.STATUS.COMPLIANT', Transmise:'FACTURES.STATUS.SENT',
+      Acceptee:'FACTURES.STATUS.ACCEPTED', Rejetee:'FACTURES.STATUS.REJECTED',
+      Payee:'FACTURES.STATUS.PAID', PartiellemementPayee:'FACTURES.STATUS.PARTIALLY_PAID',
+      Annulee:'FACTURES.STATUS.CANCELLED',
+    };
+    return map[statut] ?? statut;
   }
 
   private updateFacture(updated: any) {

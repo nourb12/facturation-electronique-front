@@ -5,6 +5,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { ParametreFiscalApiService, ParametreFiscalDto } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 type ParametreFiscalType        = 'Pourcentage' | 'Fixe';
 type ParametreFiscalSigne       = 'Positif' | 'Negatif';
@@ -41,6 +42,7 @@ interface ParametreFiscalForm {
 export class ParametresFiscauxComponent implements OnInit {
   private api   = inject(ParametreFiscalApiService);
   private toast = inject(ToastService);
+  private confirmSvc = inject(ConfirmationService);
 
   parametres = signal<ParametreFiscalDto[]>([]);
   loading    = signal(true);
@@ -246,8 +248,48 @@ export class ParametresFiscauxComponent implements OnInit {
     else         this.selectedIds.delete(id);
   }
 
+  confirmDelete(param: ParametreFiscalDto): void {
+    this.confirmSvc.confirm({
+      title: 'Supprimer ce paramètre fiscal ?',
+      message: `Cette action est irréversible. Le paramètre « ${param.libelle} » sera définitivement supprimé.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => this.deleteParam(param.id)
+    });
+  }
+
+  deleteParam(id: string): void {
+    this.api.supprimer(id).subscribe({
+      next: () => {
+        this.parametres.update(list => list.filter(p => p.id !== id));
+        this.selectedIds.delete(id);
+        this.toast.successKey('ACCOUNTING.FISCAL_PARAMS.TOAST.DELETE_OK', { count: 1 });
+        if (this.page > this.totalPages()) this.page = this.totalPages();
+      },
+      error: (err) => {
+        this.toast.errorKey(err?.error?.message ?? 'ERRORS.GENERIC');
+      }
+    });
+  }
+
   deleteSelected(): void {
     if (this.selectedIds.size === 0) return;
+    
+    const count = this.selectedIds.size;
+    const plural = count > 1 ? 's' : '';
+    
+    this.confirmSvc.confirm({
+      title: `Supprimer ${count} paramètre${plural} fiscal${plural === 's' ? 'aux' : ''} ?`,
+      message: `Cette action est irréversible. ${count} paramètre${plural} fiscal${plural === 's' ? 'aux' : ''} ${count > 1 ? 'seront' : 'sera'} définitivement supprimé${plural}.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => this.executeDeleteSelected()
+    });
+  }
+
+  executeDeleteSelected(): void {
     const ids = [...this.selectedIds];
     let done = 0, errored = 0;
     ids.forEach(id => {

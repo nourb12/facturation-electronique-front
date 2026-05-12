@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Paiement Standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #10B981;
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #2c3e50;
+        }
+        .logo span {
+            color: #10B981;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #10B981;
+            margin-bottom: 8px;
+        }
+        .invoice-number {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+        .invoice-date {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .party {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #10B981;
+        }
+        .party-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .party-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .payment-details {
+            background: #ecfdf5;
+            border: 2px solid #10B981;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 15px;
+            border-bottom: 1px solid #d1fae5;
+        }
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+        .payment-row.amount {
+            font-size: 24px;
+            font-weight: 900;
+            color: #10B981;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 3px solid #10B981;
+        }
+        .payment-label {
+            color: #666;
+            font-weight: 600;
+        }
+        .payment-value {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">
+                <span>|||</span>Birou
+            </div>
+            <div class="invoice-info">
+                <div class="invoice-title">PAIEMENT</div>
+                <div class="invoice-number"># : PAY-S-00001</div>
+                <div class="invoice-date">Date : 12/05/2026</div>
+            </div>
+        </div>
+
+        <div class="status-badge">
+            ✓ Paiement reçu
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">De :</div>
+                <div class="party-name">Client ABC</div>
+                <div class="party-details">
+                    15, Avenue de la République<br>
+                    2000 Ariana<br>
+                    Tunisie
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">À :</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna<br>
+                    La Marsa, Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-details">
+            <div class="payment-row">
+                <span class="payment-label">Facture concernée</span>
+                <span class="payment-value">INV-2021-009</span>
+            </div>
+            <div class="payment-row">
+                <span class="payment-label">Mode de paiement</span>
+                <span class="payment-value">Virement bancaire</span>
+            </div>
+            <div class="payment-row">
+                <span class="payment-label">Référence</span>
+                <span class="payment-value">VIR-2026-05-12-ABC</span>
+            </div>
+            <div class="payment-row">
+                <span class="payment-label">Date de réception</span>
+                <span class="payment-value">12 Mai 2026</span>
+            </div>
+            <div class="payment-row amount">
+                <span>Montant reçu</span>
+                <span>1.382.200 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Reçu de paiement généré automatiquement • Document non contractuel
+        </div>
+    </div>
+</body>
+</html>

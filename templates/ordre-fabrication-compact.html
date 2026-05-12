@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordre de Fabrication Compact</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #14B8A6;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0D9488;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0D9488;
+            margin-bottom: 5px;
+        }
+        .invoice-number {
+            font-size: 12px;
+            color: #666;
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .party {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 4px;
+        }
+        .party-title {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .party-details {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #14B8A6;
+        }
+        th {
+            padding: 8px;
+            text-align: left;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: 700;
+            color: #666;
+        }
+        th:last-child, td:last-child {
+            text-align: right;
+        }
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        td {
+            padding: 10px 8px;
+            color: #333;
+        }
+        .totals {
+            margin-left: auto;
+            width: 280px;
+            font-size: 12px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+        .total-row.grand-total {
+            font-size: 16px;
+            font-weight: 900;
+            color: #0D9488;
+            border-top: 2px solid #14B8A6;
+            padding-top: 10px;
+            margin-top: 8px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 9px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-info">
+                <div class="invoice-title">ORDRE DE FABRICATION</div>
+                <div class="invoice-number">OF-2021-004 | 2021-11-06</div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">Atelier</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna<br>
+                    La Marsa, Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">Responsable</div>
+                <div class="party-name">Chef de Production</div>
+                <div class="party-details">
+                    Département Production<br>
+                    Birou Suite<br>
+                    La Marsa, Tunisie
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Référence</th>
+                    <th>Quantité</th>
+                    <th>Délai</th>
+                    <th>Priorité</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Produit Fini A</td>
+                    <td>PF-A001</td>
+                    <td>50</td>
+                    <td>5 jours</td>
+                    <td>Haute</td>
+                </tr>
+                <tr>
+                    <td>Produit Fini B</td>
+                    <td>PF-B002</td>
+                    <td>30</td>
+                    <td>7 jours</td>
+                    <td>Normale</td>
+                </tr>
+                <tr>
+                    <td>Produit Fini C</td>
+                    <td>PF-C003</td>
+                    <td>20</td>
+                    <td>10 jours</td>
+                    <td>Basse</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total Quantité</span>
+                <span>100 unités</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Délai Total</span>
+                <span>10 jours</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Ordre de fabrication à traiter en priorité. Vérifier les stocks de matières premières.
+        </div>
+    </div>
+</body>
+</html>

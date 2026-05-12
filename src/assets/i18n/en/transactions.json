@@ -1,9 +1,6 @@
 {
   "TRANSACTIONS": {
     "TITLE": "Transactions",
-    "TITLE_A": "Transaction",
-    "TITLE_EM": "journal.",
-    "SUBTITLE": "Track your income and expenses.",
     "ACTIONS": {
       "ADD": "New transaction",
       "EXPORT": "Export",
@@ -38,19 +35,31 @@
       "AMOUNT": "Amount",
       "TYPE": "Type",
       "STATUS": "Status",
-      "DOC": "Document",
+      "SOURCE": "Source",
+      "DOC": "Receipt",
       "EMPTY": "No transactions found."
     },
     "TYPE": {
       "ENTREE": "Income",
-      "SORTIE": "Expense",
-      "": ""
+      "SORTIE": "Expense"
     },
     "STATUS": {
       "NONJUSTIFIEE": "Unjustified",
       "ENATTENTE": "Pending",
-      "JUSTIFIEE": "Justified",
-      "": ""
+      "JUSTIFIEE": "Justified"
+    },
+    "SOURCE": {
+      "WEB": "Web entry",
+      "MOBILEAPP": "Mobile app"
+    },
+    "REVIEW": {
+      "PENDING": "Needs review",
+      "REQUIRED": "Required field",
+      "APPROVED": "Approved",
+      "DRAFT": "Draft",
+      "FIELD_REQUIRED": "Blocking",
+      "FIELD_REVIEW": "Review",
+      "FIELD_RELIABLE": "Reliable"
     },
     "COUNTERS": {
       "JUSTIFIED": "Justified",
@@ -62,11 +71,16 @@
       "EMPTY": "No data available."
     },
     "DETAIL": {
-      "TITLE": "Transaction detail",
+      "TITLE": "Expense review",
       "TAB": {
         "RECEIPT": "Receipt",
         "ANALYTICS": "Analytics",
-        "COMMENTS": "Comments"
+        "MATCHING": "Matching",
+        "COMMENTS": "Comments",
+        "ACTIVITIES": "Activities"
+      },
+      "ACTIONS": {
+        "APPROVE": "Save and approve"
       },
       "RECEIPT": {
         "STATUS_LABEL": "Receipt status",
@@ -74,24 +88,54 @@
         "STATUS_OPTIONAL": "Optional",
         "STATUS_PRESENT": "Present",
         "UPLOAD": "Upload a receipt",
-        "DRAG_DROP": "Drag & drop or click to choose",
+        "DRAG_DROP": "Drag and drop or click to choose",
+        "OPEN": "Open file",
+        "PREVIEW_EMPTY_TITLE": "No receipt preview yet",
+        "PREVIEW_EMPTY_TEXT": "Upload an image or PDF so it can be reviewed on the web.",
         "LINK_INVOICE": "Link to an invoice",
-        "AUTO_TRANSMIT": "Automatic transmission"
+        "AUTO_TRANSMIT": "Automatic transmission",
+        "SUPPLIER": "Supplier",
+        "SUPPLIER_TAX_ID": "Tax ID",
+        "MATCH_SUPPLIER": "Find supplier",
+        "CREATE_SUPPLIER": "Create supplier",
+        "SAVE": "Save receipt review",
+        "SUPPLIER_MATCH": {
+          "SELECTED": "Selection confirmed",
+          "TAX-ID": "Matched",
+          "NAME-EXACT": "Matched",
+          "NAME-SIMILAR": "Needs confirmation",
+          "CREATED": "Created",
+          "NOT-FOUND": "Not found"
+        }
       },
       "ANALYTICS": {
         "CATEGORY": "Category",
-        "EDIT_CATEGORY": "Edit category",
-        "SPLIT": "Split"
+        "CATEGORY_PLACEHOLDER": "e.g. Meals",
+        "ADD": "Add category",
+        "REMOVE": "Remove",
+        "TOTAL": "Total",
+        "PERIOD": "Accounting period",
+        "RECOVERABLE_VAT_AMOUNT": "Recoverable VAT",
+        "RECOVERABLE_VAT_RATE": "Recoverable VAT rate",
+        "SAVE": "Save analytics"
+      },
+      "MATCHING": {
+        "STATUS": "Status",
+        "REFERENCE": "Reference",
+        "DATE": "Date",
+        "AMOUNT": "Amount",
+        "COUNTERPARTY": "Counterparty",
+        "SAVE": "Save matching",
+        "SUGGESTION_DEFAULT": "Suggestion"
       },
       "COMMENTS": {
-        "HISTORY": "Notes history",
-        "ADD_NOTE": "Add a note",
-        "PLACEHOLDER": "Your comment…"
+        "PLACEHOLDER": "Add an internal comment…",
+        "SEND": "Send",
+        "EMPTY": "No comments yet."
       },
-      "SIDE": {
-        "GLOBAL_STATUS": "Global status",
-        "ACCOUNT": "Account",
-        "EDIT_ALL": "Edit all"
+      "ACTIVITIES": {
+        "EMPTY": "No activity recorded yet.",
+        "SYSTEM": "System"
       }
     }
   }

@@ -2,7 +2,7 @@
 
     <div class="page-header">
     <div>
-      <h1 class="page-title">Clients <em>& contacts</em></h1>
+      <h1 class="page-title">Clients & contacts</h1>
       <p class="page-desc">{{ filteredClients().length }} client(s) actifs</p>
     </div>
     <div class="header-actions">
@@ -14,50 +14,56 @@
 
     
     <div class="kpi-grid">
-      <div class="kpi kpi--tuniflow" style="animation-delay:.05s">
-        <div class="kpi-top">
-          <div class="kpi-icon kpi-icon--ey">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M1 13c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-            </svg>
-          </div>
+      <div class="kpi-card" style="animation-delay:.05s">
+        <div class="kpi-icon kpi-icon--users">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
         </div>
-        <div class="kpi-val">{{ clients().length }}</div>
-        <div class="kpi-label">Total clients</div>
-        <div class="kpi-sub">{{ filters[1].count }} actifs</div>
+        <div class="kpi-body">
+          <div class="kpi-title">Total clients</div>
+          <div class="kpi-value">{{ clients().length }}</div>
+          <div class="kpi-sub">{{ filters[1].count }} actifs</div>
+        </div>
       </div>
-      <div class="kpi kpi--ok" style="animation-delay:.10s">
-        <div class="kpi-top"><div class="kpi-icon kpi-icon--ok">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <div class="kpi-card" style="animation-delay:.10s">
+        <div class="kpi-icon kpi-icon--check">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-        </div></div>
-        <div class="kpi-val">{{ filters[1].count }}</div>
-        <div class="kpi-label">Clients actifs</div>
-        <div class="kpi-sub">B2B + B2C + B2G</div>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Clients actifs</div>
+          <div class="kpi-value">{{ filters[1].count }}</div>
+          <div class="kpi-sub">B2B + B2C + B2G</div>
+        </div>
       </div>
-      <div class="kpi kpi--warn" style="animation-delay:.15s">
-        <div class="kpi-top"><div class="kpi-icon kpi-icon--warn">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M7 4.5v3M7 9.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <div class="kpi-card" style="animation-delay:.15s">
+        <div class="kpi-icon kpi-icon--alert">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
-        </div></div>
-        <div class="kpi-val">{{ filters[2].count }}</div>
-        <div class="kpi-label">Inactifs</div>
-        <div class="kpi-sub">Désactivés</div>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Inactifs</div>
+          <div class="kpi-value">{{ filters[2].count }}</div>
+          <div class="kpi-sub">Désactivés</div>
+        </div>
       </div>
-      <div class="kpi kpi--info" style="animation-delay:.20s">
-        <div class="kpi-top"><div class="kpi-icon kpi-icon--info">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M5 5h4M5 8h4M5 11h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <div class="kpi-card" style="animation-delay:.20s">
+        <div class="kpi-icon kpi-icon--file">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M6 6h4M6 9h4M6 12h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
-        </div></div>
-        <div class="kpi-val">{{ filteredClients().length }}</div>
-        <div class="kpi-label">Résultats filtrés</div>
-        <div class="kpi-sub">{{ searchQuery || activeFilter }}</div>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-title">Résultats filtrés</div>
+          <div class="kpi-value">{{ filteredClients().length }}</div>
+          <div class="kpi-sub">{{ searchQuery || activeFilter }}</div>
+        </div>
       </div>
     </div>
 

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bon de Commande Standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #22C55E;
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #2c3e50;
+        }
+        .logo span {
+            color: #22C55E;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #22C55E;
+            margin-bottom: 8px;
+        }
+        .invoice-number {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+        .invoice-date {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .party {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #22C55E;
+        }
+        .party-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .party-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        thead {
+            background: #22C55E;
+            color: white;
+        }
+        th {
+            padding: 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        th:last-child, td:last-child {
+            text-align: right;
+        }
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tbody tr:hover {
+            background: #f0fdf4;
+        }
+        td {
+            padding: 14px 12px;
+            font-size: 13px;
+            color: #333;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .totals {
+            margin-left: auto;
+            width: 350px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        .total-row.subtotal {
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .total-row.grand-total {
+            font-size: 18px;
+            font-weight: 900;
+            color: #22C55E;
+            border-top: 3px solid #22C55E;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+            color: #999;
+            line-height: 1.6;
+        }
+        .footer-title {
+            font-weight: 700;
+            color: #666;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">
+                <span>|||</span>Birou
+            </div>
+            <div class="invoice-info">
+                <div class="invoice-title">BON DE COMMANDE</div>
+                <div class="invoice-number"># : BC-2026-0001</div>
+                <div class="invoice-date">Date : 12/05/2026</div>
+                <div class="invoice-date">Livraison souhaitée : 20/05/2026</div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">Acheteur :</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna, Rue des Roses<br>
+                    La Marsa<br>
+                    Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">Fournisseur :</div>
+                <div class="party-name">Fournisseur XYZ</div>
+                <div class="party-details">
+                    25, Avenue Habib Bourguiba<br>
+                    1000 Tunis<br>
+                    Tunisie<br>
+                    M.F.: 9876543/A/M/000
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Désignation</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total HT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>REF-001</td>
+                    <td class="item-name">Ordinateur portable Dell</td>
+                    <td>5</td>
+                    <td>2500.000</td>
+                    <td>12500.000</td>
+                </tr>
+                <tr>
+                    <td>REF-002</td>
+                    <td class="item-name">Écran 24 pouces</td>
+                    <td>10</td>
+                    <td>800.000</td>
+                    <td>8000.000</td>
+                </tr>
+                <tr>
+                    <td>REF-003</td>
+                    <td class="item-name">Clavier sans fil</td>
+                    <td>10</td>
+                    <td>150.000</td>
+                    <td>1500.000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div class="total-row subtotal">
+                <span>Total HT</span>
+                <span>22.000.000 TND</span>
+            </div>
+            <div class="total-row">
+                <span>TVA 19%</span>
+                <span>4.180.000 TND</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total TTC</span>
+                <span>26.180.000 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-title">Conditions de livraison</div>
+            Livraison à l'adresse de l'acheteur. Délai de paiement : 30 jours net.
+            Toute livraison doit être accompagnée d'un bon de livraison signé.
+        </div>
+    </div>
+</body>
+</html>

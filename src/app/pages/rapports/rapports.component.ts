@@ -82,25 +82,29 @@ export class RapportsComponent implements OnInit {
         sub: tauxEncaissement !== undefined && tauxEncaissement !== null
           ? `Taux d'encaissement : ${tauxEncaissement}%`
           : 'Données indisponibles',
-        color: montantTotal !== undefined && montantTotal !== null ? 'ok' : 'muted'
+        color: montantTotal !== undefined && montantTotal !== null ? 'ok' : 'muted',
+        icon: 'cash'
       },
       {
         label: 'TVA collectée',
         val: hasTva ? `${this.formatMontant(totalTva)} TND` : '—',
         sub: hasTva ? 'Total sur la période' : 'Données indisponibles',
-        color: hasTva ? 'ok' : 'muted'
+        color: hasTva ? 'ok' : 'muted',
+        icon: 'chart'
       },
       {
         label: 'Factures rejetées',
         val: totalRejetees !== undefined && totalRejetees !== null ? String(totalRejetees) : '—',
         sub: totalRejetees !== undefined && totalRejetees !== null ? 'Total sur la période' : 'Données indisponibles',
-        color: totalRejetees !== undefined && totalRejetees !== null ? 'warn' : 'muted'
+        color: totalRejetees !== undefined && totalRejetees !== null ? 'warn' : 'muted',
+        icon: 'file'
       },
       {
         label: 'Délai moyen',
         val: delaiMoyen !== null ? `${delaiMoyen} j` : '—',
         sub: delaiMoyen !== null ? 'Moyenne pondérée' : 'Données indisponibles',
-        color: delaiMoyen !== null ? (delaiMoyen > 30 ? 'warn' : 'ok') : 'muted'
+        color: delaiMoyen !== null ? (delaiMoyen > 30 ? 'warn' : 'ok') : 'muted',
+        icon: 'clock'
       }
     ];
   });

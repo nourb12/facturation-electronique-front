@@ -1,11 +1,8 @@
 <div class="tx-layout" [@pageIn] (click)="closeExportMenu()">
-
   <header class="tx-header">
     <div class="tx-head-left">
       <h1 class="tx-title">{{ 'TRANSACTIONS.TITLE' | translate }}</h1>
-      <div class="tx-sub">
-        {{ total() }} {{ 'TRANSACTIONS.TITLE' | translate | lowercase }}
-      </div>
+      <div class="tx-sub">{{ total() }} {{ 'TRANSACTIONS.TITLE' | translate | lowercase }}</div>
     </div>
 
     <div class="tx-head-actions">
@@ -116,32 +113,6 @@
       }
     </div>
 
-    @if (selectedCount() > 0) {
-      <div class="bulk-bar" [@fadeIn] (click)="$event.stopPropagation()">
-        <div class="bulk-left">
-          <span class="bulk-pill">{{ selectedCount() }}</span>
-          <span class="bulk-label">sélectionnée(s)</span>
-        </div>
-        <div class="bulk-actions">
-          <button type="button" class="bulk-btn">{{ 'TRANSACTIONS.ACTIONS.BULK.JUSTIFY' | translate }}</button>
-          <button type="button" class="bulk-btn">{{ 'TRANSACTIONS.ACTIONS.BULK.CATEGORIZE' | translate }}</button>
-          <button type="button" class="bulk-btn" (click)="exportCsv()">{{ 'TRANSACTIONS.ACTIONS.BULK.EXPORT' | translate }}</button>
-          <button
-            type="button"
-            class="bulk-btn bulk-btn--danger bulk-btn--icon"
-            [attr.title]="'TRANSACTIONS.ACTIONS.BULK.DELETE' | translate"
-            [attr.aria-label]="'TRANSACTIONS.ACTIONS.BULK.DELETE' | translate">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2.5 3.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M5.5 2h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M4 5.2v5.1c0 .7.5 1.2 1.2 1.2h3.6c.7 0 1.2-.5 1.2-1.2V5.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M5.8 6.4v3.3M8.2 6.4v3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    }
-
     @if (loading()) {
       <div class="loading-state" [@fadeIn]>
         <div class="loading-spinner"></div>
@@ -163,6 +134,7 @@
               <th>{{ 'TRANSACTIONS.TABLE.TIER' | translate }}</th>
               <th>{{ 'TRANSACTIONS.TABLE.CATEGORY' | translate }}</th>
               <th>{{ 'TRANSACTIONS.TABLE.TYPE' | translate }}</th>
+              <th>{{ 'TRANSACTIONS.TABLE.SOURCE' | translate }}</th>
               <th class="amt">{{ 'TRANSACTIONS.TABLE.AMOUNT' | translate }}</th>
               <th>{{ 'TRANSACTIONS.TABLE.DOC' | translate }}</th>
             </tr>
@@ -170,7 +142,7 @@
           <tbody>
             @if (visibleRows().length === 0) {
               <tr>
-                <td colspan="9" class="empty-row">
+                <td colspan="10" class="empty-row">
                   <span>{{ 'TRANSACTIONS.TABLE.EMPTY' | translate }}</span>
                 </td>
               </tr>
@@ -181,27 +153,35 @@
                   <input type="checkbox" [checked]="selectedIds().includes(t.id)" (change)="toggleSelected(t.id)"/>
                 </td>
                 <td>
-                <span class="badge" [ngClass]="'badge--' + statusClass(t.statut)">
-                    {{ ('TRANSACTIONS.STATUS.' + (t.statut | uppercase)) | translate }}
+                  <div class="status-stack">
+                    <span class="badge" [ngClass]="'badge--' + statusClass(t.statut)">
+                      {{ ('TRANSACTIONS.STATUS.' + (t.statut | uppercase)) | translate }}
+                    </span>
+                    <span class="badge badge--soft" [ngClass]="'badge--' + reviewStateClass(t)">
+                      {{ reviewStateLabel(t) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="mono">{{ t.date | date:'dd/MM/yyyy' }}</td>
+                <td class="lbl">{{ t.libelle }}</td>
+                <td class="muted">{{ t.tiersNom || '—' }}</td>
+                <td class="muted">{{ t.categorieNom || '—' }}</td>
+                <td>
+                  <span class="badge badge--soft" [ngClass]="'badge--' + typeClass(t.type)">
+                    {{ ('TRANSACTIONS.TYPE.' + (t.type | uppercase)) | translate }}
                   </span>
                 </td>
-              <td class="mono">{{ t.date | date:'dd/MM/yyyy' }}</td>
-              <td class="lbl">{{ t.libelle }}</td>
-              <td class="muted">{{ t.tiersNom || '—' }}</td>
-              <td class="muted">{{ t.categorieNom || '—' }}</td>
-              <td>
-                <span class="badge badge--soft" [ngClass]="'badge--' + typeClass(t.type)">
-                  {{ ('TRANSACTIONS.TYPE.' + (t.type | uppercase)) | translate }}
-                </span>
-              </td>
-              <td class="amt mono" [class.neg]="t.type === 'Sortie'">
-                {{ t.type === 'Sortie' ? '−' : '+' }}{{ formatAmount(t.montant) }} {{ t.devise }}
-              </td>
-              <td class="doc muted">
-                {{ t.documentLie?.fileName || (t.factureId ? 'Facture liée' : '—') }}
-              </td>
-            </tr>
-          }
+                <td>
+                  <span class="badge badge--soft" [ngClass]="'badge--' + sourceClass(t.source)">
+                    {{ ('TRANSACTIONS.SOURCE.' + ((t.source || 'Web') | uppercase)) | translate }}
+                  </span>
+                </td>
+                <td class="amt mono" [class.neg]="t.type === 'Sortie'">
+                  {{ t.type === 'Sortie' ? '−' : '+' }}{{ formatAmount(t.montant) }} {{ t.devise }}
+                </td>
+                <td class="doc muted">{{ t.documentLie?.fileName || '—' }}</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -255,7 +235,7 @@
 
   @if (showDetail() && activeTransaction(); as t) {
     <div class="modal-overlay" (click)="closeDetail()">
-      <div class="modal modal--xl" (click)="$event.stopPropagation()">
+      <div class="modal modal--review" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <div>
             <div class="modal-title">{{ 'TRANSACTIONS.DETAIL.TITLE' | translate }}</div>
@@ -264,105 +244,313 @@
           <button class="modal-close" type="button" (click)="closeDetail()">×</button>
         </div>
 
-        <div class="modal-body modal-body--split">
-          <div class="modal-left">
-            <div class="modal-tabs">
-              <button type="button" class="m-tab" [class.active]="detailTab() === 'receipt'" (click)="detailTab.set('receipt')">
-                {{ 'TRANSACTIONS.DETAIL.TAB.RECEIPT' | translate }}
-              </button>
-              <button type="button" class="m-tab" [class.active]="detailTab() === 'analytics'" (click)="detailTab.set('analytics')">
-                {{ 'TRANSACTIONS.DETAIL.TAB.ANALYTICS' | translate }}
-              </button>
-              <button type="button" class="m-tab" [class.active]="detailTab() === 'comments'" (click)="detailTab.set('comments')">
-                {{ 'TRANSACTIONS.DETAIL.TAB.COMMENTS' | translate }}
-              </button>
-            </div>
+        @if (detailLoading()) {
+          <div class="loading-state" [@fadeIn]>
+            <div class="loading-spinner"></div>
+            <span>{{ 'COMMON.LOADING' | translate }}</span>
+          </div>
+        } @else {
+          <div class="modal-body modal-body--review">
+            <section class="review-preview">
+              <div class="receipt-preview receipt-preview--sticky">
+                @if (t.documentLie?.url && isImageDocument(t.documentLie?.url, t.documentLie?.contentType)) {
+                  <img class="receipt-preview__image" [src]="t.documentLie?.url" [alt]="t.documentLie?.fileName || 'Justificatif'" />
+                } @else if (t.documentLie?.url && isPdfDocument(t.documentLie?.url, t.documentLie?.contentType)) {
+                  <object class="receipt-preview__pdf" [data]="t.documentLie?.url" type="application/pdf"></object>
+                } @else {
+                  <div class="receipt-preview__empty">
+                    <strong>{{ 'TRANSACTIONS.DETAIL.RECEIPT.PREVIEW_EMPTY_TITLE' | translate }}</strong>
+                    <span>{{ 'TRANSACTIONS.DETAIL.RECEIPT.PREVIEW_EMPTY_TEXT' | translate }}</span>
+                  </div>
+                }
+              </div>
+            </section>
 
-            @if (detailTab() === 'receipt') {
-              <div class="panel">
-                <div class="panel-row">
-                  <label class="panel-label">{{ 'TRANSACTIONS.DETAIL.RECEIPT.STATUS_LABEL' | translate }}</label>
-                  <select class="select" [ngModel]="t.statutJustificatif" (ngModelChange)="setReceiptStatus($event)">
-                    <option [ngValue]="null">—</option>
-                    <option [ngValue]="'Facultatif'">{{ 'TRANSACTIONS.DETAIL.RECEIPT.STATUS_OPTIONAL' | translate }}</option>
-                    <option [ngValue]="'Perdu'">{{ 'TRANSACTIONS.DETAIL.RECEIPT.STATUS_MISSING' | translate }}</option>
-                    <option [ngValue]="'Present'">{{ 'TRANSACTIONS.DETAIL.RECEIPT.STATUS_PRESENT' | translate }}</option>
-                  </select>
+            <section class="review-panel">
+              <div class="review-summary">
+                <div class="review-summary__top">
+                  <span class="badge" [ngClass]="'badge--' + sourceClass(t.source)">
+                    {{ ('TRANSACTIONS.SOURCE.' + ((t.source || 'Web') | uppercase)) | translate }}
+                  </span>
+                  <span class="badge" [ngClass]="'badge--' + reviewStateClass(t)">
+                    {{ reviewStateLabel(t) }}
+                  </span>
                 </div>
+                <div class="review-summary__amount">{{ formatAmount(t.montant) }} {{ t.devise }}</div>
+                <div class="review-summary__meta">
+                  <div>
+                    <span>{{ 'TRANSACTIONS.TABLE.DATE' | translate }}</span>
+                    <strong>{{ t.date | date:'dd/MM/yyyy' }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ 'TRANSACTIONS.TABLE.TIER' | translate }}</span>
+                    <strong>{{ t.tiersNom || '—' }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ 'TRANSACTIONS.TABLE.CATEGORY' | translate }}</span>
+                    <strong>{{ t.categorieNom || '—' }}</strong>
+                  </div>
+                </div>
+              </div>
 
-                <div class="dropzone"
-                     [class.drag]="receiptDragging()"
-                     (dragover)="onReceiptDragOver($event)"
-                     (dragleave)="onReceiptDragLeave($event)"
-                     (drop)="onReceiptDrop($event)">
-                  <div class="dz-title">{{ 'TRANSACTIONS.DETAIL.RECEIPT.DRAG_DROP' | translate }}</div>
-                  <div class="dz-sub">{{ t.documentLie?.fileName || 'PDF, PNG, JPG' }}</div>
-                  <div class="dz-actions">
-                    <label class="btn-ghost-sm">
-                      {{ 'TRANSACTIONS.DETAIL.RECEIPT.UPLOAD' | translate }}
-                      <input type="file" accept=".pdf,.png,.jpg,.jpeg" (change)="onReceiptPicked($event)" hidden>
-                    </label>
-                    <button type="button" class="btn-ghost-sm" disabled>
-                      {{ 'TRANSACTIONS.DETAIL.RECEIPT.LINK_INVOICE' | translate }}
+              <div class="modal-tabs modal-tabs--review">
+                <button type="button" class="m-tab" [class.active]="detailTab() === 'receipt'" (click)="detailTab.set('receipt')">
+                  {{ 'TRANSACTIONS.DETAIL.TAB.RECEIPT' | translate }}
+                </button>
+                <button type="button" class="m-tab" [class.active]="detailTab() === 'analytics'" (click)="detailTab.set('analytics')">
+                  {{ 'TRANSACTIONS.DETAIL.TAB.ANALYTICS' | translate }}
+                </button>
+                <button type="button" class="m-tab" [class.active]="detailTab() === 'matching'" (click)="detailTab.set('matching')">
+                  {{ 'TRANSACTIONS.DETAIL.TAB.MATCHING' | translate }}
+                </button>
+                <button type="button" class="m-tab" [class.active]="detailTab() === 'comments'" (click)="detailTab.set('comments')">
+                  {{ 'TRANSACTIONS.DETAIL.TAB.COMMENTS' | translate }}
+                </button>
+                <button type="button" class="m-tab" [class.active]="detailTab() === 'activities'" (click)="detailTab.set('activities')">
+                  {{ 'TRANSACTIONS.DETAIL.TAB.ACTIVITIES' | translate }}
+                </button>
+              </div>
+
+              @if (detailTab() === 'receipt' && receiptDraft(); as review) {
+                <div class="panel panel--stack">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.TABLE.LABEL' | translate }}</label>
+                      <input class="input" type="text" [ngModel]="review.libelle" (ngModelChange)="setReceiptField('libelle', $event)" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.TABLE.DATE' | translate }}</label>
+                      <input class="input" type="date" [ngModel]="review.date" (ngModelChange)="setReceiptField('date', $event)" />
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.TABLE.AMOUNT' | translate }}</label>
+                      <input class="input" type="number" step="0.001" [ngModel]="review.montant" (ngModelChange)="setReceiptField('montant', +$event)" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.RECEIPT.SUPPLIER' | translate }}</label>
+                      <input class="input" type="text" [ngModel]="review.tiersNom" (ngModelChange)="setReceiptField('tiersNom', $event)" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">{{ 'TRANSACTIONS.DETAIL.RECEIPT.SUPPLIER_TAX_ID' | translate }}</label>
+                    <input class="input" type="text" [ngModel]="review.fournisseurMatriculeFiscal" (ngModelChange)="setReceiptField('fournisseurMatriculeFiscal', $event)" />
+                  </div>
+
+                  <div class="review-inline-actions">
+                    <button class="btn-secondary" type="button" [disabled]="supplierMatchLoading()" (click)="matchSupplier()">
+                      {{ 'TRANSACTIONS.DETAIL.RECEIPT.MATCH_SUPPLIER' | translate }}
+                    </button>
+                    <button class="btn-secondary" type="button" [disabled]="supplierMatchLoading()" (click)="matchSupplier(true)">
+                      {{ 'TRANSACTIONS.DETAIL.RECEIPT.CREATE_SUPPLIER' | translate }}
+                    </button>
+                  </div>
+
+                  @if (supplierMatch(); as supplierResult) {
+                    <div class="supplier-match-card">
+                      <div class="supplier-match-card__header">
+                        <strong>{{ supplierResult.displayName || review.tiersNom || '—' }}</strong>
+                        <span class="badge" [ngClass]="supplierResult.created || supplierResult.autoSelected ? 'badge--ok' : supplierResult.candidates.length ? 'badge--warn' : 'badge--err'">
+                          {{ ('TRANSACTIONS.DETAIL.RECEIPT.SUPPLIER_MATCH.' + supplierResult.matchType.toUpperCase()) | translate }}
+                        </span>
+                      </div>
+                      @if (supplierResult.candidates.length > 0) {
+                        <div class="supplier-match-card__list">
+                          @for (candidate of supplierResult.candidates; track candidate.id) {
+                            <button type="button" class="suggestion-row" (click)="matchSupplier(false, candidate)">
+                              <div>
+                                <strong>{{ candidate.nom }}</strong>
+                                <span>{{ candidate.matriculeFiscal || '—' }}</span>
+                              </div>
+                              <span>{{ candidate.score }}%</span>
+                            </button>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  <div class="receipt-fields">
+                    @for (field of review.fields; track field.key; let i = $index) {
+                      <div class="receipt-field">
+                        <div class="receipt-field__header">
+                          <strong>{{ field.label }}</strong>
+                          <span class="badge" [ngClass]="'badge--' + fieldBadgeClass(field)">
+                            {{ fieldBadgeLabel(field) }}
+                          </span>
+                        </div>
+                        <input class="input" type="text" [ngModel]="field.value" (ngModelChange)="setReviewFieldValue(i, $event)" />
+                      </div>
+                    }
+                  </div>
+
+                  <div class="review-inline-actions">
+                    <button class="btn-primary" type="button" [disabled]="detailSaving()" (click)="saveReceiptReview()">
+                      {{ 'TRANSACTIONS.DETAIL.RECEIPT.SAVE' | translate }}
                     </button>
                   </div>
                 </div>
+              }
 
-                <label class="toggle">
-                  <input type="checkbox" />
-                  <span class="toggle-ui"></span>
-                  <span>{{ 'TRANSACTIONS.DETAIL.RECEIPT.AUTO_TRANSMIT' | translate }}</span>
-                </label>
-              </div>
-            }
-
-            @if (detailTab() === 'analytics') {
-                <div class="panel">
-                  <div class="panel-row">
-                    <label class="panel-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.CATEGORY' | translate }}</label>
-                  <input class="input" type="text" [ngModel]="t.categorieNom" placeholder="Ex: Loyer, Salaires…" disabled />
+              @if (detailTab() === 'analytics' && analyticsDraft(); as analytics) {
+                <div class="panel panel--stack">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.CATEGORY' | translate }}</label>
+                    <input class="input" type="text" [ngModel]="analytics.categorieNom" (ngModelChange)="setAnalyticsField('categorieNom', $event)" />
                   </div>
-                <div class="panel-row">
-                  <label class="panel-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.SPLIT' | translate }}</label>
-                  <div class="split-empty">—</div>
+
+                  <div class="analytics-list">
+                    @for (allocation of analytics.allocations; track allocation.id; let i = $index) {
+                      <div class="analytics-row">
+                        <input class="input" type="text" [ngModel]="allocation.categoryName" (ngModelChange)="updateAllocation(i, { categoryName: $event })" [placeholder]="'TRANSACTIONS.DETAIL.ANALYTICS.CATEGORY_PLACEHOLDER' | translate" />
+                        <input class="input" type="number" step="0.01" [ngModel]="allocation.percentage" (ngModelChange)="updateAllocation(i, { percentage: +$event })" />
+                        <input class="input" type="number" step="0.001" [ngModel]="allocation.amount" (ngModelChange)="updateAllocation(i, { amount: +$event })" />
+                        <button class="btn-secondary btn-secondary--tight" type="button" (click)="removeAllocation(i)">
+                          {{ 'TRANSACTIONS.DETAIL.ANALYTICS.REMOVE' | translate }}
+                        </button>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="review-inline-actions">
+                    <button class="btn-secondary" type="button" (click)="addAllocation()">
+                      {{ 'TRANSACTIONS.DETAIL.ANALYTICS.ADD' | translate }}
+                    </button>
+                    <span class="analytics-total">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.TOTAL' | translate }} {{ allocationsTotalPercent() | number:'1.0-2' }}%</span>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.PERIOD' | translate }}</label>
+                      <input class="input" type="text" [ngModel]="analytics.accountingPeriodLabel" (ngModelChange)="setAnalyticsField('accountingPeriodLabel', $event)" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.RECOVERABLE_VAT_AMOUNT' | translate }}</label>
+                      <input class="input" type="number" step="0.001" [ngModel]="analytics.recoverableVatAmount" (ngModelChange)="setAnalyticsField('recoverableVatAmount', $event === '' ? null : +$event)" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">{{ 'TRANSACTIONS.DETAIL.ANALYTICS.RECOVERABLE_VAT_RATE' | translate }}</label>
+                    <input class="input" type="number" step="0.01" [ngModel]="analytics.recoverableVatRate" (ngModelChange)="setAnalyticsField('recoverableVatRate', $event === '' ? null : +$event)" />
+                  </div>
+
+                  <div class="review-inline-actions">
+                    <button class="btn-primary" type="button" [disabled]="detailSaving()" (click)="saveAnalytics()">
+                      {{ 'TRANSACTIONS.DETAIL.ANALYTICS.SAVE' | translate }}
+                    </button>
+                  </div>
                 </div>
-                <button type="button" class="btn-secondary" disabled>{{ 'TRANSACTIONS.DETAIL.ANALYTICS.EDIT_CATEGORY' | translate }}</button>
-              </div>
-            }
+              }
 
-            @if (detailTab() === 'comments') {
-              <div class="panel">
-                <label class="panel-label">{{ 'TRANSACTIONS.DETAIL.COMMENTS.ADD_NOTE' | translate }}</label>
-                <textarea class="textarea" rows="4" [placeholder]="'TRANSACTIONS.DETAIL.COMMENTS.PLACEHOLDER' | translate"></textarea>
-                <div class="panel-sep"></div>
-                <div class="panel-label">{{ 'TRANSACTIONS.DETAIL.COMMENTS.HISTORY' | translate }}</div>
-                <div class="history-empty">—</div>
+              @if (detailTab() === 'matching' && bankDraft(); as bank) {
+                <div class="panel panel--stack">
+                  <div class="matching-suggestions">
+                    @for (suggestion of buildBankSuggestions(t); track suggestion.label + suggestion.date) {
+                      <button type="button" class="suggestion-row" (click)="applyBankSuggestion(suggestion)">
+                        <div>
+                          <strong>{{ suggestion.label }}</strong>
+                          <span>{{ suggestion.date | date:'dd/MM/yyyy' }} · {{ suggestion.counterparty || '—' }}</span>
+                        </div>
+                        <span>{{ formatAmount(suggestion.amount) }} {{ t.devise }}</span>
+                      </button>
+                    }
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.MATCHING.STATUS' | translate }}</label>
+                      <input class="input" type="text" [ngModel]="bank.status" (ngModelChange)="setBankField('status', $event)" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.MATCHING.REFERENCE' | translate }}</label>
+                      <input class="input" type="text" [ngModel]="bank.reference" (ngModelChange)="setBankField('reference', $event)" />
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.MATCHING.DATE' | translate }}</label>
+                      <input class="input" type="date" [ngModel]="bank.date" (ngModelChange)="setBankField('date', $event)" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">{{ 'TRANSACTIONS.DETAIL.MATCHING.AMOUNT' | translate }}</label>
+                      <input class="input" type="number" step="0.001" [ngModel]="bank.amount" (ngModelChange)="setBankField('amount', $event === '' ? null : +$event)" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">{{ 'TRANSACTIONS.DETAIL.MATCHING.COUNTERPARTY' | translate }}</label>
+                    <input class="input" type="text" [ngModel]="bank.counterparty" (ngModelChange)="setBankField('counterparty', $event)" />
+                  </div>
+
+                  <div class="review-inline-actions">
+                    <button class="btn-primary" type="button" [disabled]="detailSaving()" (click)="saveBankMatch()">
+                      {{ 'TRANSACTIONS.DETAIL.MATCHING.SAVE' | translate }}
+                    </button>
+                  </div>
+                </div>
+              }
+
+              @if (detailTab() === 'comments') {
+                <div class="panel panel--stack">
+                  <textarea class="textarea" rows="4" [placeholder]="'TRANSACTIONS.DETAIL.COMMENTS.PLACEHOLDER' | translate" [ngModel]="commentDraft()" (ngModelChange)="commentDraft.set($event)"></textarea>
+                  <div class="review-inline-actions">
+                    <button class="btn-primary" type="button" [disabled]="detailSaving() || !commentDraft().trim()" (click)="addComment()">
+                      {{ 'TRANSACTIONS.DETAIL.COMMENTS.SEND' | translate }}
+                    </button>
+                  </div>
+
+                  <div class="thread-list">
+                    @if (t.comments.length === 0) {
+                      <div class="history-empty">{{ 'TRANSACTIONS.DETAIL.COMMENTS.EMPTY' | translate }}</div>
+                    }
+                    @for (comment of t.comments; track comment.id) {
+                      <div class="thread-item">
+                        <div class="thread-item__meta">
+                          <strong>{{ comment.authorName }}</strong>
+                          <span>{{ comment.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                        </div>
+                        <p>{{ comment.message }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (detailTab() === 'activities') {
+                <div class="panel panel--stack">
+                  <div class="timeline">
+                    @if (t.activities.length === 0) {
+                      <div class="history-empty">{{ 'TRANSACTIONS.DETAIL.ACTIVITIES.EMPTY' | translate }}</div>
+                    }
+                    @for (activity of t.activities; track activity.id) {
+                      <div class="timeline-item">
+                        <div class="timeline-item__dot"></div>
+                        <div class="timeline-item__content">
+                          <div class="timeline-item__meta">
+                            <strong>{{ activity.authorName || ('TRANSACTIONS.DETAIL.ACTIVITIES.SYSTEM' | translate) }}</strong>
+                            <span>{{ activity.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                          </div>
+                          <p>{{ activity.description }}</p>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="review-footer">
+                <button class="btn-primary" type="button" [disabled]="detailSaving() || t.missingFieldKeys.length > 0" (click)="approveExpense()">
+                  {{ 'TRANSACTIONS.DETAIL.ACTIONS.APPROVE' | translate }}
+                </button>
               </div>
-            }
+            </section>
           </div>
-
-          <aside class="modal-right">
-            <div class="side-card">
-              <div class="side-kv">
-                <span>{{ 'TRANSACTIONS.DETAIL.SIDE.GLOBAL_STATUS' | translate }}</span>
-                <span class="badge" [ngClass]="'badge--' + statusClass(t.statut)">
-                  {{ ('TRANSACTIONS.STATUS.' + (t.statut | uppercase)) | translate }}
-                </span>
-              </div>
-              <div class="side-kv">
-                <span>{{ 'TRANSACTIONS.TABLE.TIER' | translate }}</span>
-                <strong>{{ t.tiersNom || '—' }}</strong>
-              </div>
-              <div class="side-kv">
-                <span>{{ 'TRANSACTIONS.DETAIL.SIDE.ACCOUNT' | translate }}</span>
-                <strong>{{ t.compte || '—' }}</strong>
-              </div>
-              <div class="side-actions">
-                <button type="button" class="btn-primary" disabled>{{ 'TRANSACTIONS.DETAIL.SIDE.EDIT_ALL' | translate }}</button>
-              </div>
-            </div>
-          </aside>
-        </div>
+        }
       </div>
     </div>
   }
@@ -419,5 +607,4 @@
       </div>
     </div>
   }
-
 </div>

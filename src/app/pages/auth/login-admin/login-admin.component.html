@@ -6,40 +6,72 @@
     <div class="lp-orb lp-orb--1"></div>
     <div class="lp-orb lp-orb--2"></div>
 
-    <a class="lp-logo" routerLink="/landing">
-      <div class="lp-mark">EY</div>
-      <div class="lp-wordmark">
-        
-        <span class="lp-sub">{{ 'APP.ADMIN_CONSOLE' | translate }}</span>
-      </div>
+    <a class="lp-logo" routerLink="/landing" aria-label="TunisFlow">
+      <span class="lp-brand-pill">TunisFlow</span>
+      <span class="lp-brand-sub">La plateforme fiscale des entreprises tunisiennes</span>
     </a>
 
     <div class="lp-content">
       <div class="lp-badge">
         <span class="lp-badge-dot"></span>
-        {{ 'AUTH.PANELS.ADMIN.BADGE' | translate }}
+        Accès Administrateur
       </div>
 
       <h2 class="lp-headline">
-        {{ 'AUTH.PANELS.ADMIN.HEADLINE_A' | translate }}<br>
-        {{ 'AUTH.PANELS.ADMIN.HEADLINE_B' | translate }}<br>
-        <em>{{ 'AUTH.PANELS.ADMIN.HEADLINE_EM' | translate }}</em>
+        Console<br>
+        d'administration<br>
+        <em>TunisFlow.</em>
       </h2>
 
       <p class="lp-desc">
-        {{ 'AUTH.PANELS.ADMIN.DESC' | translate }}
+        Accès réservé aux administrateurs système. Toutes les actions sont auditées et tracées.
       </p>
+
+      <div class="lp-checklist" aria-label="Fonctionnalités administrateur">
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span>Tableau de bord & statistiques</span>
+        </div>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span>Gestion des entreprises & demandes KYC</span>
+        </div>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span>Gestion des utilisateurs & rôles</span>
+        </div>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span>Audit, factures & paramètres système</span>
+        </div>
+      </div>
 
     </div>
 
     <div class="lp-footer">
       <div class="lp-footer-item">
         <span class="lp-footer-dot lp-footer-dot--ey"></span>
-        {{ 'TRUST.TWO_FACTOR_REQUIRED' | translate }}
+        2FA obligatoire
       </div>
       <div class="lp-footer-item">
         <span class="lp-footer-dot lp-footer-dot--ey"></span>
-        {{ 'TRUST.SESSIONS_AUDITED' | translate }}
+        Sessions auditées
       </div>
     </div>
   </aside>
@@ -54,11 +86,11 @@
       @if (!showOtp()) {
 
         <div class="form-header">
-          <div class="form-eyebrow">{{ 'AUTH.ADMIN_LOGIN.EYEBROW' | translate }}</div>
+          <div class="form-eyebrow">Accès restreint · Admin</div>
           <h1 class="form-title">
-            {{ 'AUTH.ADMIN_LOGIN.TITLE_A' | translate }}<br><em>{{ 'AUTH.ADMIN_LOGIN.TITLE_B' | translate }}</em>
+            Authentification<br><em>administrateur.</em>
           </h1>
-          <p class="form-subtitle">{{ 'AUTH.ADMIN_LOGIN.SUBTITLE' | translate }}</p>
+          <p class="form-subtitle">Connexion sécurisée — session auditée.</p>
         </div>
 
         @if (errorMsg()) {
@@ -72,27 +104,27 @@
 
           <div class="form-group">
             <label class="form-label" for="identifiant">
-              {{ 'AUTH.ADMIN_LOGIN.IDENT_LABEL' | translate }} <span class="form-req">·</span>
+              Identifiant administrateur <span class="form-req">·</span>
             </label>
             <input id="identifiant" class="form-input form-input--mono"
               type="text" autocomplete="username"
-              [placeholder]="'AUTH.ADMIN_LOGIN.IDENT_PLACEHOLDER' | translate"
+              placeholder="admin.ey / votre identifiant"
               [(ngModel)]="form.identifiant"
               [class.form-input--valid]="form.identifiant.length >= 3"/>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="password">
-              {{ 'AUTH.PASSWORD' | translate }} <span class="form-req">·</span>
+              Mot de passe <span class="form-req">·</span>
             </label>
             <div class="input-wrap">
               <input id="password" class="form-input form-input--pr"
                 [type]="showPassword() ? 'text' : 'password'"
-                autocomplete="current-password" [placeholder]="'AUTH.ADMIN_LOGIN.PASSWORD_PLACEHOLDER' | translate"
+                autocomplete="current-password" placeholder="Minimum 8 caractères"
                 [(ngModel)]="form.password"
                 [class.form-input--valid]="form.password.length >= 8"/>
               <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
-                {{ showPassword() ? ('AUTH.LOGIN.HIDE' | translate) : ('AUTH.LOGIN.SHOW' | translate) }}
+                {{ showPassword() ? 'Masquer' : 'Afficher' }}
               </button>
             </div>
           </div>
@@ -100,7 +132,7 @@
           <div class="security-notice">
             <div class="sn-bar"></div>
             <div class="sn-text">
-              {{ 'AUTH.ADMIN_LOGIN.NOTICE' | translate }}
+              Un code 2FA vous sera demandé à l'étape suivante. Assurez-vous d'avoir accès à votre application d'authentification.
             </div>
           </div>
 
@@ -109,9 +141,9 @@
             (click)="onSubmit()">
             @if (loading()) {
               <span class="btn-spinner"></span>
-              {{ 'AUTH.VERIFYING' | translate }}
+              Vérification...
             } @else {
-              {{ 'AUTH.ADMIN_LOGIN.CONTINUE' | translate }}
+              Continuer vers la vérification 2FA
             }
           </button>
 
@@ -122,12 +154,12 @@
       @if (showOtp()) {
 
         <div class="form-header" [@pageIn]>
-          <div class="form-eyebrow">{{ 'AUTH.ADMIN_OTP.EYEBROW' | translate }}</div>
+          <div class="form-eyebrow">Vérification · 2FA</div>
           <h1 class="form-title">
-            {{ 'AUTH.ADMIN_OTP.TITLE_A' | translate }}<br><em>{{ 'AUTH.ADMIN_OTP.TITLE_B' | translate }}</em>
+            Code de<br><em>vérification.</em>
           </h1>
           <p class="form-subtitle">
-            {{ 'AUTH.ADMIN_OTP.SUBTITLE' | translate }}
+            Entrez le code à 6 chiffres généré par votre application 2FA.
           </p>
         </div>
 
@@ -141,14 +173,14 @@
         <div class="form-body">
 
           <div class="form-group">
-            <label class="form-label" for="otp">{{ 'AUTH.ADMIN_OTP.OTP_LABEL' | translate }} <span class="form-req">·</span></label>
+            <label class="form-label" for="otp">Code OTP <span class="form-req">·</span></label>
             <input id="otp" class="form-input form-input--otp"
               type="text" inputmode="numeric" maxlength="6"
               autocomplete="one-time-code"
-              [placeholder]="'AUTH.ADMIN_OTP.OTP_PLACEHOLDER' | translate"
+              placeholder="000 000"
               [(ngModel)]="form.otp"/>
             <span class="form-hint">
-              {{ 'AUTH.ADMIN_OTP.OTP_HINT' | translate }}
+              Valable 30 secondes — ne partagez jamais ce code.
             </span>
           </div>
 
@@ -157,14 +189,14 @@
             (click)="verifyOtp()">
             @if (loading()) {
               <span class="btn-spinner"></span>
-              {{ 'AUTH.VERIFYING' | translate }}
+              Vérification...
             } @else {
-              {{ 'AUTH.ADMIN_OTP.SUBMIT' | translate }}
+              Accéder à la console
             }
           </button>
 
           <button class="btn-back" (click)="show2FA.set(false)">
-            {{ 'AUTH.ADMIN_OTP.BACK' | translate }}
+            Revenir aux identifiants
           </button>
 
         </div>

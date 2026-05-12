@@ -34,12 +34,23 @@
       "AVOIR": "Avoir",
       "PROFORMA": "Proforma"
     },
+    "TYPE": {
+      "INVOICE": "Facture",
+      "CREDIT_NOTE": "Avoir",
+      "PROFORMA": "Proforma",
+      "QUOTE": "Devis"
+    },
     "PAYMENT_MODES": {
       "VIREMENT": "Virement bancaire",
       "CHEQUE": "Chèque",
       "ESPECES": "Espèces",
       "CARTE_BANCAIRE": "Carte bancaire",
-      "TRAITE": "Traite"
+      "TRAITE": "Traite",
+      "BANK_TRANSFER": "Virement bancaire",
+      "CHECK": "Chèque",
+      "CASH": "Espèces",
+      "CARD": "Carte bancaire",
+      "BILL_OF_EXCHANGE": "Lettre de change"
     }
   },
   "FACTURES": {
@@ -49,6 +60,16 @@
     "SEARCH_PLACEHOLDER": "Rechercher par numéro, client…",
     "LOADING": "Chargement des factures…",
     "EMPTY": "Aucune facture trouvée.",
+    "FILTERS": {
+      "ALL": "Toutes",
+      "DRAFT": "Brouillon",
+      "VALIDATED": "Validée",
+      "COMPLIANT": "Conforme",
+      "SENT": "Transmise",
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Rejetée",
+      "PAID": "Payée"
+    },
     "KPI": {
       "ISSUED_MONTH": "Émis ce mois",
       "PAID": "Encaissé",
@@ -76,6 +97,17 @@
       "PAYEE": "Payée",
       "PARTIELLEMENT_PAYEE": "Part. payée",
       "ANNULEE": "Annulée"
+    },
+    "STATUS": {
+      "DRAFT": "Brouillon",
+      "VALIDATED": "Validée",
+      "COMPLIANT": "Conforme",
+      "SENT": "Transmise",
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Rejetée",
+      "PAID": "Payée",
+      "PARTIALLY_PAID": "Partiellement payée",
+      "CANCELLED": "Annulée"
     },
     "ACTIONS": {
       "VALIDATE": "Valider",
@@ -135,17 +167,23 @@
   "ACCOUNTING": {
     "TAXES": {
       "TITLE_A": "Gestion des",
-      "TITLE_EM": "taxes.",
+      "TITLE_EM": "taxes",
       "SUBTITLE": "Configurez les taux de TVA, FODEC et droits de consommation applicables à vos factures.",
       "COLUMNS": {
         "TITLE": "Titre",
         "RATE": "Taux",
-        "TYPE": "Type"
+        "TYPE": "Type",
+        "ACTION": "Actions"
       },
       "TYPES": {
-        "TVA": "TVA",
+        "VAT": "TVA",
         "FODEC": "FODEC",
-        "DROIT_CONSOMMATION": "Droit de conso."
+        "CONSUMPTION": "Droit de consommation"
+      },
+      "TYPE_DESC": {
+        "VAT": "Taxe sur la valeur ajoutée appliquée sur le montant hors taxes.",
+        "FODEC": "Fonds de développement de la compétitivité dans les secteurs de l'agriculture, de la pêche et de l'industrie.",
+        "CONSUMPTION": "Droit de consommation appliqué sur certains produits spécifiques."
       },
       "EMPTY": {
         "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
@@ -163,6 +201,19 @@
           "TYPE": "Type"
         },
         "ERROR_RATE_GT0": "Le taux doit être supérieur à 0."
+      },
+      "TOAST": {
+        "LOAD_ERROR": "Erreur lors du chargement des taxes",
+        "CREATED": "Taxe créée avec succès",
+        "UPDATED": "Taxe mise à jour avec succès",
+        "DELETED": "Taxe supprimée avec succès",
+        "REQUIRED_FIELDS": "Veuillez remplir tous les champs obligatoires"
+      },
+      "DELETE": {
+        "TITLE": "Supprimer cette taxe ?",
+        "MESSAGE": "Cette action est irréversible. La taxe « {{name}} » sera définitivement supprimée.",
+        "CONFIRM": "Supprimer",
+        "CANCEL": "Annuler"
       }
     },
     "FISCAL_PARAMS": {
@@ -214,8 +265,24 @@
           "TITLE": "Documents cibles",
           "FACTURE": "Facture",
           "AVOIR": "Avoir",
-          "PROFORMA": "Proforma"
+          "PROFORMA": "Proforma",
+          "INVOICE": "Facture",
+          "CREDIT_INVOICE": "Facture d'avoir",
+          "DELIVERY_NOTE": "Bon de livraison",
+          "RECEIPT_NOTE": "Bon de réception",
+          "GOODS_OUT_NOTE": "Bon de sortie",
+          "PURCHASE_ORDER": "Bon de commande",
+          "QUOTE": "Devis",
+          "SUPPLIER_INVOICE": "Facture fournisseur"
         }
+      },
+      "ORDER": {
+        "BEFORE_VAT": "Avant TVA",
+        "AFTER_VAT": "Après TVA"
+      },
+      "USAGE": {
+        "MANUAL": "Manuel",
+        "AUTO": "Automatique"
       },
       "ORDRE": {
         "AVANT_TVA": "Avant TVA",
@@ -227,7 +294,17 @@
       },
       "CONDITION": {
         "NONE": "Aucune",
-        "WITH_RS": "Avec RS"
+        "WITH_RS": "Avec retenue à la source",
+        "WITHHOLDING": "Retenue à la source",
+        "DOCS": "Documents ciblés"
+      },
+      "TOAST": {
+        "LOAD_ERROR": "Impossible de charger les paramètres fiscaux.",
+        "DELETE_OK": "{{count}} paramètre(s) supprimé(s).",
+        "DELETE_PARTIAL": "{{deleted}} supprimé(s), {{errors}} erreur(s).",
+        "REQUIRED_FIELDS": "Veuillez remplir les champs obligatoires.",
+        "UPDATED": "Paramètre mis à jour.",
+        "CREATED": "Paramètre créé."
       }
     }
   }

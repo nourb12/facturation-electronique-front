@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UtilisateurApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 interface AdminUser {
   id: string;
@@ -24,6 +25,7 @@ interface AdminUser {
 export class AdminUtilisateursComponent implements OnInit {
   private utilisateurSvc = inject(UtilisateurApiService);
   private toast = inject(ToastService);
+  private confirmSvc = inject(ConfirmationService);
 
   loading = signal(true);
   saving = signal(false);
@@ -107,13 +109,21 @@ export class AdminUtilisateursComponent implements OnInit {
   }
 
   supprimer(user: AdminUser) {
-    if (!confirm(`Supprimer ${user.prenom} ${user.nom} ?`)) return;
-    this.utilisateurSvc.supprimer(user.id).subscribe({
-      next: () => {
-        this.toast.success('Utilisateur supprimé.');
-        this.load();
-      },
-      error: err => this.toast.error(err?.error?.message ?? 'Erreur.')
+    this.confirmSvc.confirm({
+      title: 'Supprimer cet utilisateur ?',
+      message: `Cette action est irréversible. L'utilisateur « ${user.prenom} ${user.nom} » sera définitivement supprimé.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.utilisateurSvc.supprimer(user.id).subscribe({
+          next: () => {
+            this.toast.success('Utilisateur supprimé.');
+            this.load();
+          },
+          error: err => this.toast.error(err?.error?.message ?? 'Erreur.')
+        });
+      }
     });
   }
 }

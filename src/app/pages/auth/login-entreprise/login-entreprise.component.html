@@ -7,11 +7,8 @@
     <div class="lp-orb lp-orb--2"></div>
 
     <a class="lp-logo" routerLink="/landing">
-      <div class="lp-mark">EY</div>
-      <div class="lp-wordmark">
-        <span class="lp-name">TunisFlow</span>
-        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
-      </div>
+      <span class="lp-brand-pill">TunisFlow</span>
+      <span class="lp-brand-sub">{{ 'APP.TAGLINE' | translate }}</span>
     </a>
 
     <div class="lp-content">
@@ -23,24 +20,36 @@
       <h2 class="lp-headline">
         {{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_A' | translate }}<br>
         {{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_B' | translate }}<br>
-        <em>{{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_EM' | translate }}</em>
+        {{ 'AUTH.PANELS.ENTREPRISE.HEADLINE_EM' | translate }}
       </h2>
 
       <p class="lp-desc">
         {{ 'AUTH.PANELS.ENTREPRISE.DESC' | translate }}
       </p>
 
-      <div class="lp-features">
-        <div class="lp-feature">
-          <span class="lp-feature-dot lp-feature-dot--ey"></span>
+      <div class="lp-checklist" aria-label="Fonctionnalités Responsable Entreprise">
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.UBL' | translate }}</span>
         </div>
-        <div class="lp-feature">
-          <span class="lp-feature-dot lp-feature-dot--ok"></span>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.TEIF' | translate }}</span>
         </div>
-        <div class="lp-feature">
-          <span class="lp-feature-dot lp-feature-dot--ok"></span>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.ENTREPRISE.FEATURES.DASH' | translate }}</span>
         </div>
       </div>

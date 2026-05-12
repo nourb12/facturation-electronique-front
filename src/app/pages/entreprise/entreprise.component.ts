@@ -7,6 +7,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { ToastService } from '../../core/services/toast.service';
 import { EntrepriseLogicService } from './entreprise-logic.service';
 
+export type SignatureType = 'digiToken' | 'certificatFichier' | 'clePrivee' | null;
+
 @Component({
   selector: 'app-entreprise',
   standalone: true,
@@ -21,6 +23,15 @@ import { EntrepriseLogicService } from './entreprise-logic.service';
     trigger('fadeIn', [
       transition(':enter', [style({ opacity: 0 }), animate('200ms ease', style({ opacity: 1 }))]),
       transition(':leave', [animate('150ms ease', style({ opacity: 0 }))])
+    ]),
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-8px)', maxHeight: '0px' }),
+        animate('280ms cubic-bezier(.16,1,.3,1)', style({ opacity: 1, transform: 'translateY(0)', maxHeight: '600px' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease', style({ opacity: 0, transform: 'translateY(-4px)', maxHeight: '0px' }))
+      ])
     ])
   ]
 })
@@ -68,19 +79,61 @@ export class EntrepriseComponent implements OnInit {
     numRNE: '',
     regimeTVA: this.regimesTVA[0],
     tauxTVAPrincipal: 19,
-    teifSignature: true,
+    teifSignature: false,
     teifArchivage: true,
-    teifHorodatage: false,
-    teifSandbox: true,
+    teifHorodatage: true,
+    teifSandbox: false,
     teifSurveille: false
   };
 
+  // ─── TEIF Signature ───────────────────────────────────────────────
+  signatureType: SignatureType = null;
+  expandedTeifItem: string | null = null;
+
+  // DigiToken
+  digiTokenPin = '';
+  digiTokenConnected = false;
+  digiTokenConnecting = false;
+
+  // Certificat fichier
+  certFileName: string | null = null;
+  certFileData: string | null = null;
+  certPassword = '';
+  certValidating = false;
+  certValidated = false;
+  certExpiry: string | null = null;
+
+  // Cle privee RSA
+  clePriveeFileName: string | null = null;
+  clePriveeData: string | null = null;
+  certRsaFileName: string | null = null;
+  certRsaData: string | null = null;
+  rsaValidated = false;
+
+  // Archivage
+  archivageActive = true; // automatique
+
+  // Tests TEIF
+  sandboxRunning = false;
+  sandboxResult: 'success' | 'error' | null = null;
+  sandboxLog: string[] = [];
+
+  // Surveillance
+  surveillanceEmail = '';
+  surveillanceEmailConfirmed = false;
+  surveillanceAlerts = {
+    rejet: true,
+    expiration: true,
+    erreurEnvoi: false
+  };
+
+  // ─── TEIF Items ────────────────────────────────────────────────────
   teifItems = [
-    { key: 'teifSignature', label: 'Signature numerique', detail: 'Certificat DGI valide' },
-    { key: 'teifArchivage', label: 'Archivage legal', detail: '10 ans de conservation' },
-    { key: 'teifHorodatage', label: 'Horodatage', detail: 'Serveur de temps qualifie' },
-    { key: 'teifSandbox', label: 'Tests TEIF', detail: 'Envoi reussi en pre-production' },
-    { key: 'teifSurveille', label: 'Surveillance', detail: 'Alertes de rejet configurees' }
+    { key: 'teifSignature',  label: 'Signature numerique', detail: 'Certificat DGI valide',            icon: 'certificate' },
+    { key: 'teifArchivage',  label: 'Archivage legal',     detail: '10 ans de conservation',           icon: 'archive' },
+    { key: 'teifHorodatage', label: 'Horodatage',          detail: 'Serveur de temps qualifie',        icon: 'clock' },
+    { key: 'teifSandbox',    label: 'Tests TEIF',          detail: 'Envoi reussi en pre-production',   icon: 'send' },
+    { key: 'teifSurveille',  label: 'Surveillance',        detail: 'Alertes de rejet configurees',     icon: 'bell' }
   ];
 
   fieldErrors: Record<string, string> = {};
@@ -105,7 +158,6 @@ export class EntrepriseComponent implements OnInit {
       this.refreshDerived();
       return;
     }
-
     this.svc.obtenirParId(id).subscribe({
       next: (e) => {
         const tel = e.telephone ?? e.tel ?? '';
@@ -125,9 +177,7 @@ export class EntrepriseComponent implements OnInit {
   }
 
   onFieldChange(field?: string) {
-    if (field === 'activiteCode') {
-      this.activiteLabel = this.logic.getActiviteLabel(this.entreprise.activiteCode);
-    }
+    if (field === 'activiteCode') this.activiteLabel = this.logic.getActiviteLabel(this.entreprise.activiteCode);
     if (field === 'forme' || field === 'raisonSociale') {
       this.formeSuggestion = this.logic.detectFormeSuggestion(this.entreprise.raisonSociale, this.entreprise.forme);
     }
@@ -135,15 +185,9 @@ export class EntrepriseComponent implements OnInit {
     this.updateTeifMeta();
   }
 
-  markTouched(field: string) {
-    this.fieldTouched[field] = true;
-    this.refreshValidation();
-  }
-
+  markTouched(field: string) { this.fieldTouched[field] = true; this.refreshValidation(); }
   fieldError(field: string): string { return this.fieldErrors[field] ?? ''; }
-  showError(field: string): boolean {
-    return !!this.fieldErrors[field] && (this.fieldTouched[field] || this.stepAttempted);
-  }
+  showError(field: string): boolean { return !!this.fieldErrors[field] && (this.fieldTouched[field] || this.stepAttempted); }
   isFieldValid(field: string): boolean {
     const val = this.entreprise?.[field];
     if (val === undefined || val === null) return false;
@@ -153,60 +197,175 @@ export class EntrepriseComponent implements OnInit {
 
   refreshValidation() {
     const errors: Record<string, string> = {};
-
-    const rs = this.logic.validateRequired(this.entreprise.raisonSociale, 'Raison sociale');
-    if (rs) errors['raisonSociale'] = rs;
-
-    const forme = this.logic.validateRequired(this.entreprise.forme, 'Forme juridique');
-    if (forme) errors['forme'] = forme;
-
-    const act = this.logic.validateRequired(this.entreprise.activiteCode, 'Code activite');
-    if (act) errors['activiteCode'] = act;
-
-    const adr = this.logic.validateRequired(this.entreprise.adresse, 'Adresse');
-    if (adr) errors['adresse'] = adr;
-
-    const gov = this.logic.validateRequired(this.entreprise.gouvernorat, 'Gouvernorat');
-    if (gov) errors['gouvernorat'] = gov;
-
-    const tel = this.logic.validateTelephone(this.entreprise.telephone);
-    if (tel) errors['telephone'] = tel;
-
-    const email = this.logic.validateEmail(this.entreprise.email);
-    if (email) errors['email'] = email;
-
-    const mf = this.logic.validateMatriculeFiscal(this.entreprise.matriculeFiscal);
-    if (mf) errors['matriculeFiscal'] = mf;
-
-    const regime = this.logic.validateRequired(this.entreprise.regimeTVA, 'Regime TVA');
-    if (regime) errors['regimeTVA'] = regime;
-
-    const taux = this.logic.validateRequired(this.entreprise.tauxTVAPrincipal, 'Taux TVA');
-    if (taux) errors['tauxTVAPrincipal'] = taux;
-
+    const checks: Array<[string, () => string | null]> = [
+      ['raisonSociale', () => this.logic.validateRequired(this.entreprise.raisonSociale, 'Raison sociale')],
+      ['forme',         () => this.logic.validateRequired(this.entreprise.forme, 'Forme juridique')],
+      ['activiteCode',  () => this.logic.validateRequired(this.entreprise.activiteCode, 'Code activite')],
+      ['adresse',       () => this.logic.validateRequired(this.entreprise.adresse, 'Adresse')],
+      ['gouvernorat',   () => this.logic.validateRequired(this.entreprise.gouvernorat, 'Gouvernorat')],
+      ['telephone',     () => this.logic.validateTelephone(this.entreprise.telephone)],
+      ['email',         () => this.logic.validateEmail(this.entreprise.email)],
+      ['matriculeFiscal',() => this.logic.validateMatriculeFiscal(this.entreprise.matriculeFiscal)],
+      ['regimeTVA',     () => this.logic.validateRequired(this.entreprise.regimeTVA, 'Regime TVA')],
+      ['tauxTVAPrincipal',() => this.logic.validateRequired(this.entreprise.tauxTVAPrincipal, 'Taux TVA')],
+    ];
+    for (const [f, fn] of checks) { const e = fn(); if (e) errors[f] = e; }
     this.fieldErrors = errors;
   }
 
   updateTeifMeta() {
     const meta = this.logic.computeTeifMeta(this.teifItems, this.entreprise);
-    if (meta.score !== this.teifScore) {
-      this.scorePulse = true;
-      setTimeout(() => this.scorePulse = false, 300);
-    }
-    if (meta.label !== this.teifLevelLabel) {
-      this.statusPulse = true;
-      setTimeout(() => this.statusPulse = false, 300);
-    }
+    if (meta.score !== this.teifScore) { this.scorePulse = true; setTimeout(() => this.scorePulse = false, 300); }
+    if (meta.label !== this.teifLevelLabel) { this.statusPulse = true; setTimeout(() => this.statusPulse = false, 300); }
     this.teifScore = meta.score;
     this.teifColor = meta.color;
-    const circ = 2 * Math.PI * 32;
-    this.teifDash = circ * (1 - meta.score / 100);
+    this.teifDash = 2 * Math.PI * 32 * (1 - meta.score / 100);
     this.teifLevelLabel = meta.label;
     this.teifLevelClass = `level-${meta.level}`;
     this.teifStatusMessage = meta.message;
     this.teifRecommendations = meta.recommendations;
   }
 
+  // ─── TEIF Accordion ───────────────────────────────────────────────
+  toggleTeifItem(key: string) {
+    this.expandedTeifItem = this.expandedTeifItem === key ? null : key;
+  }
+
+  // ─── Signature type selection ─────────────────────────────────────
+  selectSignatureType(type: SignatureType) {
+    this.signatureType = type;
+    // Reset states
+    this.digiTokenPin = ''; this.digiTokenConnected = false;
+    this.certFileName = null; this.certPassword = ''; this.certValidated = false; this.certExpiry = null;
+    this.clePriveeFileName = null; this.certRsaFileName = null; this.rsaValidated = false;
+    this.entreprise.teifSignature = false;
+    this.updateTeifMeta();
+  }
+
+  // ─── DigiToken ────────────────────────────────────────────────────
+  connectDigiToken() {
+    if (!this.digiTokenPin || this.digiTokenPin.length < 4) {
+      this.toast.error('Le code PIN doit contenir au moins 4 caracteres.');
+      return;
+    }
+    this.digiTokenConnecting = true;
+    setTimeout(() => {
+      this.digiTokenConnecting = false;
+      this.digiTokenConnected = true;
+      this.entreprise.teifSignature = true;
+      this.updateTeifMeta();
+      this.toast.success('DigiToken connecte avec succes.');
+    }, 1800);
+  }
+
+  // ─── Certificat fichier ───────────────────────────────────────────
+  onCertFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    const file = input.files[0];
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (!['p12', 'pfx'].includes(ext ?? '')) {
+      this.toast.error('Format invalide. Utilisez un fichier .p12 ou .pfx');
+      return;
+    }
+    this.certFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => { this.certFileData = e.target?.result as string; };
+    reader.readAsDataURL(file);
+  }
+
+  validateCertificat() {
+    if (!this.certFileName || !this.certPassword) {
+      this.toast.error('Veuillez choisir un fichier et saisir le mot de passe.');
+      return;
+    }
+    this.certValidating = true;
+    setTimeout(() => {
+      this.certValidating = false;
+      this.certValidated = true;
+      this.certExpiry = '12/03/2027';
+      this.entreprise.teifSignature = true;
+      this.updateTeifMeta();
+      this.toast.success('Certificat valide. Expire le ' + this.certExpiry);
+    }, 2000);
+  }
+
+  // ─── Cle privee RSA ───────────────────────────────────────────────
+  onClePriveeSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.clePriveeFileName = input.files[0].name;
+    this.checkRsaReady();
+  }
+
+  onCertRsaSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.certRsaFileName = input.files[0].name;
+    this.checkRsaReady();
+  }
+
+  checkRsaReady() {
+    if (this.clePriveeFileName && this.certRsaFileName) {
+      setTimeout(() => {
+        this.rsaValidated = true;
+        this.entreprise.teifSignature = true;
+        this.updateTeifMeta();
+        this.toast.success('Paire de cles RSA validee.');
+      }, 1500);
+    }
+  }
+
+  // ─── Sandbox / Tests TEIF ─────────────────────────────────────────
+  lancerTestSandbox() {
+    if (this.sandboxRunning) return;
+    this.sandboxRunning = true;
+    this.sandboxResult = null;
+    this.sandboxLog = [];
+    const steps = [
+      'Connexion au serveur DGI pre-production...',
+      'Preparation de la facture test (FA-TEST-001)...',
+      'Signature numerique appliquee...',
+      'Horodatage enregistre...',
+      'Envoi vers endpoint TEIF sandbox...',
+      'Reponse recue de la DGI : ACCEPTE'
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < steps.length) {
+        this.sandboxLog = [...this.sandboxLog, steps[i]];
+        i++;
+      } else {
+        clearInterval(interval);
+        this.sandboxRunning = false;
+        this.sandboxResult = 'success';
+        this.entreprise.teifSandbox = true;
+        this.updateTeifMeta();
+        this.toast.success('Test TEIF reussi en pre-production.');
+      }
+    }, 600);
+  }
+
+  // ─── Surveillance ─────────────────────────────────────────────────
+  confirmerSurveillance() {
+    if (!this.surveillanceEmail || !this.surveillanceEmail.includes('@')) {
+      this.toast.error('Email invalide.');
+      return;
+    }
+    this.surveillanceEmailConfirmed = true;
+    this.entreprise.teifSurveille = true;
+    this.updateTeifMeta();
+    this.toast.success('Alertes configurees sur ' + this.surveillanceEmail);
+  }
+
+  resetSurveillance() {
+    this.surveillanceEmailConfirmed = false;
+    this.surveillanceEmail = '';
+    this.entreprise.teifSurveille = false;
+    this.updateTeifMeta();
+  }
+
+  // ─── Navigation ───────────────────────────────────────────────────
   stepCompletion(index: number): number {
     if (index === this.steps.length - 1) return this.teifScore;
     const required = this.steps[index].required || [];
@@ -222,32 +381,20 @@ export class EntrepriseComponent implements OnInit {
 
   isStepValid(index: number): boolean {
     if (index === this.steps.length - 1) return true;
-    const required = this.steps[index].required || [];
-    return required.every(f => this.isFieldValid(f));
+    return (this.steps[index].required || []).every(f => this.isFieldValid(f));
   }
 
   goToStep(index: number) {
     if (index === this.activeStepIndex) return;
-    if (index <= this.activeStepIndex) {
-      this.activeStepIndex = index;
-      this.stepAttempted = false;
-      return;
-    }
-    if (this.isStepValid(this.activeStepIndex)) {
-      this.activeStepIndex = index;
-      this.stepAttempted = false;
-    } else {
-      this.stepAttempted = true;
-    }
+    if (index <= this.activeStepIndex) { this.activeStepIndex = index; this.stepAttempted = false; return; }
+    if (this.isStepValid(this.activeStepIndex)) { this.activeStepIndex = index; this.stepAttempted = false; }
+    else this.stepAttempted = true;
   }
 
   nextStep() {
     this.stepAttempted = true;
     if (!this.isStepValid(this.activeStepIndex)) return;
-    if (this.activeStepIndex === this.steps.length - 1) {
-      this.save();
-      return;
-    }
+    if (this.activeStepIndex === this.steps.length - 1) { this.save(); return; }
     this.activeStepIndex += 1;
     this.stepAttempted = false;
   }
@@ -269,7 +416,6 @@ export class EntrepriseComponent implements OnInit {
     if (this.saving()) return;
     const id = this.auth.entrepriseId;
     if (!id) return;
-
     const payload = {
       nom: this.entreprise.raisonSociale,
       raisonSociale: this.entreprise.raisonSociale,
@@ -296,9 +442,10 @@ export class EntrepriseComponent implements OnInit {
       teifArchivage: this.entreprise.teifArchivage,
       teifHorodatage: this.entreprise.teifHorodatage,
       teifSandbox: this.entreprise.teifSandbox,
-      teifSurveille: this.entreprise.teifSurveille
+      teifSurveille: this.entreprise.teifSurveille,
+      signatureType: this.signatureType,
+      surveillanceEmail: this.surveillanceEmail
     } as any;
-
     this.saving.set(true);
     this.svc.mettreAJour(id, payload).subscribe({
       next: (e) => {

@@ -79,6 +79,59 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit() { this.loadClients(); }
 
+  genererDonneesTest() {
+    if (!confirm('Créer 10 clients de test ?')) return;
+    
+    const clientsTest = [
+      { nom: 'SARL TechSolutions', matriculeFiscal: '1234567A', email: 'contact@techsolutions.tn', telephone: '+216 71 123 456', ville: 'Tunis', adresse: '15 Avenue Habib Bourguiba', codePostal: '1000' },
+      { nom: 'Entreprise Moderne SARL', matriculeFiscal: '2345678B', email: 'info@moderne.tn', telephone: '+216 71 234 567', ville: 'Sfax', adresse: '28 Rue de la République', codePostal: '3000' },
+      { nom: 'Cabinet Conseil Plus', matriculeFiscal: '3456789C', email: 'contact@conseilplus.tn', telephone: '+216 71 345 678', ville: 'Sousse', adresse: '42 Avenue Léopold Sédar Senghor', codePostal: '4000' },
+      { nom: 'Import Export Tunisie', matriculeFiscal: '4567890D', email: 'export@ietunisie.tn', telephone: '+216 71 456 789', ville: 'Bizerte', adresse: '7 Rue du Port', codePostal: '7000' },
+      { nom: 'Services Informatiques SA', matriculeFiscal: '5678901E', email: 'contact@si-sa.tn', telephone: '+216 71 567 890', ville: 'Tunis', adresse: '33 Rue de Marseille', codePostal: '1002' },
+      { nom: 'Distribution Alimentaire', matriculeFiscal: '6789012F', email: 'info@distalim.tn', telephone: '+216 71 678 901', ville: 'Nabeul', adresse: '12 Avenue Farhat Hached', codePostal: '8000' },
+      { nom: 'Société Générale Commerce', matriculeFiscal: '7890123G', email: 'sgc@commerce.tn', telephone: '+216 71 789 012', ville: 'Monastir', adresse: '55 Boulevard de l\'Environnement', codePostal: '5000' },
+      { nom: 'Consulting & Audit Partners', matriculeFiscal: '8901234H', email: 'contact@cap-audit.tn', telephone: '+216 71 890 123', ville: 'Tunis', adresse: '88 Avenue Mohamed V', codePostal: '1001' },
+      { nom: 'Industrie Textile Tunisienne', matriculeFiscal: '9012345I', email: 'itt@textile.tn', telephone: '+216 71 901 234', ville: 'Ksar Hellal', adresse: '21 Zone Industrielle', codePostal: '5070' },
+      { nom: 'Pharmacie Centrale Distribution', matriculeFiscal: '0123456J', email: 'pcd@pharma.tn', telephone: '+216 71 012 345', ville: 'Tunis', adresse: '99 Rue de la Liberté', codePostal: '1003' }
+    ];
+
+    let created = 0;
+    const total = clientsTest.length;
+
+    clientsTest.forEach((client, index) => {
+      const req: CreerClientRequest = {
+        nom: client.nom,
+        typeClient: 'B2B',
+        matriculeFiscal: client.matriculeFiscal,
+        email: client.email,
+        telephone: client.telephone,
+        adresse: client.adresse,
+        ville: client.ville,
+        codePostal: client.codePostal,
+        pays: 'TN'
+      };
+
+      this.clientSvc.creer(req).subscribe({
+        next: (c) => {
+          created++;
+          this.clients.update(list => [c, ...list]);
+          this.total.update(v => v + 1);
+          
+          if (created === total) {
+            this.updateFilterCounts();
+            this.toast.success(`${created} clients de test créés avec succès !`);
+          }
+        },
+        error: (err) => {
+          console.error(`Erreur création client ${index + 1}:`, err);
+          if (created + 1 === total) {
+            this.toast.warning(`${created}/${total} clients créés (certains existaient déjà)`);
+          }
+        }
+      });
+    });
+  }
+
   loadClients() {
     this.loading.set(true);
     this.clientSvc.lister(this.page(), this.parPage).subscribe({

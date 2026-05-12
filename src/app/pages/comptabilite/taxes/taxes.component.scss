@@ -209,7 +209,12 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
     letter-spacing: .09em;
     font-weight: 600;
     border-bottom: 1px solid $b0;
+    border-right: 1px solid rgba(0, 0, 0, .04);
     white-space: nowrap;
+    
+    &:last-child {
+      border-right: none;
+    }
   }
 
   tbody tr {
@@ -219,8 +224,13 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
     td {
       padding: 11px 10px;
       border-bottom: 1px solid $b0;
+      border-right: 1px solid rgba(0, 0, 0, .04);
       color: $tp;
       vertical-align: middle;
+      
+      &:last-child {
+        border-right: none;
+      }
     }
 
     &:last-child td { border-bottom: none; }
@@ -421,8 +431,8 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   transition: box-shadow .2s $ease;
 
   &.is-editing {
-    border-color: $tuniflow-glow;
-    box-shadow: 0 0 0 3px $tuniflow-dim, 0 12px 32px rgba(0,0,0,.07);
+    // Pas de cadre noir, juste une ombre subtile
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
   }
 }
 
@@ -626,6 +636,18 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   &:disabled { opacity: .4; cursor: not-allowed; }
 }
 
+/* EY yellow variant for primary actions (Ajouter) */
+.btn-ey {
+  background: #FFE600; /* EY yellow */
+  color: #0a0a0a; /* black text */
+  box-shadow: none;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(var(--c-tuniflow-rgb), .08);
+  }
+}
+
 .btn-spinner {
   display: inline-block;
   width: 12px;
@@ -653,4 +675,131 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   .table-toolbar { flex-direction: column; align-items: stretch; }
   .search-box { min-width: unset; }
   .chip-group { flex-wrap: wrap; }
+}
+
+
+// ── Action buttons ────────────────────────────────────────────────────────────
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.row-action--delete {
+  &:hover {
+    border-color: rgba($err, .3);
+    background: rgba($err, .08);
+    color: $err;
+  }
+}
+
+// ── Delete Modal ──────────────────────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-box {
+  background: $card;
+  border: 1px solid $b1;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+
+  &--danger {
+    background: rgba($err, .12);
+    color: $err;
+    border: 1.5px solid rgba($err, .25);
+  }
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $tp;
+  margin: 0;
+}
+
+.modal-message {
+  font-size: 13px;
+  color: $ts;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 340px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-modal {
+  flex: 1;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s $ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &--cancel {
+    background: $surf;
+    border: 1px solid $b1;
+    color: $ts;
+
+    &:hover {
+      background: $edge;
+      color: $tp;
+    }
+  }
+
+  &--danger {
+    background: $err;
+    border: none;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: darken($err, 5%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba($err, .35);
+    }
+
+    &:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
 }

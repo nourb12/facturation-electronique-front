@@ -58,9 +58,10 @@ $fb: 'DM Sans', sans-serif;
 }
 
 .sb-mark {
-  width:34px; height:34px; background:#FFE600; border-radius:8px;
+  height:34px; background:#FFE600; border-radius:8px;
   display:flex; align-items:center; justify-content:center;
-  font-size:10px; font-weight:900; color:#0A0A0A; letter-spacing:-.04em; flex-shrink:0;
+  padding:0 10px;
+  font-size:9px; font-weight:900; color:#0A0A0A; letter-spacing:-.02em; flex-shrink:0;
   transition:transform $fast; animation:pulseEY 3.5s ease-in-out infinite;
 }
 
@@ -195,9 +196,10 @@ $fb: 'DM Sans', sans-serif;
 
 .topbar-logo { display:flex; align-items:center; gap:9px; text-decoration:none; flex:1; min-width:0; }
 .topbar-mark {
-  width:28px; height:28px; background:#FFE600; border-radius:7px;
+  height:28px; background:#FFE600; border-radius:7px;
   display:flex; align-items:center; justify-content:center;
-  font-size:9px; font-weight:900; color:#0A0A0A; letter-spacing:-.04em; flex-shrink:0;
+  padding:0 8px;
+  font-size:8px; font-weight:900; color:#0A0A0A; letter-spacing:-.02em; flex-shrink:0;
 }
 .topbar-name { font-size:12px; font-weight:700; color:var(--tp); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 

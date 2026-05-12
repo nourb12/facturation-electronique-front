@@ -1,9 +1,6 @@
 {
   "TRANSACTIONS": {
     "TITLE": "Transactions",
-    "TITLE_A": "Journal des",
-    "TITLE_EM": "transactions.",
-    "SUBTITLE": "Suivez vos entrées et sorties de trésorerie.",
     "ACTIONS": {
       "ADD": "Nouvelle transaction",
       "EXPORT": "Exporter",
@@ -38,19 +35,31 @@
       "AMOUNT": "Montant",
       "TYPE": "Type",
       "STATUS": "Statut",
+      "SOURCE": "Source",
       "DOC": "Justificatif",
       "EMPTY": "Aucune transaction trouvée."
     },
     "TYPE": {
       "ENTREE": "Entrée",
-      "SORTIE": "Sortie",
-      "": ""
+      "SORTIE": "Sortie"
     },
     "STATUS": {
       "NONJUSTIFIEE": "Non justifiée",
       "ENATTENTE": "En attente",
-      "JUSTIFIEE": "Justifiée",
-      "": ""
+      "JUSTIFIEE": "Justifiée"
+    },
+    "SOURCE": {
+      "WEB": "Saisie web",
+      "MOBILEAPP": "Application mobile"
+    },
+    "REVIEW": {
+      "PENDING": "À vérifier",
+      "REQUIRED": "Champ requis",
+      "APPROVED": "Validée",
+      "DRAFT": "Brouillon",
+      "FIELD_REQUIRED": "Bloquant",
+      "FIELD_REVIEW": "À vérifier",
+      "FIELD_RELIABLE": "Fiable"
     },
     "COUNTERS": {
       "JUSTIFIED": "Justifiées",
@@ -62,11 +71,16 @@
       "EMPTY": "Aucune donnée disponible."
     },
     "DETAIL": {
-      "TITLE": "Détail de la transaction",
+      "TITLE": "Dépense à vérifier",
       "TAB": {
         "RECEIPT": "Justificatif",
         "ANALYTICS": "Analytique",
-        "COMMENTS": "Commentaires"
+        "MATCHING": "Rapprochement",
+        "COMMENTS": "Commentaires",
+        "ACTIVITIES": "Activités"
+      },
+      "ACTIONS": {
+        "APPROVE": "Enregistrer et valider"
       },
       "RECEIPT": {
         "STATUS_LABEL": "Statut du justificatif",
@@ -75,23 +89,53 @@
         "STATUS_PRESENT": "Présent",
         "UPLOAD": "Téléverser un justificatif",
         "DRAG_DROP": "Glisser-déposer ou cliquer pour choisir",
+        "OPEN": "Ouvrir le fichier",
+        "PREVIEW_EMPTY_TITLE": "Aucun justificatif à prévisualiser",
+        "PREVIEW_EMPTY_TEXT": "Ajoutez une image ou un PDF pour le vérifier côté web.",
         "LINK_INVOICE": "Lier à une facture",
-        "AUTO_TRANSMIT": "Transmission automatique"
+        "AUTO_TRANSMIT": "Transmission automatique",
+        "SUPPLIER": "Fournisseur",
+        "SUPPLIER_TAX_ID": "Matricule fiscal",
+        "MATCH_SUPPLIER": "Rechercher le fournisseur",
+        "CREATE_SUPPLIER": "Créer le fournisseur",
+        "SAVE": "Enregistrer le justificatif",
+        "SUPPLIER_MATCH": {
+          "SELECTED": "Choix confirmé",
+          "TAX-ID": "Reconnu",
+          "NAME-EXACT": "Reconnu",
+          "NAME-SIMILAR": "À confirmer",
+          "CREATED": "Créé",
+          "NOT-FOUND": "Introuvable"
+        }
       },
       "ANALYTICS": {
         "CATEGORY": "Catégorie",
-        "EDIT_CATEGORY": "Modifier la catégorie",
-        "SPLIT": "Ventiler"
+        "CATEGORY_PLACEHOLDER": "Ex. Restauration",
+        "ADD": "Ajouter une catégorie",
+        "REMOVE": "Retirer",
+        "TOTAL": "Total",
+        "PERIOD": "Période d'imputation",
+        "RECOVERABLE_VAT_AMOUNT": "TVA récupérable",
+        "RECOVERABLE_VAT_RATE": "Taux TVA récupérable",
+        "SAVE": "Enregistrer l'analytique"
+      },
+      "MATCHING": {
+        "STATUS": "Statut",
+        "REFERENCE": "Référence",
+        "DATE": "Date",
+        "AMOUNT": "Montant",
+        "COUNTERPARTY": "Contrepartie",
+        "SAVE": "Enregistrer le rapprochement",
+        "SUGGESTION_DEFAULT": "Suggestion"
       },
       "COMMENTS": {
-        "HISTORY": "Historique des notes",
-        "ADD_NOTE": "Ajouter une note",
-        "PLACEHOLDER": "Votre commentaire…"
+        "PLACEHOLDER": "Ajouter un commentaire interne…",
+        "SEND": "Envoyer",
+        "EMPTY": "Aucun commentaire pour le moment."
       },
-      "SIDE": {
-        "GLOBAL_STATUS": "Statut global",
-        "ACCOUNT": "Compte",
-        "EDIT_ALL": "Tout modifier"
+      "ACTIVITIES": {
+        "EMPTY": "Aucune activité enregistrée.",
+        "SYSTEM": "Système"
       }
     }
   }

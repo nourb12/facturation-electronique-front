@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { PersonnalisationApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { Pipe, PipeTransform } from '@angular/core';
 
 // --- PIPE: filtre catégories ----------------------------------
@@ -90,6 +91,7 @@ export class PersonnalisationComponent implements OnInit {
 
   private api = inject(PersonnalisationApiService);
   private toast = inject(ToastService);
+  private confirmSvc = inject(ConfirmationService);
 
   private defaultData: any;
 
@@ -205,6 +207,10 @@ export class PersonnalisationComponent implements OnInit {
       { type: 'bon_commande', label: 'Bon de commande',  icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2h6l4 4v6H2V2z"/></svg>',             color: '#22C55E', prefix: 'BC',  sep: '-', includeYear: true, digits: 4, nextNum: 1, reset: 'annuelle' },
       { type: 'proforma',   label: 'Facture proforma', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M5 7h4"/></svg>',     color: '#8B5CF6', prefix: 'PRO', sep: '-', includeYear: true, digits: 4, nextNum: 1, reset: 'annuelle' },
       { type: 'bon_livraison', label: 'Bon de livraison', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="4" width="9" height="7" rx="1"/><path d="M10 6h2l1 3v2h-3V6z"/><circle cx="4" cy="12" r="1.5"/><circle cx="11" cy="12" r="1.5"/></svg>', color: '#F59E0B', prefix: 'BL',  sep: '-', includeYear: true, digits: 4, nextNum: 1, reset: 'annuelle' },
+      { type: 'bon_sortie', label: 'Bon de sortie', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="10" height="10" rx="1.5"/><path d="M7 5v4M5 7l2 2 2-2"/></svg>', color: '#0EA5E9', prefix: 'EV',  sep: '-', includeYear: true, digits: 4, nextNum: 1, reset: 'annuelle' },
+      { type: 'paiement_recu', label: 'Paiements reçus', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M4 7l2 2 4-4"/></svg>', color: '#10B981', prefix: 'PAY-S',  sep: '-', includeYear: true, digits: 5, nextNum: 1, reset: 'annuelle' },
+      { type: 'paiement_emis', label: 'Paiements émis', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M7 4v6M4 7h6"/></svg>', color: '#EC4899', prefix: 'PAY-P',  sep: '-', includeYear: true, digits: 5, nextNum: 1, reset: 'annuelle' },
+      { type: 'ordre_fabrication', label: 'Ordre de fabrication', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="10" height="8" rx="1.5"/><path d="M5 1v4M9 1v4M2 6h10"/></svg>', color: '#F97316', prefix: 'OF',  sep: '-', includeYear: true, digits: 4, nextNum: 1, reset: 'annuelle' },
     ],
     pdf: {
       logoUrl: '', primaryColor: '#E8C84A', font: 'Helvetica', paperSize: 'A4',
@@ -218,6 +224,10 @@ export class PersonnalisationComponent implements OnInit {
       { key: 'devis',        label: 'Devis',            description: 'Offre de prix non engageante',                 color: '#3B82F6', prefix: 'DEV', seqKey: 'devis',        defaultTva: 19, delaiPaiement: 0,  actif: true  },
       { key: 'bon_commande', label: 'Bon de commande',  description: 'Engagement d\'achat fournisseur',              color: '#22C55E', prefix: 'BC',  seqKey: 'bon_commande', defaultTva: 19, delaiPaiement: 30, actif: true  },
       { key: 'bon_livraison',label: 'Bon de livraison', description: 'Accompagne la marchandise',                   color: '#F59E0B', prefix: 'BL',  seqKey: 'bon_livraison',defaultTva: 0,  delaiPaiement: 0,  actif: true  },
+      { key: 'bon_sortie',   label: 'Bon de sortie',    description: 'Sortie de stock interne',                      color: '#0EA5E9', prefix: 'EV',  seqKey: 'bon_sortie',   defaultTva: 0,  delaiPaiement: 0,  actif: true  },
+      { key: 'paiement_recu',label: 'Paiements reçus',  description: 'Encaissement client',                          color: '#10B981', prefix: 'PAY-S',seqKey: 'paiement_recu',defaultTva: 0,  delaiPaiement: 0,  actif: true  },
+      { key: 'paiement_emis',label: 'Paiements émis',   description: 'Décaissement fournisseur',                     color: '#EC4899', prefix: 'PAY-P',seqKey: 'paiement_emis',defaultTva: 0,  delaiPaiement: 0,  actif: true  },
+      { key: 'ordre_fabrication',label: 'Ordre de fabrication', description: 'Ordre de production interne',         color: '#F97316', prefix: 'OF',  seqKey: 'ordre_fabrication',defaultTva: 0, delaiPaiement: 0, actif: true  },
     ],
     categoriesVente: [
       { id: 1, label: 'Prestations de services',       compte: '706000', tva: 19, docs: 12 },
@@ -508,6 +518,35 @@ export class PersonnalisationComponent implements OnInit {
     return parts.join(seq.sep);
   }
 
+  // --- FORMAT NEXT NUMBER --------------------------------------
+  formatNextNumber(seq: Sequence): string {
+    return String(seq.nextNum).padStart(seq.digits, '0');
+  }
+
+  updateNextNumber(seq: Sequence, value: string) {
+    // Enlever les zéros au début et convertir en nombre
+    const num = parseInt(value.replace(/^0+/, '') || '1', 10);
+    seq.nextNum = Math.max(1, num);
+    this.markDirty();
+  }
+
+  // --- SEQUENCE UPDATE -----------------------------------------
+  toggleSequenceUpdate(seq: Sequence, checked: boolean) {
+    if (checked) {
+      this.confirmSvc.confirm({
+        title: 'Mettre à jour le format de numérotation ?',
+        message: `Tous les ${seq.label.toLowerCase()}s existants seront renumérotés selon le nouveau format : ${this.buildPreview(seq)}. Cette action est irréversible.`,
+        confirmText: 'Mettre à jour',
+        cancelText: 'Annuler',
+        confirmClass: 'primary',
+        onConfirm: () => {
+          this.toast.success(`Format de numérotation mis à jour pour ${seq.label}`);
+          this.markDirty();
+        }
+      });
+    }
+  }
+
   // --- PDF -----------------------------------------------------
   triggerLogoUpload() { this.logoInput?.nativeElement.click(); }
 
@@ -529,9 +568,23 @@ export class PersonnalisationComponent implements OnInit {
   }
 
   removeCategory(type: 'vente' | 'achat', id: number) {
-    if (type === 'vente') this.data.categoriesVente = this.data.categoriesVente.filter(c => c.id !== id);
-    else this.data.categoriesAchat = this.data.categoriesAchat.filter(c => c.id !== id);
-    this.markDirty();
+    const cat = type === 'vente' 
+      ? this.data.categoriesVente.find((c: any) => c.id === id)
+      : this.data.categoriesAchat.find((c: any) => c.id === id);
+    
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette catégorie ?',
+      message: `Cette action est irréversible. La catégorie « ${cat?.label || 'cette catégorie'} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        if (type === 'vente') this.data.categoriesVente = this.data.categoriesVente.filter((c: any) => c.id !== id);
+        else this.data.categoriesAchat = this.data.categoriesAchat.filter((c: any) => c.id !== id);
+        this.markDirty();
+        this.toast.success('Catégorie supprimée.');
+      }
+    });
   }
 
   // --- TAXES ---------------------------------------------------
@@ -542,7 +595,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeTaxe(id: number) { this.data.taxes = this.data.taxes.filter(t => t.id !== id); this.markDirty(); }
+  removeTaxe(id: number) {
+    const tax = this.data.taxes.find((t: any) => t.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette taxe ?',
+      message: `Cette action est irréversible. La taxe « ${tax?.label || 'cette taxe'} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.taxes = this.data.taxes.filter((t: any) => t.id !== id);
+        this.markDirty();
+        this.toast.success('Taxe supprimée.');
+      }
+    });
+  }
 
   taxTypeClass(type: string): string {
     return { TVA: 'badge--ey', FODEC: 'badge--info', TCL: 'badge--warn', Timbre: 'badge--neutral', Droit: 'badge--err' }[type] ?? 'badge--neutral';
@@ -556,7 +623,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeRetenue(id: number) { this.data.retenues = this.data.retenues.filter(r => r.id !== id); this.markDirty(); }
+  removeRetenue(id: number) {
+    const ret = this.data.retenues.find((r: any) => r.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette retenue ?',
+      message: `Cette action est irréversible. La retenue « ${ret?.label || 'cette retenue'} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.retenues = this.data.retenues.filter((r: any) => r.id !== id);
+        this.markDirty();
+        this.toast.success('Retenue supprimée.');
+      }
+    });
+  }
 
   // --- ARTICLES ------------------------------------------------
   private nextUniteId = 100;
@@ -567,7 +648,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeUnite(id: number) { this.data.articles.unites = this.data.articles.unites.filter((u: any) => u.id !== id); this.markDirty(); }
+  removeUnite(id: number) {
+    const unite = this.data.articles.unites.find((u: any) => u.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette unité ?',
+      message: `Cette action est irréversible. L'unité « ${unite?.label || 'cette unité'} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.articles.unites = this.data.articles.unites.filter((u: any) => u.id !== id);
+        this.markDirty();
+        this.toast.success('Unité supprimée.');
+      }
+    });
+  }
 
   addFamille() {
     const colors = ['#3B82F6','#22C55E','#EF4444','#8B5CF6','#F59E0B'];
@@ -575,7 +670,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeFamille(id: number) { this.data.articles.familles = this.data.articles.familles.filter((f: any) => f.id !== id); this.markDirty(); }
+  removeFamille(id: number) {
+    const famille = this.data.articles.familles.find((f: any) => f.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette famille ?',
+      message: `Cette action est irréversible. La famille « ${famille?.label || 'cette famille'} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.articles.familles = this.data.articles.familles.filter((f: any) => f.id !== id);
+        this.markDirty();
+        this.toast.success('Famille supprimée.');
+      }
+    });
+  }
 
   // --- MODES PAIEMENT ------------------------------------------
   private nextModeId = 100;
@@ -585,7 +694,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeModePaiement(id: number) { this.data.modesPaiement = this.data.modesPaiement.filter(m => m.id !== id); this.markDirty(); }
+  removeModePaiement(id: number) {
+    const mode = this.data.modesPaiement.find((m: any) => m.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer ce mode de paiement ?',
+      message: `Cette action est irréversible. Le mode « ${mode?.label || 'ce mode'} » sera définitivement supprimé.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.modesPaiement = this.data.modesPaiement.filter((m: any) => m.id !== id);
+        this.markDirty();
+        this.toast.success('Mode de paiement supprimé.');
+      }
+    });
+  }
 
   // --- WEBHOOKS ------------------------------------------------
   private nextWebhookId = 1;
@@ -595,7 +718,21 @@ export class PersonnalisationComponent implements OnInit {
     this.markDirty();
   }
 
-  removeWebhook(id: number) { this.data.webhooks = this.data.webhooks.filter(w => w.id !== id); this.markDirty(); }
+  removeWebhook(id: number) {
+    const webhook = this.data.webhooks.find((w: any) => w.id === id);
+    this.confirmSvc.confirm({
+      title: 'Supprimer ce webhook ?',
+      message: `Cette action est irréversible. Le webhook « ${webhook?.url || 'ce webhook'} » sera définitivement supprimé.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        this.data.webhooks = this.data.webhooks.filter((w: any) => w.id !== id);
+        this.markDirty();
+        this.toast.success('Webhook supprimé.');
+      }
+    });
+  }
 
   toggleWebhookEvent(w: Webhook, key: string) {
     const idx = w.events.indexOf(key);

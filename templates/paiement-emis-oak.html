@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Émis Oak</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fefdfb;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border: 8px solid #8B7355;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px double #8B7355;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: 900;
+            color: #5D4E37;
+            font-family: Georgia, serif;
+            margin-bottom: 10px;
+        }
+        .invoice-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8B7355;
+            letter-spacing: 3px;
+            margin-top: 15px;
+        }
+        .invoice-number {
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .party {
+            background: #f9f7f4;
+            padding: 20px;
+            border: 2px solid #d4c4b0;
+        }
+        .party-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8B7355;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #5D4E37;
+            margin-bottom: 8px;
+        }
+        .party-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.7;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        thead {
+            background: #8B7355;
+            color: #fefdfb;
+        }
+        th {
+            padding: 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        th:last-child, td:last-child {
+            text-align: right;
+        }
+        tbody tr {
+            border-bottom: 1px solid #d4c4b0;
+        }
+        td {
+            padding: 14px 12px;
+            font-size: 13px;
+            color: #333;
+        }
+        .totals {
+            margin-left: auto;
+            width: 350px;
+            background: #f9f7f4;
+            padding: 20px;
+            border: 2px solid #d4c4b0;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        .total-row.grand-total {
+            font-size: 20px;
+            font-weight: 900;
+            color: #5D4E37;
+            border-top: 3px double #8B7355;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 3px double #8B7355;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-title">PAIEMENT ÉMIS</div>
+            <div class="invoice-number">N° PE-2021-007 • 06 Novembre 2021</div>
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">Émetteur</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna, Rue des Roses<br>
+                    La Marsa, Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">Bénéficiaire</div>
+                <div class="party-name">Fournisseur XYZ</div>
+                <div class="party-details">
+                    1234567/A<br>
+                    15, Avenue Habib Bourguiba<br>
+                    2000 Tunis, Tunisie
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Référence</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Paiement facture INV-2021-009</td>
+                    <td>INV-2021-009</td>
+                    <td>1.382.200</td>
+                    <td>Effectué</td>
+                </tr>
+                <tr>
+                    <td>Paiement facture INV-2021-010</td>
+                    <td>INV-2021-010</td>
+                    <td>850.000</td>
+                    <td>Effectué</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total Montant</span>
+                <span>2.232.200 TND</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Montant Payé</span>
+                <span>2.232.200 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Paiement effectué
+        </div>
+    </div>
+</body>
+</html>

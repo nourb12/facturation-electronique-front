@@ -304,6 +304,20 @@ a { color:inherit; text-decoration:none; }
 }
 .page-desc { font-size:12.5px; color:var(--ts); margin-top:3px; }
 
+/* Global topbar title styles (harmonized with entreprise) */
+.topbar-title { font-family:$fd; font-size:1.6rem; font-weight:900; letter-spacing:-.02em; color:var(--tp); margin:0; }
+.topbar-bc { font-size:12px; color:var(--ts); margin-top:4px; display:block; }
+
+/* Normalize other header classes to match entreprise topbar style */
+.dt-title, .page-title, .page-header .page-title {
+  font-family: $fd; font-size:1.6rem; font-weight:900; letter-spacing:-.02em; color:var(--tp); margin:0;
+}
+
+/* Remove emphasis styling inside titles (no split-bold/italic look) */
+.dt-title em, .page-title em, .topbar-title em, .page-header em {
+  font-style: normal; font-weight: 700; color: var(--tp);
+}
+
 // Section label
 .section-label {
   font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em;

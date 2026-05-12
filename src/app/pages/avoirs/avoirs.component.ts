@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   FactureApiService, FactureDto, ListeFacturesDto,
   StatistiquesFacturesDto, ClientService, ClientDto,
@@ -16,7 +17,7 @@ import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCo
 @Component({
   selector: 'app-avoirs',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './avoirs.component.html',
   styleUrls: ['./avoirs.component.scss'],
   animations: [
@@ -115,7 +116,13 @@ export class AvoirsComponent implements OnInit {
   ];
 
   readonly typeFactureOptions   = ['Avoir'];
-  readonly modePaiementOptions  = ['Virement', 'Cheque', 'Especes', 'CarteBancaire', 'Traite'];
+  readonly modePaiementOptions = [
+    { value: 'Virement',      labelKey: 'INVOICE.PAYMENT_MODES.BANK_TRANSFER' },
+    { value: 'Cheque',        labelKey: 'INVOICE.PAYMENT_MODES.CHECK' },
+    { value: 'Especes',       labelKey: 'INVOICE.PAYMENT_MODES.CASH' },
+    { value: 'CarteBancaire', labelKey: 'INVOICE.PAYMENT_MODES.CARD' },
+    { value: 'Traite',        labelKey: 'INVOICE.PAYMENT_MODES.BILL_OF_EXCHANGE' },
+  ] as const;
 
 
   filteredFactures = computed(() => {
@@ -143,6 +150,116 @@ export class AvoirsComponent implements OnInit {
   ngOnInit() { this.loadAll(); }
 
 
+  genererDonneesTest() {
+    if (!confirm('Créer 7 avoirs de test ?')) return;
+    
+    const avoirsTest = [
+      {
+        clientNom: 'SARL TechSolutions',
+        totalHt: 1250.500,
+        totalTva: 237.595,
+        totalTtc: 1488.095,
+        statut: 'Brouillon',
+        dateEcheance: '2026-06-15'
+      },
+      {
+        clientNom: 'Entreprise Moderne SARL',
+        totalHt: 890.250,
+        totalTva: 169.148,
+        totalTtc: 1059.398,
+        statut: 'Validee',
+        dateEcheance: '2026-06-20'
+      },
+      {
+        clientNom: 'Cabinet Conseil Plus',
+        totalHt: 2100.000,
+        totalTva: 399.000,
+        totalTtc: 2499.000,
+        statut: 'Conforme',
+        dateEcheance: '2026-06-25'
+      },
+      {
+        clientNom: 'Import Export Tunisie',
+        totalHt: 750.800,
+        totalTva: 142.652,
+        totalTtc: 893.452,
+        statut: 'Transmise',
+        dateEcheance: '2026-06-30'
+      },
+      {
+        clientNom: 'Services Informatiques SA',
+        totalHt: 1580.000,
+        totalTva: 300.200,
+        totalTtc: 1880.200,
+        statut: 'Acceptee',
+        dateEcheance: '2026-07-05'
+      },
+      {
+        clientNom: 'Distribution Alimentaire',
+        totalHt: 3200.500,
+        totalTva: 608.095,
+        totalTtc: 3808.595,
+        statut: 'Payee',
+        dateEcheance: '2026-07-10'
+      },
+      {
+        clientNom: 'Société Générale Commerce',
+        totalHt: 450.000,
+        totalTva: 85.500,
+        totalTtc: 535.500,
+        statut: 'Brouillon',
+        dateEcheance: '2026-07-15'
+      }
+    ];
+
+    // Récupérer le premier client disponible
+    if (this.clients().length === 0) {
+      this.toast.error('Aucun client disponible. Créez d\'abord des clients.');
+      return;
+    }
+
+    const clientId = this.clients()[0].id;
+    let created = 0;
+
+    avoirsTest.forEach((avoir, index) => {
+      const req = {
+        clientId: clientId,
+        typeFacture: 'Avoir',
+        modePaiement: 'Virement',
+        dateEcheance: new Date(avoir.dateEcheance).toISOString(),
+        notes: `Avoir de test ${index + 1} - ${avoir.clientNom}`,
+        devise: 'TND',
+        lignes: [
+          {
+            designation: `Remboursement ${avoir.clientNom}`,
+            quantite: 1,
+            prixUnitaire: avoir.totalHt,
+            tauxTva: 19,
+            tauxRemise: 0,
+            unite: 'U'
+          }
+        ]
+      };
+
+      this.factureSvc.creer(req).subscribe({
+        next: (f) => {
+          created++;
+          this.factures.update(list => [f, ...list]);
+          this.total.update(v => v + 1);
+          
+          if (created === avoirsTest.length) {
+            this.updateStatutCounts();
+            this.toast.success(`${created} avoirs de test créés avec succès !`);
+          }
+        },
+        error: (err) => {
+          this.toast.error(`Erreur création avoir ${index + 1}: ${err?.error?.message ?? 'Erreur'}`);
+        }
+      });
+    });
+  }
+
+
   loadAll() {
     this.loading.set(true);
 
@@ -164,14 +281,55 @@ export class AvoirsComponent implements OnInit {
         this.total.set(res.total);
         this.loading.set(false);
         this.updateStatutCounts();
+        this.calculateStats();
       },
       error: () => this.loading.set(false)
     });
 
-    this.factureSvc.statistiques().subscribe({ next: s => this.stats.set(s) });
-
     this.clientSvc.lister(1, 200, true).subscribe({ next: res => this.clients.set(res.items) });
     this.produitSvc.lister(1, 200, undefined, true).subscribe({ next: res => this.produits.set(res.items) });
+  }
+
+  private calculateStats() {
+    const avoirs = this.factures();
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    let montantTotalMois = 0;
+    let montantEncaisseMois = 0;
+    let montantEnAttente = 0;
+    let totalEnRetard = 0;
+
+    avoirs.forEach(avoir => {
+      const dateEmission = avoir.dateEmission ? new Date(avoir.dateEmission) : null;
+      const isCurrentMonth = dateEmission && 
+        dateEmission.getMonth() === currentMonth && 
+        dateEmission.getFullYear() === currentYear;
+
+      if (isCurrentMonth) {
+        montantTotalMois += avoir.totalTtc || 0;
+        if (avoir.statut === 'Payee') {
+          montantEncaisseMois += avoir.totalTtc || 0;
+        }
+      }
+
+      if (avoir.statut === 'Acceptee' || avoir.statut === 'PartiellemementPayee') {
+        montantEnAttente += avoir.montantRestant || avoir.totalTtc || 0;
+      }
+
+      if (avoir.estEnRetard) {
+        totalEnRetard++;
+      }
+    });
+
+    this.stats.set({
+      montantTotalMois,
+      montantEncaisseMois,
+      montantEnAttente,
+      totalEnRetard,
+      totalBrouillons: avoirs.filter(a => a.statut === 'Brouillon').length,
+    } as any);
   }
 
   private updateStatutCounts() {
@@ -261,6 +419,7 @@ export class AvoirsComponent implements OnInit {
         this.factures.update(list => [f, ...list]);
         this.total.update(v => v + 1);
         this.updateStatutCounts();
+        this.calculateStats();
         this.closeModal();
         this.toast.success(`Avoir ${f.numero} créé.`);
       },
@@ -419,6 +578,17 @@ export class AvoirsComponent implements OnInit {
       Payee: 'ok', PartiellemementPayee: 'warn', Annulee: 'neutral'
     };
     return map[statut] ?? 'neutral';
+  }
+
+  statutLabelKey(statut: string): string {
+    const map: Record<string, string> = {
+      Brouillon:'FACTURES.STATUS.DRAFT', Validee:'FACTURES.STATUS.VALIDATED',
+      Conforme:'FACTURES.STATUS.COMPLIANT', Transmise:'FACTURES.STATUS.SENT',
+      Acceptee:'FACTURES.STATUS.ACCEPTED', Rejetee:'FACTURES.STATUS.REJECTED',
+      Payee:'FACTURES.STATUS.PAID', PartiellemementPayee:'FACTURES.STATUS.PARTIALLY_PAID',
+      Annulee:'FACTURES.STATUS.CANCELLED',
+    };
+    return map[statut] ?? statut;
   }
 
   private updateFacture(updated: any) {

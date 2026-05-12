@@ -67,7 +67,7 @@ describe('LoginFinancierComponent', () => {
     tick(600);
 
     expect(authSpy.clearSession).toHaveBeenCalled();
-    expect(cmp.errorMsg()).toContain('responsable financier');
+    expect(cmp.errorMsg()).toBe('ERRORS.FINANCIER_ONLY');
     expect(router.navigate).not.toHaveBeenCalled();
   }));
 

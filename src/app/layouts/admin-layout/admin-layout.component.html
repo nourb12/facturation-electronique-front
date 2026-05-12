@@ -3,12 +3,9 @@
     <div class="sb-grid-bg" aria-hidden="true"></div>
 
     <div class="sb-top">
-      <a class="sb-logo" routerLink="/admin/dashboard">
-        <div class="sb-mark">EY</div>
-        <div class="sb-wordmark" *ngIf="!collapsed">
-          <span class="sb-name">{{ 'APP.ADMIN_CONSOLE' | translate }}</span>
-          <span class="sb-sub">{{ 'ADMIN.SIDEBAR.SUBTITLE' | translate }}</span>
-        </div>
+      <a class="sb-logo" routerLink="/admin/dashboard" aria-label="TunisFlow">
+        <span class="sb-brand-pill">TunisFlow</span>
+        <span class="sb-brand-sub" *ngIf="!collapsed">{{ 'APP.TAGLINE' | translate }}</span>
       </a>
       <button class="sb-toggle" type="button" (click)="toggle()" [attr.aria-pressed]="collapsed" [attr.aria-label]="'COMMON.ARIA.COLLAPSE_SIDEBAR' | translate">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>

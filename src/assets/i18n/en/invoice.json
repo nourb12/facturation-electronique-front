@@ -40,6 +40,16 @@
     "SEARCH_PLACEHOLDER": "Search by number, client…",
     "LOADING": "Loading invoices…",
     "EMPTY": "No invoices found.",
+    "FILTERS": {
+      "ALL": "All",
+      "DRAFT": "Draft",
+      "VALIDATED": "Validated",
+      "COMPLIANT": "Compliant",
+      "SENT": "Sent",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "PAID": "Paid"
+    },
     "KPI": {
       "ISSUED_MONTH": "Issued this month",
       "PAID": "Collected",
@@ -126,17 +136,23 @@
   "ACCOUNTING": {
     "TAXES": {
       "TITLE_A": "Tax",
-      "TITLE_EM": "management.",
+      "TITLE_EM": "management",
       "SUBTITLE": "Configure VAT, FODEC and consumption tax rates applicable to your invoices.",
       "COLUMNS": {
         "TITLE": "Title",
         "RATE": "Rate",
-        "TYPE": "Type"
+        "TYPE": "Type",
+        "ACTION": "Actions"
       },
       "TYPES": {
-        "TVA": "VAT",
+        "VAT": "VAT",
         "FODEC": "FODEC",
-        "DROIT_CONSOMMATION": "Consumption tax"
+        "CONSUMPTION": "Consumption tax"
+      },
+      "TYPE_DESC": {
+        "VAT": "Value-added tax applied to the amount excluding taxes.",
+        "FODEC": "Competitiveness Development Fund in the agriculture, fisheries and industry sectors.",
+        "CONSUMPTION": "Consumption tax applied to specific products."
       },
       "EMPTY": {
         "SEARCH_TITLE": "No results for \"{{query}}\"",
@@ -154,6 +170,19 @@
           "TYPE": "Type"
         },
         "ERROR_RATE_GT0": "Rate must be greater than 0."
+      },
+      "TOAST": {
+        "LOAD_ERROR": "Error loading taxes",
+        "CREATED": "Tax created successfully",
+        "UPDATED": "Tax updated successfully",
+        "DELETED": "Tax deleted successfully",
+        "REQUIRED_FIELDS": "Please fill in all required fields"
+      },
+      "DELETE": {
+        "TITLE": "Delete this tax?",
+        "MESSAGE": "This action is irreversible. The tax \"{{name}}\" will be permanently deleted.",
+        "CONFIRM": "Delete",
+        "CANCEL": "Cancel"
       }
     },
     "FISCAL_PARAMS": {
@@ -196,12 +225,41 @@
           "TITLE": "Target documents",
           "FACTURE": "Invoice",
           "AVOIR": "Credit note",
-          "PROFORMA": "Proforma"
+          "PROFORMA": "Proforma",
+          "INVOICE": "Invoice",
+          "CREDIT_INVOICE": "Credit invoice",
+          "DELIVERY_NOTE": "Delivery note",
+          "RECEIPT_NOTE": "Goods receipt",
+          "GOODS_OUT_NOTE": "Goods issue note",
+          "PURCHASE_ORDER": "Purchase order",
+          "QUOTE": "Quote",
+          "SUPPLIER_INVOICE": "Supplier invoice"
         }
+      },
+      "ORDER": {
+        "BEFORE_VAT": "Before VAT",
+        "AFTER_VAT": "After VAT"
+      },
+      "USAGE": {
+        "MANUAL": "Manual",
+        "AUTO": "Automatic"
       },
       "ORDRE": { "AVANT_TVA": "Before VAT", "APRES_TVA": "After VAT" },
       "UTILISATION": { "MANUEL": "Manual", "AUTO": "Automatic" },
-      "CONDITION": { "NONE": "None", "WITH_RS": "With withholding" }
+      "CONDITION": {
+        "NONE": "None",
+        "WITH_RS": "With withholding",
+        "WITHHOLDING": "Withholding tax",
+        "DOCS": "Target documents"
+      },
+      "TOAST": {
+        "LOAD_ERROR": "Could not load fiscal parameters.",
+        "DELETE_OK": "{{count}} parameter(s) deleted.",
+        "DELETE_PARTIAL": "{{deleted}} deleted, {{errors}} error(s).",
+        "REQUIRED_FIELDS": "Please fill in the required fields.",
+        "UPDATED": "Parameter updated.",
+        "CREATED": "Parameter created."
+      }
     }
   }
 }

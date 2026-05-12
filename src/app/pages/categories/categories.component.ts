@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CategorieApiService } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 
 @Component({
   selector: 'app-categories',
@@ -22,6 +23,7 @@ import { ToastService } from '../../core/services/toast.service';
 export class CategoriesComponent implements OnInit {
   private svc   = inject(CategorieApiService);
   private toast = inject(ToastService);
+  private confirmSvc = inject(ConfirmationService);
 
   categories = signal<any[]>([]);
   loading    = signal(true);
@@ -140,6 +142,29 @@ export class CategoriesComponent implements OnInit {
         this.closeModal();
       },
       error: (err) => { this.saving.set(false); this.toast.error(err?.error?.message ?? 'Erreur.'); }
+    });
+  }
+
+  confirmDelete(cat: any) {
+    this.confirmSvc.confirm({
+      title: 'Supprimer cette catégorie ?',
+      message: `Cette action est irréversible. La catégorie « ${cat.nom} » sera définitivement supprimée.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => this.deleteCategory(cat.id)
+    });
+  }
+
+  deleteCategory(id: string) {
+    this.svc.supprimer(id).subscribe({
+      next: () => {
+        this.categories.update(list => list.filter(c => c.id !== id));
+        this.toast.success('Catégorie supprimée.');
+      },
+      error: (err: any) => {
+        this.toast.error(err?.error?.message ?? 'Erreur lors de la suppression.');
+      }
     });
   }
 }

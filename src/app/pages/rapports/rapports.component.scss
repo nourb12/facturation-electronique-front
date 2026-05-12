@@ -8,16 +8,13 @@
 .btn-secondary{display:flex;align-items:center;gap:7px;padding:10px 16px;background:transparent;border:1px solid $b2;border-radius:10px;font-family:$fb;font-size:13px;font-weight:600;color:$ts;cursor:pointer;transition:all .15s;&:hover{background:$b1;color:$tp}}
 .period-bar{display:flex;gap:4px;margin-bottom:16px;background:$surf;border:1px solid $b1;border-radius:10px;padding:4px;width:fit-content}
 .period-btn{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;color:$tt;border:none;background:none;cursor:pointer;transition:all .15s;&:hover{color:$ts}&.active{background:$tuniflow-dim;color:$tuniflow;border:1px solid $b-tuniflow}}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.kpi-card{background:$surf;border:1px solid $b1;border-radius:12px;padding:16px}
-.kc-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:$tt;margin-bottom:6px}
-.kc-val{font-family:$fm;font-size:1.2rem;font-weight:700;margin-bottom:4px}
-.kc--tuniflow{color:$tuniflow}
-.kc--ok{color:$ok}
-.kc--warn{color:$warn}
-.kc--info{color:$info}
-.kc--muted{color:$tt}
-.kc-sub{font-size:10.5px;color:$tt}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{background:$card;border:1px solid $b1;border-radius:16px;padding:16px;display:flex;gap:14px;align-items:flex-start;transition:border-color 260ms $ease,transform 260ms $ease;cursor:pointer;&:hover{border-color:rgba(var(--c-tuniflow-rgb),.3);transform:translateY(-2px)}}
+.kpi-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;&--cash{background:rgba(var(--c-tuniflow-rgb),.15);color:$tuniflow}&--chart{background:rgba(34,197,94,.15);color:$ok}&--file{background:rgba(245,158,11,.15);color:$warn}&--clock{background:rgba(59,130,246,.15);color:$info}}
+.kpi-body{display:flex;flex-direction:column;gap:6px;flex:1}
+.kpi-title{font-size:12px;color:$ts;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.kpi-value{font-family:$fm;font-size:1.5rem;font-weight:700;color:$tp;line-height:1}
+.kpi-sub{font-size:11px;color:$ts}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .box{background:$surf;border:1px solid $b1;border-radius:14px;padding:16px}
 .box-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}

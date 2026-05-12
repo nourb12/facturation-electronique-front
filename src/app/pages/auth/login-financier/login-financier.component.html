@@ -7,11 +7,8 @@
     <div class="lp-orb lp-orb--2"></div>
 
     <a class="lp-logo" routerLink="/landing">
-      <div class="lp-mark">EY</div>
-      <div class="lp-wordmark">
-        <span class="lp-name">TunisFlow</span>
-        <span class="lp-sub">{{ 'APP.TAGLINE' | translate }}</span>
-      </div>
+      <span class="lp-brand-pill">TunisFlow</span>
+      <span class="lp-brand-sub">{{ 'APP.TAGLINE' | translate }}</span>
     </a>
 
     <div class="lp-content">
@@ -30,22 +27,38 @@
         {{ 'AUTH.PANELS.FINANCIER.DESC' | translate }}
       </p>
 
-      <div class="lp-permissions">
-        <div class="lp-perm-title">{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS_TITLE' | translate }}</div>
-        <div class="lp-perm-row">
-          <span class="lp-perm-dot lp-perm-dot--ok"></span>
+      <div class="lp-checklist" aria-label="Fonctionnalités Responsable Financier">
+        <div class="lp-checklist-title">{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS_TITLE' | translate }}</div>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.INVOICES' | translate }}</span>
         </div>
-        <div class="lp-perm-row">
-          <span class="lp-perm-dot lp-perm-dot--ok"></span>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.DASHBOARD' | translate }}</span>
         </div>
-        <div class="lp-perm-row">
-          <span class="lp-perm-dot lp-perm-dot--warn"></span>
+        <div class="lp-check">
+          <span class="lp-check-icon" aria-hidden="true">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.EXPORTS' | translate }}</span>
         </div>
-        <div class="lp-perm-row">
-          <span class="lp-perm-dot lp-perm-dot--muted"></span>
+        <div class="lp-check lp-check--muted">
+          <span class="lp-check-icon lp-check-icon--muted" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
           <span>{{ 'AUTH.PANELS.FINANCIER.PERMISSIONS.ADMIN' | translate }}</span>
         </div>
       </div>

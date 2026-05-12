@@ -19,7 +19,8 @@
     <ul class="nav-links nav-links--extended">
       <li><a href="#pourquoi" (click)="scrollToSection($event, 'pourquoi')">{{ 'LANDING.NAV.WHY' | translate }}</a></li>
       <li><a href="#pour-qui" (click)="scrollToSection($event, 'pour-qui')">{{ 'LANDING.NAV.AUDIENCE' | translate }}</a></li>
-      <li><a href="#contact" (click)="scrollToSection($event, 'contact')">{{ 'LANDING.NAV.CONTACT' | translate }}</a></li>
+      <li><a href="#mobile" (click)="scrollToSection($event, 'mobile')">{{ 'LANDING.NAV.MOBILE' | translate }}</a></li>
+      <li><a href="#tarifs" (click)="scrollToSection($event, 'tarifs')">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -168,14 +169,20 @@
 </section>
 
 <section class="stats-section" id="chiffres">
-  <div class="stats-grid">
-    @for (stat of stats(); track stat.label; let i = $index) {
-      <div class="stat-item reveal" [style.--reveal-delay]="(i * 80) + 'ms'">
-        <div class="stat-value">{{ stat.display }}</div>
-        <div class="stat-label">{{ stat.label | translate }}</div>
-      </div>
-    }
+  <div class="top-cards">
+    <div class="top-cards-grid container">
+      @for (card of topCards(); track card.labelKey; let i = $index) {
+        <div class="top-card reveal" [style.--reveal-delay]="(i * 60) + 'ms'">
+          <div class="tc-value">
+            <ng-container *ngIf="card.prefix; else normalVal">{{ card.prefix }} {{ card.display }}</ng-container>
+            <ng-template #normalVal>{{ card.display }}</ng-template>
+          </div>
+          <div class="tc-label">{{ card.label }}</div>
+        </div>
+      }
+    </div>
   </div>
+  <!-- secondary stats removed (merged into top-cards) -->
 </section>
 
 <section class="workflow-section" id="workflow">
@@ -436,6 +443,327 @@
   </div>
 </section>
 
+<!-- ══ FONCTIONNALITÉS MÉTIER ══════════════════════════════════════ -->
+<section class="biz-section" id="fonctionnalites">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Fonctionnalités</div>
+      <h2 class="section-title">
+        Facile, Rapide<br>
+        et <em>Complet</em>
+      </h2>
+      <p class="section-desc">
+        Un seul outil pour gérer efficacement votre facturation, votre comptabilité et vos paiements.
+      </p>
+    </div>
+
+    <div class="biz-grid">
+      <div class="biz-card reveal" style="--reveal-delay:0ms">
+        <div class="biz-card-header">
+          <div class="biz-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2.5" y="1.5" width="13" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M5.5 5.5h7M5.5 9h7M5.5 12.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="biz-title">Cycle de facturation complet</h3>
+        </div>
+        <p class="biz-desc">Créez vos devis, factures, avoirs et bons de livraison. Convertissez un devis en facture en un clic. Workflow TEIF intégré.</p>
+        <div class="biz-preview">
+          <div class="biz-stat"><span class="biz-num">128</span><span class="biz-lbl">Factures ce mois</span></div>
+          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">98%</span><span class="biz-lbl">Acceptées TTN</span></div>
+          <div class="biz-stat"><span class="biz-num">1.4s</span><span class="biz-lbl">Transmission</span></div>
+        </div>
+      </div>
+
+      <div class="biz-card reveal" style="--reveal-delay:80ms">
+        <div class="biz-card-header">
+          <div class="biz-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M2 9h14M9 2l3.5 3.5L9 9M9 9l3.5 3.5L9 16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="biz-title">Suivi comptable automatisé</h3>
+        </div>
+        <p class="biz-desc">Journaux d'écritures, encaissements, décaissements et trésorerie synchronisés automatiquement à chaque facture ou paiement.</p>
+        <div class="biz-tags">
+          <span class="biz-tag">Journaux</span>
+          <span class="biz-tag">TVA multi-taux</span>
+          <span class="biz-tag">FODEC</span>
+          <span class="biz-tag">Timbre fiscal</span>
+        </div>
+      </div>
+
+      <div class="biz-card reveal" style="--reveal-delay:160ms">
+        <div class="biz-card-header">
+          <div class="biz-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M9 5.5v3.5l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="biz-title">Trésorerie en temps réel</h3>
+        </div>
+        <p class="biz-desc">Paiements partiels ou totaux, relances automatiques email & SMS, suivi des retards et prévision des encaissements.</p>
+        <div class="biz-preview">
+          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">78%</span><span class="biz-lbl">Encaissé</span></div>
+          <div class="biz-stat"><span class="biz-num" style="color:var(--warn)">18%</span><span class="biz-lbl">En attente</span></div>
+          <div class="biz-stat"><span class="biz-num">4%</span><span class="biz-lbl">En retard</span></div>
+        </div>
+      </div>
+
+      <div class="biz-card biz-card--wide reveal" style="--reveal-delay:240ms">
+        <div class="biz-card-header">
+          <div class="biz-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="1.5" y="1.5" width="15" height="15" rx="3.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M5 9l2.5 2.5L12 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="biz-title">Onboarding digital</h3>
+        </div>
+        <p class="biz-desc">Validation documentaire digitale (CIN, patente, RNE, RIB). Vérification de conformité avant tout accès à la plateforme.</p>
+        <div class="biz-tags">
+          <span class="biz-tag biz-tag--ey">Score niveau client</span>
+          <span class="biz-tag biz-tag--ey">Validation admin</span>
+          <span class="biz-tag">Arabe · Français · Anglais</span>
+        </div>
+      </div>
+
+      <div class="biz-card biz-card--wide reveal" style="--reveal-delay:320ms">
+        <div class="biz-card-header">
+          <div class="biz-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 11.5l3.5-3.5 2.5 2.5 3.5-4 2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="1.5" y="1.5" width="15" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </div>
+          <h3 class="biz-title">Rapports & Analytics</h3>
+        </div>
+        <p class="biz-desc">Tableaux de bord multi-rôles, exports PDF & CSV, prédiction des retards de paiement et détection d'anomalies par intelligence artificielle.</p>
+        <div class="biz-tags">
+          <span class="biz-tag biz-tag--ai">IA Prédictive</span>
+          <span class="biz-tag biz-tag--ai">Détection anomalies</span>
+          <span class="biz-tag">Export PDF</span>
+          <span class="biz-tag">Export CSV</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MOBILE SECTION ════════════════════════════════════════════════ -->
+<section class="mobile-section" id="mobile">
+  <div class="container">
+    <div class="mobile-inner">
+
+      <div class="mobile-content reveal-left">
+        <div class="section-eyebrow">Application mobile</div>
+        <h2 class="section-title" style="text-align:left;max-width:420px">
+          TunisFlow<br>dans votre <em>poche</em>
+        </h2>
+        <p class="mobile-desc">
+          Scannez vos documents papier depuis votre téléphone et envoyez-les à votre plateforme pour validation, traitement et attribution d'un statut légal. Assurez le suivi complet de votre activité comptable, où que vous soyez.
+        </p>
+
+        <ul class="mobile-features">
+          @for (feat of mobileFeatures(); track feat.title) {
+            <li class="mobile-feat-item">
+              <span class="mobile-feat-icon" [innerHTML]="safeSvg(feat.icon)"></span>
+              <div>
+                <div class="mobile-feat-title">{{ feat.title }}</div>
+                <div class="mobile-feat-desc">{{ feat.desc }}</div>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="mobile-visual reveal-right">
+        <div class="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <!-- Dark mode image -->
+              <img
+                class="phone-img phone-img--dark"
+                src="assets/images/app-dark.jpg"
+                alt="TunisFlow mobile dark mode"
+                loading="lazy"
+              />
+              <!-- Light mode image -->
+              <img
+                class="phone-img phone-img--light"
+                src="assets/images/app-light.jpg"
+                alt="TunisFlow mobile light mode"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <!-- Floating badge -->
+          <div class="phone-badge phone-badge--ocr">
+            <span class="phone-badge-dot"></span>
+            <span>OCR extrait en 1.2s</span>
+          </div>
+          <div class="phone-badge phone-badge--status">
+            <span>✓</span>
+            <span>Statut légal validé</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TARIFS ══════════════════════════════════════════════════════ -->
+<section class="pricing-section" id="tarifs">
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Tarifs transparents</div>
+      <h2 class="section-title">
+        Choisissez le plan<br>
+        adapté à votre <em>entreprise</em>
+      </h2>
+      <p class="section-desc">
+        Tous les plans incluent la conformité TEIF, la signature électronique et la transmission TTN. Sans frais cachés, sans engagement.
+      </p>
+      <!-- Billing toggle -->
+      <div class="billing-toggle">
+        <button class="toggle-btn"
+          [class.active]="billingType() === 'mensuel'"
+          (click)="billingType.set('mensuel')">Mensuel</button>
+        <button class="toggle-btn"
+          [class.active]="billingType() === 'annuel'"
+          (click)="billingType.set('annuel')">
+          Annuel &nbsp;<span class="save-badge">-20%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Plans grid -->
+    <div class="pricing-grid">
+      @for (plan of plans(); track plan.id; let i = $index) {
+        <div class="plan-card reveal"
+          [class.plan-pro]="plan.isPro"
+          [style.--reveal-delay]="(i * 100) + 'ms'">
+
+          @if (plan.isPro) {
+            <div class="popular-badge">Le plus populaire</div>
+          }
+
+          <div class="plan-header">
+            <div class="plan-name">{{ plan.name }}</div>
+            <div class="plan-price">
+              @if (plan.priceMensuel === null) {
+                <span class="price-custom">Sur devis</span>
+              } @else if (plan.priceMensuel === 0) {
+                <span class="price-amount">0</span>
+              } @else {
+                <span class="price-currency">DT</span>
+                <span class="price-amount">{{ getCurrentPrice(plan) }}</span>
+              }
+            </div>
+            @if (plan.priceMensuel !== null && plan.priceMensuel > 0) {
+              <div class="price-period">/ mois HT</div>
+              @if (billingType() === 'annuel') {
+                <div class="price-annual">Au lieu de {{ plan.priceMensuel }} DT/mois</div>
+              }
+            } @else if (plan.priceMensuel === 0) {
+              <div class="price-period">/ mois · Gratuit pour démarrer</div>
+            } @else {
+              <div class="price-period">Tarification personnalisée</div>
+            }
+            <p class="plan-tagline">{{ plan.tagline }}</p>
+          </div>
+
+          <a [href]="plan.ctaLink" class="plan-cta"
+            [class.plan-cta--ey]="plan.ctaStyle === 'ey'"
+            [class.plan-cta--ghost]="plan.ctaStyle === 'ghost'"
+            [class.plan-cta--outline]="plan.ctaStyle === 'outline'">
+            {{ plan.ctaLabel }}
+          </a>
+
+          @if (plan.id !== 'starter') {
+            <div class="plan-section-label">
+              {{ plan.id === 'pro' ? 'Tout Starter, plus :' : 'Tout Pro, plus :' }}
+            </div>
+          } @else {
+            <div class="plan-section-label">Inclus</div>
+          }
+
+          <ul class="plan-features">
+            @for (feat of plan.features; track feat.text) {
+              <li>
+                <span class="feat-icon" 
+                  [class.ok]="feat.type === 'ok'"
+                  [class.ey]="feat.type === 'ey'" 
+                  [class.na]="feat.type === 'na'">
+                  {{ feat.type === 'na' ? '–' : (feat.type === 'ey' ? '★' : '✓') }}
+                </span>
+                <span class="feat-text" 
+                  [innerHTML]="feat.text"
+                  [style.opacity]="feat.type === 'na' ? '0.5' : '1'">
+                </span>
+                @if (feat.badge) {
+                  <span class="feat-badge" 
+                    [class.ai]="feat.badge === 'ai'"
+                    [class.new]="feat.badge === 'new'"
+                    [class.soon]="feat.badge === 'soon'">
+                    {{ feat.badge === 'ai' ? 'IA' : feat.badge === 'new' ? 'API' : 'Bientôt' }}
+                  </span>
+                }
+              </li>
+            }
+          </ul>
+
+          <div class="plan-limits">
+            @for (limit of plan.limits; track limit.label) {
+              <span class="limit-chip">
+                <span class="limit-val">{{ limit.val }}</span> {{ limit.label }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Guarantee strip -->
+    <div class="guarantee-strip reveal">
+      <div class="guarantee-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1L2 4v4C2 11.3 4.7 13.8 8 14.3c3.3-.5 6-3 6-6.3V4L8 1z"
+            stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M5.5 8l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <span><strong>100% conforme</strong> TEIF & TTN</span>
+      </div>
+      <div class="guarantee-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M8 4.5v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <span><strong>Accès immédiat</strong> après validation KYC</span>
+      </div>
+      <div class="guarantee-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1.5" y="1.5" width="13" height="13" rx="3" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M5 8l2.5 2.5 3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <span><strong>Sans engagement</strong> — résiliable à tout moment</span>
+      </div>
+      <div class="guarantee-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5l1.8 3.6 4 .6-2.9 2.8.7 4L8 10.4 4.4 12.5l.7-4L2.2 5.7l4-.6L8 1.5z"
+            stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+        <span>Données hébergées <strong>en Tunisie</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="cta-section" id="contact">
   <div class="container">
     <div class="cta-inner reveal">
@@ -510,7 +838,6 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-logo">
-          <div class="footer-mark">EY</div>
           <div>
             <div class="footer-name">TunisFlow</div>
             <div class="footer-sub">{{ 'LANDING.FOOTER.SUBTITLE' | translate }}</div>

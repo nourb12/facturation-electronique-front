@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bon de Commande Ticket</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 80mm;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border: 2px dashed #ccc;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ccc;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 8px;
+        }
+        .invoice-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 5px;
+        }
+        .invoice-number {
+            font-size: 10px;
+            color: #666;
+        }
+        .party {
+            margin-bottom: 15px;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+        .party-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .items {
+            margin-bottom: 15px;
+            border-top: 1px dashed #ccc;
+            border-bottom: 1px dashed #ccc;
+            padding: 10px 0;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+        .item-name {
+            font-weight: 700;
+        }
+        .item-details {
+            font-size: 9px;
+            color: #666;
+            margin-left: 10px;
+        }
+        .totals {
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .total-row.grand {
+            font-size: 14px;
+            font-weight: 900;
+            border-top: 2px solid #000;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #999;
+            border-top: 2px dashed #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-title">BON DE COMMANDE</div>
+            <div class="invoice-number">BC-2021-015</div>
+            <div class="invoice-number">06/11/2021</div>
+        </div>
+
+        <div class="party">
+            <div class="party-title">COMMANDÉ PAR:</div>
+            Birou Suite<br>
+            La Marsa, Tunisie<br>
+            M.F.: 1729801/F
+        </div>
+
+        <div class="party">
+            <div class="party-title">FOURNISSEUR:</div>
+            Fournisseur XYZ<br>
+            1234567/A<br>
+            2000 Tunis
+        </div>
+
+        <div class="items">
+            <div class="item">
+                <div>
+                    <div class="item-name">Ordinateur portable</div>
+                    <div class="item-details">5 x 2500.000</div>
+                </div>
+                <div>12500.000</div>
+            </div>
+            <div class="item">
+                <div>
+                    <div class="item-name">Écran 24 pouces</div>
+                    <div class="item-details">10 x 450.000</div>
+                </div>
+                <div>4500.000</div>
+            </div>
+            <div class="item">
+                <div>
+                    <div class="item-name">Clavier sans fil</div>
+                    <div class="item-details">10 x 85.000</div>
+                </div>
+                <div>850.000</div>
+            </div>
+        </div>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total HT</span>
+                <span>17.850.000</span>
+            </div>
+            <div class="total-row">
+                <span>TVA 19%</span>
+                <span>3.391.500</span>
+            </div>
+            <div class="total-row grand">
+                <span>TOTAL TTC</span>
+                <span>21.241.500 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Commande ferme<br>
+            Document non contractuel
+        </div>
+    </div>
+</body>
+</html>

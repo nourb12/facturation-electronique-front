@@ -10,6 +10,8 @@
       "SECURITY": "Security",
       "WHY": "Why TunisFlow",
       "AUDIENCE": "Target companies",
+      "MOBILE": "Mobile",
+      "PRICING": "Pricing",
       "CONTACT": "Contact"
     },
     "CTA": {
@@ -188,6 +190,14 @@
           "TITLE": "Real-time compliance score",
           "DESC": "A TEIF compliance score is calculated continuously for every invoice, so you always know where you stand."
         }
+      }
+    },
+    "TOP": {
+      "ITEMS": {
+        "COMPANIES": "Tunisian companies affected",
+        "FINE": "Maximum fine per invoice",
+        "TTN_RATE": "Invoices through TTN / TEIF",
+        "EFFECTIVE_DATE": "Effective date"
       }
     },
     "AUDIENCE": {

@@ -1,6 +1,6 @@
 {
   "APP": {
-    "TAGLINE": "Facturation électronique certifiée",
+    "TAGLINE": "La plateforme fiscale des entreprises tunisiennes",
     "ADMIN_CONSOLE": "Console d'administration",
     "BADGE_TEIF_CERTIFIED": "TEIF 2026 · Certifié DGI"
   },
@@ -18,6 +18,8 @@
     "CLOSE": "Fermer",
     "SAVE": "Enregistrer",
     "SAVING": "Enregistrement…",
+    "DELETE": "Supprimer",
+    "DELETING": "Suppression…",
     "COPIED": "Copié !",
     "COPY": "Copier",
     "CHECK_NOW": "Vérifier maintenant",

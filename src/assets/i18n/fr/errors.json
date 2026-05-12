@@ -15,6 +15,9 @@
     "ACCOUNT_INACTIVE": "Votre compte est inactif. Contactez l'administrateur.",
     "INVALID_TOKEN": "Session invalide. Veuillez vous reconnecter.",
     "INVALID_OTP": "Code OTP invalide ou expiré.",
-    "ACCESS_DENIED": "Accès refusé."
+    "ACCESS_DENIED": "Accès refusé.",
+    "ADMIN_ONLY": "Accès réservé aux administrateurs.",
+    "FINANCIER_ONLY": "Accès réservé au responsable financier.",
+    "INSUFFICIENT_ROLE": "Rôle insuffisant pour accéder à cet espace."
   }
 }

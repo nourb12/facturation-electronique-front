@@ -405,7 +405,7 @@
   }
 
   // Tous les liens
-  a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-ghost) {
+  a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-ghost):not(.btn-outline):not(.btn-outline-light):not(.plan-cta--outline):not(.plan-cta--ghost) {
     color: var(--tp);
     
     &:hover {
@@ -627,17 +627,81 @@
   .hero-typewriter {
     // Garder le fond jaune vif
     background: #FFE600 !important;
-    // MAIS mettre le texte en BLANC pour qu'il soit visible
-    color: #FFFFFF !important;
+    // Texte en NOIR pour meilleur contraste sur fond jaune
+    color: #000000 !important;
   }
 
   .hero-typeword {
-    // Texte blanc sur fond jaune
-    color: #FFFFFF !important;
+    // Texte noir sur fond jaune
+    color: #000000 !important;
   }
 
   .hero-caret {
-    // Curseur blanc aussi
-    background: #FFFFFF !important;
+    // Curseur noir aussi
+    background: #000000 !important;
+  }
+
+  // Tous les autres éléments surlignés en jaune
+  .section-highlight,
+  .db-title-highlight,
+  .title-highlight,
+  .hero-title-highlight {
+    color: #000000 !important;
+  }
+
+  // Nav name (logo TunisFlow)
+  .nav-name {
+    color: #000000 !important;
+  }
+
+  // Eyebrows et badges jaunes
+  .db-eyebrow,
+  .section-eyebrow,
+  .hero-badge {
+    // Si le fond est jaune, le texte doit être noir
+    &[style*="background: #FFE600"],
+    &[style*="background:#FFE600"] {
+      color: #000000 !important;
+    }
+  }
+
+  // Boutons primaires EY
+  .btn-primary,
+  .btn-ey,
+  .db-btn-ey,
+  .btn-modal-ey,
+  .btn-tbar-primary,
+  .dt-btn-new {
+    color: #000000 !important;
+  }
+
+  // Badges et capsules EY
+  .badge--ey,
+  .capsule--ey,
+  .pill--ey {
+    color: #000000 !important;
+  }
+
+  // Marks et avatars
+  .ey-mark,
+  .sb-mark,
+  .topbar-mark,
+  .sb-avatar {
+    color: #000000 !important;
+  }
+
+  // Progress dots
+  .db-progress-dot,
+  .progress-dot {
+    &[style*="background: #FFE600"],
+    &[style*="background:#FFE600"] {
+      color: #000000 !important;
+    }
+  }
+
+  // Éléments sélectionnés avec fond jaune
+  .db-day--selected,
+  .db-slot--selected {
+    color: #000000 !important;
   }
 }

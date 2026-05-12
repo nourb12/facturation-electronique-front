@@ -8,6 +8,7 @@ import {
   CategorieApiService, CategorieDto
 } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 
 type ProduitView = {
   id: string;
@@ -45,6 +46,7 @@ export class ProduitsComponent implements OnInit {
   private produitSvc   = inject(ProduitApiService);
   private categorieSvc = inject(CategorieApiService);
   private toast        = inject(ToastService);
+  private confirmSvc   = inject(ConfirmationService);
 
   loading    = signal(true);
   saving     = signal(false);
@@ -208,6 +210,30 @@ export class ProduitsComponent implements OnInit {
   }
 
   prixTTC(p: ProduitView) { return (p.prix * (1 + (p.tva ?? 0) / 100)).toLocaleString('fr-TN'); }
+
+  confirmDelete(p: ProduitView) {
+    this.confirmSvc.confirm({
+      title: 'Supprimer ce produit ?',
+      message: `Cette action est irréversible. Le produit « ${p.nom} » sera définitivement supprimé.`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      confirmClass: 'danger',
+      onConfirm: () => this.deleteProduit(p.id)
+    });
+  }
+
+  deleteProduit(id: string) {
+    this.produitSvc.supprimer(id).subscribe({
+      next: () => {
+        this.produits.update(list => list.filter(p => p.id !== id));
+        this.refreshCounts();
+        this.toast.success('Produit supprimé.');
+      },
+      error: (err: any) => {
+        this.toast.error(err?.error?.message ?? 'Erreur lors de la suppression.');
+      }
+    });
+  }
 
   private resetForm() {
     this.form = { code: '', libelle: '', description: '', prixUnitaire: 0, tauxTva: 19, type: 'Produit', unite: 'U', categorieId: '' };

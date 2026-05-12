@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">
-        {{ 'ACCOUNTING.TAXES.TITLE_A' | translate }} <em>{{ 'ACCOUNTING.TAXES.TITLE_EM' | translate }}</em>
+        {{ 'ACCOUNTING.TAXES.TITLE_A' | translate }} {{ 'ACCOUNTING.TAXES.TITLE_EM' | translate }}.
       </h1>
       <p class="page-desc">{{ 'ACCOUNTING.TAXES.SUBTITLE' | translate }}</p>
     </div>
@@ -92,11 +92,18 @@
                   }
                   @if (visibleColumns['action']) {
                     <td class="act-col">
-                      <button class="row-action" type="button" (click)="edit(t)" [title]="'COMMON.ACTIONS.EDIT' | translate">
-                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                          <path d="M8.5 2.5l2 2L4 11H2v-2L8.5 2.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-                        </svg>
-                      </button>
+                      <div class="action-buttons">
+                        <button class="row-action" type="button" (click)="edit(t)" [title]="'COMMON.ACTIONS.EDIT' | translate">
+                          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M8.5 2.5l2 2L4 11H2v-2L8.5 2.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+                        <button class="row-action row-action--delete" type="button" (click)="confirmDelete(t)" [title]="'COMMON.ACTIONS.DELETE' | translate">
+                          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                            <path d="M2 3.5h9M5 3.5V2.5h3v1M3.5 3.5l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </button>
+                      </div>
                     </td>
                   }
                 </tr>
@@ -234,14 +241,11 @@
         @if (editId) {
           <button class="btn-ghost" type="button" (click)="resetForm()">{{ 'COMMON.CANCEL' | translate }}</button>
         }
-        <button class="btn-primary" type="button" (click)="save()" [disabled]="!canSave()">
+        <button class="btn-primary" [class.btn-ey]="!editId" type="button" (click)="save()" [disabled]="!canSave()">
           @if (saving()) {
             <span class="btn-spinner"></span>
             {{ 'COMMON.SAVING' | translate }}
           } @else {
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M2 6.5l3.5 3.5 5.5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
             {{ (editId ? 'COMMON.ACTIONS.UPDATE' : 'COMMON.ACTIONS.ADD') | translate }}
           }
         </button>
@@ -250,3 +254,31 @@
 
   </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+@if (deleteConfirm) {
+  <div class="modal-overlay" [@fadeIn] (click)="cancelDelete()">
+    <div class="modal-box" (click)="$event.stopPropagation()" [@slideUp]>
+      <div class="modal-icon modal-icon--danger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6M5 6l1 14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 class="modal-title">{{ 'ACCOUNTING.TAXES.DELETE.TITLE' | translate }}</h3>
+      <p class="modal-message">{{ 'ACCOUNTING.TAXES.DELETE.MESSAGE' | translate:{ name: deleteConfirm.titre } }}</p>
+      <div class="modal-actions">
+        <button class="btn-modal btn-modal--cancel" type="button" (click)="cancelDelete()">
+          {{ 'ACCOUNTING.TAXES.DELETE.CANCEL' | translate }}
+        </button>
+        <button class="btn-modal btn-modal--danger" type="button" (click)="deleteConfirmed()" [disabled]="deleting()">
+          @if (deleting()) {
+            <span class="btn-spinner"></span>
+            {{ 'COMMON.DELETING' | translate }}
+          } @else {
+            {{ 'ACCOUNTING.TAXES.DELETE.CONFIRM' | translate }}
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

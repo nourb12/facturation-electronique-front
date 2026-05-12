@@ -54,28 +54,25 @@ $fm:'JetBrains Mono',monospace;
 }
 .alert-close { margin-left:auto; background:none; border:none; color:$tt; font-size:18px; cursor:pointer; &:hover { color:$ts; } }
 
-.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
-.kpi {
-  background:$surf; border:1px solid $b1; border-radius:14px; padding:16px 16px 13px;
-  position:relative; overflow:hidden; transition:border-color .2s,transform .2s;
-  animation:fadeUp .4s $ease both;
-  &::before { content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent); }
-  &:hover { border-color:$b2; transform:translateY(-2px); }
-  &--ey::before { background:linear-gradient(90deg,transparent,rgba(var(--c-tuniflow-rgb),.3),transparent); }
-  &--ok::before { background:linear-gradient(90deg,transparent,rgba(34,197,94,.3),transparent); }
-  &--warn::before { background:linear-gradient(90deg,transparent,rgba(245,158,11,.3),transparent); }
-  &--info::before { background:linear-gradient(90deg,transparent,rgba(59,130,246,.3),transparent); }
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; }
+.kpi-card {
+  background:$card; border:1px solid $b1; border-radius:16px; padding:16px;
+  display:flex; gap:14px; align-items:flex-start; position:relative; overflow:hidden;
+  transition:border-color 260ms $ease, transform 260ms $ease; cursor:pointer; animation:fadeUp .4s $ease both;
+  &:hover { border-color:rgba(var(--c-tuniflow-rgb),.3); transform:translateY(-2px); }
 }
-.kpi-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
-.kpi-icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-  &--ey { background:$tuniflow-dim; color:$tuniflow; } &--ok { background:$ok2; color:$ok; }
-  &--warn { background:$warn2; color:$warn; } &--info { background:$info2; color:$info; } }
-.kpi-val { font-family:$fm; font-size:1.5rem; font-weight:700; color:$tp; line-height:1; margin-bottom:3px; }
-.kpi-label { font-size:11.5px; color:$ts; }
-.kpi-sub { font-size:10.5px; color:$tt; margin-top:2px; }
-.kpi-delta { font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:99px;
-  &--up { background:$ok2; color:$ok; } &--down { background:$err2; color:$err; } }
+.kpi-icon {
+  width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; font-size:16px;
+  &--grid { background:rgba(var(--c-tuniflow-rgb),.15); color:$tuniflow; }
+  &--chart { background:rgba(34,197,94,.15); color:$ok; }
+  &--alert { background:rgba(245,158,11,.15); color:$warn; }
+  &--service { background:rgba(59,130,246,.15); color:$info; }
+}
+.kpi-body { display:flex; flex-direction:column; gap:6px; flex:1; }
+.kpi-title { font-size:12px; color:$ts; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+.kpi-value { font-family:$fm; font-size:1.5rem; font-weight:700; color:$tp; line-height:1; }
+.kpi-sub { font-size:11px; color:$ts; }
 
 .filter-row { display:flex; align-items:center; margin-bottom:16px; }
 .filter-tabs { display:flex; gap:4px; }
@@ -120,6 +117,27 @@ $fm:'JetBrains Mono',monospace;
   &--ttc { color:$tuniflow; } }
 .pt-tva { font-family:$fm; font-size:11px; color:$ts; }
 .pt-actions { display:flex; gap:5px; }
+
+// Harmonized action buttons
+.action-btn {
+  width:26px; height:26px; border-radius:7px; border:1px solid $b1; background:$surf;
+  color:$tt; display:flex; align-items:center; justify-content:center; cursor:pointer; 
+  transition:all .15s cubic-bezier(.16,1,.3,1);
+  
+  &--edit:hover { 
+    background:$tuniflow-dim; 
+    color:$tuniflow; 
+    border-color:$tuniflow-glow; 
+  }
+  
+  &--delete:hover { 
+    background:$err2; 
+    color:$err; 
+    border-color:rgba(239,68,68,.2); 
+  }
+}
+
+// Legacy support - can be removed later
 .pt-btn {
   width:26px; height:26px; border-radius:7px; border:1px solid $b1; background:$surf;
   color:$tt; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s;
@@ -158,5 +176,7 @@ $fm:'JetBrains Mono',monospace;
 
 
 :host-context([data-theme="light"]) .topbar-title em { color: $tuniflow; }
+
+/* use global topbar styles */
 
 

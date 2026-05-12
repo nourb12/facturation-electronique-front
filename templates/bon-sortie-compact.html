@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bon de Sortie Compact</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .invoice {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8B5CF6;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #7C3AED;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #7C3AED;
+            margin-bottom: 5px;
+        }
+        .invoice-number {
+            font-size: 12px;
+            color: #666;
+        }
+        .parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .party {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 4px;
+        }
+        .party-title {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .party-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .party-details {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #8B5CF6;
+        }
+        th {
+            padding: 8px;
+            text-align: left;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: 700;
+            color: #666;
+        }
+        th:last-child, td:last-child {
+            text-align: right;
+        }
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        td {
+            padding: 10px 8px;
+            color: #333;
+        }
+        .totals {
+            margin-left: auto;
+            width: 280px;
+            font-size: 12px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+        .total-row.grand-total {
+            font-size: 16px;
+            font-weight: 900;
+            color: #7C3AED;
+            border-top: 2px solid #8B5CF6;
+            padding-top: 10px;
+            margin-top: 8px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 9px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <div class="logo">|||Birou</div>
+            <div class="invoice-info">
+                <div class="invoice-title">BON DE SORTIE</div>
+                <div class="invoice-number">BS-2021-005 | 2021-11-06</div>
+            </div>
+        </div>
+
+        <div class="parties">
+            <div class="party">
+                <div class="party-title">Magasin</div>
+                <div class="party-name">Birou Suite</div>
+                <div class="party-details">
+                    Résidence la Zitouna<br>
+                    La Marsa, Tunisie<br>
+                    M.F.: 1729801/F
+                </div>
+            </div>
+
+            <div class="party">
+                <div class="party-title">Destination</div>
+                <div class="party-name">Entrepôt Central</div>
+                <div class="party-details">
+                    Zone Logistique<br>
+                    5, Rue Industrielle<br>
+                    2000 Tunis
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Référence</th>
+                    <th>P.U.</th>
+                    <th>Qté</th>
+                    <th>Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Produit X</td>
+                    <td>REF-X001</td>
+                    <td>200.000</td>
+                    <td>10</td>
+                    <td>2000.000</td>
+                </tr>
+                <tr>
+                    <td>Produit Y</td>
+                    <td>REF-Y002</td>
+                    <td>300.000</td>
+                    <td>5</td>
+                    <td>1500.000</td>
+                </tr>
+                <tr>
+                    <td>Produit Z</td>
+                    <td>REF-Z003</td>
+                    <td>150.000</td>
+                    <td>8</td>
+                    <td>1200.000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div class="total-row">
+                <span>Total Qté</span>
+                <span>23 unités</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total</span>
+                <span>4.700.000 TND</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Sortie de stock pour transfert. Vérifier les quantités avant départ.
+        </div>
+    </div>
+</body>
+</html>

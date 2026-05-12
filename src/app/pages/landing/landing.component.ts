@@ -70,6 +70,20 @@ export interface AuditLog {
   ok: boolean;
 }
 
+export interface PricingPlan {
+  id: string;
+  name: string;
+  priceMensuel: number | null;
+  priceAnnuel: number | null;
+  tagline: string;
+  isPro: boolean;
+  ctaLabel: string;
+  ctaLink: string;
+  ctaStyle: 'ghost' | 'ey' | 'outline';
+  features: { text: string; type: 'ok' | 'ey' | 'na'; badge?: 'ai' | 'new' | 'soon' }[];
+  limits: { val: string; label: string }[];
+}
+
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -109,6 +123,14 @@ export class LandingComponent implements OnInit, OnDestroy {
     { label: 'LANDING.STATS.ITEMS.DGI_TRANSMISSION', target: 2, suffix: 's', fixed: '< 2s', display: '0.0s' },
     { label: 'LANDING.STATS.ITEMS.UBL_VALID', target: null, suffix: '', fixed: 'UBL 2.1', display: 'UBL 2.1' },
     { label: 'LANDING.STATS.ITEMS.PLATFORM_UPTIME', target: 99.9, suffix: '%', fixed: '99.9%', display: '0%' }
+  ]);
+
+  // Top summary cards (animated). labelKey is translated at runtime into label
+  topCards = signal<Array<{labelKey: string; label?: string; valueTarget: number | null; prefix?: string; suffix?: string; display: string; done?: boolean}>>([
+    { labelKey: 'LANDING.TOP.ITEMS.COMPANIES', valueTarget: 380000, suffix: '', display: '0', done: false },
+    { labelKey: 'LANDING.TOP.ITEMS.FINE', valueTarget: 500, suffix: ' DT', display: '0', done: false },
+    { labelKey: 'LANDING.TOP.ITEMS.TTN_RATE', valueTarget: 100, suffix: '%', display: '0%', done: false },
+    { labelKey: 'LANDING.TOP.ITEMS.EFFECTIVE_DATE', valueTarget: 2025, prefix: 'Juil.', suffix: '', display: 'Juil. 2025', done: false }
   ]);
 
   features = signal<Feature[]>([
@@ -174,51 +196,51 @@ export class LandingComponent implements OnInit, OnDestroy {
       title: 'LANDING.WORKFLOW.ITEMS.STEP1.TITLE',
       desc: 'LANDING.WORKFLOW.ITEMS.STEP1.DESC',
       tag: 'LANDING.WORKFLOW.ITEMS.STEP1.TAG',
-      icon: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M11 7v8M7 11h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.3"/><path d="M9 6v6M6 9h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
     },
     {
       num: 2,
       title: 'LANDING.WORKFLOW.ITEMS.STEP2.TITLE',
       desc: 'LANDING.WORKFLOW.ITEMS.STEP2.DESC',
       tag: 'LANDING.WORKFLOW.ITEMS.STEP2.TAG',
-      icon: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L3 6.5v5.5C3 16.6 6.5 20 11 20.5c4.5-.5 8-3.9 8-8.5V6.5L11 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.5 11l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2 5v4.5C2 12.9 5.1 15.9 9 16.5c3.9-.6 7-3.6 7-7V5L9 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 9l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     },
     {
       num: 3,
       title: 'LANDING.WORKFLOW.ITEMS.STEP3.TITLE',
       desc: 'LANDING.WORKFLOW.ITEMS.STEP3.DESC',
       tag: 'LANDING.WORKFLOW.ITEMS.STEP3.TAG',
-      icon: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="2" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 7h8M7 11h8M7 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="1.5" width="13" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 5.5h7M5.5 9h7M5.5 12.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
     },
     {
       num: 4,
       title: 'LANDING.WORKFLOW.ITEMS.STEP4.TITLE',
       desc: 'LANDING.WORKFLOW.ITEMS.STEP4.DESC',
       tag: 'LANDING.WORKFLOW.ITEMS.STEP4.TAG',
-      icon: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 7h6M8 11h6M8 15h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M14.5 16l1 1 2-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1.5" width="12" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M6 5.5h6M6 9h6M6 12.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13.5" cy="13.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M12.2 13.5l.8.8 1.8-1.8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     },
     {
       num: 5,
       title: 'LANDING.WORKFLOW.ITEMS.STEP5.TITLE',
       desc: 'LANDING.WORKFLOW.ITEMS.STEP5.DESC',
       tag: 'LANDING.WORKFLOW.ITEMS.STEP5.TAG',
-      icon: '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h16M13 5l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h14M11 4l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     }
   ]);
 
   diffItems = signal<DiffItem[]>([
     {
-      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2.5 2.5L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.3"/><path d="M7 9l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       title: 'LANDING.WHY.ITEMS.PAPERLESS.TITLE',
       desc: 'LANDING.WHY.ITEMS.PAPERLESS.DESC'
     },
     {
-      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 5.5v3.5l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       title: 'LANDING.WHY.ITEMS.AUTOMATION.TITLE',
       desc: 'LANDING.WHY.ITEMS.AUTOMATION.DESC'
     },
     {
-      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5.3 3.4 8.7 8 9.7C17.6 20.7 21 17.3 21 12V6L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2 5v4.5C2 12.9 5.1 15.9 9 16.5c3.9-.6 7-3.6 7-7V5L9 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6.5 9l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       title: 'LANDING.WHY.ITEMS.SCORE.TITLE',
       desc: 'LANDING.WHY.ITEMS.SCORE.DESC'
     }
@@ -226,7 +248,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 
   audiences = signal<Audience[]>([
     {
-      icon: '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="5" stroke="currentColor" stroke-width="1.5"/><path d="M9 14l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 9l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       title: 'LANDING.AUDIENCE.ITEMS.SME.TITLE',
       desc: 'LANDING.AUDIENCE.ITEMS.SME.DESC',
       points: [
@@ -236,7 +258,7 @@ export class LandingComponent implements OnInit, OnDestroy {
       ]
     },
     {
-      icon: '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M5 25c0-5 4.5-8 9-8s9 3 9 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 17c0-3.5 3-6 5.5-6s5.5 2.5 5.5 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
       title: 'LANDING.AUDIENCE.ITEMS.ACCOUNTANTS.TITLE',
       desc: 'LANDING.AUDIENCE.ITEMS.ACCOUNTANTS.DESC',
       points: [
@@ -246,7 +268,7 @@ export class LandingComponent implements OnInit, OnDestroy {
       ]
     },
     {
-      icon: '<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L3 8v7c0 6.6 4.7 11.4 11 12.5C20.3 26.4 25 21.6 25 15V8L14 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2 5.5v5C2 14.5 5 17 9 17.5c4-.5 7-3 7-7v-5L9 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>',
       title: 'LANDING.AUDIENCE.ITEMS.ENTERPRISE.TITLE',
       desc: 'LANDING.AUDIENCE.ITEMS.ENTERPRISE.DESC',
       points: [
@@ -288,6 +310,114 @@ export class LandingComponent implements OnInit, OnDestroy {
     { action: 'LANDING.SECURITY.LOGS.ITEM5.ACTION', time: 'LANDING.SECURITY.LOGS.ITEM5.TIME', status: 'LANDING.SECURITY.LOGS.ITEM5.STATUS', ok: true }
   ]);
 
+  billingType = signal<'mensuel' | 'annuel'>('mensuel');
+
+  plans = signal<PricingPlan[]>([
+    {
+      id: 'starter',
+      name: 'Starter',
+      priceMensuel: 0,
+      priceAnnuel: 0,
+      tagline: 'Pour tester la plateforme et émettre vos premières factures conformes TEIF.',
+      isPro: false,
+      ctaLabel: 'Commencer gratuitement',
+      ctaLink: '/demande-acces',
+      ctaStyle: 'ghost',
+      features: [
+        { text: 'Jusqu\'à <strong>10 factures/mois</strong>', type: 'ok' },
+        { text: 'Génération <strong>XML TEIF</strong> conforme', type: 'ok' },
+        { text: 'Transmission <strong>TTN / e-Fatoora</strong>', type: 'ok' },
+        { text: 'Export <strong>PDF facture</strong> ', type: 'ok' },
+        { text: '<strong>1 utilisateur</strong>', type: 'ok' }
+      ],
+      limits: [
+        { val: '10', label: 'factures/mois' },
+        { val: '1', label: 'utilisateur' },
+        { val: '1', label: 'entreprise' }
+      ]
+    },
+    {
+      id: 'pro',
+      name: 'Pro',
+      priceMensuel: 149,
+      priceAnnuel: 119,
+      tagline: 'Pour les PME tunisiennes qui ont besoin d\'un workflow fiscal complet et automatisé.',
+      isPro: true,
+      ctaLabel: 'Démarrer Pro →',
+      ctaLink: '/demande-acces',
+      ctaStyle: 'ey',
+      features: [
+        { text: 'Factures <strong>illimitées</strong>', type: 'ey' },
+        { text: 'Jusqu\'à <strong>5 utilisateurs</strong>', type: 'ey' },
+        { text: '<strong>Suivi comptable</strong> complet — journaux, encaissements, décaissements', type: 'ey' },
+        { text: '<strong>Gestion paiements</strong> , relances auto email & SMS', type: 'ey' },
+        { text: '<strong>Pilotage</strong> — CA, taux d\'encaissement', type: 'ey' },
+        { text: 'Export rapports <strong>PDF & CSV</strong>', type: 'ey' },
+        { text: '<strong>Devis & avoirs</strong> (notes de crédit)', type: 'ey' },
+        { text: 'Gestion taxes — <strong>TVA multi-taux, FODEC, timbre</strong>', type: 'ey' },
+        { text: 'Signature électronique <strong>TunTrust</strong>', type: 'ey' },
+        { text: '<strong>Extraction automatique</strong> — extraction documents (CIN, patente, RNE, RIB)', type: 'ey' },
+        { text: 'Score <strong>risque par facture</strong>', type: 'ok' },
+        { text: 'Prédiction <strong>retards de paiement</strong>', type: 'ok' }
+      ],
+      limits: [
+        { val: '∞', label: 'factures' },
+        { val: '5', label: 'utilisateurs' },
+        { val: '1', label: 'entreprise' },
+        { val: '10 Go', label: 'stockage' }
+      ]
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise',
+      priceMensuel: null,
+      priceAnnuel: null,
+      tagline: 'Pour les grandes entreprises et cabinets comptables gérant plusieurs entités.',
+      isPro: false,
+      ctaLabel: 'Contacter l\'équipe →',
+      ctaLink: 'noreply.einvoicingportal@gmail.com',
+      ctaStyle: 'outline',
+      features: [
+        { text: 'Utilisateurs <strong>illimités</strong>', type: 'ok' },
+        { text: 'Multi-entreprises — <strong>tableau de bord centralisé</strong>', type: 'ok' },
+        { text: 'Application <strong>mobile Flutter</strong> + OCR terrain', type: 'ok' },
+        { text: 'Détection <strong>anomalies avancée</strong> + alertes personnalisées', type: 'ok' },
+        { text: 'Stockage <strong>illimité</strong>', type: 'ok' },
+        { text: 'Support prioritaire <strong>dédié</strong>', type: 'ok' },
+        { text: 'Audit complet + <strong>archivage légal 10 ans</strong>', type: 'ok' },
+      ],
+      limits: [
+        { val: '∞', label: 'factures' },
+        { val: '∞', label: 'utilisateurs' },
+        { val: '∞', label: 'entreprises' },
+        { val: '∞', label: 'stockage' }
+      ]
+    }
+  ]);
+
+  mobileFeatures = signal([
+    {
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1.5" width="12" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/><circle cx="9" cy="13.5" r="0.8" fill="currentColor"/><path d="M6 5.5h6M6 8.5h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+      title: 'Capture des documents',
+      desc: 'Photographiez vos documents papier directement depuis votre smartphone.'
+    },
+    {
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 6.5h14M2 10h14M2 13.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><rect x="1.5" y="1.5" width="15" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/></svg>',
+      title: 'Extraction des informations',
+      desc: 'Les documents sont traités et exploitables en arabe, français et anglais.'
+    },
+    {
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="1.5" width="13" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 5.5h7M5.5 9h7M5.5 12.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+      title: 'Pré-remplissage des champs',
+      desc: 'Les informations sont organisées pour faciliter la gestion et le traitement.'
+    },
+    {
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h14M11 4l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      title: 'Validation et envoi',
+      desc: 'Les données sont vérifiées, validées et intégrées à la plateforme avec un statut officiel.'
+    }
+  ]);
+
   constructor(
     private el: ElementRef,
     private zone: NgZone,
@@ -301,6 +431,9 @@ export class LandingComponent implements OnInit, OnDestroy {
     }
 
     this.initHeroTypewriter();
+    // translate top card labels now and whenever language changes
+    this.translateTopCardLabels();
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => this.translateTopCardLabels());
 
     this.zone.runOutsideAngular(() => {
       const loop = () => {
@@ -315,6 +448,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.initObservers();
       this.animateStats();
+      // animateTopCards will be triggered by IntersectionObserver when visible
     }, 200);
   }
 
@@ -386,6 +520,12 @@ export class LandingComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustHtml(icon);
   }
 
+  getCurrentPrice(plan: PricingPlan): string {
+    if (plan.priceMensuel === null) return 'Sur devis';
+    const price = this.billingType() === 'mensuel' ? plan.priceMensuel : plan.priceAnnuel;
+    return price === 0 ? '0' : `${price}`;
+  }
+
   private animateStats(): void {
     if (this.statsAnimated) {
       return;
@@ -426,6 +566,56 @@ export class LandingComponent implements OnInit, OnDestroy {
     };
 
     this.statsRafId = requestAnimationFrame(render);
+  }
+
+  private animateTopCards(): void {
+    const cards = this.topCards();
+    const numeric = cards.map((c, i) => ({ ...c, i })).filter(c => typeof c.valueTarget === 'number') as any[];
+    if (!numeric.length) return;
+
+    const start = performance.now();
+    const duration = 2000; // 2s as requested
+
+    // easeOutCubic
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const render = (time: number) => {
+      const raw = Math.min(1, (time - start) / duration);
+      const progress = ease(raw);
+
+      const next = cards.map(c => {
+        if (typeof c.valueTarget !== 'number') return c;
+        const target = c.valueTarget as number;
+        const value = Math.round(target * progress);
+        // if this card has a prefix (month) we only animate the year number
+        if (c.prefix) {
+          return { ...c, display: `${value}` };
+        }
+
+        const formatted = target >= 1000 ? value.toLocaleString('fr-FR') : `${value}`;
+        const display = c.suffix === '%'
+          ? `${Math.round(target * progress)}%`
+          : c.suffix && c.suffix.trim().length ? `${formatted}${c.suffix}` : `${formatted}`;
+        return { ...c, display };
+      });
+
+      this.topCards.set(next as any);
+
+      if (raw < 1) {
+        requestAnimationFrame(render);
+      } else {
+        // finalize values and mark done to avoid rerun
+        this.topCards.update(all => all.map(c => ({
+          ...c,
+          display: typeof c.valueTarget === 'number'
+            ? (c.prefix ? `${c.valueTarget}` : (c.suffix === '%' ? `${c.valueTarget}${c.suffix}` : ((c.valueTarget as number) >= 1000 ? (c.valueTarget as number).toLocaleString('fr-FR') + (c.suffix ?? '') : `${c.valueTarget}${c.suffix ?? ''}`)))
+            : c.display,
+          done: true
+        })));
+      }
+    };
+
+    requestAnimationFrame(render);
   }
 
   private initHeroTypewriter(): void {
@@ -555,5 +745,28 @@ export class LandingComponent implements OnInit, OnDestroy {
       statsObserver.observe(statsSection);
       this.observers.push(statsObserver);
     }
+
+    // Observe top-cards and trigger animation once when visible
+    const topCardsEl = host.querySelector('.top-cards');
+    if (topCardsEl) {
+      const topObserver = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          this.zone.run(() => this.animateTopCards());
+          topObserver.disconnect();
+        }
+      }, { threshold: 0.2 });
+
+      topObserver.observe(topCardsEl);
+      this.observers.push(topObserver);
+    }
+  }
+
+  private translateTopCardLabels(): void {
+    const cards = this.topCards();
+    const keys = cards.map(c => c.labelKey);
+    this.translate.get(keys).subscribe(translations => {
+      const next = cards.map(c => ({ ...c, label: (translations[c.labelKey] as string) || this.translate.instant(c.labelKey) }));
+      this.topCards.set(next as any);
+    });
   }
 }
