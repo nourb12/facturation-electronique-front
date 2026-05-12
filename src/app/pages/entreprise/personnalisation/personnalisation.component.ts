@@ -367,14 +367,17 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
         { key: 'total_ttc',  label: 'Total TTC',       visible: true,  largeur: null, ordre: 7 },
       ],
       quantiteMode: 'simple',
-      enteteTexte: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
-      piedDePageTexte: '',
+      enteteText: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
+      footerText: '',
       enteteImageUrl: '',
-      signatureUrl: '',
+      sigImageUrl: '',
+      cachetUrl: '',
       signatureActive: true,
       hashActive: true,
       langue: 'fr',
-      arrondi: 'non'
+      arrondi: '2',
+      sigFont: 'Brush Script MT',
+      margins: { top: 10, bottom: 10, left: 10, right: 10 }
     },
     typesDocuments: [
       { key: 'facture',      label: 'Facture',          description: 'Document comptable principal (Art. 18 CTVA)', color: '#E8C84A', prefix: 'FAC', seqKey: 'facture',      defaultTva: 19, delaiPaiement: 30, actif: true  },

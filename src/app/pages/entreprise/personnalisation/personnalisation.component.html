@@ -200,11 +200,72 @@
             <p class="section-desc">Personnalisez l'aspect visuel de vos documents exportés (factures, devis, bons de commande).</p>
           </div>
 
-          <div class="two-col-layout">
-            <div class="left-col">
+          <!-- PDF TABS NAVIGATION -->
+          <div class="pdf-tabs">
+            @for (tab of pdfTabs; track tab.key) {
+              <button class="pdf-tab-btn" 
+                      [class.active]="pdfActiveTab() === tab.key"
+                      (click)="setPdfTab(tab.key)">
+                <i [class]="'ti ' + tab.icon"></i>
+                <span>{{ tab.label }}</span>
+              </button>
+            }
+          </div>
+
+          <!-- TAB 1: MODÈLES PDF -->
+          @if (pdfActiveTab() === 'modeles') {
+            <div class="pdf-tab-body">
+              <div class="setting-block">
+                <div class="block-title">Sélectionnez un modèle</div>
+                <div class="modeles-grid">
+                  @for (modele of modelesDisponibles; track modele.key) {
+                    <div class="modele-card" (click)="setModeleAllTypes(modele.key)">
+                      <div class="modele-preview">
+                        <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                          <rect x="4" y="4" width="52" height="72" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                          <line x1="10" y1="12" x2="50" y2="12" stroke="currentColor" stroke-width="1"/>
+                          <line x1="10" y1="20" x2="50" y2="20" stroke="currentColor" stroke-width="1"/>
+                          <line x1="10" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="1"/>
+                          <line x1="10" y1="36" x2="50" y2="36" stroke="currentColor" stroke-width="1"/>
+                          <line x1="10" y1="44" x2="50" y2="44" stroke="currentColor" stroke-width="1"/>
+                          <line x1="10" y1="52" x2="30" y2="52" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                      </div>
+                      <div class="modele-info">
+                        <div class="modele-name">{{ modele.label }}</div>
+                        <div class="modele-desc">{{ modele.description }}</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
 
               <div class="setting-block">
-                <div class="block-title">Identité visuelle</div>
+                <div class="block-title">Modèles par type de document</div>
+                <div class="modeles-by-type">
+                  @for (docType of pdfTypesDocuments; track docType.key) {
+                    <div class="modele-type-row">
+                      <div class="type-label">
+                        <i [class]="'ti ' + docType.icon" [style.color]="docType.color"></i>
+                        <span>{{ docType.label }}</span>
+                      </div>
+                      <select class="form-select" [(ngModel)]="data.pdf.modeles[docType.key]" (ngModelChange)="markDirty()">
+                        @for (m of modelesDisponibles; track m.key) {
+                          <option [value]="m.key">{{ m.label }}</option>
+                        }
+                      </select>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- TAB 2: IDENTITÉ VISUELLE -->
+          @if (pdfActiveTab() === 'identite') {
+            <div class="pdf-tab-body">
+              <div class="setting-block">
+                <div class="block-title">Logo de l'entreprise</div>
                 <div class="logo-upload-zone" (click)="triggerLogoUpload()">
                   @if (data.pdf.logoUrl) {
                     <img [src]="data.pdf.logoUrl" alt="Logo" class="logo-preview"/>
@@ -245,7 +306,12 @@
                   <option value="Calibri">Calibri</option>
                 </select>
               </div>
+            </div>
+          }
 
+          <!-- TAB 3: MISE EN PAGE -->
+          @if (pdfActiveTab() === 'mise-en-page') {
+            <div class="pdf-tab-body">
               <div class="setting-block">
                 <div class="block-title">Taille du papier</div>
                 <div class="toggle-group">
@@ -256,9 +322,191 @@
                 </div>
               </div>
 
-            </div>
+              <div class="setting-block">
+                <div class="block-title">Marges (mm)</div>
+                <div class="margins-grid">
+                  <div class="form-group">
+                    <label class="form-label">Haut</label>
+                    <input class="form-input" type="number" [(ngModel)]="data.pdf.margins.top" (ngModelChange)="markDirty()" min="0" max="50"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Bas</label>
+                    <input class="form-input" type="number" [(ngModel)]="data.pdf.margins.bottom" (ngModelChange)="markDirty()" min="0" max="50"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Gauche</label>
+                    <input class="form-input" type="number" [(ngModel)]="data.pdf.margins.left" (ngModelChange)="markDirty()" min="0" max="50"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Droite</label>
+                    <input class="form-input" type="number" [(ngModel)]="data.pdf.margins.right" (ngModelChange)="markDirty()" min="0" max="50"/>
+                  </div>
+                </div>
+              </div>
 
-            <div class="right-col">
+              <div class="setting-block">
+                <div class="block-title">Colonnes personnalisées</div>
+                <div class="colonnes-list">
+                  @for (col of data.pdf.colonnes; let i = $index; track i) {
+                    <div class="colonne-item" draggable="true" (dragstart)="onDragStart(i)" (dragover)="onDragOver($event, i)" (dragend)="onDragEnd()">
+                      <span class="drag-handle">⋮⋮</span>
+                      <input class="form-input" [(ngModel)]="col.label" (ngModelChange)="markDirty()" placeholder="Nom colonne"/>
+                      <input class="form-input" [(ngModel)]="col.width" (ngModelChange)="markDirty()" placeholder="Largeur %"/>
+                      <button class="act-btn act-btn--err" (click)="removeColonne(i)">
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                          <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  }
+                </div>
+                <button class="btn-secondary" (click)="addColonnePersonnalisee()">+ Ajouter colonne</button>
+              </div>
+            </div>
+          }
+
+          <!-- TAB 4: EN-TÊTE ET PIED DE PAGE -->
+          @if (pdfActiveTab() === 'entete') {
+            <div class="pdf-tab-body">
+              <div class="setting-block">
+                <div class="block-title">En-tête personnalisé</div>
+                <div class="editor-field">
+                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.enteteText" 
+                    placeholder="Insérez du texte ou des variables…" rows="4" (ngModelChange)="markDirty()"></textarea>
+                  <div class="variables-hint">
+                    <span class="hint-label">Variables disponibles:</span>
+                    <div class="variables-list">
+                      @for (v of getVarsParGroupe(variablesEntete, 'Entreprise'); track v.token) {
+                        <button class="var-btn" (click)="insererVariableEntete(v)">{{ v.label }}</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Image d'en-tête</div>
+                <div class="logo-upload-zone" (click)="triggerEnteteUpload()">
+                  @if (data.pdf.enteteImageUrl) {
+                    <img [src]="data.pdf.enteteImageUrl" alt="En-tête" class="logo-preview"/>
+                    <span class="logo-change">Changer l'image</span>
+                  } @else {
+                    <div class="logo-placeholder">
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect x="2" y="6" width="24" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="9" cy="12" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5 22l5-5 4 4 4-5 5 6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Déposer votre image</span>
+                      <span class="logo-hint">PNG, JPG · max 2 Mo</span>
+                    </div>
+                  }
+                </div>
+                <input #enteteInput type="file" accept="image/*" style="display:none" (change)="onEnteteImageChange($event)"/>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Pied de page personnalisé</div>
+                <div class="editor-field">
+                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.footerText"
+                    placeholder="Toute facture non réglée dans les délais sera majorée d'une pénalité de retard…"
+                    rows="4" (ngModelChange)="markDirty()"></textarea>
+                  <div class="variables-hint">
+                    <span class="hint-label">Variables disponibles:</span>
+                    <div class="variables-list">
+                      @for (v of getVarsParGroupe(variablesPied, 'Entreprise'); track v.token) {
+                        <button class="var-btn" (click)="insererVariablePied(v)">{{ v.label }}</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- TAB 5: CACHET ET SIGNATURE -->
+          @if (pdfActiveTab() === 'signature') {
+            <div class="pdf-tab-body">
+              <div class="setting-block">
+                <div class="block-title">Mode de signature</div>
+                <div class="sig-mode-buttons">
+                  <button class="sig-mode-btn" [class.active]="sigMode() === 'draw'" (click)="setSigMode('draw')">
+                    <i class="ti ti-pencil"></i> Dessiner
+                  </button>
+                  <button class="sig-mode-btn" [class.active]="sigMode() === 'type'" (click)="setSigMode('type')">
+                    <i class="ti ti-keyboard"></i> Taper
+                  </button>
+                  <button class="sig-mode-btn" [class.active]="sigMode() === 'import'" (click)="setSigMode('import')">
+                    <i class="ti ti-upload"></i> Importer
+                  </button>
+                </div>
+              </div>
+
+              @if (sigMode() === 'draw') {
+                <div class="setting-block">
+                  <div class="block-title">Dessiner votre signature</div>
+                  <canvas #sigCanvas class="sig-canvas" width="400" height="150"></canvas>
+                  <button class="btn-secondary" (click)="clearCanvas()">Effacer</button>
+                </div>
+              }
+
+              @if (sigMode() === 'type') {
+                <div class="setting-block">
+                  <div class="block-title">Taper votre signature</div>
+                  <input class="form-input" type="text" [(ngModel)]="sigTyped" (ngModelChange)="markDirty()" placeholder="Votre nom"/>
+                  <select class="form-select" [(ngModel)]="data.pdf.sigFont" (ngModelChange)="markDirty()">
+                    <option value="Brush Script MT">Brush Script MT</option>
+                    <option value="Lucida Handwriting">Lucida Handwriting</option>
+                    <option value="Segoe Print">Segoe Print</option>
+                  </select>
+                </div>
+              }
+
+              @if (sigMode() === 'import') {
+                <div class="setting-block">
+                  <div class="block-title">Importer une image de signature</div>
+                  <div class="logo-upload-zone" (click)="triggerSigImportUpload()">
+                    @if (data.pdf.sigImageUrl) {
+                      <img [src]="data.pdf.sigImageUrl" alt="Signature" class="logo-preview"/>
+                      <span class="logo-change">Changer l'image</span>
+                    } @else {
+                      <div class="logo-placeholder">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                          <path d="M4 24h20M8 12l4-4 4 4 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Déposer votre signature</span>
+                        <span class="logo-hint">PNG, JPG · max 2 Mo</span>
+                      </div>
+                    }
+                  </div>
+                  <input #sigImportInput type="file" accept="image/*" style="display:none" (change)="onSigImageChange($event)"/>
+                </div>
+              }
+
+              <div class="setting-block">
+                <div class="block-title">Cachet de l'entreprise</div>
+                <div class="logo-upload-zone" (click)="triggerLogoUpload()">
+                  @if (data.pdf.cachetUrl) {
+                    <img [src]="data.pdf.cachetUrl" alt="Cachet" class="logo-preview"/>
+                    <span class="logo-change">Changer le cachet</span>
+                  } @else {
+                    <div class="logo-placeholder">
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="14" cy="14" r="7" stroke="currentColor" stroke-width="1"/>
+                      </svg>
+                      <span>Déposer votre cachet</span>
+                      <span class="logo-hint">PNG, JPG · max 2 Mo</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- TAB 6: OPTIONS D'AFFICHAGE -->
+          @if (pdfActiveTab() === 'options') {
+            <div class="pdf-tab-body">
               <div class="setting-block">
                 <div class="block-title">Mentions légales obligatoires (DGI)</div>
                 <div class="form-group">
@@ -277,12 +525,6 @@
                   <label class="form-label">IBAN / RIB bancaire</label>
                   <input class="form-input font-mono" [(ngModel)]="data.pdf.iban" placeholder="TN59 10 006 0351835984788" (ngModelChange)="markDirty()"/>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Pied de page personnalisé</label>
-                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.footerText"
-                    placeholder="Toute facture non réglée dans les délais sera majorée d'une pénalité de retard…"
-                    rows="3" (ngModelChange)="markDirty()"></textarea>
-                </div>
               </div>
 
               <div class="setting-block">
@@ -300,8 +542,27 @@
                   </div>
                 }
               </div>
+
+              <div class="setting-block">
+                <div class="block-title">Langue des documents</div>
+                <select class="form-select" [(ngModel)]="data.pdf.langue" (ngModelChange)="setPdfLangue($event)">
+                  <option value="fr">Français</option>
+                  <option value="en">English</option>
+                  <option value="ar">العربية</option>
+                </select>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Arrondi des montants</div>
+                <select class="form-select" [(ngModel)]="data.pdf.arrondi" (ngModelChange)="setPdfArrondi($event)">
+                  <option value="0">Pas d'arrondi</option>
+                  <option value="1">À l'unité</option>
+                  <option value="2">À 2 décimales</option>
+                  <option value="3">À 3 décimales</option>
+                </select>
+              </div>
             </div>
-          </div>
+          }
         </div>
       }
 

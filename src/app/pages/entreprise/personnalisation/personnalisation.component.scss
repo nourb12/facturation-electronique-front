@@ -916,7 +916,7 @@ $fm: 'JetBrains Mono',monospace;
   flex-wrap: wrap;
 }
 
-.pdf-tab {
+.pdf-tab-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -945,6 +945,13 @@ $fm: 'JetBrains Mono',monospace;
 }
 
 // ─── TAB BODY ────────────────────────────────────────────────────────────────
+.pdf-tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeUp .2s $ease;
+}
+
 .tab-body {
   display: flex;
   flex-direction: column;
@@ -971,6 +978,62 @@ $fm: 'JetBrains Mono',monospace;
 }
 
 // ─── MODELES ─────────────────────────────────────────────────────────────────
+.modeles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.modele-card {
+  background: $surf;
+  border: 1px solid $b1;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+
+  &:hover {
+    border-color: $tuniflow;
+    box-shadow: 0 4px 12px rgba(var(--c-tuniflow-rgb), .15);
+    transform: translateY(-2px);
+  }
+}
+
+.modele-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  margin-bottom: 8px;
+  color: $ts;
+}
+
+.modele-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.modele-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: $tp;
+}
+
+.modele-desc {
+  font-size: 10px;
+  color: $tt;
+  line-height: 1.4;
+}
+
+.modeles-by-type {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .modele-type-row {
   display: flex;
   align-items: center;
@@ -982,7 +1045,7 @@ $fm: 'JetBrains Mono',monospace;
   flex-wrap: wrap;
 }
 
-.modele-type-label {
+.type-label {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -990,54 +1053,14 @@ $fm: 'JetBrains Mono',monospace;
   font-size: 13px;
   font-weight: 600;
   color: $tp;
+  i { font-size: 16px; }
 }
 
-.type-dot {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1.5px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  i { font-size: 15px; }
-}
-
-.modele-choices {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-.modele-chip {
-  padding: 5px 11px;
-  border-radius: 8px;
-  border: 1px solid $b2;
-  background: none;
-  font-family: $fb;
-  font-size: 12px;
-  font-weight: 500;
-  color: $ts;
-  cursor: pointer;
-  transition: all .13s;
-
-  &:hover { background: $b0; color: $tp; }
-
-  &.active {
-    background: $tuniflow-dim;
-    color: $tuniflow;
-    border-color: $b-tuniflow;
-    font-weight: 700;
-  }
-}
-
-// ─── COLOR PREVIEW BAR ────────────────────────────────────────────────────────
-.color-preview-bar {
-  height: 4px;
-  border-radius: 99px;
-  transition: background .2s;
+// ─── MARGINS GRID ────────────────────────────────────────────────────────────
+.margins-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 // ─── COLONNES DRAG & DROP ─────────────────────────────────────────────────────
@@ -1045,9 +1068,10 @@ $fm: 'JetBrains Mono',monospace;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-bottom: 12px;
 }
 
-.colonne-row {
+.colonne-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1067,123 +1091,88 @@ $fm: 'JetBrains Mono',monospace;
   font-size: 16px;
   color: $tt;
   cursor: grab;
+  flex-shrink: 0;
   &:active { cursor: grabbing; }
-}
-
-.col-label {
-  flex: 1;
-  font-size: 13px;
-  color: $tp;
-}
-
-.col-label-input {
-  flex: 1;
-  padding: 4px 8px;
-  font-size: 12px;
 }
 
 // ─── ÉDITEUR CHAMP LIBRE (en-tête / pied de page) ────────────────────────────
 .editor-field {
-  width: 100%;
-  min-height: 60px;
-  padding: 10px 12px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 9px;
-  color: var(--input-text);
-  font-family: $fb;
-  font-size: 13px;
-  line-height: 1.6;
-  outline: none;
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin-bottom: 12px;
-  transition: border .15s, box-shadow .15s;
-
-  &:focus { border-color: $tuniflow; box-shadow: 0 0 0 3px rgba(var(--c-tuniflow-rgb), .13); }
-
-  &:empty::before {
-    content: attr(data-placeholder);
-    color: var(--input-placeholder);
-    pointer-events: none;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-// ─── VARIABLES CHIPS (pied de page / en-tête) ─────────────────────────────────
-.var-groupe-label {
+.variables-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: $b0;
+  border-radius: 9px;
+}
+
+.hint-label {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .08em;
-  color: $tt;
-  margin: 10px 0 5px;
+  color: $ts;
 }
 
-.vars-chips {
+.variables-list {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
-  margin-bottom: 4px;
 }
 
-.var-chip {
+.var-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 4px 9px;
   border-radius: 7px;
   border: 1px solid $b2;
-  background: $b0;
+  background: $surf;
   font-family: $fb;
   font-size: 11.5px;
   font-weight: 500;
   color: $ts;
   cursor: pointer;
   transition: all .13s;
-  i { font-size: 10px; }
+
   &:hover { background: $tuniflow-dim; color: $tuniflow; border-color: $b-tuniflow; }
 }
 
-// ─── SIGNATURE STUDIO ─────────────────────────────────────────────────────────
-.sig-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: start;
-}
-
-.sig-studio {
-  background: $surf;
-  border: 1px solid $b1;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.sig-studio-header {
+// ─── SIGNATURE MODES ──────────────────────────────────────────────────────────
+.sig-mode-buttons {
   display: flex;
-  border-bottom: 1px solid $b0;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.sig-tab {
-  flex: 1;
-  padding: 10px 8px;
-  font-family: $fb;
-  font-size: 12px;
-  font-weight: 500;
-  color: $ts;
-  border: none;
-  background: none;
-  cursor: pointer;
+.sig-mode-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border-bottom: 2px solid transparent;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px solid $b2;
+  background: none;
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 600;
+  color: $ts;
+  cursor: pointer;
   transition: all .13s;
-  i { font-size: 13px; }
+  i { font-size: 14px; }
 
-  &:hover { color: $tp; background: $b0; }
-  &.active { color: $tuniflow; border-bottom-color: $tuniflow; background: $tuniflow-dim; }
+  &:hover { background: $b0; color: $tp; }
+
+  &.active {
+    background: $tuniflow-dim;
+    color: $tuniflow;
+    border-color: $b-tuniflow;
+  }
 }
 
 .sig-canvas {
@@ -1191,155 +1180,11 @@ $fm: 'JetBrains Mono',monospace;
   width: 100%;
   height: 160px;
   background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 9px;
   cursor: crosshair;
   touch-action: none;
-}
-
-.sig-type-zone {
-  padding: 16px;
-}
-
-.sig-type-input {
   margin-bottom: 12px;
-}
-
-.sig-type-preview {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 26px;
-  font-style: italic;
-  color: $tp;
-  text-align: center;
-  padding: 12px;
-  border-bottom: 1.5px solid $b2;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sig-import-zone {
-  margin: 12px;
-  border-radius: 9px;
-}
-
-.sig-footer {
-  padding: 10px 12px;
-  border-top: 1px solid $b0;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  background: $b0;
-}
-
-// ─── SIGNATURE PREVIEW PANEL ──────────────────────────────────────────────────
-.sig-preview-panel {
-  background: $surf;
-  border: 1px solid $b1;
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.sig-doc-mock {
-  background: var(--input-bg);
-  border: 1px solid $b1;
-  border-radius: 10px;
-  padding: 14px;
-  overflow: hidden;
-}
-
-.sig-doc-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-
-.sig-doc-line {
-  height: 6px;
-  background: $b1;
-  border-radius: 3px;
-  &.long  { width: 100%; }
-  &.med   { width: 75%; }
-  &.short { width: 50%; }
-}
-
-.sig-doc-divider {
-  height: 1px;
-  background: $b1;
-  margin: 4px 0;
-}
-
-.sig-doc-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
-  padding-top: 10px;
-  border-top: 1px solid $b0;
-}
-
-.sig-zone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 100px;
-}
-
-.sig-img-preview {
-  max-height: 48px;
-  max-width: 120px;
-  object-fit: contain;
-}
-
-.sig-typed-preview {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 18px;
-  font-style: italic;
-  color: $tp;
-  text-align: center;
-  height: 48px;
-  display: flex;
-  align-items: center;
-}
-
-.sig-empty-hint {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  i { font-size: 28px; color: $tt; }
-}
-
-.sig-underline {
-  width: 100%;
-  height: 1px;
-  background: $b2;
-  margin: 4px 0;
-}
-
-.sig-zone-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: $tt;
-}
-
-.hash-zone {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hash-badge {
-  font-family: $fm;
-  font-size: 9px;
-  color: $ts;
-  background: $b0;
-  border: 1px solid $b1;
-  border-radius: 5px;
-  padding: 3px 7px;
-  word-break: break-all;
-  text-align: center;
 }
 
 // ─── RESPONSIVE PDF ───────────────────────────────────────────────────────────
