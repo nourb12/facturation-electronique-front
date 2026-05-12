@@ -167,7 +167,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       label: 'Documents',
       items: [
         { key: 'numerotation', label: 'Numérotation', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="1" width="10" height="12" rx="1.5"/><line x1="5" y1="4" x2="9" y2="4"/><line x1="5" y1="7" x2="9" y2="7"/><line x1="5" y1="10" x2="7" y2="10"/></svg>' },
-        { key: 'pdf', label: 'PDF & Apparence', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="12" height="12" rx="2"/><path d="M4 7h6M4 4h3"/></svg>' },
+        { key: 'pdf', label: 'PDF et Apparence', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="12" height="12" rx="2"/><path d="M4 7h6M4 4h3"/></svg>' },
         { key: 'types', label: 'Types de documents', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2h6l4 4v6H2V2z"/><path d="M8 2v4h4"/></svg>' },
       ]
     },
@@ -179,19 +179,19 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       ]
     },
     {
-      label: 'Fiscal & Légal',
+      label: 'Fiscal et Légal',
       items: [
-        { key: 'taxes', label: 'Taxes & TVA', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M4.5 9.5l5-5"/><circle cx="5" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="9" r="1" fill="currentColor"/></svg>' },
+        { key: 'taxes', label: 'Taxes et TVA', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M4.5 9.5l5-5"/><circle cx="5" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="9" r="1" fill="currentColor"/></svg>' },
         { key: 'retenues', label: 'Retenues à la source', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1l5.5 9.5H1.5L7 1z"/><path d="M7 5v3M7 9.5v.5" stroke-linecap="round"/></svg>' },
       ]
     },
     {
       label: 'Configuration',
       items: [
-        { key: 'articles', label: 'Articles & Unités', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><line x1="1" y1="6" x2="13" y2="6"/><line x1="5" y1="3" x2="5" y2="11"/></svg>' },
+        { key: 'articles', label: 'Articles et Unités', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><line x1="1" y1="6" x2="13" y2="6"/><line x1="5" y1="3" x2="5" y2="11"/></svg>' },
         { key: 'paiements', label: 'Modes de paiement', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><line x1="1" y1="6" x2="13" y2="6"/></svg>' },
         { key: 'comptabilite', label: 'Comptabilité', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="12" height="12" rx="2"/><line x1="1" y1="5" x2="13" y2="5"/><line x1="5" y1="5" x2="5" y2="13"/></svg>' },
-        { key: 'conditions', label: 'Conditions & Affichage', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2" stroke-linecap="round"/></svg>' },
+        { key: 'conditions', label: 'Conditions et Affichage', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2" stroke-linecap="round"/></svg>' },
         { key: 'webhooks', label: 'Webhooks', badge: '', icon: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3" cy="7" r="2"/><circle cx="11" cy="3" r="2"/><circle cx="11" cy="11" r="2"/><path d="M5 7q4 0 4-4M5 7q4 0 4 4"/></svg>' },
       ]
     }
@@ -202,8 +202,8 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     { key: 'modeles',     label: 'Modèles PDF',           icon: 'ti-layout-grid' },
     { key: 'identite',    label: 'Identité visuelle',      icon: 'ti-palette' },
     { key: 'mise-en-page',label: 'Mise en page',           icon: 'ti-columns' },
-    { key: 'entete',      label: 'En-tête & Pied de page', icon: 'ti-align-left' },
-    { key: 'signature',   label: 'Cachet & Signature',     icon: 'ti-writing-sign' },
+    { key: 'entete',      label: 'En-tête et Pied de page', icon: 'ti-align-left' },
+    { key: 'signature',   label: 'Cachet et Signature',     icon: 'ti-writing-sign' },
     { key: 'options',     label: 'Affichage PDF',          icon: 'ti-adjustments-horizontal' },
   ];
 
@@ -286,7 +286,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
 
   pdfOptions = [
     { key: 'showLogo', label: 'Afficher le logo', hint: 'Logo en haut à gauche de chaque document' },
-    { key: 'showSignature', label: 'Cachet & signature', hint: 'Zone dédiée en bas du document' },
+    { key: 'showSignature', label: 'Cachet et signature', hint: 'Zone dédiée en bas du document' },
     { key: 'showTimbre', label: 'Timbre fiscal automatique', hint: '1 DT si TTC ≥ 1000 DT (LF 2024)' },
     { key: 'showMentionArrete', label: "Mention « Arrêtée la somme de »", hint: 'Montant en lettres obligatoire (DGI)' },
     { key: 'showIban', label: 'IBAN / RIB sur le document', hint: 'Pour faciliter le virement bancaire' },
