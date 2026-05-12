@@ -259,6 +259,6 @@ ACTION REQUISE:
 Rapport généré: 12 Mai 2026
 Statut: ✅ AUDIT COMPLET
 Prochaine révision: Après Phase 1
-Responsable: Équipe Frontend & Backend
+Responsable: Équipe Frontend et Backend
 
 ================================================================================

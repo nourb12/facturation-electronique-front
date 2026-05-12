@@ -195,7 +195,7 @@ ng serve
 
 ---
 
-## 🎨 Design & Harmonisation
+## 🎨 Design et Harmonisation
 
 ### **Polices EY**
 - **Titres** : Playfair Display (serif, élégant)

@@ -71,14 +71,14 @@ TEXTES (Haute lisibilité)
   --tt:              #9CA3AF    Texte tertiaire (gris moyen)
   --tm:              #6B7280    Texte muted (gris foncé)
 
-NAVBAR & SIDEBAR
+NAVBAR et SIDEBAR
 ───────────────────────────────────────────────────────────────────────────
   --navbar-bg:       #3A3A45    Fond navbar (comme site EY)
   --navbar-border:   rgba(255,255,255,.10)
   --sidebar-bg:      #2E2E38    Fond sidebar
   --sidebar-text:    #FFFFFF    Texte sidebar (blanc pur)
 
-INPUTS & FORMS
+INPUTS et FORMS
 ───────────────────────────────────────────────────────────────────────────
   --input-bg:        #3A3A45    Fond inputs
   --input-border:    rgba(255,255,255,.15)

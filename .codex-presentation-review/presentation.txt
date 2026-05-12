@@ -20,7 +20,7 @@ Plateforme intermédiaire TTN pour la gestion de
 
 
 
-                            Membre des Big Four & leader mondial de :
+                            Membre des Big Four et leader mondial de :
                                -l’audit, du conseil, de la fiscalité et des transactions,
                                -Accompagne les entreprises dans leur transformation
                         et leur croissance
@@ -193,7 +193,7 @@ Absence de vérification      manque de                   Manque
 06 - TECHNOLOGIES
 
 
-   Front End         Back End                  DATA & INFRA         IA & OCR
+   Front End         Back End                  DATA et INFRA         IA et OCR
 
 
    Angular17     ASP.NET Core (.NET 8)
@@ -376,7 +376,7 @@ validation entreprises via KYC                                                  
 
 
                                       Activités transversales :
-                                   Tests, CI/CD & Documentation
+                                   Tests, CI/CD et Documentation
 
 
 
@@ -405,7 +405,7 @@ conformité réglementaire TEIF                 XML TEIF                        
 
 
                                                                   Activités transversales :
-                                                               Tests, CI/CD & Documentation
+                                                               Tests, CI/CD et Documentation
 
 
 
@@ -438,7 +438,7 @@ conformité réglementaire TEIF                 XML TEIF                        
 
 
                                                                                                                       Activités transversales :
-                                                                                                                   Tests, CI/CD & Documentation
+                                                                                                                   Tests, CI/CD et Documentation
 
 
 
@@ -470,11 +470,11 @@ conformité réglementaire TEIF                 XML TEIF                        
 
 
 Phase 1 :
-fondation, sécurité et KYC      S1 & S2
+fondation, sécurité et KYC      S1 et S2
 
 
 Phase 2 :
-Cycle de vie des factures                 S3 & S4
+Cycle de vie des factures                 S3 et S4
 electroniques
 
 

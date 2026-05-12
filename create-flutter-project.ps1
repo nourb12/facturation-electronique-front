@@ -59,7 +59,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  # HTTP & API
+  # HTTP et API
   http: ^1.1.0
   dio: ^5.4.0
   
@@ -71,7 +71,7 @@ dependencies:
   shared_preferences: ^2.2.2
   flutter_secure_storage: ^9.0.0
   
-  # JSON & Serialization
+  # JSON et Serialization
   json_annotation: ^4.8.1
   
   # UI Components
@@ -79,7 +79,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   cached_network_image: ^3.3.1
   
-  # Date & Time
+  # Date et Time
   intl: ^0.19.0
   
   # PDF

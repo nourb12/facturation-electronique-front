@@ -42,7 +42,13 @@ export type ReceiptReviewPayload = {
   tiersNom?: string | null;
   fournisseurId?: string | null;
   fournisseurMatriculeFiscal?: string | null;
-  fields: Array<{ key: string; value?: string | null }>;
+  fields: Array<{
+    key: string;
+    value?: string | null;
+    label?: string | null;
+    confidence?: number | null;
+    required?: boolean | null;
+  }>;
 };
 
 export type CategorizeExpensePayload = {

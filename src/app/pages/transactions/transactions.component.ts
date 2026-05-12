@@ -437,6 +437,38 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
+  setReviewFieldLabel(index: number, label: string) {
+    this.receiptDraft.update((draft) => {
+      if (!draft) return draft;
+      const fields = draft.fields.map((field, fieldIndex) =>
+        fieldIndex === index ? { ...field, label } : field
+      );
+      return { ...draft, fields };
+    });
+  }
+
+  addReviewField() {
+    this.receiptDraft.update((draft) => {
+      if (!draft) return draft;
+      const count = draft.fields.filter((field) => field.key.startsWith('custom_')).length + 1;
+      const label = `Champ manuel ${count}`;
+      return {
+        ...draft,
+        fields: [
+          ...draft.fields,
+          {
+            key: `custom_champ_manuel_${Date.now()}`,
+            label,
+            value: '',
+            confidence: 100,
+            required: false,
+            requiresReview: true,
+          },
+        ],
+      };
+    });
+  }
+
   saveReceiptReview() {
     const transaction = this.activeTransaction();
     const draft = this.receiptDraft();
@@ -449,7 +481,13 @@ export class TransactionsComponent implements OnInit {
       tiersNom: draft.tiersNom,
       fournisseurId: draft.fournisseurId,
       fournisseurMatriculeFiscal: draft.fournisseurMatriculeFiscal,
-      fields: draft.fields.map((field) => ({ key: field.key, value: field.value ?? '' })),
+      fields: draft.fields.map((field) => ({
+        key: field.key,
+        label: field.label,
+        value: field.value ?? '',
+        confidence: field.confidence,
+        required: field.required,
+      })),
     }).pipe(catchError(() => of(null))).subscribe({
       next: (updated) => {
         this.detailSaving.set(false);

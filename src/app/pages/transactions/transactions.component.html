@@ -377,7 +377,11 @@
                     @for (field of review.fields; track field.key; let i = $index) {
                       <div class="receipt-field">
                         <div class="receipt-field__header">
-                          <strong>{{ field.label }}</strong>
+                          @if (field.key.startsWith('custom_')) {
+                            <input class="input" type="text" [ngModel]="field.label" (ngModelChange)="setReviewFieldLabel(i, $event)" placeholder="Titre du champ" />
+                          } @else {
+                            <strong>{{ field.label }}</strong>
+                          }
                           <span class="badge" [ngClass]="'badge--' + fieldBadgeClass(field)">
                             {{ fieldBadgeLabel(field) }}
                           </span>
@@ -388,6 +392,9 @@
                   </div>
 
                   <div class="review-inline-actions">
+                    <button class="btn-ghost-sm" type="button" (click)="addReviewField()">
+                      + Ajouter un champ
+                    </button>
                     <button class="btn-primary" type="button" [disabled]="detailSaving()" (click)="saveReceiptReview()">
                       {{ 'TRANSACTIONS.DETAIL.RECEIPT.SAVE' | translate }}
                     </button>
