@@ -65,7 +65,7 @@ export class FacturesScanneesComponent implements OnInit {
   });
 
   readonly confirmedCount = computed(() => {
-    return this.rows().filter(t => t.statut === 'Confirmé' || t.statut === 'Signé').length;
+    return this.rows().filter(t => t.statut === 'Justifiee').length;
   });
 
   readonly errorCount = computed(() => {
