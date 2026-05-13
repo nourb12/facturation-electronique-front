@@ -127,6 +127,19 @@ export class FacturesScanneesComponent implements OnInit {
     this.load();
   }
 
+  setTypeFilter(type: UiTypeFilter): void {
+    this.typeFilter.set(type);
+  }
+
+  getCountByType(type: string): number {
+    return this.rows().filter(r => r.documentType === type).length;
+  }
+
+  onSearchChange(value: string): void {
+    this.search.set(value);
+    this.onFilterChange();
+  }
+
   prevPage() {
     if (this.page() <= 1) return;
     this.page.update((p) => p - 1);
