@@ -5,6 +5,74 @@
       <h1 class="page-title">{{ 'SCANNED_INVOICES.TITLE' | translate }}</h1>
       <p class="page-desc">{{ 'SCANNED_INVOICES.SUBTITLE' | translate:{ total: total() } }}</p>
     </div>
+    <div class="header-actions">
+      <button class="btn-primary" (click)="refreshData()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M1 6.5c0-3 2.4-5.5 5.5-5.5 2.2 0 4 1.3 4.8 3.2M12 6.5c0 3-2.4 5.5-5.5 5.5-2.2 0-4-1.3-4.8-3.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M11.5 4l1.5-1.5M1.5 9l-1.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Actualiser
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--document">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 2h8l3 3v9H3V2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M11 2v3h3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Total scannés</div>
+        <div class="kpi-value">{{ total() }}</div>
+        <div class="kpi-sub">En attente de traitement</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--check">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Confirmés</div>
+        <div class="kpi-value kpi-value--ok">{{ confirmedCount() }}</div>
+        <div class="kpi-sub">Factures validées</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--alert">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M8 5v3M8 10.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Avec erreurs</div>
+        <div class="kpi-value kpi-value--warn">{{ errorCount() }}</div>
+        <div class="kpi-sub">Champs manquants</div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--percent">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.3"/>
+          <circle cx="11" cy="11" r="2" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M11 5L5 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="kpi-body">
+        <div class="kpi-title">Confiance OCR</div>
+        <div class="kpi-value">{{ averageConfidence() }}%</div>
+        <div class="kpi-sub">Moyenne</div>
+      </div>
+    </div>
   </div>
 
   <!-- FILTERS -->
@@ -92,7 +160,7 @@
                 @if (t.tiersNom) {
                   <p class="card-meta">{{ t.tiersNom }}</p>
                 }
-                <p class="card-meta">{{ t.date | date:'dd/MM/yyyy' }} • {{ formatAmount(t.montant) }} {{ t.devise }}</p>
+                <p class="card-meta">{{ t.date | date:'dd/MM/yyyy' }} &bull; {{ formatAmount(t.montant) }} {{ t.devise }}</p>
                 @if (t.missingFieldKeys.length) {
                   <div class="card-warning">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -145,13 +213,13 @@
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <path d="M8 2L3 6.5l5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          {{ 'COMMON.PREVIOUS' | translate }}
+          {{ 'SCANNED_INVOICES.ACTIONS.PREV' | translate }}
         </button>
         <div class="pagination-info">
           <span>{{ page() }}</span> / <span>{{ Math.ceil((total() || 0) / parPage) }}</span>
         </div>
         <button class="btn-secondary" type="button" (click)="nextPage()" [disabled]="page() >= Math.ceil((total() || 0)/parPage)">
-          {{ 'COMMON.NEXT' | translate }}
+          {{ 'SCANNED_INVOICES.ACTIONS.NEXT' | translate }}
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
             <path d="M5 2l5 4.5-5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>

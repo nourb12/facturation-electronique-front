@@ -64,7 +64,27 @@ export class FacturesScanneesComponent implements OnInit {
     });
   });
 
+  readonly confirmedCount = computed(() => {
+    return this.rows().filter(t => t.statut === 'Confirmé' || t.statut === 'Signé').length;
+  });
+
+  readonly errorCount = computed(() => {
+    return this.rows().filter(t => (t.missingFieldKeys?.length ?? 0) > 0).length;
+  });
+
+  readonly averageConfidence = computed(() => {
+    const rows = this.rows();
+    if (rows.length === 0) return 0;
+    const sum = rows.reduce((acc, t) => acc + (t.ocrOverallConfidence ?? 0), 0);
+    return Math.round((sum / rows.length) * 100);
+  });
+
   ngOnInit(): void {
+    this.load();
+  }
+
+  refreshData(): void {
+    this.page.set(1);
     this.load();
   }
 
