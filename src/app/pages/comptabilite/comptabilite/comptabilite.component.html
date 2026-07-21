@@ -1,0 +1,852 @@
+<section class="acct-page">
+  <header class="acct-topbar">
+    <div>
+      <p class="eyebrow">{{ 'ACCOUNTING.BADGE' | translate }}</p>
+      <h1>{{ 'ACCOUNTING.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'ACCOUNTING.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="top-actions">
+      <label class="search-box">
+        <i class="ti ti-search"></i>
+        <input [ngModel]="search()" (ngModelChange)="search.set($event)" [placeholder]="'ACCOUNTING.SEARCH' | translate">
+      </label>
+    </div>
+  </header>
+
+  <nav class="acct-sections" aria-label="Navigation comptabilité">
+    @for (section of sections; track section.key) {
+      <button type="button" class="section-pill" [class.active]="activeSection() === section.key" [attr.data-tone]="section.tone" (click)="go(section.key)">
+        <span><i [class]="'ti ' + section.icon"></i></span>
+        {{ section.label }}
+      </button>
+    }
+  </nav>
+
+  @if (loading()) {
+    <div class="loading-card">
+      <span class="spinner"></span>
+      {{ 'COMMON.LOADING' | translate }}
+    </div>
+  } @else {
+    @if (activeSection() === 'dashboard') {
+      <div class="data-mode" [class.demo]="dataSource() === 'demo'">
+        <i class="ti" [class.ti-broadcast]="dataSource() === 'api'" [class.ti-database]="dataSource() === 'demo'"></i>
+        {{ dataSource() === 'api' ? 'Données en temps réel' : 'Données de démonstration' }}
+      </div>
+      <div class="kpi-grid">
+        @for (kpi of data().kpis; track kpi.key) {
+          <a class="kpi-card" [routerLink]="kpiRoute(kpi)" [attr.data-tone]="kpi.tone">
+            <span class="kpi-icon"><i [class]="'ti ' + kpi.icon"></i></span>
+            <div>
+              <p>{{ kpi.label }}</p>
+              <strong>{{ kpi.type === 'money' ? money(kpi.value) : kpi.value }}</strong>
+              <small>{{ kpi.hint }}</small>
+            </div>
+          </a>
+        }
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="panel panel-wide">
+          <div class="panel-head">
+            <div>
+              <h2>Contrôle conformité</h2>
+              <p>Chaîne facture, paiement, lettrage, TVA, retenue à la source et clôture.</p>
+            </div>
+            <a routerLink="/comptabilite/parametres-fiscaux">Paramètres fiscaux</a>
+          </div>
+          <div class="alert-list">
+            @for (a of data().alertes; track a.code) {
+              <a class="alert-row" [routerLink]="alertLink(a.code)" [attr.data-level]="a.level">
+                <i [class]="'ti ' + a.icon"></i>
+                <div>
+                  <strong>{{ a.title }}</strong>
+                  <span>{{ a.text }}</span>
+                </div>
+                <b>{{ a.deadline }}</b>
+              </a>
+            }
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head compact">
+            <h2>Calendrier fiscal</h2>
+            <span>2026</span>
+          </div>
+          <div class="calendar-list">
+            @for (event of data().calendrierFiscal; track event.code) {
+              <div class="calendar-item">
+                <time>{{ event.echeance }}</time>
+                <div>
+                  <strong>{{ event.label }}</strong>
+                  <span>{{ event.detail }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      </div>
+    }
+
+    @if (activeSection() === 'saisie') {
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Plan comptable tunisien enrichi</h2>
+            <p>Comptes PCG 1997, taxes spécifiques, comptes de retenue, charges et produits courants.</p>
+          </div>
+          <div class="head-actions">
+            <button type="button" class="secondary-action" (click)="openAddAccount()">
+              <i class="ti ti-plus"></i>
+              Ajouter un compte
+            </button>
+            <a routerLink="/comptabilite/taxes">Taxes</a>
+          </div>
+        </div>
+        <div class="responsive-table">
+          <table>
+            <thead><tr><th>Compte</th><th>Intitulé</th><th>Classe</th><th>Nature</th><th>Usage expert</th><th>Solde actuel</th></tr></thead>
+            <tbody>
+              @for (c of filteredPlan(); track c.numero) {
+                <tr>
+                  <td class="mono">{{ c.numero }}</td>
+                  <td><strong>{{ c.intitule }}</strong></td>
+                  <td><span class="class-chip">{{ c.classe }}</span></td>
+                  <td><span class="badge">{{ c.nature }}</span></td>
+                  <td>{{ c.usage }}</td>
+                  <td class="money">{{ soldeCompte(c.numero) ? money(soldeCompte(c.numero)) : '-' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      @if (showAccountModal()) {
+        <div class="modal-backdrop" (click)="closeAddAccount()">
+          <section class="account-modal" role="dialog" aria-modal="true" aria-labelledby="add-account-title" (click)="$event.stopPropagation()">
+            <header>
+              <div>
+                <h2 id="add-account-title">Ajouter un compte personnalisé</h2>
+                <p>Sous-compte PCG à utiliser dans la balance, les écritures et les exports.</p>
+              </div>
+              <button type="button" class="icon-action" aria-label="Fermer" (click)="closeAddAccount()">
+                <i class="ti ti-x"></i>
+              </button>
+            </header>
+
+            <form class="account-form" (ngSubmit)="addCustomAccount()">
+              <label>
+                <span>Numéro</span>
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="6"
+                  [ngModel]="newAccount().numero"
+                  (ngModelChange)="updateAccountField('numero', $event)"
+                  name="numero"
+                  placeholder="706100"
+                  required>
+              </label>
+              <label>
+                <span>Intitulé</span>
+                <input
+                  type="text"
+                  [ngModel]="newAccount().intitule"
+                  (ngModelChange)="updateAccountField('intitule', $event)"
+                  name="intitule"
+                  placeholder="Prestation développement logiciel"
+                  required>
+              </label>
+              <label>
+                <span>Classe</span>
+                <select [ngModel]="newAccount().classe" (ngModelChange)="updateAccountField('classe', $event)" name="classe">
+                  <option value="1">1 - Capitaux</option>
+                  <option value="2">2 - Immobilisations</option>
+                  <option value="3">3 - Stocks</option>
+                  <option value="4">4 - Tiers</option>
+                  <option value="5">5 - Trésorerie</option>
+                  <option value="6">6 - Charges</option>
+                  <option value="7">7 - Produits</option>
+                  <option value="8">8 - Comptes spéciaux</option>
+                  <option value="9">9 - Analytique</option>
+                </select>
+              </label>
+              <label>
+                <span>Nature</span>
+                <input
+                  type="text"
+                  [ngModel]="newAccount().nature"
+                  (ngModelChange)="updateAccountField('nature', $event)"
+                  name="nature"
+                  placeholder="Produits"
+                  required>
+              </label>
+              <label class="wide">
+                <span>Usage</span>
+                <input
+                  type="text"
+                  [ngModel]="newAccount().usage"
+                  (ngModelChange)="updateAccountField('usage', $event)"
+                  name="usage"
+                  placeholder="Facturation de prestations spécifiques">
+              </label>
+
+              @if (accountFormError()) {
+                <p class="form-error">{{ accountFormError() }}</p>
+              }
+
+              <footer>
+                <button type="button" class="ghost-action" (click)="closeAddAccount()">Annuler</button>
+                <button type="submit" class="primary-action" [disabled]="!!accountFormError()">
+                  <i class="ti ti-check"></i>
+                  Ajouter
+                </button>
+              </footer>
+            </form>
+          </section>
+        </div>
+      }
+    }
+
+    @if (activeSection() === 'saisie') {
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Écritures comptables</h2>
+            <p>Écritures générées depuis factures, avoirs, paiements, OCR mobile et opérations bancaires.</p>
+          </div>
+          <div class="head-actions">
+            <button type="button" class="secondary-action" (click)="openManualEntry()">
+              <i class="ti ti-plus"></i>
+              Nouvelle écriture
+            </button>
+            <span class="total-chip">Débit {{ money(total(data().ecritures, 'debit')) }}</span>
+            <span class="total-chip">Crédit {{ money(total(data().ecritures, 'credit')) }}</span>
+            <span class="balance-chip" [class.off]="!isEquilibre(data().ecritures)">
+              {{ isEquilibre(data().ecritures) ? 'Équilibré' : 'Déséquilibré' }}
+            </span>
+          </div>
+        </div>
+        <div class="responsive-table">
+          <table>
+            <thead><tr><th>Date</th><th>Journal</th><th>Pièce</th><th>Compte</th><th>Libellé</th><th>Tiers</th><th>Débit</th><th>Crédit</th><th>Statut</th></tr></thead>
+            <tbody>
+              @for (e of filteredEcritures(); track e.id) {
+                <tr>
+                  <td class="mono">{{ e.date | date:'dd/MM/yyyy' }}</td>
+                  <td><span class="journal-chip">{{ journalLabel(e.journal) }}</span></td>
+                  <td class="mono">{{ e.piece }}</td>
+                  <td class="mono">{{ e.compte }}</td>
+                  <td>{{ e.libelle }}</td>
+                  <td>{{ e.tiers || '-' }}</td>
+                  <td class="money">{{ e.debit ? money(e.debit) : '-' }}</td>
+                  <td class="money">{{ e.credit ? money(e.credit) : '-' }}</td>
+                  <td><span class="status" [ngClass]="accountingStatusClass(e.statut)">{{ e.statut }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      @if (showEntryModal()) {
+        <div class="modal-backdrop" (click)="closeManualEntry()">
+          <section class="account-modal entry-modal" role="dialog" aria-modal="true" aria-labelledby="manual-entry-title" (click)="$event.stopPropagation()">
+            <header>
+              <div>
+                <h2 id="manual-entry-title">Nouvelle écriture manuelle</h2>
+                <p>Opérations diverses, écritures de clôture, provisions, salaires ou régularisations.</p>
+              </div>
+              <button type="button" class="icon-action" aria-label="Fermer" (click)="closeManualEntry()">
+                <i class="ti ti-x"></i>
+              </button>
+            </header>
+
+            <form class="account-form manual-entry-form" (ngSubmit)="addManualEntry()">
+              <label>
+                <span>Date</span>
+                <input type="date" [ngModel]="manualEntry().date" (ngModelChange)="updateManualEntryField('date', $event)" name="entryDate" required>
+              </label>
+              <label>
+                <span>Pièce</span>
+                <input type="text" [ngModel]="manualEntry().piece" (ngModelChange)="updateManualEntryField('piece', $event)" name="entryPiece" required>
+              </label>
+              <label class="wide">
+                <span>Libellé</span>
+                <input type="text" [ngModel]="manualEntry().libelle" (ngModelChange)="updateManualEntryField('libelle', $event)" name="entryLibelle" placeholder="Provision congés payés, salaires, extourne..." required>
+              </label>
+              <label class="wide">
+                <span>Tiers</span>
+                <input type="text" [ngModel]="manualEntry().tiers" (ngModelChange)="updateManualEntryField('tiers', $event)" name="entryTiers" placeholder="Optionnel">
+              </label>
+
+              <div class="entry-lines">
+                <div class="entry-lines-head">
+                  <strong>Lignes débit / crédit</strong>
+                  <button type="button" class="secondary-action" (click)="addManualLine()">
+                    <i class="ti ti-plus"></i>
+                    Ligne
+                  </button>
+                </div>
+                @for (line of manualEntry().lignes; track $index) {
+                  <div class="entry-line">
+                    <label>
+                      <span>Compte</span>
+                      <input type="text" inputmode="numeric" maxlength="6" [ngModel]="line.compte" (ngModelChange)="updateManualLine($index, 'compte', $event)" [name]="'lineCompte' + $index" placeholder="681100">
+                    </label>
+                    <label>
+                      <span>Débit</span>
+                      <input type="number" min="0" step="0.001" [ngModel]="line.debit" (ngModelChange)="updateManualLine($index, 'debit', $event)" [name]="'lineDebit' + $index">
+                    </label>
+                    <label>
+                      <span>Crédit</span>
+                      <input type="number" min="0" step="0.001" [ngModel]="line.credit" (ngModelChange)="updateManualLine($index, 'credit', $event)" [name]="'lineCredit' + $index">
+                    </label>
+                    <button type="button" class="icon-action" aria-label="Supprimer la ligne" [disabled]="manualEntry().lignes.length <= 2" (click)="removeManualLine($index)">
+                      <i class="ti ti-trash"></i>
+                    </button>
+                  </div>
+                }
+              </div>
+
+              <div class="manual-totals">
+                <span>Débit {{ money(manualDebit()) }}</span>
+                <span>Crédit {{ money(manualCredit()) }}</span>
+                <span class="balance-chip" [class.off]="!!manualEntryError()">
+                  {{ manualEntryError() ? 'À équilibrer' : 'Équilibrée' }}
+                </span>
+              </div>
+
+              @if (manualEntryError()) {
+                <p class="form-error">{{ manualEntryError() }}</p>
+              }
+
+              <footer>
+                <button type="button" class="ghost-action" (click)="closeManualEntry()">Annuler</button>
+                <button type="submit" class="primary-action" [disabled]="!!manualEntryError()">
+                  <i class="ti ti-check"></i>
+                  Valider l’écriture
+                </button>
+              </footer>
+            </form>
+          </section>
+        </div>
+      }
+    }
+
+    @if (activeSection() === 'saisie') {
+      <section class="panel journal-tools">
+        <div class="panel-head">
+          <div>
+            <h2>Consultation des journaux</h2>
+            <p>Onglets légaux, période et export du détail des écritures.</p>
+          </div>
+          <div class="head-actions">
+            <button type="button" class="secondary-action export-pdf" (click)="exportJournalPdf()">
+              <i class="ti ti-file-type-pdf"></i>
+              PDF
+            </button>
+            <button type="button" class="secondary-action export-excel" (click)="exportJournalExcel()">
+              <i class="ti ti-file-spreadsheet"></i>
+              Excel
+            </button>
+          </div>
+        </div>
+        <div class="journal-filters">
+          <div class="journal-tabs" role="tablist" aria-label="Journaux">
+            <button type="button" [class.active]="selectedJournal() === ''" (click)="selectJournal('')">Tous</button>
+            @for (j of data().journaux; track j.code) {
+              <button type="button" [class.active]="selectedJournal() === j.code" (click)="selectJournal(j.code)">{{ journalLabel(j.code) }}</button>
+            }
+          </div>
+          <label>
+            <span>Du</span>
+            <input type="date" [ngModel]="dateDebut()" (ngModelChange)="dateDebut.set($event)">
+          </label>
+          <label>
+            <span>Au</span>
+            <input type="date" [ngModel]="dateFin()" (ngModelChange)="dateFin.set($event)">
+          </label>
+          <button type="button" class="ghost-action" (click)="clearJournalFilters()">Réinitialiser</button>
+        </div>
+        <div class="responsive-table journal-detail">
+          <table>
+            <thead><tr><th>Date</th><th>Journal</th><th>Pièce</th><th>Compte</th><th>Libellé</th><th>Tiers</th><th>Débit</th><th>Crédit</th></tr></thead>
+            <tbody>
+              @for (e of journalEcritures(); track e.id) {
+                <tr>
+                  <td class="mono">{{ e.date | date:'dd/MM/yyyy' }}</td>
+                  <td><span class="journal-chip">{{ journalLabel(e.journal) }}</span></td>
+                  <td class="mono">{{ e.piece }}</td>
+                  <td class="mono">{{ e.compte }}</td>
+                  <td>{{ e.libelle }}</td>
+                  <td>{{ e.tiers || '-' }}</td>
+                  <td class="money">{{ e.debit ? money(e.debit) : '-' }}</td>
+                  <td class="money">{{ e.credit ? money(e.credit) : '-' }}</td>
+                </tr>
+              } @empty {
+                <tr><td colspan="8" class="empty-cell">Aucune écriture pour cette sélection.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="cards-grid">
+        @for (j of data().journaux; track j.code) {
+          <button type="button" class="journal-card" (click)="filterJournal(j.code)">
+            <div>
+              <span class="journal-code">{{ journalLabel(j.code) }}</span>
+              <h3>{{ j.label }}</h3>
+              <p>{{ j.role }}</p>
+            </div>
+            <strong>{{ money(j.total) }}</strong>
+            <small>{{ j.nbPieces }} pièces · {{ j.controle }}</small>
+          </button>
+        }
+      </div>
+    }
+
+    @if (activeSection() === 'consultation') {
+      <section class="panel consultation-tools">
+        <div class="panel-head">
+          <div>
+            <h2>Consultation comptable</h2>
+            <p>Balance officielle, grand livre progressif, filtres compte et période.</p>
+          </div>
+          <button type="button" class="ghost-action" (click)="clearConsultationFilters()">Réinitialiser</button>
+        </div>
+        <div class="consultation-filters">
+          <label>
+            <span>Compte grand livre</span>
+            <select [ngModel]="ledgerCompte()" (ngModelChange)="ledgerCompte.set($event)">
+              <option value="">Tous les comptes</option>
+              @for (c of compteOptions(); track c.numero) {
+                <option [value]="c.numero">{{ c.numero }} · {{ c.intitule }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Du</span>
+            <input type="date" [ngModel]="consultationDateDebut()" (ngModelChange)="consultationDateDebut.set($event)">
+          </label>
+          <label>
+            <span>Au</span>
+            <input type="date" [ngModel]="consultationDateFin()" (ngModelChange)="consultationDateFin.set($event)">
+          </label>
+        </div>
+      </section>
+
+      <div class="split-grid consultation-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Balance générale</h2>
+              <p>Total débit / crédit et soldes NCT séparés.</p>
+            </div>
+            <div class="head-actions">
+              <span>{{ data().balance.length }} comptes</span>
+              <span class="balance-chip" [class.off]="!isEquilibre(data().balance)">
+                {{ isEquilibre(data().balance) ? 'Équilibrée' : 'À contrôler' }}
+              </span>
+              <button type="button" class="secondary-action export-pdf" (click)="exportBalancePdf()">PDF</button>
+              <button type="button" class="secondary-action export-excel" (click)="exportBalanceExcel()">Excel</button>
+            </div>
+          </div>
+          <div class="responsive-table">
+            <table>
+              <thead><tr><th>Compte</th><th>Intitulé</th><th>Total débit</th><th>Total crédit</th><th>Solde débiteur</th><th>Solde créditeur</th></tr></thead>
+              <tbody>
+                @for (b of data().balance; track b.compte) {
+                  <tr>
+                    <td class="mono">{{ b.compte }}</td>
+                    <td>{{ b.intitule }}</td>
+                    <td class="money">{{ money(b.debit) }}</td>
+                    <td class="money">{{ money(b.credit) }}</td>
+                    <td class="money">{{ soldeDebiteur(b) ? money(soldeDebiteur(b)) : '-' }}</td>
+                    <td class="money">{{ soldeCrediteur(b) ? money(soldeCrediteur(b)) : '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Grand livre</h2>
+              <p>Solde progressif calculé après chaque mouvement.</p>
+            </div>
+            <div class="head-actions">
+              <span>{{ grandLivreMouvements().length }} lignes</span>
+              <button type="button" class="secondary-action export-pdf" (click)="exportGrandLivrePdf()">PDF</button>
+              <button type="button" class="secondary-action export-excel" (click)="exportGrandLivreExcel()">Excel</button>
+            </div>
+          </div>
+          <div class="responsive-table ledger-table">
+            <table>
+              <thead><tr><th>Date</th><th>Journal</th><th>Pièce</th><th>Compte</th><th>Libellé</th><th>Débit</th><th>Crédit</th><th>Solde progressif</th></tr></thead>
+              <tbody>
+                @for (g of grandLivreMouvements(); track g.id) {
+                  <tr>
+                    <td class="mono">{{ g.date | date:'dd/MM/yyyy' }}</td>
+                    <td><span class="journal-chip">{{ journalLabel(g.journal) }}</span></td>
+                    <td class="mono">{{ g.piece }}</td>
+                    <td><span class="mono">{{ g.compte }}</span><small>{{ g.intitule }}</small></td>
+                    <td>{{ g.libelle }}</td>
+                    <td class="money">{{ g.debit ? money(g.debit) : '-' }}</td>
+                    <td class="money">{{ g.credit ? money(g.credit) : '-' }}</td>
+                    <td class="money">{{ money(g.soldeProgressif) }}</td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="8" class="empty-cell">Aucun mouvement pour cette sélection.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    }
+
+    @if (activeSection() === 'actifs') {
+      <section class="panel">
+        <div class="panel-head">
+          <div><h2>Gestion des actifs immobilisés</h2><p>Familles, taux d’amortissement tunisiens usuels, dotations et valeur nette comptable.</p></div>
+          <div class="head-actions">
+            <button type="button" class="secondary-action" (click)="generateDotationEntries()">
+              <i class="ti ti-file-pencil"></i>
+              Générer dotations
+            </button>
+            <button type="button" class="secondary-action" (click)="openAddAsset()">
+              <i class="ti ti-plus"></i>
+              Ajouter un actif
+            </button>
+          </div>
+        </div>
+        <div class="responsive-table">
+          <table>
+            <thead><tr><th>Actif</th><th>Compte</th><th>Taux</th><th>Acquisition</th><th>Dotation</th><th>VNC</th><th>État</th></tr></thead>
+            <tbody>
+              @for (a of data().actifs; track a.id) {
+                <tr>
+                  <td><strong>{{ a.label }}</strong><small>{{ a.famille }}</small></td>
+                  <td class="mono">{{ a.compte }}</td>
+                  <td>
+                    <label class="rate-field">
+                      <input type="number" min="0" max="100" step="0.01" [ngModel]="a.taux" (ngModelChange)="updateAssetTaux(a.id, $event)">
+                      <span>%</span>
+                    </label>
+                  </td>
+                  <td class="money">{{ money(a.acquisition) }}</td>
+                  <td class="money">{{ money(a.dotation) }}</td>
+                  <td class="money">{{ money(a.vnc) }}</td>
+                  <td><span class="status on">{{ a.statut }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      @if (showAssetModal()) {
+        <div class="modal-backdrop" (click)="closeAddAsset()">
+          <section class="account-modal" role="dialog" aria-modal="true" aria-labelledby="add-asset-title" (click)="$event.stopPropagation()">
+            <header>
+              <div>
+                <h2 id="add-asset-title">Ajouter un actif immobilisé</h2>
+                <p>La dotation annuelle et la VNC sont calculées depuis le taux d’amortissement.</p>
+              </div>
+              <button type="button" class="icon-action" aria-label="Fermer" (click)="closeAddAsset()">
+                <i class="ti ti-x"></i>
+              </button>
+            </header>
+
+            <form class="account-form" (ngSubmit)="addAsset()">
+              <label>
+                <span>Libellé</span>
+                <input type="text" [ngModel]="newAsset().label" (ngModelChange)="updateAssetField('label', $event)" name="assetLabel" placeholder="Serveur de sauvegarde" required>
+              </label>
+              <label>
+                <span>Famille</span>
+                <input type="text" [ngModel]="newAsset().famille" (ngModelChange)="updateAssetField('famille', $event)" name="assetFamille" required>
+              </label>
+              <label>
+                <span>Compte</span>
+                <select [ngModel]="newAsset().compte" (ngModelChange)="updateAssetField('compte', $event)" name="assetCompte">
+                  <option value="213000">213000 - Constructions</option>
+                  <option value="213500">213500 - Logiciels</option>
+                  <option value="218100">218100 - Agencements</option>
+                  <option value="218200">218200 - Transport</option>
+                  <option value="218300">218300 - Informatique</option>
+                </select>
+              </label>
+              <label>
+                <span>Taux</span>
+                <input type="number" min="0" max="100" step="0.01" [ngModel]="newAsset().taux" (ngModelChange)="updateAssetField('taux', $event)" name="assetTaux" required>
+              </label>
+              <label>
+                <span>Acquisition</span>
+                <input type="number" min="0" step="0.001" [ngModel]="newAsset().acquisition" (ngModelChange)="updateAssetField('acquisition', $event)" name="assetAcquisition" required>
+              </label>
+              <label>
+                <span>État</span>
+                <input type="text" [ngModel]="newAsset().statut" (ngModelChange)="updateAssetField('statut', $event)" name="assetStatut">
+              </label>
+
+              @if (assetFormError()) {
+                <p class="form-error">{{ assetFormError() }}</p>
+              }
+
+              <footer>
+                <button type="button" class="ghost-action" (click)="closeAddAsset()">Annuler</button>
+                <button type="submit" class="primary-action" [disabled]="!!assetFormError()">
+                  <i class="ti ti-check"></i>
+                  Ajouter
+                </button>
+              </footer>
+            </form>
+          </section>
+        </div>
+      }
+    }
+
+    @if (activeSection() === 'etats') {
+      <section class="panel states-panel">
+        <div class="panel-head">
+          <div>
+            <h2>États financiers calculés</h2>
+            <p>Bilan NCT, résultat, flux et liasse DGI alimentés depuis la balance et les écritures.</p>
+          </div>
+          <div class="head-actions states-actions">
+            <button type="button" class="secondary-action export-pdf" (click)="exportLiasseDgiPdf()">Liasse DGI PDF</button>
+            <a class="shortcut-link shortcut-blue" routerLink="/comptabilite/declarations/tva">Déclaration TVA</a>
+            <a class="shortcut-link shortcut-green" routerLink="/comptabilite/retenue-source">État 257 RS</a>
+          </div>
+        </div>
+        <div class="states-grid">
+          <article class="state-card state-bilan">
+            <header><h3>Bilan NCT</h3><button type="button" class="secondary-action export-pdf" (click)="exportEtatPdf('bilan')">PDF</button></header>
+            <dl>
+              <div><dt>Total actif</dt><dd>{{ money(etatsFinanciers().bilan.totalActif) }}</dd></div>
+              <div><dt>Total passif</dt><dd>{{ money(etatsFinanciers().bilan.totalPassif) }}</dd></div>
+              <div><dt>Écart contrôle</dt><dd>{{ money(etatsFinanciers().bilan.totalActif - etatsFinanciers().bilan.totalPassif) }}</dd></div>
+            </dl>
+          </article>
+          <article class="state-card state-resultat">
+            <header><h3>Résultat</h3><button type="button" class="secondary-action export-pdf" (click)="exportEtatPdf('resultat')">PDF</button></header>
+            <dl>
+              <div><dt>Produits</dt><dd>{{ money(etatsFinanciers().resultat.produits) }}</dd></div>
+              <div><dt>Charges</dt><dd>{{ money(etatsFinanciers().resultat.charges) }}</dd></div>
+              <div><dt>Résultat net</dt><dd>{{ money(etatsFinanciers().resultat.resultatNet) }}</dd></div>
+            </dl>
+          </article>
+          <article class="state-card state-flux">
+            <header><h3>Flux</h3><button type="button" class="secondary-action export-pdf" (click)="exportEtatPdf('flux')">PDF</button></header>
+            <dl>
+              <div><dt>Encaissements</dt><dd>{{ money(etatsFinanciers().flux.encaissements) }}</dd></div>
+              <div><dt>Décaissements</dt><dd>{{ money(etatsFinanciers().flux.decaissements) }}</dd></div>
+              <div><dt>Flux net</dt><dd>{{ money(etatsFinanciers().flux.fluxNet) }}</dd></div>
+            </dl>
+          </article>
+        </div>
+      </section>
+      <div class="cards-grid reports-grid">
+        @for (etat of data().etats; track etat.code) {
+          <article class="report-card">
+            <i [class]="'ti ' + etat.icon"></i>
+            <h3>{{ etat.label }}</h3>
+            <p>{{ etat.description }}</p>
+            <span>{{ etat.norme }}</span>
+          </article>
+        }
+      </div>
+    }
+
+    @if (activeSection() === 'etats') {
+      <section class="panel exercises-panel">
+        <div class="panel-head">
+          <div><h2>Exercices comptables</h2><p>Ouverture, validation, inventaire, clôture et report à nouveau.</p></div>
+          <div class="head-actions">
+            <button type="button" class="secondary-action" (click)="openNextExercise()">
+              <i class="ti ti-calendar-plus"></i>
+              Ouvrir un exercice
+            </button>
+            <button type="button" class="secondary-action" (click)="closeExercise()">
+              <i class="ti ti-lock-check"></i>
+              Clôturer
+            </button>
+            <button type="button" class="secondary-action" (click)="generateReportANouveau()">
+              <i class="ti ti-transfer"></i>
+              Report à nouveau
+            </button>
+          </div>
+        </div>
+        <div class="exercise-summary">
+          <article><span>Résultat à affecter</span><strong>{{ money(etatsFinanciers().resultat.resultatNet) }}</strong></article>
+          <article><span>Produits à solder</span><strong>{{ money(etatsFinanciers().resultat.produits) }}</strong></article>
+          <article><span>Charges à solder</span><strong>{{ money(etatsFinanciers().resultat.charges) }}</strong></article>
+        </div>
+        <div class="timeline">
+          @for (ex of data().exercices; track ex.code) {
+            <article class="timeline-item" [class.done]="ex.statut === 'Clôturé'">
+              <span></span>
+              <div><strong>{{ ex.label }}</strong><p>{{ ex.detail }}</p></div>
+              <div class="timeline-actions">
+                <b>{{ ex.statut }}</b>
+                @if (ex.code === 'CLOSE') {
+                  <button type="button" class="ghost-action" (click)="closeExercise()">Générer clôture</button>
+                }
+                @if (ex.code === 'OPEN') {
+                  <button type="button" class="ghost-action" (click)="generateReportANouveau()">Générer RAN</button>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+
+    @if (activeSection() === 'etats') {
+      <section class="panel analytic-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Ventilation analytique</h2>
+            <p>Suivi par mois, trimestre ou année avec axes personnalisables.</p>
+          </div>
+          <div class="head-actions">
+            <select class="period-select" [ngModel]="analyticPeriod()" (ngModelChange)="analyticPeriod.set($event)">
+              <option value="mois">Mois</option>
+              <option value="trimestre">Trimestre</option>
+              <option value="annee">Année</option>
+            </select>
+            <button type="button" class="secondary-action action-soft" (click)="openAnalyticAxis()">
+              <i class="ti ti-plus"></i>
+              Ajouter un axe
+            </button>
+          </div>
+        </div>
+      </section>
+      <div class="cards-grid">
+        @for (axe of filteredAnalytique(); track axe.code) {
+          <article [class]="'analytic-card tone-' + ($index % 6)">
+            <div class="analytic-head"><h3>{{ axe.label }}</h3><span>{{ axe.marge }}%</span></div>
+            <p>{{ axe.description }}</p>
+            <div class="progress"><span [style.width.%]="axe.marge"></span></div>
+            <footer><strong>{{ money(axe.produits) }}</strong><small>{{ money(axe.charges) }} charges</small></footer>
+          </article>
+        }
+      </div>
+
+      @if (showAnalyticModal()) {
+        <div class="modal-backdrop" (click)="closeAnalyticAxis()">
+          <section class="account-modal" role="dialog" aria-modal="true" aria-labelledby="add-analytic-title" (click)="$event.stopPropagation()">
+            <header>
+              <div>
+                <h2 id="add-analytic-title">Ajouter un axe analytique</h2>
+                <p>Département, projet, produit, agence ou centre de coût.</p>
+              </div>
+              <button type="button" class="icon-action" aria-label="Fermer" (click)="closeAnalyticAxis()">
+                <i class="ti ti-x"></i>
+              </button>
+            </header>
+            <form class="account-form" (ngSubmit)="addAnalyticAxis()">
+              <label>
+                <span>Code</span>
+                <input type="text" [ngModel]="newAnalytic().code" (ngModelChange)="updateAnalyticField('code', $event)" name="analyticCode" placeholder="PROJ-A" required>
+              </label>
+              <label>
+                <span>Libellé</span>
+                <input type="text" [ngModel]="newAnalytic().label" (ngModelChange)="updateAnalyticField('label', $event)" name="analyticLabel" placeholder="Projet Alpha" required>
+              </label>
+              <label class="wide">
+                <span>Description</span>
+                <input type="text" [ngModel]="newAnalytic().description" (ngModelChange)="updateAnalyticField('description', $event)" name="analyticDescription">
+              </label>
+              <label>
+                <span>Produits annuels</span>
+                <input type="number" min="0" step="0.001" [ngModel]="newAnalytic().produits" (ngModelChange)="updateAnalyticField('produits', $event)" name="analyticProduits">
+              </label>
+              <label>
+                <span>Charges annuelles</span>
+                <input type="number" min="0" step="0.001" [ngModel]="newAnalytic().charges" (ngModelChange)="updateAnalyticField('charges', $event)" name="analyticCharges">
+              </label>
+              @if (analyticFormError()) {
+                <p class="form-error">{{ analyticFormError() }}</p>
+              }
+              <footer>
+                <button type="button" class="ghost-action" (click)="closeAnalyticAxis()">Annuler</button>
+                <button type="submit" class="primary-action" [disabled]="!!analyticFormError()">
+                  <i class="ti ti-check"></i>
+                  Ajouter
+                </button>
+              </footer>
+            </form>
+          </section>
+        </div>
+      }
+    }
+
+    @if (activeSection() === 'fiscal') {
+      <section class="panel fiscal-hero">
+        <div class="panel-head">
+          <div>
+            <h2>Pilotage fiscal</h2>
+            <p>TVA D15, état 257 retenues à la source, liasse DGI et calendrier des échéances.</p>
+          </div>
+          <div class="head-actions">
+            <a class="shortcut-link shortcut-blue" routerLink="/comptabilite/declarations/tva">TVA D15</a>
+            <a class="shortcut-link shortcut-green" routerLink="/comptabilite/retenue-source">État 257</a>
+          </div>
+        </div>
+        <div class="fiscal-metrics">
+          <article>
+            <span>TVA nette due</span>
+            <strong>{{ money(etatsFinanciers().fiscal.tvaNette) }}</strong>
+          </article>
+          <article>
+            <span>RS à reverser</span>
+            <strong>{{ money(etatsFinanciers().fiscal.rsAReverser) }}</strong>
+          </article>
+          <article>
+            <span>Autres taxes</span>
+            <strong>{{ money(etatsFinanciers().fiscal.autresTaxes) }}</strong>
+          </article>
+        </div>
+      </section>
+
+      <div class="cards-grid fiscal-grid">
+        @for (card of fiscalCards(); track card.code) {
+          <a class="fiscal-card" [routerLink]="card.route" [attr.data-tone]="card.tone">
+            <span class="fiscal-card-icon"><i [class]="'ti ' + card.icon"></i></span>
+            <div>
+              <h3>{{ card.title }}</h3>
+              <strong>{{ card.value }}</strong>
+              <p>{{ card.text }}</p>
+            </div>
+            <i class="ti ti-arrow-right"></i>
+          </a>
+        }
+      </div>
+
+      <section class="panel">
+        <div class="panel-head compact">
+          <h2>Calendrier fiscal</h2>
+          <span>Échéances Tunisie</span>
+        </div>
+        <div class="calendar-list">
+          @for (event of data().calendrierFiscal; track event.code) {
+            <div class="calendar-item">
+              <time>{{ event.echeance }}</time>
+              <div>
+                <strong>{{ event.label }}</strong>
+                <span>{{ event.detail }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  }
+</section>

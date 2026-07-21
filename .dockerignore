@@ -1,0 +1,11 @@
+node_modules/
+dist/*
+!dist/tuniflow/
+!dist/tuniflow/**
+.angular/
+.git/
+.codex-temp/
+.codex-presentation-review/
+coverage/
+*.log
+src.zip

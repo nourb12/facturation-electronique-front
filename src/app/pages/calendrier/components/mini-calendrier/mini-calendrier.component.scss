@@ -1,0 +1,9 @@
+$ey: var(--c-tuniflow); $tp: var(--tp); $ts: var(--ts); $tt: var(--tt); $b0: var(--b0);
+.mini-cal { width: 100%; }
+.mini-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.mini-month { font-size: 12px; font-weight: 700; color: $tp; text-transform: capitalize; }
+.mini-nav { background: none; border: none; cursor: pointer; color: $ts; font-size: 14px; padding: 2px 5px; border-radius: 5px; line-height: 1; &:hover { background: $b0; color: $tp; } }
+.mini-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 1px; text-align: center; }
+.mini-day-lbl { font-size: 10px; color: $tt; font-weight: 600; padding: 3px 0; }
+.mini-day { font-size: 11px; color: $ts; padding: 4px 2px; border-radius: 5px; cursor: pointer; line-height: 1.4; position: relative; display: flex; flex-direction: column; align-items: center; &:hover { background: $b0; color: $tp; } &.other { color: $tt; opacity: .5; } &.today { background: $ey; color: var(--tuniflow-btn-text); font-weight: 700; border-radius: 50%; width: 22px; height: 22px; margin: auto; padding: 0; justify-content: center; } &.selected { background: rgba(var(--c-tuniflow-rgb),.15); color: $ey; font-weight: 700; border-radius: 50%; width: 22px; height: 22px; margin: auto; padding: 0; justify-content: center; } }
+.mini-dot { width: 4px; height: 4px; border-radius: 50%; background: $ey; margin-top: 1px; display: block; }

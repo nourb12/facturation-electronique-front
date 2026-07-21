@@ -1,5 +1,5 @@
-// -----------------------------------------------------------------------------
-// ONBOARDING WIZARD — Live Card Preview  [FIXED v2]
+﻿// -----------------------------------------------------------------------------
+// ONBOARDING WIZARD â€” Live Card Preview  [FIXED v2]
 // Corrections : SCSS structure, logo upload, code postal, responsive
 // -----------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ $ease: cubic-bezier(.16,1,.3,1);
 $fast: 160ms $ease;
 $base: 280ms $ease;
 
-$fd: 'Playfair Display', Georgia, serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans', sans-serif;
 $fm: 'JetBrains Mono', monospace;
 
@@ -120,7 +120,7 @@ $panel-w: 280px;
 }
 
 // -----------------------------------------------------------------------------
-// PANNEAU GAUCHE — FIXE
+// PANNEAU GAUCHE â€” FIXE
 // -----------------------------------------------------------------------------
 .left-panel {
   position: sticky;
@@ -179,14 +179,11 @@ $panel-w: 280px;
 .lp-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
   margin-bottom: 28px;
   position: relative;
   z-index: 1;
-
-  &:hover .lp-mark { transform: scale(1.06); }
 }
 
 .lp-mark {
@@ -201,16 +198,20 @@ $panel-w: 280px;
   animation: pulseEY 3.5s ease-in-out infinite;
 }
 
-.lp-wordmark { display: flex; flex-direction: column; min-width: 0; }
+.lp-wordmark { display: flex; flex-direction: column; min-width: 0; max-width: 100%; }
 .lp-name {
-  font-size: 13px; font-weight: 600; color: $tp;
+  font-size: 14px; font-weight: 800; color: $tp;
   line-height: 1.2; display: block;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .lp-sub {
-  font-size: 10px; color: $tt;
-  display: block; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+  font-size: 11px; color: $ts;
+  display: block;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.35;
+  max-width: 210px;
 }
 
 // -- Promesse ------------------------------------------------------------------
@@ -266,7 +267,7 @@ $panel-w: 280px;
   word-break: break-word;
 }
 
-// -- étapes --------------------------------------------------------------------
+// -- Ã©tapes --------------------------------------------------------------------
 .lp-steps {
   display: flex;
   flex-direction: column;
@@ -527,7 +528,7 @@ $panel-w: 280px;
   overflow: hidden;
 }
 
-// FIX: quand un logo est uploadé, l'avatar l'affiche
+// FIX: quand un logo est uploadÃ©, l'avatar l'affiche
 .lc-avatar-logo {
   width: 100%; height: 100%;
   object-fit: cover;
@@ -594,7 +595,7 @@ $panel-w: 280px;
 
 .lc-score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .lc-score-label { font-size: 9px; font-weight: 700; color: $tt; text-transform: uppercase; letter-spacing: .07em; }
-.lc-score-pct   { font-family: $fm; font-size: 11px; color: $tuniflow; font-weight: 700; }
+.lc-score-pct   { font-family: var(--font-number); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; font-size: 11px; color: $tuniflow; font-weight: 700; }
 .lc-score-track { height: 3px; border-radius: $r99; background: $edge; overflow: hidden; }
 .lc-score-fill  {
   height: 100%;
@@ -613,7 +614,7 @@ $panel-w: 280px;
 .wiz-progress { margin-bottom:28px; }
 .wiz-progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .wiz-progress-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: $tt; }
-.wiz-progress-pct   { font-family: $fm; font-size: 11px; color: $tt; }
+.wiz-progress-pct   { font-family: var(--font-number); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; font-size: 11px; color: $tt; }
 .wiz-progress-track { height: 2px; background: $edge; border-radius: $r99; overflow: hidden; }
 .wiz-progress-fill  {
   height: 100%; background: $tuniflow; border-radius: $r99;
@@ -629,7 +630,7 @@ $panel-w: 280px;
 }
 
 // -----------------------------------------------------------------------------
-// EN-TèTES D'éTAPES
+// EN-TÃ¨TES D'Ã©TAPES
 // -----------------------------------------------------------------------------
 .step-header { margin-bottom: 32px; }
 .step-eyebrow {
@@ -701,7 +702,7 @@ $panel-w: 280px;
   &--padded   { padding-left: 46px; }
   &--padded-r { padding-right: 46px; }
 
-  // FIX: logo file input — style natif masqué, remplacé par zone cliquable
+  // FIX: logo file input â€” style natif masquÃ©, remplacÃ© par zone cliquable
   &--file {
     padding: 0;
     background: transparent;
@@ -767,7 +768,7 @@ $panel-w: 280px;
   min-height: 48px;
   padding: 11px 14px;
   border-radius: $r10;
-  border: 1px solid rgba(0, 0, 0, .12);
+  border: 1px solid rgba(203,213,225,.85);
   background: #FFFFFF;
   color: #111827;
   display: flex;
@@ -1073,7 +1074,7 @@ $panel-w: 280px;
 }
 
 // -----------------------------------------------------------------------------
-// CATéGORIES — éTAPE 4
+// CATÃ©GORIES â€” Ã©TAPE 4
 // -----------------------------------------------------------------------------
 .cat-grid {
   display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px;
@@ -1148,7 +1149,7 @@ $panel-w: 280px;
 }
 
 // -----------------------------------------------------------------------------
-// SUCCèS — éTAPE 5
+// SUCCÃ¨S â€” Ã©TAPE 5
 // -----------------------------------------------------------------------------
 .rp-inner--success {
   max-width: 640px;
@@ -1575,14 +1576,14 @@ $panel-w: 280px;
 }
 
 // -----------------------------------------------------------------------------
-// LIGHT MODE — FIX: bloc correctement fermé, AVANT les @media
+// LIGHT MODE â€” FIX: bloc correctement fermÃ©, AVANT les @media
 // -----------------------------------------------------------------------------
 :host-context([data-theme="light"]) {
   .wizard-layout { background: #FFFFFF; color: #111827; }
 
   .left-panel {
     background: var(--sidebar-bg, #fafafa);
-    border-right: 1px solid var(--sidebar-border, rgba(0,0,0,.08));
+    border-right: 1px solid var(--sidebar-border, rgba(203,213,225,.76));
     color: #111827;
   }
 
@@ -1595,7 +1596,7 @@ $panel-w: 280px;
 
   .success-card {
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.08);
+    border-color: rgba(203,213,225,.76);
     box-shadow: 0 24px 54px rgba(15,23,42,.08);
   }
 
@@ -1607,7 +1608,7 @@ $panel-w: 280px;
 
   .success-brand {
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.08);
+    border-color: rgba(203,213,225,.76);
   }
 
   .success-brand-mark {
@@ -1630,28 +1631,28 @@ $panel-w: 280px;
   .success-ref,
   .success-timeline {
     background: #F9FAFB;
-    border-color: rgba(0,0,0,.08);
+    border-color: rgba(203,213,225,.76);
   }
 
   .success-ref-box {
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
   }
 
   .success-tl-node {
     background: #F3F4F6;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     color: #6B7280;
   }
 
   .btn-follow {
     color: #374151;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     background: #FFFFFF;
 
     &:hover {
       color: #111827;
-      border-color: rgba(0,0,0,.16);
+      border-color: rgba(148,163,184,.46);
       background: #F9FAFB;
     }
   }
@@ -1664,7 +1665,7 @@ $panel-w: 280px;
 
   .lp-step-node {
     background: #F1F2F6;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     color: #111827;
   }
 
@@ -1697,7 +1698,7 @@ $panel-w: 280px;
   .form-select {
     color: #111827;
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     option { background: #FFFFFF; color: #111827; }
     &:focus { border-color: rgba(255,230,0,.6); box-shadow: 0 0 0 3px rgba(255,230,0,.08); }
     &::placeholder { color: #9CA3AF; }
@@ -1715,15 +1716,15 @@ $panel-w: 280px;
 
   .logo-upload-zone {
     background: #f9f9f9;
-    border-color: rgba(0,0,0,.15);
+    border-color: rgba(148,163,184,.44);
     &:hover { border-color: rgba(255,230,0,.5); background: rgba(255,230,0,.02); }
   }
-  .logo-upload-icon { background: #F1F2F6; border-color: rgba(0,0,0,.12); color: #6B7280; }
+  .logo-upload-icon { background: #F1F2F6; border-color: rgba(203,213,225,.85); color: #6B7280; }
   .logo-upload-text { color: #374151; span { color: #6B7280; } }
 
   .live-card {
     background: #F3F4F6;
-    border: 1px solid rgba(0,0,0,.08);
+    border: 1px solid rgba(203,213,225,.76);
     box-shadow: 0 12px 32px rgba(0,0,0,.12);
   }
   .lc-brand, .lc-rs-name, .lc-rs-forme,
@@ -1736,14 +1737,14 @@ $panel-w: 280px;
   .surface-el { background: #F1F2F6; }
   .custom-cat {
     background: #f5f5f5;
-    border-color: rgba(0,0,0,.1);
+    border-color: rgba(203,213,225,.8);
   }
   .custom-cat-input { color: #111827; &::placeholder { color: #9CA3AF; } }
-  .cat-card { background: #f9f9f9; border-color: rgba(0,0,0,.08); .cat-card-name { color: #111827; } .cat-card-desc { color: #6B7280; } }
+  .cat-card { background: #f9f9f9; border-color: rgba(203,213,225,.76); .cat-card-name { color: #111827; } .cat-card-desc { color: #6B7280; } }
 }
 
 // -----------------------------------------------------------------------------
-// RESPONSIVE — FIX: à l'extèrieur du bloc light-mode
+// RESPONSIVE â€” FIX: Ã  l'extÃ¨rieur du bloc light-mode
 // -----------------------------------------------------------------------------
 @media (max-width: 1100px) {
   .card-col { display: none; }
@@ -1786,7 +1787,7 @@ $panel-w: 280px;
   .auto-redirect { max-width: 100%; }
 }
 // -----------------------------------------------------------------------------
-// Demande Accés — Ajouts spécifiques
+// Demande AccÃ©s â€” Ajouts spÃ©cifiques
 // -----------------------------------------------------------------------------
 
 .lp-step-desc {
@@ -2094,7 +2095,7 @@ $panel-w: 280px;
 
   .lc-doc-chip {
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.08);
+    border-color: rgba(203,213,225,.76);
     color: #6B7280;
   }
 
@@ -2109,7 +2110,7 @@ $panel-w: 280px;
 
   .doc-card {
     background: #F9FAFB;
-    border-color: rgba(0,0,0,.1);
+    border-color: rgba(203,213,225,.8);
   }
 
   .doc-card__title { color: #111827; }
@@ -2117,7 +2118,7 @@ $panel-w: 280px;
 
   .doc-upload {
     background: #FFFFFF;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
   }
 
   .doc-upload:hover {
@@ -2127,7 +2128,7 @@ $panel-w: 280px;
   .doc-upload__icon {
     background: #F1F2F6;
     color: #111827;
-    border: 1px solid rgba(0,0,0,.08);
+    border: 1px solid rgba(203,213,225,.76);
   }
 
   .doc-upload__text { color: #6B7280; }
@@ -2137,9 +2138,6 @@ $panel-w: 280px;
   .doc-file__name { color: #111827; }
   .doc-file__size { color: #6B7280; }
 
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 .lp-step--clickable {
   cursor: pointer;
@@ -2198,11 +2196,8 @@ $panel-w: 280px;
 .pc-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
   margin-bottom: 40px;
-
-  .lp-mark { animation: none; }
 }
 
 .pc-title {
@@ -2538,7 +2533,7 @@ $panel-w: 280px;
 
   .pc-left {
     background: #FFFFFF;
-    border-color: rgba(0, 0, 0, .08);
+    border-color: rgba(203,213,225,.76);
   }
 
   .pc-title { color: #111827; }
@@ -2546,7 +2541,7 @@ $panel-w: 280px;
 
   .pc-card {
     background: #FAFAFA;
-    border-color: rgba(0, 0, 0, .1);
+    border-color: rgba(203,213,225,.8);
     color: #111827;
 
     &:hover {

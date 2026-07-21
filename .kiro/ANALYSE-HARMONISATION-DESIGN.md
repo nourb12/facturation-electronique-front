@@ -1,7 +1,7 @@
 # 📊 ANALYSE D'HARMONISATION DU DESIGN - WEB & MOBILE
 
 **Date**: 2 Mai 2026  
-**Projet**: EY Invoice Portal (TunisFlow)  
+**Projet**: EY Invoice Portal (TuniFlow)  
 **Plateformes**: Web (Angular) + Mobile (Flutter)
 
 ---

@@ -1,466 +1,541 @@
 <div class="page-wrap" [@pageIn]>
-
-  <!-- ══════════════════════════════════════════════════════════
-       PAGE HEADER — même style que Paramètres de personnalisation
-  ══════════════════════════════════════════════════════════ -->
-  <div class="page-header">
+  <header class="page-header">
     <div>
+      <div class="breadcrumb">Collaborateurs <span>›</span> {{ getCurrentViewLabel() }}</div>
       <h1 class="page-title">Collaborateurs</h1>
-      <p class="page-desc">Gestion des accès · {{ getCurrentViewLabel() }}</p>
+      <p class="page-desc">Pilotez les accès, les rôles, les permissions et le journal d’activité de l’entreprise.</p>
     </div>
     <div class="header-actions">
-      <button class="btn-secondary" (click)="showView('roles')">
-        <i class="ti ti-shield-check" aria-hidden="true"></i> Gérer les rôles
-      </button>
-      <button class="btn-primary btn-ey" (click)="inviteModal=true">
-        <i class="ti ti-user-plus" aria-hidden="true"></i> Inviter un membre
+      <button class="btn-primary btn-primary--ey" type="button" (click)="inviteModal.set(true)">
+        <i class="ti ti-user-plus" aria-hidden="true"></i>
+        Inviter un membre
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- ══════════════════════════════════════════════════════════
-       LAYOUT GRID — même structure que Paramètres
-  ══════════════════════════════════════════════════════════ -->
   <div class="content-layout">
-
-    <!-- ══════════════════════════════════════════════════════
-         SIDEBAR NAV — même style que perso-nav
-    ══════════════════════════════════════════════════════ -->
-    <nav class="side-nav">
-      <div class="nav-group">
-        <span class="nav-section-label">Collaborateurs</span>
-        <button
-          *ngFor="let item of nav"
-          class="nav-item"
-          [class.active]="activeView() === item.id"
-          (click)="showView(item.id)"
-        >
-          <span class="nav-item-icon">
-            <i class="ti ti-{{ item.icon }}" aria-hidden="true"></i>
-          </span>
-          <span class="nav-item-label">{{ item.label }}</span>
-        </button>
-      </div>
+    <nav class="side-nav" aria-label="Navigation collaborateurs">
+      <span class="nav-section-label">Collaborateurs</span>
+      <button
+        *ngFor="let item of nav"
+        class="nav-item"
+        type="button"
+        [class.active]="activeView() === item.id"
+        (click)="showView(item.id)"
+      >
+        <i class="ti ti-{{ item.icon }}" aria-hidden="true"></i>
+        <span>{{ item.label }}</span>
+      </button>
     </nav>
 
-    <!-- ══════════════════════════════════════════════════════
-         MAIN CONTENT
-    ══════════════════════════════════════════════════════ -->
     <main class="main-content">
-
-    <!-- ── VUE D'ENSEMBLE ──────────────────────────────────── -->
-    <section *ngIf="activeView() === 'overview'" [@fadeIn]>
-
-      <!-- KPI cards -->
-      <div class="kpi-grid">
-        <div class="kpi-card" *ngFor="let k of kpis" [attr.title]="k.tooltip">
-          <div class="kpi-icon" [ngClass]="'kpi-icon--' + k.iconClass">
-            <i class="ti ti-{{ k.icon}}" aria-hidden="true"></i>
-          </div>
-          <div class="kpi-body">
-            <div class="kpi-title">{{ k.label }}</div>
-            <div class="kpi-value">{{ k.val }}</div>
-            <div class="kpi-sub">{{ k.sub }}</div>
-          </div>
-        </div>
+      <div *ngIf="loading()" class="skeleton-grid" [@fadeIn]>
+        <div class="skeleton-card" *ngFor="let i of [1,2,3,4]"></div>
       </div>
 
-      <!-- Charts row -->
-      <div class="charts-row">
-
-        <!-- Top performers -->
-        <div class="chart-card">
-          <div class="chart-head">
-            <span>Top réalisateurs d'actions</span>
-            <span class="chart-period">30 derniers jours</span>
-          </div>
-          <div class="bar-list">
-            <div class="bar-item" *ngFor="let a of topActions">
-              <div class="bar-avatar" [style.background]="a.color + '22'" [style.color]="a.color">
-                {{ getInitials(a.name) }}
-              </div>
-              <span class="bar-name">{{ a.name }}</span>
-              <div class="bar-track">
-                <div class="bar-fill" [style.width.%]="a.pct" [style.background]="a.color"></div>
-              </div>
-              <span class="bar-count">{{ a.val }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action types donut (SVG) -->
-        <div class="chart-card">
-          <div class="chart-head">
-            <span>Répartition par type</span>
-            <span class="chart-period">Total : 142 actions</span>
-          </div>
-          <div class="donut-wrap">
-            <svg width="110" height="110" viewBox="0 0 110 110" role="img" aria-label="Répartition des actions par type">
-              <circle cx="55" cy="55" r="40" fill="none" stroke="#1D9E75" stroke-width="18"
-                stroke-dasharray="100.5 150.8" stroke-dashoffset="0" stroke-linecap="butt"/>
-              <circle cx="55" cy="55" r="40" fill="none" stroke="#D4537E" stroke-width="18"
-                stroke-dasharray="50.3 201"  stroke-dashoffset="-100.5" stroke-linecap="butt"/>
-              <circle cx="55" cy="55" r="40" fill="none" stroke="#378ADD" stroke-width="18"
-                stroke-dasharray="60.3 190.8" stroke-dashoffset="-150.8" stroke-linecap="butt"/>
-              <circle cx="55" cy="55" r="40" fill="none" stroke="#EF9F27" stroke-width="18"
-                stroke-dasharray="40.2 211" stroke-dashoffset="-211.1" stroke-linecap="butt"/>
-            </svg>
-            <div class="donut-legend">
-              <div class="legend-item" *ngFor="let t of actionTypes">
-                <span class="legend-sq" [style.background]="t.color"></span>
-                <span class="legend-name">{{ t.label }}</span>
-                <span class="legend-pct">{{ t.pct }}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Recent activity -->
-      <div class="section-title">Activité récente</div>
-      <div class="activity-list">
-        <div class="act-row" *ngFor="let a of recentActivity">
-          <div class="act-icon" [ngClass]="'act-icon--' + actIconClass(a.type)">
-            <i class="ti ti-{{ actIcon(a.type) }}" aria-hidden="true"></i>
-          </div>
-          <div class="act-body">
-            <span class="act-who">{{ a.who }}</span>
-            <span class="act-what"> {{ a.what }}</span>
-          </div>
-          <span class="act-time">{{ a.time }}</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── MEMBRES ────────────────────────────────────────── -->
-    <section *ngIf="activeView() === 'membres'" [@fadeIn]>
-      <div class="view-header">
-        <div>
-          <h2 class="view-title">Membres</h2>
-          <p class="view-desc">{{ membres().length }} collaborateurs enregistrés</p>
-        </div>
-        <div class="header-actions">
-          <div class="search-wrap">
-            <i class="ti ti-search" aria-hidden="true"></i>
-            <input type="text" placeholder="Rechercher..." [(ngModel)]="searchQuery"/>
-          </div>
-        </div>
-      </div>
-
-      <div class="membres-table-wrap">
-        <table class="membres-table">
-          <thead>
-            <tr>
-              <th>Membre</th>
-              <th>Rôle</th>
-              <th>Statut</th>
-              <th>Actions (30j)</th>
-              <th>Dernière connexion</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let m of filteredMembres()">
-              <td>
-                <div class="member-cell">
-                  <div class="avatar" [style.background]="m.color" [style.color]="m.tcolor">{{ m.initials }}</div>
-                  <span class="member-name">{{ m.name }}</span>
-                </div>
-              </td>
-              <td>
-                <span class="role-badge" [style.background]="m.color" [style.color]="m.tcolor">
-                  {{ m.roleName }}
-                </span>
-              </td>
-              <td>
-                <span class="statut-badge" [ngClass]="'statut--' + getStatutClass(m.statut)">
-                  <span class="statut-dot"></span>{{ m.statut }}
-                </span>
-              </td>
-              <td class="mono">{{ m.actions30 }}</td>
-              <td class="muted">{{ m.lastLogin }}</td>
-              <td>
-                <div class="row-actions">
-                  <button class="icon-btn" title="Permissions" (click)="editRolePerms(m.roleId)">
-                    <i class="ti ti-key" aria-hidden="true"></i>
-                  </button>
-                  <button class="icon-btn" [title]="m.statut === 'Actif' ? 'Suspendre' : 'Réactiver'"
-                    (click)="toggleStatut(m)">
-                    <i class="ti" [ngClass]="m.statut === 'Actif' ? 'ti-lock' : 'ti-lock-open'" aria-hidden="true"></i>
-                  </button>
-                  <button class="icon-btn icon-btn--danger" title="Supprimer" (click)="supprimerMembre(m.id)">
-                    <i class="ti ti-trash" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ── RÔLES ──────────────────────────────────────────── -->
-    <section *ngIf="activeView() === 'roles'" [@fadeIn]>
-      <div class="view-header">
-        <div>
-          <h2 class="view-title">Rôles</h2>
-          <p class="view-desc">Gérez les profils d'accès de votre équipe</p>
-        </div>
-        <button class="btn-primary" (click)="newRoleOpen=!newRoleOpen">
-          <i class="ti ti-plus" aria-hidden="true"></i> Nouveau rôle
-        </button>
-      </div>
-
-      <!-- New role form -->
-      <div class="new-role-form" *ngIf="newRoleOpen" [@fadeIn]>
-        <div class="nrf-row">
-          <div class="form-group">
-            <label class="form-label">Nom du rôle <span class="req">*</span></label>
-            <input type="text" class="form-input" placeholder="Ex : Auditeur interne" [(ngModel)]="newRoleForm.name"/>
-          </div>
-          <div class="form-group" style="flex:2">
-            <label class="form-label">Description</label>
-            <input type="text" class="form-input" placeholder="Responsabilités de ce rôle..." [(ngModel)]="newRoleForm.desc"/>
-          </div>
-        </div>
-        <div class="nrf-footer">
-          <button class="btn-secondary" (click)="newRoleOpen=false">Annuler</button>
-          <button class="btn-primary" (click)="addRole()">
-            <i class="ti ti-check" aria-hidden="true"></i> Créer le rôle
+      <section *ngIf="!loading() && activeView() === 'overview'" [@fadeIn]>
+        <div class="kpi-grid">
+          <button class="kpi-card" type="button" *ngFor="let k of kpis()" (click)="k.action()">
+            <span class="kpi-icon" [ngClass]="'kpi-icon--' + k.tone">
+              <i class="ti ti-{{ k.icon }}" aria-hidden="true"></i>
+            </span>
+            <span class="kpi-body">
+              <span class="kpi-title">{{ k.label }}</span>
+              <strong class="kpi-value">{{ k.val }}</strong>
+              <span class="kpi-sub">{{ k.sub }}</span>
+            </span>
           </button>
         </div>
-      </div>
 
-      <div class="roles-grid">
-        <div class="role-card" *ngFor="let r of roles()">
-          <div class="role-card-head">
-            <div class="role-icon-wrap" [style.background]="r.color">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" [attr.stroke]="r.textColor">
-                <ng-container [ngSwitch]="r.icon">
-                  <g *ngSwitchCase="'crown'">
-                    <path d="M2 12l2-6 3 3 2-4 2 4 3-3 2 6H2z" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M2 12h14v2H2z" stroke-width="1.3"/>
-                  </g>
-                  <g *ngSwitchCase="'calculator'">
-                    <rect x="3" y="2" width="12" height="14" rx="2" stroke-width="1.3"/>
-                    <path d="M6 5h6M6 8h2M10 8h2M6 11h2M10 11h2M6 14h2M10 14h2" stroke-width="1.3" stroke-linecap="round"/>
-                  </g>
-                  <g *ngSwitchCase="'briefcase'">
-                    <rect x="2" y="6" width="14" height="9" rx="2" stroke-width="1.3"/>
-                    <path d="M6 6V4a1 1 0 011-1h4a1 1 0 011 1v2M2 10h14" stroke-width="1.3"/>
-                  </g>
-                  <g *ngSwitchCase="'box'">
-                    <path d="M2 6l7-3 7 3v8l-7 3-7-3V6z" stroke-width="1.3" stroke-linejoin="round"/>
-                    <path d="M2 6l7 3m0 0l7-3m-7 3v9" stroke-width="1.3"/>
-                  </g>
-                  <g *ngSwitchDefault>
-                    <circle cx="9" cy="6" r="3" stroke-width="1.3"/>
-                    <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-width="1.3" stroke-linecap="round"/>
-                  </g>
-                </ng-container>
+        <div class="charts-row">
+          <article class="chart-card">
+            <div class="chart-head">
+              <div>
+                <strong>Actions par collaborateur</strong>
+                <span>30 derniers jours</span>
+              </div>
+            </div>
+            <div class="bar-list">
+              <button class="bar-item" type="button" *ngFor="let a of topActions()" (click)="filterActivityByMember(a.id)">
+                <span class="bar-avatar" [style.background]="a.color + '22'" [style.color]="a.color">{{ a.initials }}</span>
+                <span class="bar-name">
+                  <strong>{{ a.name }}</strong>
+                  <small>{{ a.role }}</small>
+                </span>
+                <span class="bar-track">
+                  <span class="bar-fill" [style.width.%]="a.pct" [style.background]="a.color"></span>
+                </span>
+                <span class="bar-count">
+                  <strong>{{ a.actions30 }}</strong>
+                  <small>actions</small>
+                </span>
+              </button>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <div class="chart-head">
+              <div>
+                <strong>Répartition par module</strong>
+                <span>Donut cliquable pour filtrer le journal</span>
+              </div>
+            </div>
+            <div class="donut-wrap">
+              <svg class="donut" width="132" height="132" viewBox="0 0 132 132" role="img" aria-label="Répartition des actions">
+                <circle cx="66" cy="66" r="46" fill="none" stroke="#E2E8F0" stroke-width="20"></circle>
+                <circle
+                  *ngFor="let t of actionTypes(); let i = index"
+                  class="donut-segment"
+                  cx="66"
+                  cy="66"
+                  r="46"
+                  fill="none"
+                  [attr.stroke]="t.color"
+                  stroke-width="20"
+                  [attr.stroke-dasharray]="(t.pct * 2.89) + ' 289'"
+                  [attr.stroke-dashoffset]="-i * 72"
+                  (click)="filterActivityByModule(t.label)"
+                ></circle>
+                <text x="66" y="62" text-anchor="middle">{{ totalActions() }}</text>
+                <text x="66" y="80" text-anchor="middle">actions</text>
               </svg>
+              <div class="donut-legend">
+                <button class="legend-item" type="button" *ngFor="let t of actionTypes()" (click)="filterActivityByModule(t.label)">
+                  <span class="legend-sq" [style.background]="t.color"></span>
+                  <span class="legend-text">
+                    <strong>{{ t.label }}</strong>
+                    <small>Ouvrir le journal filtré</small>
+                  </span>
+                  <span class="legend-count">
+                    <strong>{{ t.count }}</strong>
+                    <small>{{ t.pct }}%</small>
+                  </span>
+                </button>
+              </div>
             </div>
-            <div class="role-info">
-              <div class="role-name">{{ r.name }}</div>
-              <div class="role-members-count">{{ r.members.length }} membre{{ r.members.length > 1 ? 's' : '' }}</div>
-            </div>
-            <span *ngIf="r.custom" class="custom-badge">Personnalisé</span>
-          </div>
-          <p class="role-desc">{{ r.desc }}</p>
-          <div class="role-avatars">
-            <div class="avatar avatar--sm" *ngFor="let m of r.members"
-              [style.background]="r.color" [style.color]="r.textColor">{{ m }}</div>
-          </div>
-          <div class="role-card-footer">
-            <button class="btn-secondary btn-sm" (click)="editRolePerms(r.id)">
-              <i class="ti ti-key" aria-hidden="true"></i> Permissions
-            </button>
-            <button *ngIf="r.custom" class="icon-btn icon-btn--danger" (click)="deleteRole(r.id)">
-              <i class="ti ti-trash" aria-hidden="true"></i>
-            </button>
-          </div>
+          </article>
         </div>
-      </div>
-    </section>
 
-    <!-- ── PERMISSIONS ────────────────────────────────────── -->
-    <section *ngIf="activeView() === 'permissions'" [@fadeIn]>
-      <div class="view-header">
-        <div>
-          <h2 class="view-title">Permissions</h2>
-          <p class="view-desc">Configurez l'accès par module et par action</p>
+        <article class="activity-panel">
+          <div class="section-head">
+            <div>
+              <h2>Activité récente</h2>
+              <p>Dernières opérations sensibles réalisées par l’équipe.</p>
+            </div>
+            <button class="btn-secondary" type="button" (click)="showView('activite')">
+              Voir tout
+              <i class="ti ti-arrow-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="activity-list">
+            <button class="act-row" type="button" *ngFor="let a of recentActivity()" [attr.title]="formatDateTimePrecise(a.date)" (click)="goToEntity(a)">
+              <span class="act-icon" [ngClass]="'act-icon--' + actionClass(a.action)">
+                <i class="ti ti-{{ actionIcon(a.action) }}" aria-hidden="true"></i>
+              </span>
+              <span class="act-body">
+                <strong>{{ a.who }}</strong>
+                <span>{{ a.what }} </span>
+                <em>{{ a.entityLabel }}</em>
+              </span>
+              <span class="act-time">{{ relativeTime(a.date) }}</span>
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section *ngIf="!loading() && activeView() === 'membres'" [@fadeIn]>
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Membres</h2>
+            <p class="view-desc">{{ filteredMembres().length }} collaborateur(s) affiché(s) sur {{ membres().length }}.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-export btn-export--excel" type="button" (click)="exportMembersExcel()"><i class="ti ti-file-spreadsheet"></i> Excel</button>
+            <button class="btn-export btn-export--pdf" type="button" (click)="exportMembersPdf()"><i class="ti ti-file-type-pdf"></i> PDF</button>
+          </div>
         </div>
-        <div class="header-actions">
-          <select class="form-select-sm" [ngModel]="selectedRoleForPerm()" (ngModelChange)="selectedRoleForPerm.set($event)">
+
+        <div class="filters-bar">
+          <label class="search-wrap">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="text" placeholder="Rechercher un membre..." [(ngModel)]="memberSearchInput" (ngModelChange)="setMemberSearch($event)" />
+          </label>
+          <select class="form-select-sm" [ngModel]="roleFilter()" (ngModelChange)="roleFilter.set($event)">
+            <option value="Tous">Tous les rôles</option>
             <option *ngFor="let r of roles()" [value]="r.id">{{ r.name }}</option>
           </select>
-          <select class="form-select-sm" [(ngModel)]="selectedUserForPerm" (ngModelChange)="onUserFilterChange()">
-            <option value="">Tous les utilisateurs</option>
-            <option *ngFor="let m of getUsersByRole()" [value]="m.id">{{ m.name }}</option>
+          <select class="form-select-sm" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+            <option value="Tous">Tous les statuts</option>
+            <option value="Actif">Actif</option>
+            <option value="Invité">Invité</option>
+            <option value="Inactif">Inactif</option>
           </select>
-          <button class="btn-primary btn-ey" (click)="savePermissions()">
-            <i class="ti ti-check" aria-hidden="true"></i> Enregistrer
+          <button class="btn-secondary" type="button" (click)="resetMemberFilters()">Réinitialiser</button>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredMembres().length === 0">
+          <i class="ti ti-users-off" aria-hidden="true"></i>
+          <strong>Aucun membre trouvé</strong>
+          <span>Essayez d’ajuster les filtres ou invitez un nouveau collaborateur.</span>
+        </div>
+
+        <div class="membres-table-wrap" *ngIf="filteredMembres().length > 0">
+          <table class="membres-table">
+            <thead>
+              <tr>
+                <th>Membre</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+                <th>Invitation</th>
+                <th>Actions 30j</th>
+                <th>Dernière connexion</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of filteredMembres()" [class.row-muted]="m.statut === 'Inactif'">
+                <td>
+                  <div class="member-cell">
+                    <div class="avatar" [style.background]="roleById(m.roleId)?.color" [style.color]="roleById(m.roleId)?.accent">{{ m.initials }}</div>
+                    <div>
+                      <strong class="member-name">{{ m.name }}</strong>
+                      <span class="member-email">{{ m.email }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <select class="role-select" [ngModel]="m.roleId" (ngModelChange)="updateMemberRole(m, $event)">
+                    <option *ngFor="let r of roles()" [value]="r.id">{{ r.name }}</option>
+                  </select>
+                </td>
+                <td>
+                  <div class="status-cell">
+                    <span class="statut-badge" [ngClass]="'statut--' + statusClass(m.statut)">
+                      <span class="statut-dot"></span>{{ m.statut }}
+                    </span>
+                    <label class="inline-toggle" *ngIf="m.statut !== 'Invité'" title="Activer / désactiver">
+                      <input type="checkbox" [checked]="m.statut === 'Actif'" (change)="toggleMemberStatus(m)" />
+                      <span></span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <span *ngIf="m.statut === 'Invité' && m.inviteDate" class="muted">{{ formatDateTime(m.inviteDate) }}</span>
+                  <span *ngIf="m.statut !== 'Invité'" class="muted">-</span>
+                </td>
+                <td>
+                  <button class="link-number" type="button" (click)="filterActivityByMember(m.id)">{{ m.actions30 }} actions</button>
+                </td>
+                <td class="muted">{{ m.lastLogin }}</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="btn-relance" *ngIf="m.statut === 'Invité'" type="button" (click)="relanceInvitation(m)">Relancer</button>
+                    <button class="icon-btn" type="button" title="Permissions" (click)="editRolePerms(m.roleId)"><i class="ti ti-key"></i></button>
+                    <button class="icon-btn" type="button" title="Désactiver" *ngIf="m.statut !== 'Invité'" (click)="toggleMemberStatus(m)">
+                      <i class="ti" [ngClass]="m.statut === 'Actif' ? 'ti-user-off' : 'ti-user-check'"></i>
+                    </button>
+                    <button class="icon-btn icon-btn--danger" type="button" title="Supprimer" (click)="requestDeleteMember(m)"><i class="ti ti-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section *ngIf="!loading() && activeView() === 'roles'" [@fadeIn]>
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Rôles</h2>
+            <p class="view-desc">Chaque rôle affiche ses permissions clés et le nombre de membres associés.</p>
+          </div>
+          <button class="btn-primary btn-primary--ey" type="button" (click)="openRoleModal()"><i class="ti ti-plus"></i> Nouveau rôle</button>
+        </div>
+
+        <div class="roles-grid">
+          <article class="role-card" *ngFor="let r of roles()">
+            <div class="role-card-head">
+              <span class="role-icon-wrap" [style.background]="r.color" [style.color]="r.accent">
+                <i class="ti ti-{{ r.icon }}"></i>
+              </span>
+              <div class="role-info">
+                <strong>{{ r.name }}</strong>
+                <button class="role-members-count" type="button" (click)="filterMembersByRole(r.id)">
+                  {{ roleMemberCount()(r.id) }} membre(s)
+                </button>
+              </div>
+              <span class="custom-badge" *ngIf="r.custom">Personnalisé</span>
+            </div>
+            <p class="role-desc">{{ r.desc }}</p>
+
+            <div class="role-matrix">
+              <div class="role-matrix-title">
+                <span>Permissions clés</span>
+                <small>Voir, créer, modifier, supprimer, exporter</small>
+              </div>
+              <div class="role-matrix-row" *ngFor="let module of modules.slice(0, 4)">
+                <span>{{ module }}</span>
+                <span class="mini-dots">
+                  <i *ngFor="let action of permissionActions" [class.on]="permissionEnabled(r.id, module, action)"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="role-card-footer">
+              <button class="btn-secondary btn-sm" type="button" (click)="openPermissionPanel(r)"><i class="ti ti-layout-sidebar-right"></i> Permissions</button>
+              <button class="btn-secondary btn-sm" type="button" (click)="duplicateRole(r)"><i class="ti ti-copy"></i> Dupliquer</button>
+              <button class="icon-btn icon-btn--danger" type="button" *ngIf="r.custom" (click)="requestDeleteRole(r)"><i class="ti ti-trash"></i></button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section *ngIf="!loading() && activeView() === 'permissions'" [@fadeIn]>
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Permissions</h2>
+            <p class="view-desc">Matrice Rôle × Module avec sauvegarde immédiate.</p>
+          </div>
+          <div class="header-actions">
+            <select class="form-select-sm" [ngModel]="selectedRoleForPerm()" (ngModelChange)="selectedRoleForPerm.set($event)">
+              <option *ngFor="let r of roles()" [value]="r.id">{{ r.name }}</option>
+            </select>
+            <button class="btn-secondary" type="button" (click)="resetPermissions()"><i class="ti ti-restore"></i> Défaut</button>
+          </div>
+        </div>
+
+        <div class="permission-preview permission-preview--old">
+          <span>Aperçu de visibilité</span>
+          <strong>{{ roleName(selectedRoleForPerm()) }}</strong>
+          <p>{{ permissionPreview() }}</p>
+        </div>
+
+        <div class="permission-preview permission-preview--pro">
+          <div class="permission-preview__main">
+            <span>Aperçu de visibilité</span>
+            <strong>{{ roleName(selectedRoleForPerm()) }}</strong>
+            <p>{{ permissionPreview() }}</p>
+          </div>
+          <div class="permission-preview__stats">
+            <article>
+              <strong>{{ permissionSummary().enabled }}/{{ permissionSummary().total }}</strong>
+              <span>permissions actives</span>
+            </article>
+            <article>
+              <strong>{{ permissionSummary().visibleModules }}</strong>
+              <span>modules visibles</span>
+            </article>
+            <article>
+              <strong>{{ permissionSummary().deleteRights }}</strong>
+              <span>droits suppression</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="perm-matrix">
+          <div class="perm-matrix-head">
+            <span>Module</span>
+            <span *ngFor="let action of permissionActions">{{ action }}</span>
+          </div>
+          <div class="perm-matrix-row" *ngFor="let module of modules">
+            <strong>{{ module }}</strong>
+            <label class="perm-check" *ngFor="let action of permissionActions" [attr.title]="action + ' - ' + module">
+              <input type="checkbox" [checked]="permissionEnabled(selectedRoleForPerm(), module, action)" (change)="togglePermission(selectedRoleForPerm(), module, action)" />
+              <span></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section *ngIf="!loading() && activeView() === 'activite'" [@fadeIn]>
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Journal d’activité</h2>
+            <p class="view-desc">{{ filteredActivity().length }} événement(s), avec date et heure précises.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-export btn-export--excel" type="button" (click)="exportActivityExcel()"><i class="ti ti-file-spreadsheet"></i> Excel</button>
+            <button class="btn-export btn-export--pdf" type="button" (click)="exportActivityPdf()"><i class="ti ti-file-type-pdf"></i> PDF</button>
+          </div>
+        </div>
+
+        <div class="filters-bar filters-bar--activity">
+          <label class="search-wrap">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="text" placeholder="Rechercher dans le journal..." [(ngModel)]="activitySearchInput" (ngModelChange)="setActivitySearch($event)" />
+          </label>
+          <select class="form-select-sm" [ngModel]="activityMemberFilter()" (ngModelChange)="activityMemberFilter.set($event); page.set(1)">
+            <option value="Tous">Tous les membres</option>
+            <option *ngFor="let m of membres()" [value]="m.id">{{ m.name }}</option>
+          </select>
+          <select class="form-select-sm" [ngModel]="activityModuleFilter()" (ngModelChange)="activityModuleFilter.set($event); page.set(1)">
+            <option value="Tous">Tous les modules</option>
+            <option *ngFor="let module of modules" [value]="module">{{ module }}</option>
+          </select>
+          <select class="form-select-sm" [ngModel]="activityActionFilter()" (ngModelChange)="activityActionFilter.set($event); page.set(1)">
+            <option value="Toutes">Toutes les actions</option>
+            <option value="Création">Création</option>
+            <option value="Modification">Modification</option>
+            <option value="Suppression">Suppression</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Permission">Permission</option>
+            <option value="Invitation">Invitation</option>
+          </select>
+          <input class="date-input" type="date" [ngModel]="activityStartDate()" (ngModelChange)="activityStartDate.set($event); page.set(1)" />
+          <input class="date-input" type="date" [ngModel]="activityEndDate()" (ngModelChange)="activityEndDate.set($event); page.set(1)" />
+          <button class="btn-secondary" type="button" (click)="resetActivityFilters()">Réinitialiser</button>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredActivity().length === 0">
+          <i class="ti ti-clipboard-off" aria-hidden="true"></i>
+          <strong>Aucune activité</strong>
+          <span>Aucun événement ne correspond aux filtres sélectionnés.</span>
+        </div>
+
+        <div class="activity-table" *ngIf="filteredActivity().length > 0">
+          <button class="activity-row" type="button" *ngFor="let a of pagedActivity()" [attr.title]="formatDateTimePrecise(a.date)" (click)="goToEntity(a)">
+            <span class="act-icon" [ngClass]="'act-icon--' + actionClass(a.action)">
+              <i class="ti ti-{{ actionIcon(a.action) }}"></i>
+            </span>
+            <span class="activity-main">
+              <strong>{{ a.who }}</strong>
+              <span>{{ a.what }} <em>{{ a.entityLabel }}</em></span>
+            </span>
+            <span class="module-chip">{{ a.module }}</span>
+            <span class="action-chip" [ngClass]="'action-chip--' + actionClass(a.action)">{{ a.action }}</span>
+            <span class="act-time">{{ formatDateTime(a.date) }}</span>
           </button>
         </div>
-      </div>
 
-      <!-- Perm stats bar -->
-      <div class="perm-stats-bar">
-        <div class="psb-info">
-          <span class="psb-label">Permissions actives</span>
-          <span class="psb-val">{{ activePermsCount() }} / {{ totalPerms() }}</span>
-        </div>
-        <div class="psb-track">
-          <div class="psb-fill" [style.width.%]="permPct"></div>
-        </div>
-        <span class="psb-pct">{{ permPct }}%</span>
-      </div>
-
-      <!-- Perm table header -->
-      <div class="perm-table-header">
-        <span class="pth-name">Permission</span>
-        <span class="pth-action">Lire</span>
-        <span class="pth-action">Écrire</span>
-        <span class="pth-action">Modifier</span>
-        <span class="pth-action">Supprimer</span>
-      </div>
-
-      <!-- Categories -->
-      <div class="perm-cats">
-        <div class="perm-cat" *ngFor="let cat of permCats()">
-          <div class="perm-cat-head" (click)="toggleCat(cat)">
-            <div class="pch-left">
-              <div class="pch-icon" [style.background]="cat.color + '22'" [style.color]="cat.color">
-                <i class="ti ti-{{ cat.icon }}" aria-hidden="true"></i>
-              </div>
-              <span class="pch-title">{{ cat.title }}</span>
-              <span class="pch-count">{{ cat.items.length }} permissions</span>
-            </div>
-            <div class="pch-right">
-              <label class="toggle-all" (click)="$event.stopPropagation()" title="Tout activer/désactiver">
-                <input type="checkbox"
-                  [checked]="isCatAllActive(cat)"
-                  (change)="toggleAllCat(cat, $any($event.target).checked)"/>
-                <span class="toggle-all-track">
-                  <span class="toggle-all-thumb"></span>
-                </span>
-              </label>
-              <i class="ti" [ngClass]="cat.open ? 'ti-chevron-up' : 'ti-chevron-down'" aria-hidden="true"></i>
-            </div>
+        <div class="table-footer" *ngIf="filteredActivity().length > 0">
+          <span>Page {{ page() }} / {{ totalPages() }}</span>
+          <div class="pager">
+            <button class="icon-btn" type="button" [disabled]="page() === 1" (click)="prevPage()"><i class="ti ti-chevron-left"></i></button>
+            <button class="icon-btn" type="button" [disabled]="page() === totalPages()" (click)="nextPage()"><i class="ti ti-chevron-right"></i></button>
           </div>
-
-          <div class="perm-items" *ngIf="cat.open">
-            <div class="perm-item" *ngFor="let item of cat.items">
-              <span class="pi-name">{{ item.name }}</span>
-              <label class="perm-switch">
-                <input type="checkbox" [(ngModel)]="item.actions.lire" (change)="onPermChange()"/>
-                <span class="perm-switch-slider"></span>
-              </label>
-              <label class="perm-switch">
-                <input type="checkbox" [(ngModel)]="item.actions.ecrire" (change)="onPermChange()"/>
-                <span class="perm-switch-slider"></span>
-              </label>
-              <label class="perm-switch">
-                <input type="checkbox" [(ngModel)]="item.actions.modifier" (change)="onPermChange()"/>
-                <span class="perm-switch-slider"></span>
-              </label>
-              <label class="perm-switch">
-                <input type="checkbox" [(ngModel)]="item.actions.supprimer" (change)="onPermChange()"/>
-                <span class="perm-switch-slider"></span>
-              </label>
-            </div>
-          </div>
+          <label class="page-size">
+            Lignes
+            <select class="form-select-sm" [ngModel]="pageSize()" (ngModelChange)="pageSize.set(+$event); page.set(1)">
+              <option [value]="10">10</option>
+              <option [value]="25">25</option>
+              <option [value]="50">50</option>
+            </select>
+          </label>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
+  </div>
+</div>
 
-    <!-- ── ACTIVITÉ ───────────────────────────────────────── -->
-    <section *ngIf="activeView() === 'activite'" [@fadeIn]>
-      <div class="view-header">
-        <div>
-          <h2 class="view-title">Journal d'activité</h2>
-          <p class="view-desc">Toutes les actions de l'équipe</p>
-        </div>
-      </div>
-
-      <div class="act-filters">
-        <button class="act-filter-btn" [class.active]="actFilter() === 'all'"    (click)="actFilter.set('all')">Tout</button>
-        <button class="act-filter-btn" [class.active]="actFilter() === 'create'" (click)="actFilter.set('create')">
-          <i class="ti ti-plus" aria-hidden="true"></i> Créations
-        </button>
-        <button class="act-filter-btn" [class.active]="actFilter() === 'edit'"   (click)="actFilter.set('edit')">
-          <i class="ti ti-edit" aria-hidden="true"></i> Modifications
-        </button>
-        <button class="act-filter-btn" [class.active]="actFilter() === 'delete'" (click)="actFilter.set('delete')">
-          <i class="ti ti-trash" aria-hidden="true"></i> Suppressions
-        </button>
-        <button class="act-filter-btn" [class.active]="actFilter() === 'view'"   (click)="actFilter.set('view')">
-          <i class="ti ti-eye" aria-hidden="true"></i> Consultations
-        </button>
-      </div>
-
-      <div class="activity-list activity-list--full">
-        <div class="act-row" *ngFor="let a of filteredActivity()" [@fadeIn]>
-          <div class="act-icon" [ngClass]="'act-icon--' + actIconClass(a.type)">
-            <i class="ti ti-{{ actIcon(a.type) }}" aria-hidden="true"></i>
-          </div>
-          <div class="act-body">
-            <span class="act-who">{{ a.who }}</span>
-            <span class="act-what"> {{ a.what }}</span>
-          </div>
-          <span class="act-time">{{ a.time }}</span>
-        </div>
-        <div *ngIf="filteredActivity().length === 0" class="act-empty">
-          <i class="ti ti-mood-empty" aria-hidden="true"></i>
-          <span>Aucune activité pour ce filtre</span>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  </div><!-- .content-layout -->
-</div><!-- .page-wrap -->
-
-<!-- ══════════════════════════════════════════════════════════
-     MODAL INVITE
-══════════════════════════════════════════════════════════ -->
-@if (inviteModal) {
-  <div class="modal-overlay" [@fadeIn] (click)="inviteModal=false">
-    <div class="modal" (click)="$event.stopPropagation()" [@modalIn]>
-      <div class="modal-header">
+<div class="modal-overlay" *ngIf="inviteModal()" [@fadeIn] (click)="inviteModal.set(false)">
+  <div class="modal" [@modalIn] (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
         <h2 class="modal-title">Inviter un collaborateur</h2>
-        <button class="modal-close" (click)="inviteModal=false" aria-label="Fermer">
-          <i class="ti ti-x" aria-hidden="true"></i>
-        </button>
+        <p>Un lien d’activation sera envoyé au membre.</p>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Prénom et Nom <span class="req">*</span></label>
-          <input type="text" class="form-input" placeholder="Ex : Ahmed Trabelsi" [(ngModel)]="inviteForm.name"/>
+      <button class="modal-close" type="button" (click)="inviteModal.set(false)"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <label class="form-group">
+        <span class="form-label">Prénom et nom</span>
+        <input class="form-input" type="text" placeholder="Ex : Ahmed Trabelsi" [(ngModel)]="inviteForm.name" />
+      </label>
+      <label class="form-group">
+        <span class="form-label">Email professionnel</span>
+        <input class="form-input" type="email" placeholder="membre@entreprise.tn" [(ngModel)]="inviteForm.email" />
+      </label>
+      <label class="form-group">
+        <span class="form-label">Rôle assigné</span>
+        <select class="form-select" [(ngModel)]="inviteForm.roleId">
+          <option *ngFor="let r of roles()" [value]="r.id">{{ r.name }}</option>
+        </select>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" type="button" (click)="inviteModal.set(false)">Annuler</button>
+      <button class="btn-primary btn-primary--ey" type="button" (click)="sendInvite()"><i class="ti ti-send"></i> Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="roleModal()" [@fadeIn] (click)="roleModal.set(false)">
+  <div class="modal modal--wide" [@modalIn] (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Créer un rôle</h2>
+        <p>Définissez le périmètre métier et les premières permissions.</p>
+      </div>
+      <button class="modal-close" type="button" (click)="roleModal.set(false)"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-group">
+          <span class="form-label">Nom</span>
+          <input class="form-input" type="text" placeholder="Ex : Auditeur interne" [(ngModel)]="roleForm.name" />
+        </label>
+        <label class="form-group">
+          <span class="form-label">Description</span>
+          <input class="form-input" type="text" placeholder="Périmètre de ce rôle..." [(ngModel)]="roleForm.desc" />
+        </label>
+      </div>
+      <div class="role-permission-picker">
+        <label *ngFor="let module of modules">
+          <strong>{{ module }}</strong>
+          <span *ngFor="let action of permissionActions">
+            <input type="checkbox" [checked]="roleForm.permissions.has(module + ':' + action)" (change)="toggleRoleFormPermission(module, action)" />
+            {{ action }}
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" type="button" (click)="roleModal.set(false)">Annuler</button>
+      <button class="btn-primary btn-primary--ey" type="button" (click)="addRole()"><i class="ti ti-check"></i> Créer le rôle</button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="permissionPanelRole() as role">
+  <div class="panel-overlay" [@fadeIn] (click)="permissionPanelRole.set(null)">
+    <aside class="slide-panel" (click)="$event.stopPropagation()">
+    <div class="slide-panel__head">
+      <div>
+        <span class="breadcrumb">Détail permissions</span>
+        <h2>{{ role.name }}</h2>
+        <p>{{ role.desc }}</p>
+      </div>
+      <button class="modal-close" type="button" (click)="permissionPanelRole.set(null)"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="slide-panel__body">
+      <div class="panel-perm-row" *ngFor="let module of modules">
+        <strong>{{ module }}</strong>
+        <span>
+          <em *ngFor="let action of permissionActions" [class.on]="permissionEnabled(role.id, module, action)">{{ action }}</em>
+        </span>
+      </div>
+    </div>
+    <div class="slide-panel__footer">
+      <button class="btn-secondary" type="button" (click)="editRolePerms(role.id); permissionPanelRole.set(null)">Modifier dans la matrice</button>
+    </div>
+    </aside>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="confirmModal() as confirm">
+  <div class="modal-overlay" [@fadeIn] (click)="confirmModal.set(null)">
+    <div class="modal modal--confirm" [@modalIn] (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">{{ confirm.title }}</h2>
+          <p>{{ confirm.text }}</p>
         </div>
-        <div class="form-group">
-          <label class="form-label">Email professionnel <span class="req">*</span></label>
-          <input type="email" class="form-input" placeholder="membre@entreprise.tn" [(ngModel)]="inviteForm.email"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Rôle assigné</label>
-          <select class="form-select" [(ngModel)]="inviteForm.roleId">
-            <option *ngFor="let r of roles()" [value]="r.id">{{ r.name }}</option>
-          </select>
-        </div>
-        <div class="invite-note">
-          <i class="ti ti-mail" aria-hidden="true"></i>
-          Un email d'invitation sera envoyé avec un lien sécurisé (valable 48h).
-        </div>
+        <button class="modal-close" type="button" (click)="confirmModal.set(null)"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" (click)="inviteModal=false">Annuler</button>
-        <button class="btn-primary btn-ey" (click)="sendInvite()">
-          <i class="ti ti-send" aria-hidden="true"></i> Envoyer l'invitation
-        </button>
+        <button class="btn-secondary" type="button" (click)="confirmModal.set(null)">Annuler</button>
+        <button class="btn-danger" type="button" (click)="confirm.action()"><i class="ti ti-trash"></i> Confirmer</button>
       </div>
     </div>
   </div>
-}
+</ng-container>

@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
@@ -10,7 +11,8 @@ import {
   StatistiquesFacturesDto, ClientService, ClientDto,
   ProduitApiService, ProduitDto,
   TeifApiService, PaiementApiService, SignatureApiService,
-  TtnApiService, PersonnalisationApiService, EntrepriseApiService
+  TtnApiService, PersonnalisationApiService, EntrepriseApiService,
+  ParametreFiscalApiService
 } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastService } from '../../core/services/toast.service';
@@ -41,6 +43,7 @@ export interface FactureDraft {
 }
 
 type ViewMode = 'list' | 'create' | 'edit' | 'detail';
+type SubmitMode = 'draft' | 'final';
 
 @Component({
   selector: 'app-factures',
@@ -82,9 +85,11 @@ export class FacturesComponent implements OnInit {
   private ttnSvc        = inject(TtnApiService);
   private personnSvc    = inject(PersonnalisationApiService);
   private entrepriseSvc = inject(EntrepriseApiService);
+  private paramFiscalSvc = inject(ParametreFiscalApiService);
   private authSvc       = inject(AuthService);
   private toast         = inject(ToastService);
   private translate     = inject(TranslateService);
+  private route         = inject(ActivatedRoute);
 
   view = signal<ViewMode>('list');
 
@@ -93,6 +98,9 @@ export class FacturesComponent implements OnInit {
   pdfLoading    = signal(false);
   actionLoading = signal(false);
   teifLoading   = signal(false);
+  formError     = signal<string | null>(null);
+  showXmlModal  = signal(false);
+  xmlPreview    = signal('');
 
   factures    = signal<any[]>([]);
   total       = signal(0);
@@ -101,6 +109,7 @@ export class FacturesComponent implements OnInit {
   produits    = signal<ProduitDto[]>([]);
   personnalisation = signal<any>(null);
   entreprise  = signal<any>(null);
+  parametresFiscaux = signal<any[]>([]);
 
   searchQuery  = '';
   activeStatut = 'all';
@@ -140,6 +149,7 @@ export class FacturesComponent implements OnInit {
     { key: 'all',       labelKey: 'FACTURES.FILTERS.ALL',       count: 0 },
     { key: 'Brouillon', labelKey: 'FACTURES.FILTERS.DRAFT',     count: 0 },
     { key: 'Validee',   labelKey: 'FACTURES.FILTERS.VALIDATED', count: 0 },
+    { key: 'EnAttenteAdmin', labelKey: 'En attente admin', count: 0 },
     { key: 'Conforme',  labelKey: 'FACTURES.FILTERS.COMPLIANT', count: 0 },
     { key: 'Transmise', labelKey: 'FACTURES.FILTERS.SENT',      count: 0 },
     { key: 'Acceptee',  labelKey: 'FACTURES.FILTERS.ACCEPTED',  count: 0 },
@@ -217,13 +227,29 @@ export class FacturesComponent implements OnInit {
   totalTtc = computed(() => {
     let ttc = this.totalHtApresRemise() + this.totalTva();
     if (this._draft().timbreFiscal) ttc += 1;
-    if (this._draft().activerRetenue && this._draft().tauxRetenue)
-      ttc -= this.retenueAmount();
     return ttc;
   });
 
+  signatureUrl = computed(() => {
+    const pdf = this.personnalisation()?.pdf;
+    if (pdf?.signatureActive === false || pdf?.options?.showSignature === false) return '';
+    return pdf?.signatureUrl || pdf?.sigImageUrl || '';
+  });
+
+  cachetUrl = computed(() => {
+    const pdf = this.personnalisation()?.pdf;
+    if (pdf?.signatureActive === false || pdf?.options?.showSignature === false) return '';
+    return pdf?.cachetUrl || '';
+  });
+
   retenueAmount = computed(() =>
-    this.totalHtApresRemise() * ((this._draft().tauxRetenue ?? 0) / 100)
+    this._draft().activerRetenue
+      ? this.totalHtApresRemise() * ((this._draft().tauxRetenue ?? 0) / 100)
+      : 0
+  );
+
+  netAPayer = computed(() =>
+    Math.max(0, this.totalTtc() - this.retenueAmount())
   );
 
   groupesTva = computed(() => {
@@ -242,6 +268,8 @@ export class FacturesComponent implements OnInit {
     this.loadAll();
     this.chargerEntreprise();
     this.chargerPersonnalisation();
+    this.chargerParametresFiscaux();
+    this.applyRouteIntent();
   }
 
   private loadAll() {
@@ -280,6 +308,16 @@ export class FacturesComponent implements OnInit {
     });
   }
 
+  private chargerParametresFiscaux() {
+    this.paramFiscalSvc.lister().subscribe({
+      next: params => {
+        this.parametresFiscaux.set(params ?? []);
+        this._draft.update(d => this.appliquerParametreRsAuDraft(d));
+      },
+      error: () => {}
+    });
+  }
+
   private updateStatutCounts() {
     const all = this.factures();
     this.statuts[0].count = all.length;
@@ -295,8 +333,9 @@ export class FacturesComponent implements OnInit {
     this.factures.update(list => list.map(f => ({ ...f, _selected: checked })));
   }
 
-  ouvrirCreation() {
-    this._draft.set(this.draftVide());
+  ouvrirCreation(typeFacture = 'Facture') {
+    this._draft.set({ ...this.draftVide(), typeFacture: this.safeTypeFacture(typeFacture) });
+    this.formError.set(null);
     this.rechercheClient = '';
     this.view.set('create');
   }
@@ -340,6 +379,24 @@ export class FacturesComponent implements OnInit {
 
   ouvrirDetail(f: any) { this.selectedFacture.set(f); this.view.set('detail'); }
   retourListe() { this.view.set('list'); this.selectedFacture.set(null); this.loadAll(); }
+
+  paiementLabel(f: any): string {
+    return this.isFacturePayee(f) ? 'Payée' : 'Non payée';
+  }
+
+  paiementClass(f: any): string {
+    return this.isFacturePayee(f) ? 'ok' : 'neutral';
+  }
+
+  transmissionTtnLabel(f: any): string {
+    if (this.normalizeStatusText(f?.statut).includes('enattenteadmin')) return 'En attente admin';
+    return this.isFactureTransmise(f) ? 'Transmis' : 'Non transmis';
+  }
+
+  transmissionTtnClass(f: any): string {
+    if (this.normalizeStatusText(f?.statut).includes('enattenteadmin')) return 'warn';
+    return this.isFactureTransmise(f) ? 'ok' : 'neutral';
+  }
 
   rechercherClients() { this.showClientDropdown.set(true); }
 
@@ -495,54 +552,354 @@ export class FacturesComponent implements OnInit {
     }));
   }
 
-  sauvegarderBrouillon() { this.soumettre(true); }
-  finaliser() { this.soumettre(false); }
+  sauvegarderBrouillon() { this.soumettre('draft'); }
+  finaliser() { this.soumettre('final'); }
 
-  private soumettre(brouillon: boolean) {
+  private soumettre(mode: SubmitMode) {
     const d = this._draft();
-    if (!d.clientId || this.saving()) return;
+    if (this.saving()) return;
+
+    this.formError.set(null);
+    const errors = mode === 'final' ? this.validateFinal(d) : this.validateDraft(d);
+    if (errors.length) {
+      const message = errors[0];
+      this.formError.set(message);
+      this.toast.error(message);
+      return;
+    }
+
+    if (!d.clientId && mode === 'final') {
+      const message = 'Client obligatoire pour valider la facture.';
+      this.formError.set(message);
+      this.toast.error(message);
+      return;
+    }
+
+    if (!d.clientId) {
+      this.creerClientBrouillonPuisSauver(mode);
+      return;
+    }
+
     this.saving.set(true);
-    const lignes = d.sections.flatMap(s => s.lignes).map(l => ({
-      designation: l.designation, quantite: l.quantite, prixUnitaire: l.prixUnitaire,
-      tauxTva: l.tauxTva, tauxRemise: l.tauxRemise || 0, unite: l.unite,
-      produitId: l.produitId || undefined, description: l.description || undefined,
+    const lignesSource = this.normaliserLignesBrouillon(d);
+    const lignes = lignesSource.map(l => ({
+      designation: l.designation,
+      quantite: l.quantite,
+      prixUnitaire: l.prixUnitaire,
+      tauxTva: l.tauxTva,
+      tauxRemise: l.tauxRemise || 0,
+      unite: l.unite || 'U',
+      produitId: l.produitId || undefined,
+      description: l.description || undefined,
     }));
+
     const req: any = {
-      clientId: d.clientId, typeFacture: d.typeFacture, modePaiement: d.modePaiement,
-      dateEcheance: new Date(d.dateEcheance).toISOString(),
-      notes: d.notes || undefined, conditionsPaiement: d.conditionsPaiement || undefined,
-      devise: d.devise, reference: d.reference || undefined, brouillon, lignes,
+      clientId: d.clientId,
+      typeFacture: this.safeTypeFacture(d.typeFacture),
+      modePaiement: this.safeModePaiement(d.modePaiement),
+      dateEcheance: this.safeDateEcheance(d.dateEcheance),
+      notes: d.notes || undefined,
+      conditionsPaiement: d.conditionsPaiement || undefined,
+      devise: (d.devise || 'TND').slice(0, 3).toUpperCase(),
+      reference: d.reference || undefined,
+      lignes,
+      appliquerRS: d.activerRetenue,
+      codeRS: d.activerRetenue ? this.codeRetenue(d.tauxRetenue) : undefined,
+      tauxRS: d.activerRetenue ? d.tauxRetenue : 0,
+      baseRS: d.activerRetenue ? this.totalHtApresRemise() : 0,
+      montantRS: this.retenueAmount(),
+      netAPayer: this.netAPayer(),
     };
+
     const obs = d.id ? this.factureSvc.mettreAJour(d.id, req) : this.factureSvc.creer(req);
     obs.subscribe({
       next: (f: any) => {
-        if (brouillon) {
-          this.saving.set(false);
-          this.toast.success(`Brouillon ${f.numero} enregistr?.`);
-          this.retourListe();
+        if (mode === 'final') {
+          this.factureSvc.valider(f.id).subscribe({
+            next: (updated: any) => {
+              this.saving.set(false);
+              this.toast.success(`Facture ${updated.numero} validée. Elle est prête à être signée.`);
+              this.retourListe();
+            },
+            error: (err: any) => {
+              this.saving.set(false);
+              const message = this.apiError(err, 'Facture enregistrée, mais validation impossible.');
+              this.formError.set(message);
+              this.toast.error(message);
+            }
+          });
           return;
         }
 
-        this.factureSvc.valider(f.id).subscribe({
-          next: (validated) => {
-            this.saving.set(false);
-            this.toast.success(`Facture ${validated.numero} finalis?e.`);
-            this.retourListe();
-          },
-          error: (err) => {
-            this.saving.set(false);
-            this.toast.error(err?.error?.message ?? 'Erreur validation.');
-          }
-        });
+        this.saving.set(false);
+        const message = mode === 'draft'
+          ? `Brouillon ${f.numero} enregistré.`
+          : `Facture ${f.numero} créée. En attente de validation admin.`;
+        this.toast.success(message);
+        this.retourListe();
       },
-      error: (err: any) => { this.saving.set(false); this.toast.error(err?.error?.message ?? 'Erreur sauvegarde.'); }
+      error: (err: any) => {
+        this.saving.set(false);
+        const message = this.apiError(err, mode === 'draft' ? 'Brouillon non enregistré.' : 'Facture non créée.');
+        this.formError.set(message);
+        this.toast.error(message);
+      }
     });
+  }
+  ouvrirApercuXml() {
+    const xml = this.buildXmlPreview();
+    this.xmlPreview.set(xml);
+    this.showXmlModal.set(true);
+  }
+
+  fermerApercuXml() {
+    this.showXmlModal.set(false);
+  }
+
+  async copierXml() {
+    try {
+      await navigator.clipboard.writeText(this.xmlPreview());
+      this.toast.success('XML copié.');
+    } catch {
+      this.toast.error('Copie impossible depuis ce navigateur.');
+    }
+  }
+
+  telechargerXmlPreview() {
+    const numero = this._draft().numero || 'facture-brouillon';
+    const blob = new Blob([this.xmlPreview()], { type: 'application/xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${numero}_TEIF_preview.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  private validateDraft(d: FactureDraft): string[] {
+    const errors: string[] = [];
+    if (d.dateEcheance && Number.isNaN(new Date(d.dateEcheance).getTime())) errors.push('Date invalide.');
+    return errors;
+  }
+
+  private validateFinal(d: FactureDraft): string[] {
+    const errors = this.validateDraft(d);
+    const lignes = d.sections.flatMap(s => s.lignes);
+    if (!d.clientId) errors.push('Client obligatoire.');
+    if (!d.dateEmission || Number.isNaN(new Date(d.dateEmission).getTime())) errors.push('Date d’émission obligatoire.');
+    if (!d.dateEcheance || Number.isNaN(new Date(d.dateEcheance).getTime())) errors.push('Date d’échéance obligatoire.');
+    if (!lignes.length) errors.push('Au moins une ligne de facture est obligatoire.');
+    if (lignes.some(l => !l.designation?.trim())) errors.push('Chaque ligne doit avoir une désignation.');
+    if (lignes.some(l => Number(l.quantite) <= 0)) errors.push('Chaque ligne doit avoir une quantité positive.');
+    if (lignes.some(l => Number(l.prixUnitaire) < 0)) errors.push('Le prix unitaire ne peut pas être négatif.');
+    if (this.totalHtApresRemise() < 0) errors.push('La remise globale ne peut pas dépasser le total HT.');
+    if (this.totalTtc() <= 0) errors.push('Le total TTC doit être supérieur à zéro.');
+    return errors;
+  }
+  private creerClientBrouillonPuisSauver(mode: SubmitMode) {
+    this.saving.set(true);
+    const suffix = Date.now();
+    this.clientSvc.creer({
+      nom: 'Client brouillon',
+      email: `brouillon-${suffix}@tuniflow.local`,
+      typeClient: 'B2B',
+      pays: 'TN'
+    }).subscribe({
+      next: client => {
+        this.clients.update(list => [client, ...list]);
+        this._draft.update(d => ({ ...d, clientId: client.id }));
+        this.rechercheClient = client.nom;
+        this.saving.set(false);
+        this.soumettre(mode);
+      },
+      error: err => {
+        this.saving.set(false);
+        const message = this.apiError(err, 'Impossible de créer le client brouillon.');
+        this.formError.set(message);
+        this.toast.error(message);
+      }
+    });
+  }
+
+  private normaliserLignesBrouillon(d: FactureDraft): LigneFactureDraft[] {
+    const lignes = d.sections.flatMap(s => s.lignes)
+      .filter(l => String(l.designation || '').trim() || Number(l.prixUnitaire) > 0 || Number(l.quantite) > 0)
+      .map(l => ({
+        ...l,
+        designation: String(l.designation || '').trim() || 'Ligne brouillon',
+        quantite: Number(l.quantite) > 0 ? Number(l.quantite) : 1,
+        prixUnitaire: Number(l.prixUnitaire) >= 0 ? Number(l.prixUnitaire) : 0,
+        tauxTva: Number.isFinite(Number(l.tauxTva)) ? Number(l.tauxTva) : 19,
+        unite: l.unite || 'U'
+      }));
+
+    return lignes.length ? lignes : [{
+      ...this.nouvelleLigne(),
+      designation: 'Ligne brouillon',
+      quantite: 1,
+      prixUnitaire: 0,
+      tauxTva: 19,
+      montantHt: 0,
+      montantTva: 0,
+      montantTtc: 0
+    }];
+  }
+
+  private apiError(err: any, fallback: string): string {
+    const body = err?.error;
+    const validationErrors = body?.errors;
+    if (validationErrors && typeof validationErrors === 'object') {
+      const firstKey = Object.keys(validationErrors)[0];
+      const firstValue = firstKey ? validationErrors[firstKey] : null;
+      const raw = Array.isArray(firstValue) ? firstValue[0] : firstValue;
+      return this.toFrenchApiMessage(String(raw || firstKey || fallback));
+    }
+
+    return this.toFrenchApiMessage(body?.message || body?.detail || body?.title || fallback);
+  }
+
+  private toFrenchApiMessage(message: string): string {
+    const lower = message.toLowerCase();
+    if (lower.includes('one or more validation')) return 'Données incomplètes.';
+    if (lower.includes('client')) return 'Client invalide ou introuvable.';
+    if (lower.includes('date') || lower.includes('échéance') || lower.includes('echeance')) return 'Date d’échéance invalide.';
+    if (lower.includes('ligne')) return 'Ajoutez au moins une ligne.';
+    if (lower.includes('designation') || lower.includes('désignation')) return 'Désignation de ligne manquante.';
+    if (lower.includes('unite') || lower.includes('unité')) return 'Unité de ligne manquante.';
+    return message || 'Action impossible.';
+  }
+
+  private safeDateEcheance(value: string): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const date = value ? new Date(value) : new Date(today);
+    if (Number.isNaN(date.getTime()) || date < today) {
+      const fallback = new Date(today);
+      fallback.setDate(fallback.getDate() + 30);
+      return fallback.toISOString();
+    }
+    return date.toISOString();
+  }
+
+  private applyRouteIntent() {
+    const params = this.route.snapshot.queryParamMap;
+    const action = params.get('action');
+    const type = params.get('type') ?? 'Facture';
+
+    if (action === 'create') {
+      this.ouvrirCreation(type);
+      return;
+    }
+
+    if (action === 'edit') {
+      const id = params.get('id') ?? params.get('document');
+      if (id) {
+        this.ouvrirEdition({ id });
+        return;
+      }
+      this.ouvrirCreation(type);
+    }
+  }
+
+  private isFacturePayee(f: any): boolean {
+    if (this.normalizeStatusText(f?.statut).includes('payee')) return true;
+    const restant = Number(f?.montantRestant);
+    if (Number.isFinite(restant)) return restant <= 0.001;
+    const paye = Number(f?.montantPaye);
+    const attendu = Number(f?.netAPayer ?? f?.totalTtc);
+    return Number.isFinite(paye) && Number.isFinite(attendu) && attendu > 0 && paye >= attendu - 0.001;
+  }
+
+  private isFactureTransmise(f: any): boolean {
+    const statut = this.normalizeStatusText(f?.statut);
+    return ['transmise', 'acceptee', 'rejetee', 'payee', 'partiellementpayee', 'partiellemementpayee']
+      .some(value => statut.includes(value));
+  }
+
+  private normalizeStatusText(value: unknown): string {
+    return String(value ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  private safeTypeFacture(value: string): string {
+    return ['Facture', 'Avoir', 'Proforma'].includes(value) ? value : 'Facture';
+  }
+
+  private safeModePaiement(value: string): string {
+    return ['Virement', 'Cheque', 'Especes', 'CarteBancaire', 'Traite'].includes(value) ? value : 'Virement';
+  }
+  private buildXmlPreview(): string {
+    const d = this._draft();
+    const client = this.clientSelectionne();
+    const entreprise = this.entreprise();
+    const escape = (value: unknown) => String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+
+    const lignes = d.sections.flatMap(s => s.lignes).map((l, index) => `
+    <cac:InvoiceLine>
+      <cbc:ID>${index + 1}</cbc:ID>
+      <cbc:InvoicedQuantity unitCode="${escape(l.unite || 'U')}">${Number(l.quantite || 0).toFixed(3)}</cbc:InvoicedQuantity>
+      <cbc:LineExtensionAmount currencyID="${escape(d.devise)}">${Number(l.montantHt || 0).toFixed(3)}</cbc:LineExtensionAmount>
+      <cac:Item>
+        <cbc:Name>${escape(l.designation || 'Ligne brouillon')}</cbc:Name>
+        <cbc:Description>${escape(l.description)}</cbc:Description>
+        <cac:ClassifiedTaxCategory>
+          <cbc:ID>S</cbc:ID>
+          <cbc:Percent>${Number(l.tauxTva || 0).toFixed(1)}</cbc:Percent>
+        </cac:ClassifiedTaxCategory>
+      </cac:Item>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="${escape(d.devise)}">${Number(l.prixUnitaire || 0).toFixed(3)}</cbc:PriceAmount>
+      </cac:Price>
+    </cac:InvoiceLine>`).join('\n');
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<ubl:Invoice xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+             xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+             xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+  <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+  <cbc:CustomizationID>TEIF-SIMULATION-V0</cbc:CustomizationID>
+  <cbc:ID>${escape(d.numero || 'BROUILLON')}</cbc:ID>
+  <cbc:IssueDate>${escape(d.dateEmission)}</cbc:IssueDate>
+  <cbc:DueDate>${escape(d.dateEcheance)}</cbc:DueDate>
+  <cbc:InvoiceTypeCode>${d.typeFacture === 'Avoir' ? '381' : '380'}</cbc:InvoiceTypeCode>
+  <cbc:DocumentCurrencyCode>${escape(d.devise)}</cbc:DocumentCurrencyCode>
+  <cac:AccountingSupplierParty>
+    <cac:Party>
+      <cac:PartyName><cbc:Name>${escape(entreprise?.raisonSociale || entreprise?.nom || 'Entreprise')}</cbc:Name></cac:PartyName>
+      <cac:PartyTaxScheme><cbc:CompanyID>${escape(entreprise?.matriculeFiscal)}</cbc:CompanyID></cac:PartyTaxScheme>
+    </cac:Party>
+  </cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty>
+    <cac:Party>
+      <cac:PartyName><cbc:Name>${escape(client?.nom || 'Client non sélectionné')}</cbc:Name></cac:PartyName>
+      <cac:PartyTaxScheme><cbc:CompanyID>${escape(client?.matriculeFiscal)}</cbc:CompanyID></cac:PartyTaxScheme>
+    </cac:Party>
+  </cac:AccountingCustomerParty>${lignes}
+  <cac:TaxTotal>
+    <cbc:TaxAmount currencyID="${escape(d.devise)}">${this.totalTva().toFixed(3)}</cbc:TaxAmount>
+  </cac:TaxTotal>
+  <cac:LegalMonetaryTotal>
+    <cbc:LineExtensionAmount currencyID="${escape(d.devise)}">${this.totalHt().toFixed(3)}</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="${escape(d.devise)}">${this.totalHtApresRemise().toFixed(3)}</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="${escape(d.devise)}">${this.totalTtc().toFixed(3)}</cbc:TaxInclusiveAmount>
+    <cbc:PayableAmount currencyID="${escape(d.devise)}">${this.netAPayer().toFixed(3)}</cbc:PayableAmount>
+  </cac:LegalMonetaryTotal>
+</ubl:Invoice>`;
   }
 
   draftAsFacture(): any {
     const d = this._draft();
     return { id: d.id ?? '', numero: d.numero ?? '', clientId: d.clientId,
       totalHt: this.totalHt(), totalTva: this.totalTva(), totalTtc: this.totalTtc(),
+      appliquerRS: d.activerRetenue, tauxRS: d.tauxRetenue,
+      montantRS: this.retenueAmount(), netAPayer: this.netAPayer(),
       montantRestant: 0, statut: 'Brouillon' };
   }
 
@@ -569,6 +926,23 @@ export class FacturesComponent implements OnInit {
         this.toast.success('XML TEIF généré.');
       },
       error: (err) => { this.teifLoading.set(false); this.toast.error(err?.error?.message ?? 'Erreur XML.'); }
+    });
+  }
+
+  soumettreValidationFiscale(f: any) {
+    if (!f?.id || this.actionLoading()) return;
+    this.actionLoading.set(true);
+    this.factureSvc.soumettreValidationFiscale(f.id).subscribe({
+      next: (updated) => {
+        this.actionLoading.set(false);
+        this.updateFacture(updated);
+        this.toast.success('Facture envoyée à l’admin pour validation fiscale simulée.');
+        if (this.view() === 'detail') this.selectedFacture.set(updated);
+      },
+      error: (err) => {
+        this.actionLoading.set(false);
+        this.toast.error(err?.error?.message ?? 'Soumission fiscale simulée impossible.');
+      }
     });
   }
 
@@ -600,7 +974,7 @@ export class FacturesComponent implements OnInit {
 
   ouvrirPaiement(f: any) {
     this.selectedFacture.set(f);
-    this.paiementForm.montant = f.montantRestant ?? f.totalTtc ?? 0;
+    this.paiementForm.montant = f.montantRestant ?? f.netAPayer ?? f.totalTtc ?? 0;
     this.paiementForm.datePaiement = new Date().toISOString().substring(0, 10);
     this.showPaiementModal.set(true);
   }
@@ -653,7 +1027,7 @@ export class FacturesComponent implements OnInit {
     });
   }
 
-  exportCSV() {
+  exportExcel() {
     const rows = [['N° Facture','Client','Statut','Total HT','Total TTC','Devise','Date émission']];
     this.filteredFactures().forEach(f =>
       rows.push([f.numero, f.clientNom, f.statut, String(f.totalHt), String(f.totalTtc), f.devise, f.dateEmission?.substring(0, 10)])
@@ -661,12 +1035,12 @@ export class FacturesComponent implements OnInit {
     const csv = rows.map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'factures.csv'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'factures.xlsx'; a.click();
     URL.revokeObjectURL(url);
   }
 
   montantEnLettres(): string {
-    const n = this.totalTtc();
+    const n = this.netAPayer();
     const dinars = Math.floor(n);
     const millimes = Math.round((n - dinars) * 1000);
     const u = ['','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'];
@@ -687,6 +1061,7 @@ export class FacturesComponent implements OnInit {
   statutLabelKey(statut: string): string {
     const map: Record<string, string> = {
       Brouillon:'FACTURES.STATUS.DRAFT', Validee:'FACTURES.STATUS.VALIDATED',
+      EnAttenteAdmin:'En attente admin',
       Conforme:'FACTURES.STATUS.COMPLIANT', Transmise:'FACTURES.STATUS.SENT',
       Acceptee:'FACTURES.STATUS.ACCEPTED', Rejetee:'FACTURES.STATUS.REJECTED',
       Payee:'FACTURES.STATUS.PAID', PartiellementPayee:'FACTURES.STATUS.PARTIALLY_PAID',
@@ -698,6 +1073,7 @@ export class FacturesComponent implements OnInit {
   getStatutClass(statut: string): string {
     const map: Record<string, string> = {
       Brouillon:'neutral', Validee:'info', Conforme:'info', Transmise:'warn',
+      EnAttenteAdmin:'warn',
       Acceptee:'ok', Rejetee:'err', Payee:'ok', PartiellementPayee:'warn', Annulee:'neutral'
     };
     return map[statut] ?? 'neutral';
@@ -711,7 +1087,7 @@ export class FacturesComponent implements OnInit {
 
   private draftVide(): FactureDraft {
     const defaults = this.getDraftDefaultsFromPersonnalisation(this.today());
-    return {
+    return this.appliquerParametreRsAuDraft({
       clientId:'', typeFacture:'Facture', typeVente:'', devise: defaults.devise,
       dateEmission: this.today(), dateEcheance: defaults.dateEcheance,
       textLibre:'', titre:'', description:'', notes:'',
@@ -719,12 +1095,12 @@ export class FacturesComponent implements OnInit {
       remiseGlobale:0, timbreFiscal: defaults.timbreFiscal, afficherMfClient:true, afficherIban: defaults.afficherIban,
       activerRetenue:false, tauxRetenue:0, modePaiement: defaults.modePaiement, delaiPaiement: defaults.delaiPaiement,
       conditionsPaiement: defaults.conditionsPaiement, etablissement:'', iban: defaults.iban, bic:'', reference:'',
-    };
+    });
   }
 
   private appliquerPersonnalisationAuDraft(draft: FactureDraft): FactureDraft {
     const defaults = this.getDraftDefaultsFromPersonnalisation(draft.dateEmission || this.today());
-    return {
+    return this.appliquerParametreRsAuDraft({
       ...draft,
       devise: draft.devise || defaults.devise,
       dateEcheance: draft.dateEcheance || defaults.dateEcheance,
@@ -734,6 +1110,20 @@ export class FacturesComponent implements OnInit {
       timbreFiscal: draft.timbreFiscal || defaults.timbreFiscal,
       afficherIban: draft.afficherIban || defaults.afficherIban,
       iban: draft.iban || defaults.iban,
+    });
+  }
+
+  private appliquerParametreRsAuDraft(draft: FactureDraft): FactureDraft {
+    const rs = this.parametresFiscaux().find((p: any) =>
+      p?.estActif !== false &&
+      (p?.inclureRetenueSource || String(p?.libelle ?? '').toLowerCase().includes('retenue'))
+    );
+    if (!rs) return draft;
+    if (draft.activerRetenue && draft.tauxRetenue) return draft;
+    return {
+      ...draft,
+      activerRetenue: !!rs.inclureRetenueSource,
+      tauxRetenue: Number(rs.valeur ?? draft.tauxRetenue ?? 0),
     };
   }
 
@@ -800,6 +1190,12 @@ export class FacturesComponent implements OnInit {
     const d = new Date(dateEmission || this.today());
     d.setDate(d.getDate() + delaiPaiement);
     return d.toISOString().substring(0, 10);
+  }
+
+  /** Determine le code fiscal RS tunisien transmis avec la facture. */
+  private codeRetenue(taux: number): string {
+    const normalized = Number(taux || 0).toString().replace('.', '_');
+    return `RS_${normalized}`;
   }
 
   private nouvelleLigne(): LigneFactureDraft {

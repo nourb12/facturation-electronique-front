@@ -17,29 +17,8 @@
     </div>
   </div>
 
-  <!-- --- LAYOUT SPLIT --- -->
+  <!-- --- CONTENT --- -->
   <div class="perso-layout">
-
-    <!-- NAV SIDEBAR -->
-    <nav class="perso-nav">
-      @for (group of navGroups; track group.label) {
-        <div class="nav-group">
-          <span class="nav-group-label">{{ group.label }}</span>
-          @for (item of group.items; track item.key) {
-            <button class="nav-item" [class.active]="activeSectionKey() === item.key"
-                    (click)="setSection(item.key)">
-              <span class="nav-item-icon" [innerHTML]="item.icon"></span>
-              <span class="nav-item-label">{{ item.label }}</span>
-              @if (item.badge) {
-                <span class="nav-badge">{{ item.badge }}</span>
-              }
-            </button>
-          }
-        </div>
-      }
-    </nav>
-
-    <!-- CONTENT AREA -->
     <div class="perso-content" [@sectionIn]="activeSectionKey()">
 
       <!-- ══════════════════════════════════════════
@@ -162,15 +141,44 @@
                   <!-- Séquence dynamique -->
                   <div class="form-group">
                     <label class="form-label">Séquence dynamique</label>
-                    <input class="form-input font-mono" value="YYYY" disabled style="background: var(--bg-edge); cursor: not-allowed;"/>
+                    <div class="sequence-dynamic-panel">
+                      <div class="sequence-dynamic-head">
+                        <span class="sequence-token">{{ sequenceDynamicLabel(seq) }}</span>
+                        <span class="sequence-hint">Aperçu : {{ buildPreview(seq) }}</span>
+                      </div>
+                      <div class="sequence-options">
+                        <div class="sequence-option-field">
+                          <span>Réinitialisation</span>
+                          <select class="form-select" [(ngModel)]="seq.reset" (ngModelChange)="markDirty()">
+                            <option value="jamais">Jamais</option>
+                            <option value="annuelle">Chaque année</option>
+                            <option value="mensuelle">Chaque mois</option>
+                          </select>
+                        </div>
+                        <label class="sequence-option">
+                          <input type="checkbox" [(ngModel)]="seq.includeYear" (ngModelChange)="markDirty()"/>
+                          <span>Inclure l'année</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                   
+                  <!-- Nombre de chiffres -->
+                  <div class="form-group">
+                    <label class="form-label">Nombre de chiffres</label>
+                    <select class="form-select" [(ngModel)]="seq.digits" (ngModelChange)="markDirty()">
+                      <option [ngValue]="3">3 chiffres</option>
+                      <option [ngValue]="4">4 chiffres</option>
+                      <option [ngValue]="5">5 chiffres</option>
+                      <option [ngValue]="6">6 chiffres</option>
+                    </select>
+                  </div>
+
                   <!-- Numéro suivant -->
                   <div class="form-group">
                     <label class="form-label">Numéro suivant</label>
                     <input class="form-input font-mono" type="text" [value]="formatNextNumber(seq)" 
                            (input)="updateNextNumber(seq, $any($event.target).value)" 
-                           (ngModelChange)="markDirty()" 
                            placeholder="00001"/>
                   </div>
                   
@@ -201,9 +209,12 @@
           </div>
 
           <!-- PDF TABS NAVIGATION -->
-          <div class="pdf-tabs">
+          <div class="pdf-tabs" role="tablist" aria-label="Configuration PDF">
             @for (tab of pdfTabs; track tab.key) {
               <button class="pdf-tab-btn" 
+                      type="button"
+                      role="tab"
+                      [attr.aria-selected]="pdfActiveTab() === tab.key"
                       [class.active]="pdfActiveTab() === tab.key"
                       (click)="setPdfTab(tab.key)">
                 <i [class]="'ti ' + tab.icon"></i>
@@ -215,47 +226,85 @@
           <!-- TAB 1: MODÈLES PDF -->
           @if (pdfActiveTab() === 'modeles') {
             <div class="pdf-tab-body">
-              <div class="setting-block">
-                <div class="block-title">Sélectionnez un modèle</div>
-                <div class="modeles-grid">
-                  @for (modele of modelesDisponibles; track modele.key) {
-                    <div class="modele-card" (click)="setModeleAllTypes(modele.key)">
-                      <div class="modele-preview">
-                        <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
-                          <rect x="4" y="4" width="52" height="72" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                          <line x1="10" y1="12" x2="50" y2="12" stroke="currentColor" stroke-width="1"/>
-                          <line x1="10" y1="20" x2="50" y2="20" stroke="currentColor" stroke-width="1"/>
-                          <line x1="10" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="1"/>
-                          <line x1="10" y1="36" x2="50" y2="36" stroke="currentColor" stroke-width="1"/>
-                          <line x1="10" y1="44" x2="50" y2="44" stroke="currentColor" stroke-width="1"/>
-                          <line x1="10" y1="52" x2="30" y2="52" stroke="currentColor" stroke-width="1"/>
-                        </svg>
-                      </div>
-                      <div class="modele-info">
-                        <div class="modele-name">{{ modele.label }}</div>
-                        <div class="modele-desc">{{ modele.description }}</div>
-                      </div>
-                    </div>
-                  }
+              <div class="modeles-studio">
+                <div class="modeles-studio-head">
+                  <div>
+                    <div class="block-title">Studio de modèles</div>
+                    <div class="template-preview-meta">Sélectionnez un style et visualisez la page complète à droite.</div>
+                  </div>
                 </div>
-              </div>
-
-              <div class="setting-block">
-                <div class="block-title">Modèles par type de document</div>
-                <div class="modeles-by-type">
-                  @for (docType of pdfTypesDocuments; track docType.key) {
-                    <div class="modele-type-row">
-                      <div class="type-label">
-                        <i [class]="'ti ' + docType.icon" [style.color]="docType.color"></i>
-                        <span>{{ docType.label }}</span>
-                      </div>
-                      <select class="form-select" [(ngModel)]="data.pdf.modeles[docType.key]" (ngModelChange)="markDirty()">
-                        @for (m of modelesDisponibles; track m.key) {
-                          <option [value]="m.key">{{ m.label }}</option>
-                        }
-                      </select>
+                <div class="modeles-layout">
+                <div class="modeles-config">
+                  <section class="modeles-pane">
+                    <div class="block-title">Sélectionnez un modèle</div>
+                    <div class="modeles-grid">
+                      @for (modele of modelesDisponibles; track modele.key) {
+                        <div class="modele-card"
+                             [class.active]="isAllTypesModele(modele.key)"
+                             (click)="setModeleAllTypes(modele.key)">
+                          <div class="modele-preview">
+                            <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                              <rect x="4" y="4" width="52" height="72" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                              <line x1="10" y1="12" x2="50" y2="12" stroke="currentColor" stroke-width="1"/>
+                              <line x1="10" y1="20" x2="50" y2="20" stroke="currentColor" stroke-width="1"/>
+                              <line x1="10" y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="1"/>
+                              <line x1="10" y1="36" x2="50" y2="36" stroke="currentColor" stroke-width="1"/>
+                              <line x1="10" y1="44" x2="50" y2="44" stroke="currentColor" stroke-width="1"/>
+                              <line x1="10" y1="52" x2="30" y2="52" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                          </div>
+                          <div class="modele-info">
+                            <div class="modele-name">{{ modele.label }}</div>
+                            <div class="modele-desc">{{ modele.description }}</div>
+                          </div>
+                        </div>
+                      }
                     </div>
-                  }
+                  </section>
+
+                  <section class="modeles-pane">
+                    <div class="block-title">Modèles par type de document</div>
+                    <div class="modeles-by-type">
+                      @for (docType of pdfTypesDocuments; track docType.key) {
+                        <div class="modele-type-row"
+                             [class.previewing]="selectedPreviewType() === docType.key">
+                          <div class="type-label">
+                            <i [class]="'ti ' + docType.icon" [style.color]="docType.color"></i>
+                            <span>{{ docType.label }}</span>
+                          </div>
+                          <div class="modele-choices" role="group" [attr.aria-label]="'Modele '+docType.label">
+                            @for (m of modelesDisponibles; track m.key) {
+                              <button class="modele-chip"
+                                      type="button"
+                                      [class.active]="data.pdf.modeles[docType.key] === m.key"
+                                      (click)="setModele(docType.key, m.key)">
+                                {{ m.label }}
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </section>
+                </div>
+
+                <aside class="template-preview-shell">
+                  <div class="template-preview-head">
+                    <div>
+                      <div class="block-title">Visualisation</div>
+                    </div>
+                  </div>
+                  <div class="template-preview-screen">
+                    <div class="template-preview-stage">
+                      <iframe
+                        class="template-preview-frame"
+                        [class.template-preview-frame--ticket]="selectedPreviewModele() === 'ticket'"
+                        [src]="templatePreviewUrl()"
+                        [title]="'Apercu '+selectedPreviewDocumentLabel()+' '+selectedPreviewModele()">
+                      </iframe>
+                    </div>
+                  </div>
+                </aside>
                 </div>
               </div>
             </div>
@@ -266,7 +315,7 @@
             <div class="pdf-tab-body">
               <div class="setting-block">
                 <div class="block-title">Logo de l'entreprise</div>
-                <div class="logo-upload-zone" (click)="triggerLogoUpload()">
+                <div class="logo-upload-zone logo-upload-zone--compact" (click)="triggerLogoUpload()" role="button" tabindex="0">
                   @if (data.pdf.logoUrl) {
                     <img [src]="data.pdf.logoUrl" alt="Logo" class="logo-preview"/>
                     <span class="logo-change">Changer le logo</span>
@@ -289,12 +338,14 @@
                 <div class="block-title">Couleur principale</div>
                 <div class="color-row">
                   @for (c of colorPresets; track c) {
-                    <button class="color-swatch" [style.background]="c"
+                    <button class="color-swatch" type="button" [style.background]="c"
                             [class.active]="data.pdf.primaryColor === c"
+                            [attr.aria-label]="'Couleur '+c"
                             (click)="setPdfPrimaryColor(c)"></button>
                   }
                   <input type="color" class="color-custom" [(ngModel)]="data.pdf.primaryColor" (ngModelChange)="markDirty()" title="Couleur personnalisée"/>
                 </div>
+                <div class="color-preview-bar" [style.background]="data.pdf.primaryColor"></div>
               </div>
 
               <div class="setting-block">
@@ -306,6 +357,56 @@
                   <option value="Calibri">Calibri</option>
                 </select>
               </div>
+
+              <div class="two-col-layout pdf-identity-layout">
+                <div class="setting-block">
+                  <div class="block-title">Mentions fiscales</div>
+                  <div class="legal-grid">
+                    <div class="form-group">
+                      <label class="form-label">Matricule fiscal</label>
+                      <input class="form-input font-mono" [(ngModel)]="data.pdf.matriculeFiscal" placeholder="1234567A/B/C/000" (ngModelChange)="markDirty()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">RNE</label>
+                      <input class="form-input font-mono" [(ngModel)]="data.pdf.rne" placeholder="J12345678" (ngModelChange)="markDirty()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">RC</label>
+                      <input class="form-input font-mono" [(ngModel)]="data.pdf.rc" placeholder="B12345678" (ngModelChange)="markDirty()"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">IBAN / RIB</label>
+                      <input class="form-input font-mono" [(ngModel)]="data.pdf.iban" placeholder="TN59 10 006 0351835984788" (ngModelChange)="markDirty()"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-block">
+                  <div class="block-title">Apercu visuel</div>
+                  <div class="pdf-preview-card" [style.--preview-accent]="data.pdf.primaryColor">
+                    <div class="preview-page">
+                      <div class="preview-head">
+                        <div class="preview-logo">
+                          @if (data.pdf.logoUrl) {
+                            <img [src]="data.pdf.logoUrl" alt="Logo apercu"/>
+                          } @else {
+                            <span>TF</span>
+                          }
+                        </div>
+                        <div class="preview-title">
+                          <strong>Facture</strong>
+                          <span>FAC-2026-0001</span>
+                        </div>
+                      </div>
+                      <div class="preview-line preview-line--accent"></div>
+                      <div class="preview-lines">
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="preview-total">Total TTC 1 190.000 TND</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           }
 
@@ -316,7 +417,7 @@
                 <div class="block-title">Taille du papier</div>
                 <div class="toggle-group">
                   @for (s of ['A4','Letter','A5']; track s) {
-                    <button class="toggle-btn" [class.active]="data.pdf.paperSize === s"
+                    <button class="toggle-btn" type="button" [class.active]="data.pdf.paperSize === s"
                             (click)="setPdfPaperSize(s)">{{ s }}</button>
                   }
                 </div>
@@ -351,8 +452,14 @@
                     <div class="colonne-item" draggable="true" (dragstart)="onDragStart(i)" (dragover)="onDragOver($event, i)" (dragend)="onDragEnd()">
                       <span class="drag-handle">⋮⋮</span>
                       <input class="form-input" [(ngModel)]="col.label" (ngModelChange)="markDirty()" placeholder="Nom colonne"/>
-                      <input class="form-input" [(ngModel)]="col.width" (ngModelChange)="markDirty()" placeholder="Largeur %"/>
-                      <button class="act-btn act-btn--err" (click)="removeColonne(i)">
+                      <button class="switch mini" type="button" [class.on]="col.visible" (click)="col.visible = !col.visible; markDirty()" [attr.aria-label]="'Afficher '+col.label">
+                        <span class="switch-thumb"></span>
+                      </button>
+                      <div class="largeur-input-wrap">
+                        <input class="form-input" type="number" [(ngModel)]="col.largeur" (ngModelChange)="markDirty()" placeholder="Auto" min="5" max="60"/>
+                        <span class="largeur-unit">%</span>
+                      </div>
+                      <button class="act-btn act-btn--err" type="button" (click)="removeColonne(i)" aria-label="Supprimer la colonne">
                         <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                           <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -360,7 +467,7 @@
                     </div>
                   }
                 </div>
-                <button class="btn-secondary" (click)="addColonnePersonnalisee()">+ Ajouter colonne</button>
+                <button class="btn-secondary" type="button" (click)="addColonnePersonnalisee()">+ Ajouter colonne</button>
               </div>
             </div>
           }
@@ -371,15 +478,22 @@
               <div class="setting-block">
                 <div class="block-title">En-tête personnalisé</div>
                 <div class="editor-field">
-                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.enteteText" 
-                    placeholder="Insérez du texte ou des variables…" rows="4" (ngModelChange)="markDirty()"></textarea>
+                  <div #enteteRef class="form-input form-textarea rich-editor" contenteditable="true"
+                       role="textbox" aria-multiline="true"
+                       [textContent]="data.pdf.enteteTexte"
+                       (input)="onEnteteTexteInput($event)"></div>
                   <div class="variables-hint">
                     <span class="hint-label">Variables disponibles:</span>
-                    <div class="variables-list">
-                      @for (v of getVarsParGroupe(variablesEntete, 'Entreprise'); track v.token) {
-                        <button class="var-btn" (click)="insererVariableEntete(v)">{{ v.label }}</button>
-                      }
-                    </div>
+                    @for (groupe of groupesEntete; track groupe) {
+                      <div class="variables-group">
+                        <span class="variables-group-label">{{ groupe }}</span>
+                        <div class="variables-list">
+                          @for (v of getVarsParGroupe(variablesEntete, groupe); track v.token) {
+                            <button class="var-btn" type="button" (click)="insererVariableEntete(v)">{{ v.label }}</button>
+                          }
+                        </div>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -408,16 +522,22 @@
               <div class="setting-block">
                 <div class="block-title">Pied de page personnalisé</div>
                 <div class="editor-field">
-                  <textarea class="form-input form-textarea" [(ngModel)]="data.pdf.footerText"
-                    placeholder="Toute facture non réglée dans les délais sera majorée d'une pénalité de retard…"
-                    rows="4" (ngModelChange)="markDirty()"></textarea>
+                  <div #piedRef class="form-input form-textarea rich-editor" contenteditable="true"
+                       role="textbox" aria-multiline="true"
+                       [textContent]="data.pdf.piedDePageTexte"
+                       (input)="onPiedDePageTexteInput($event)"></div>
                   <div class="variables-hint">
                     <span class="hint-label">Variables disponibles:</span>
-                    <div class="variables-list">
-                      @for (v of getVarsParGroupe(variablesPied, 'Entreprise'); track v.token) {
-                        <button class="var-btn" (click)="insererVariablePied(v)">{{ v.label }}</button>
-                      }
-                    </div>
+                    @for (groupe of groupesPied; track groupe) {
+                      <div class="variables-group">
+                        <span class="variables-group-label">{{ groupe }}</span>
+                        <div class="variables-list">
+                          @for (v of getVarsParGroupe(variablesPied, groupe); track v.token) {
+                            <button class="var-btn" type="button" (click)="insererVariablePied(v)">{{ v.label }}</button>
+                          }
+                        </div>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -430,13 +550,13 @@
               <div class="setting-block">
                 <div class="block-title">Mode de signature</div>
                 <div class="sig-mode-buttons">
-                  <button class="sig-mode-btn" [class.active]="sigMode() === 'draw'" (click)="setSigMode('draw')">
+                  <button class="sig-mode-btn" type="button" [class.active]="sigMode() === 'draw'" (click)="setSigMode('draw')">
                     <i class="ti ti-pencil"></i> Dessiner
                   </button>
-                  <button class="sig-mode-btn" [class.active]="sigMode() === 'type'" (click)="setSigMode('type')">
+                  <button class="sig-mode-btn" type="button" [class.active]="sigMode() === 'type'" (click)="setSigMode('type')">
                     <i class="ti ti-keyboard"></i> Taper
                   </button>
-                  <button class="sig-mode-btn" [class.active]="sigMode() === 'import'" (click)="setSigMode('import')">
+                  <button class="sig-mode-btn" type="button" [class.active]="sigMode() === 'import'" (click)="setSigMode('import')">
                     <i class="ti ti-upload"></i> Importer
                   </button>
                 </div>
@@ -446,7 +566,7 @@
                 <div class="setting-block">
                   <div class="block-title">Dessiner votre signature</div>
                   <canvas #sigCanvas class="sig-canvas" width="400" height="150"></canvas>
-                  <button class="btn-secondary" (click)="clearCanvas()">Effacer</button>
+                  <button class="btn-secondary" type="button" (click)="clearCanvas()">Effacer</button>
                 </div>
               }
 
@@ -466,8 +586,8 @@
                 <div class="setting-block">
                   <div class="block-title">Importer une image de signature</div>
                   <div class="logo-upload-zone" (click)="triggerSigImportUpload()">
-                    @if (data.pdf.sigImageUrl) {
-                      <img [src]="data.pdf.sigImageUrl" alt="Signature" class="logo-preview"/>
+                    @if (data.pdf.signatureUrl || data.pdf.sigImageUrl) {
+                      <img [src]="data.pdf.signatureUrl || data.pdf.sigImageUrl" alt="Signature" class="logo-preview"/>
                       <span class="logo-change">Changer l'image</span>
                     } @else {
                       <div class="logo-placeholder">
@@ -485,7 +605,7 @@
 
               <div class="setting-block">
                 <div class="block-title">Cachet de l'entreprise</div>
-                <div class="logo-upload-zone" (click)="triggerLogoUpload()">
+                <div class="logo-upload-zone" (click)="triggerCachetUpload()">
                   @if (data.pdf.cachetUrl) {
                     <img [src]="data.pdf.cachetUrl" alt="Cachet" class="logo-preview"/>
                     <span class="logo-change">Changer le cachet</span>
@@ -498,6 +618,55 @@
                       <span>Déposer votre cachet</span>
                       <span class="logo-hint">PNG, JPG · max 2 Mo</span>
                     </div>
+                  }
+                </div>
+                <input #cachetInput type="file" accept="image/*" style="display:none" (change)="onCachetImageChange($event)"/>
+              </div>
+
+              <div class="setting-block">
+                <div class="block-title">Validation et tracabilite</div>
+                <div class="toggle-row">
+                  <div>
+                    <div class="toggle-label">Afficher la zone signature</div>
+                    <div class="toggle-hint">Reserve un espace propre en bas du PDF.</div>
+                  </div>
+                  <button class="switch" type="button" [class.on]="data.pdf.signatureActive" (click)="data.pdf.signatureActive = !data.pdf.signatureActive; markDirty()">
+                    <span class="switch-thumb"></span>
+                  </button>
+                </div>
+                <div class="toggle-row">
+                  <div>
+                    <div class="toggle-label">Hash de verification</div>
+                    <div class="toggle-hint">Affiche une empreinte de controle pour l'archivage.</div>
+                  </div>
+                  <button class="switch" type="button" [class.on]="data.pdf.hashActive" (click)="data.pdf.hashActive = !data.pdf.hashActive; markDirty()">
+                    <span class="switch-thumb"></span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="setting-block sig-preview-panel">
+                <div class="block-title">Apercu bas de page</div>
+                <div class="sig-doc-mock">
+                  <div class="sig-doc-line"></div>
+                  <div class="sig-doc-bottom">
+                    <div class="sig-box">
+                      <span>Cachet</span>
+                      @if (data.pdf.cachetUrl) {
+                        <img [src]="data.pdf.cachetUrl" alt="Cachet apercu"/>
+                      }
+                    </div>
+                    <div class="sig-box">
+                      <span>Signature</span>
+                      @if (sigMode() === 'type' && sigTyped) {
+                        <strong [style.font-family]="data.pdf.sigFont">{{ sigTyped }}</strong>
+                      } @else if (data.pdf.signatureUrl || data.pdf.sigImageUrl) {
+                        <img [src]="data.pdf.signatureUrl || data.pdf.sigImageUrl" alt="Signature apercu"/>
+                      }
+                    </div>
+                  </div>
+                  @if (data.pdf.hashActive) {
+                    <div class="hash-badge">Hash SHA-256 visible</div>
                   }
                 </div>
               </div>
@@ -576,7 +745,7 @@
             <p class="section-desc">Configurez les types de documents disponibles et leurs paramètres par défaut (Art. 18 Code TVA Tunisie).</p>
           </div>
 
-          <div class="table-box">
+          <div class="table-box table-box--types">
             <table class="ft-table">
               <thead>
                 <tr>
@@ -628,7 +797,7 @@
                       </select>
                     </td>
                     <td>
-                      <button class="switch" [class.on]="t.actif" (click)="toggleTypeDocumentActive(t)">
+                      <button class="switch" type="button" [class.on]="t.actif" (click)="toggleTypeDocumentActive(t)" [attr.aria-label]="'Activer '+t.label">
                         <span class="switch-thumb"></span>
                       </button>
                     </td>
@@ -646,8 +815,8 @@
       @if (activeSectionKey() === 'catVente') {
         <div class="section-body">
           <div class="section-intro">
-            <h2 class="section-title">Catégories de <em>vente</em></h2>
-            <p class="section-desc">Organisez vos produits/services. Liées aux comptes de produits (Classe 7 — PCG Tunisie).</p>
+            <h2 class="section-title">Catégories de vente</h2>
+            <p class="section-desc">Définissez comment chaque vente sera classée dans vos factures et votre comptabilité. Le compte associé doit appartenir à la classe 7 du PCG tunisien.</p>
           </div>
           <ng-container *ngTemplateOutlet="categoryManager; context: { $implicit: data.categoriesVente, type: 'vente' }"/>
         </div>
@@ -659,8 +828,8 @@
       @if (activeSectionKey() === 'catAchat') {
         <div class="section-body">
           <div class="section-intro">
-            <h2 class="section-title">Catégories d'<em>achat</em></h2>
-            <p class="section-desc">Classifiez vos dépenses. Liées aux comptes de charges (Classe 6 — PCG Tunisie). Importantes pour déductibilité TVA.</p>
+            <h2 class="section-title">Catégories d'achat</h2>
+            <p class="section-desc">Classez vos dépenses pour faciliter le suivi, la TVA déductible et les écritures comptables. Le compte associé doit généralement appartenir à la classe 6.</p>
           </div>
           <ng-container *ngTemplateOutlet="categoryManager; context: { $implicit: data.categoriesAchat, type: 'achat' }"/>
         </div>
@@ -720,9 +889,9 @@
                     </td>
                     <td>
                       @if (tax.systeme) {
-                        <span class="font-mono ft-bold" [style.color]="'var(--c-tuniflow)'">{{ tax.taux }}%</span>
+                        <span class="font-number ft-bold" [style.color]="'var(--c-tuniflow)'">{{ tax.taux }}%</span>
                       } @else {
-                        <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="tax.taux"
+                        <input class="form-input font-number" style="width:70px" type="number" [(ngModel)]="tax.taux"
                                min="0" max="100" step="0.1" (ngModelChange)="markDirty()"/>
                       }
                     </td>
@@ -802,9 +971,9 @@
                     </td>
                     <td>
                       @if (r.systeme) {
-                        <span class="font-mono ft-bold" [style.color]="'var(--c-tuniflow)'">{{ r.taux }}%</span>
+                        <span class="font-number ft-bold" [style.color]="'var(--c-tuniflow)'">{{ r.taux }}%</span>
                       } @else {
-                        <input class="form-input font-mono" style="width:70px" type="number" [(ngModel)]="r.taux"
+                        <input class="form-input font-number" style="width:70px" type="number" [(ngModel)]="r.taux"
                                min="0" max="100" step="0.5" (ngModelChange)="markDirty()"/>
                       }
                     </td>
@@ -958,14 +1127,25 @@
       @if (activeSectionKey() === 'paiements') {
         <div class="section-body">
           <div class="section-intro">
-            <h2 class="section-title">Modes de <em>paiement</em></h2>
-            <p class="section-desc">Configurez les modes de règlement. Attention : plafond légal espèces B2B = 5 000 DT (Loi 2022-46).</p>
+            <h2 class="section-title">Modes de paiement</h2>
+            <p class="section-desc">Personnalisez les moyens de règlement proposés sur vos documents et leurs comptes comptables. Les modes système sont modifiables, mais ne peuvent pas être supprimés.</p>
           </div>
 
-          <div class="table-box">
+          <div class="payment-guide">
+            <div>
+              <strong>Configuration appliquée aux paiements</strong>
+              <span>Le délai prépare l'échéance et le compte PCG alimente automatiquement l'écriture comptable.</span>
+            </div>
+            <span class="payment-guide__legal">Espèces B2B : plafond légal 5 000 DT</span>
+          </div>
+
+          <div class="table-box table-box--payments">
             <div class="table-toolbar">
-              <span class="lignes-title">Modes disponibles</span>
-              <button class="btn-add-ligne" (click)="addModePaiement()">+ Ajouter</button>
+              <div class="category-toolbar__copy">
+                <strong>{{ data.modesPaiement.length }} modes disponibles</strong>
+                <span>Activez uniquement les moyens proposés à vos utilisateurs.</span>
+              </div>
+              <button class="btn-add-ligne" type="button" (click)="addModePaiement()"><span aria-hidden="true">+</span> Ajouter un mode</button>
             </div>
             <table class="ft-table">
               <thead>
@@ -987,14 +1167,14 @@
                         <div class="ft-client-init" [style.background]="m.color+'18'" [style.color]="m.color">
                           <span [innerHTML]="m.icon"></span>
                         </div>
-                        <input class="form-input" style="width:150px" [(ngModel)]="m.label"
-                               [disabled]="m.systeme" (ngModelChange)="markDirty()"/>
+                        <input class="form-input payment-name-input" [(ngModel)]="m.label"
+                               placeholder="Nom du mode" (ngModelChange)="markDirty()"/>
                       </div>
                     </td>
-                    <td><input class="form-input font-mono" style="width:70px" [(ngModel)]="m.code"
-                               [disabled]="m.systeme" (ngModelChange)="markDirty()"/></td>
+                    <td><input class="form-input font-mono payment-code-input" [(ngModel)]="m.code"
+                               placeholder="CODE" maxlength="12" (ngModelChange)="markDirty()"/></td>
                     <td>
-                      <select class="form-select" style="width:120px" [(ngModel)]="m.delai" (ngModelChange)="markDirty()">
+                      <select class="form-select payment-delay-select" [(ngModel)]="m.delai" (ngModelChange)="markDirty()">
                         <option [ngValue]="0">Comptant</option>
                         <option [ngValue]="30">30 jours</option>
                         <option [ngValue]="60">60 jours</option>
@@ -1004,28 +1184,31 @@
                     </td>
                     <td>
                       @if (m.plafond) {
-                        <span class="badge badge--warn">{{ m.plafond | number }} DT</span>
+                        <span class="badge badge--warn" title="Plafond légal informatif, non modifiable">{{ m.plafond | number }} DT</span>
                       } @else {
-                        <span class="ft-muted">—</span>
+                        <span class="ft-muted">Non applicable</span>
                       }
                     </td>
                     <td>
-                      <input class="form-input font-mono" style="width:90px" [(ngModel)]="m.comptePcg"
-                             placeholder="532…" (ngModelChange)="markDirty()"/>
+                      <input class="form-input font-mono payment-account-input" [(ngModel)]="m.comptePcg"
+                             placeholder="532000" inputmode="numeric" maxlength="6" (ngModelChange)="markDirty()"/>
                     </td>
                     <td>
-                      <button class="switch" [class.on]="m.actif"
+                      <button class="switch" type="button" [class.on]="m.actif"
+                              [attr.aria-label]="(m.actif ? 'Désactiver ' : 'Activer ') + m.label"
                               (click)="toggleModePaiementActive(m)">
                         <span class="switch-thumb"></span>
                       </button>
                     </td>
-                    <td>
+                    <td class="payment-action-cell">
                       @if (!m.systeme) {
-                        <button class="act-btn act-btn--err" (click)="removeModePaiement(m.id)">
-                          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                            <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <button class="act-btn act-btn--err" type="button" (click)="removeModePaiement(m.id)" [attr.aria-label]="'Supprimer '+m.label" title="Supprimer ce mode">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
                         </button>
+                      } @else {
+                        <span class="payment-system-badge" title="Mode standard TuniFlow : modification autorisée, suppression protégée">Système</span>
                       }
                     </td>
                   </tr>
@@ -1156,7 +1339,7 @@
                 <div class="form-group">
                   <label class="form-label">Langue des documents</label>
                   <div class="toggle-group">
-                    @for (l of [['fr','Français'],['ar','العربية'],['en','English']]; track l[0]) {
+                    @for (l of languesPdf; track l[0]) {
                       <button class="toggle-btn" [class.active]="data.conditions.langue === l[0]"
                               (click)="setConditionsLangue(l[0])">{{ l[1] }}</button>
                     }
@@ -1164,7 +1347,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Taux de pénalité de retard (%)</label>
-                  <input class="form-input font-mono" type="number" [(ngModel)]="data.conditions.penaliteRetard"
+                  <input class="form-input font-number" type="number" [(ngModel)]="data.conditions.penaliteRetard"
                          min="0" max="100" step="0.5" (ngModelChange)="markDirty()"/>
                 </div>
               </div>
@@ -1275,34 +1458,79 @@
 
 <!-- --- TEMPLATE RÉUTILISABLE : CATEGORY MANAGER --- -->
 <ng-template #categoryManager let-cats let-type="type">
-  <div class="table-box">
+  <div class="category-guide" [class.category-guide--purchase]="type === 'achat'">
+    <div class="category-guide__icon" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M5 7h14M7 3h10l2 4v13H5V7l2-4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M9 11h6M9 15h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <strong>{{ type === 'vente' ? 'Comment utiliser une catégorie de vente ?' : "Comment utiliser une catégorie d'achat ?" }}</strong>
+      <p>
+        {{ type === 'vente'
+          ? 'Sélectionnez cette catégorie sur une ligne de facture : TuniFlow appliquera automatiquement le compte de produit et le taux de TVA configurés.'
+          : "Sélectionnez cette catégorie sur une dépense ou une facture fournisseur : TuniFlow préparera le compte de charge et la TVA déductible." }}
+      </p>
+    </div>
+  </div>
+
+  <div class="table-box table-box--categories">
     <div class="table-toolbar">
-      <div class="search-box" style="min-width:200px">
+      <div class="category-toolbar__copy">
+        <strong>{{ cats.length }} catégorie(s)</strong>
+        <span>Les modifications seront appliquées après enregistrement.</span>
+      </div>
+      <div class="category-toolbar__actions">
+      <div class="search-box category-search">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
           <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/>
           <path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <input type="text" placeholder="Rechercher…" [(ngModel)]="catSearch"/>
+        <input type="search" placeholder="Rechercher une catégorie" [(ngModel)]="catSearch"/>
       </div>
-      <button class="btn-add-ligne" (click)="addCategory(type)">+ Ajouter</button>
+      <button class="btn-add-ligne" type="button" (click)="addCategory(type)">
+        <span aria-hidden="true">+</span> Ajouter une catégorie
+      </button>
+      </div>
     </div>
     <table class="ft-table">
       <thead>
         <tr>
-          <th>Titre</th>
-          <th>Code comptable (PCG)</th>
-          <th>TVA associée</th>
-          <th>Documents</th>
-          <th>Action</th>
+          <th>Catégorie</th>
+          <th>Compte PCG</th>
+          <th>TVA</th>
+          <th>Utilisation</th>
+          <th class="category-actions-heading">Suppression</th>
         </tr>
       </thead>
       <tbody>
         @for (c of cats | catFilter:catSearch; track c.id) {
           <tr>
-            <td><input class="form-input" style="width:220px" [(ngModel)]="c.label" (ngModelChange)="markDirty()"/></td>
-            <td><input class="form-input font-mono" style="width:100px" [(ngModel)]="c.compte" placeholder="601000" (ngModelChange)="markDirty()"/></td>
             <td>
-              <select class="form-select" style="width:90px" [(ngModel)]="c.tva" (ngModelChange)="markDirty()">
+              <label class="category-field">
+                <span class="sr-only">Nom de la catégorie</span>
+                <input class="form-input category-name-input" [(ngModel)]="c.label" placeholder="Nom de la catégorie" (ngModelChange)="markDirty()"/>
+              </label>
+            </td>
+            <td>
+              <label class="category-field">
+                <span class="sr-only">Compte comptable PCG</span>
+                <input
+                  class="form-input font-mono category-account-input"
+                  [class.is-invalid]="!!c.compte && !isValidCategoryAccount(c.compte, type)"
+                  [(ngModel)]="c.compte"
+                  [placeholder]="type === 'vente' ? '706000' : '601000'"
+                  inputmode="numeric"
+                  maxlength="6"
+                  (ngModelChange)="markDirty()"/>
+                @if (c.compte && !isValidCategoryAccount(c.compte, type)) {
+                  <span class="category-field-error">{{ type === 'vente' ? 'Compte classe 7 attendu' : 'Compte classe 6 attendu' }}</span>
+                }
+              </label>
+            </td>
+            <td>
+              <select class="form-select category-tax-select" [(ngModel)]="c.tva" (ngModelChange)="markDirty()" [attr.aria-label]="'TVA de '+c.label">
                 <option [ngValue]="19">19%</option>
                 <option [ngValue]="13">13%</option>
                 <option [ngValue]="7">7%</option>
@@ -1311,18 +1539,33 @@
             </td>
             <td>
               @if (c.docs > 0) {
-                <span class="badge badge--tuniflow">{{ c.docs }} doc(s)</span>
+                <span class="badge badge--info">{{ c.docs }} document(s)</span>
               } @else {
-                <span class="badge badge--neutral">0 document</span>
+                <span class="badge badge--neutral">Non utilisée</span>
               }
             </td>
-            <td>
-              <button class="act-btn act-btn--err" (click)="removeCategory(type, c.id)" [disabled]="c.docs > 0">
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                  <path d="M1.5 3h8M4 3V2h3v1M2.5 3l.5 7h5l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
+            <td class="category-action-cell">
+              @if (c.docs > 0) {
+                <span class="category-locked" [title]="'Suppression impossible : cette catégorie est utilisée dans '+c.docs+' document(s).'">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  Utilisée
+                </span>
+              } @else {
+                <button class="act-btn act-btn--err" type="button" (click)="removeCategory(type, c.id)" [attr.aria-label]="'Supprimer '+c.label" title="Supprimer cette catégorie">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              }
             </td>
+          </tr>
+        }
+        @if ((cats | catFilter:catSearch).length === 0) {
+          <tr>
+            <td colspan="5" class="empty-row">Aucune catégorie ne correspond à votre recherche.</td>
           </tr>
         }
       </tbody>

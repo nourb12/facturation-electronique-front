@@ -2,7 +2,7 @@
 <nav class="navbar" [class.scrolled]="scrolled">
   <div class="nav-inner">
     <a routerLink="/landing" class="nav-logo">
-      <span class="nav-name">TunisFlow</span>
+      <span class="nav-name">TuniFlow</span>
     </a>
 
     <ul class="nav-links">
@@ -224,7 +224,7 @@
                     </svg>
                     {{ selectedDateLabel() }} · {{ selectedSlot() }}
                   </div>
-                  <button class="db-btn-ey db-btn-ey--full" (click)="proceedToForm()">
+                  <button class="btn-primary" (click)="proceedToForm()">
                     Confirmer ce créneau <span>→</span>
                   </button>
                 </div>
@@ -359,7 +359,7 @@
             <button type="button" class="db-btn-ghost" (click)="backToCalendar()">Annuler</button>
             <button
               type="submit"
-              class="db-btn-ey"
+              class="btn-primary"
               [disabled]="bookingFormRef.invalid || isSubmitting()"
             >
               @if (isSubmitting()) {
@@ -418,8 +418,8 @@
           </div>
         </div>
         <div class="db-confirm-actions">
-          <button class="db-btn-ghost" (click)="bookAnother()">Planifier une autre session</button>
-          <a routerLink="/landing" class="db-btn-ey">Retour à l'accueil →</a>
+          <button class="btn-ghost" (click)="bookAnother()">Planifier une autre session</button>
+          <a routerLink="/landing" class="btn-primary">Retour à l'accueil →</a>
         </div>
       </div>
     }

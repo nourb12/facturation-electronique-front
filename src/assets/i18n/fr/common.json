@@ -66,6 +66,7 @@
     "ITEMS": {
       "DASHBOARD": "Tableau de bord",
       "INVOICES": "Factures",
+      "SCANNED_INVOICES": "Factures scannées",
       "QUOTES": "Devis",
       "CREDIT_NOTES": "Avoirs",
       "PAYMENTS": "Paiements",
@@ -74,13 +75,48 @@
       "CATEGORIES": "Catégories",
       "MY_COMPANY": "Mon entreprise",
       "CUSTOMIZATION": "Personnalisation",
+      "CALENDAR": "Calendrier",
       "USERS": "Utilisateurs",
       "TRANSACTIONS": "Transactions",
       "FISCAL_PARAMS": "Paramètres fiscaux",
       "TAXES": "Taxes",
+      "ACCOUNTING_DASHBOARD": "Comptabilité",
+      "CHART_OF_ACCOUNTS": "Plan comptable",
+      "ACCOUNTING_ENTRIES": "Écritures comptables",
+      "LEGAL_JOURNALS": "Journaux légaux",
+      "ACCOUNTING_CONSULTATION": "Consultation",
+      "ASSET_MANAGEMENT": "Gestion des actifs",
+      "FINANCIAL_STATEMENTS": "États comptables",
+      "ACCOUNTING_PERIODS": "Exercices comptables",
+      "ANALYTIC_ACCOUNTING": "Analytique",
       "REPORTS": "Rapports",
       "LOGOUT": "Déconnexion"
     }
+  },
+  "ACCOUNTING": {
+    "BADGE": "Tableau responsable entreprise",
+    "TITLE": "Comptabilité",
+    "SUBTITLE": "Pilotage comptable complet : PCG Tunisie, journaux légaux, états NCT, fiscalité, actifs et analytique.",
+    "SEARCH": "Rechercher un compte, une pièce, un journal...",
+    "REFRESH": "Actualiser"
+  },
+  "SCANNED_INVOICES": {
+    "TITLE": "Factures scannées",
+    "SUBTITLE": "{{total}} à traiter",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Rechercher (libellé, tiers, type...)",
+      "TYPE_ALL": "Tous types"
+    },
+    "ACTIONS": {
+      "OPEN": "Ouvrir",
+      "CONFIRM": "Confirmer",
+      "SIGN": "Signer",
+      "PREV": "Précédent",
+      "NEXT": "Suivant"
+    },
+    "NO_FILE": "Aucun fichier",
+    "MISSING_FIELDS": "{{count}} champ(s) à compléter",
+    "EMPTY": "Aucune facture scannée à traiter."
   },
   "ADMIN": {
     "SIDEBAR": {
@@ -110,7 +146,7 @@
       "FEATURES": "Fonctionnalités",
       "COMPLIANCE": "Conformité",
       "SECURITY": "Sécurité",
-      "WHY": "Pourquoi TunisFlow",
+      "WHY": "Pourquoi TuniFlow",
       "AUDIENCE": "Pour qui",
       "CONTACT": "Contact"
     },
@@ -118,7 +154,7 @@
       "SIGN_IN": "Se connecter",
       "REQUEST_ACCESS": "Demander l'accès",
       "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
-      "SEE_DEMO": "Voir le fonctionnement"
+      "SEE_DEMO": "Demander Démo"
     }
   },
   "PW_STRENGTH": {

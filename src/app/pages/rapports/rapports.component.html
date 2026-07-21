@@ -6,7 +6,7 @@
     </div>
     <div class="header-actions">
       <button class="btn-secondary" (click)="exportPDF()"> Exporter PDF</button>
-      <button class="btn-secondary" (click)="exportExcel()"> Exporter Excel</button>
+      <button class="btn-secondary" (click)="exportExcel()"> Exporter CSV</button>
     </div>
   </div>
 
@@ -110,11 +110,11 @@
         <tr *ngFor="let r of recapData()" [class.recap-current]="r.current">
           <td class="mono">{{ r.mois }}</td>
           <td>{{ r.nbFact }}</td>
-          <td class="mono">{{ r.ht }}</td>
-          <td class="mono warn">{{ r.tva }}</td>
-          <td class="mono bold">{{ r.ttc }}</td>
-          <td class="mono ok">{{ r.paye }}</td>
-          <td class="mono err">{{ r.impaye }}</td>
+          <td class="num">{{ r.ht }}</td>
+          <td class="num warn">{{ r.tva }}</td>
+          <td class="num bold">{{ r.ttc }}</td>
+          <td class="num ok">{{ r.paye }}</td>
+          <td class="num err">{{ r.impaye }}</td>
           <td>
             <div class="recap-bar-wrap">
               <div class="recap-bar" [style.width]="r.taux + '%'"></div>

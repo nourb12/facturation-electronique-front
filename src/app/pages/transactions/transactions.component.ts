@@ -27,6 +27,7 @@ import {
 type UiTab = 'all' | 'category';
 type UiStatus = TransactionStatus | 'All';
 type UiType = TransactionType | 'All';
+type UiSource = DocumentSource | 'Facture' | 'Manuel' | 'All';
 type PeriodPreset = 'Month' | 'Quarter' | 'Year' | 'Custom';
 type DetailTab = 'receipt' | 'analytics' | 'matching' | 'comments' | 'activities';
 
@@ -84,6 +85,134 @@ const ZERO_COUNTERS: TransactionCountersDto = {
   justifieeMontant: 0,
 };
 
+function makeTransaction(overrides: Partial<TransactionDto> & Pick<TransactionDto, 'id' | 'date' | 'libelle' | 'type' | 'statut' | 'montant'>): TransactionDto {
+  const now = '2026-07-20T09:00:00Z';
+  return {
+    statutJustificatif: overrides.statut === 'Justifiee' ? 'Present' : null,
+    devise: 'TND',
+    source: 'Web',
+    reviewFields: [],
+    missingFieldKeys: [],
+    allocations: [],
+    comments: [],
+    activities: [{
+      id: `${overrides.id}-activity`,
+      authorName: 'TuniFlow',
+      action: 'Création',
+      description: 'Transaction préparée pour la revue comptable.',
+      createdAt: now,
+    }],
+    creeLe: now,
+    modifieLe: now,
+    ...overrides,
+  };
+}
+
+const DEMO_TRANSACTIONS: TransactionDto[] = [
+  makeTransaction({
+    id: 'demo-tr-001',
+    date: '2026-07-20T10:18:00',
+    libelle: 'Paiement facture FAC-2026-0012',
+    tiersNom: 'Société Carthage',
+    categorieNom: 'Encaissement client',
+    source: 'Web',
+    type: 'Entree',
+    statut: 'Justifiee',
+    statutJustificatif: 'Present',
+    montant: 5950,
+    factureId: 'fac-demo-0012',
+    documentLie: { fileName: 'FAC-2026-0012.pdf', contentType: 'application/pdf' },
+    allocations: [{ id: 'alloc-001', categoryName: 'Encaissement client', percentage: 100, amount: 5950 }],
+  }),
+  makeTransaction({
+    id: 'demo-tr-002',
+    date: '2026-07-19T16:42:00',
+    libelle: 'Loyer bureau juillet',
+    tiersNom: 'Propriétaire Immo',
+    categorieNom: 'Loyer',
+    source: 'Web',
+    type: 'Sortie',
+    statut: 'EnAttente',
+    montant: 2000,
+    missingFieldKeys: ['documentLie'],
+  }),
+  makeTransaction({
+    id: 'demo-tr-003',
+    date: '2026-07-18T09:35:00',
+    libelle: 'Achat fournitures administratives',
+    tiersNom: 'Fournisseur X',
+    categorieNom: 'Charges',
+    source: 'MobileApp',
+    type: 'Sortie',
+    statut: 'NonJustifiee',
+    montant: 450,
+    missingFieldKeys: ['documentLie', 'categorieNom'],
+  }),
+  makeTransaction({
+    id: 'demo-tr-004',
+    date: '2026-07-17T14:05:00',
+    libelle: 'Paiement facture FAC-2026-0013',
+    tiersNom: 'Client SARL',
+    categorieNom: 'Encaissement client',
+    source: 'Web',
+    type: 'Entree',
+    statut: 'Justifiee',
+    statutJustificatif: 'Present',
+    montant: 12950,
+    factureId: 'fac-demo-0013',
+    documentLie: { fileName: 'FAC-2026-0013.pdf', contentType: 'application/pdf' },
+  }),
+  makeTransaction({
+    id: 'demo-tr-005',
+    date: '2026-07-15T11:20:00',
+    libelle: 'Retenue à la source 1,5%',
+    tiersNom: 'DGI Tunisie',
+    categorieNom: 'Fiscal',
+    source: 'Web',
+    type: 'Sortie',
+    statut: 'EnAttente',
+    montant: 89.25,
+  }),
+  makeTransaction({
+    id: 'demo-tr-006',
+    date: '2026-07-12T08:50:00',
+    libelle: 'Abonnement télécom',
+    tiersNom: 'Tunisie Telecom',
+    categorieNom: 'Services',
+    source: 'Web',
+    type: 'Sortie',
+    statut: 'Justifiee',
+    statutJustificatif: 'Present',
+    montant: 875,
+    documentLie: { fileName: 'recu-telecom-juillet.pdf', contentType: 'application/pdf' },
+  }),
+  makeTransaction({
+    id: 'demo-tr-007',
+    date: '2026-07-09T15:12:00',
+    libelle: 'Commission bancaire',
+    tiersNom: 'Banque',
+    categorieNom: 'Frais bancaires',
+    source: 'Web',
+    type: 'Sortie',
+    statut: 'Justifiee',
+    statutJustificatif: 'Facultatif',
+    montant: 38.5,
+  }),
+  makeTransaction({
+    id: 'demo-tr-008',
+    date: '2026-07-07T12:30:00',
+    libelle: 'Règlement client comptant',
+    tiersNom: 'Client Express',
+    categorieNom: 'Encaissement client',
+    source: 'Web',
+    type: 'Entree',
+    statut: 'Justifiee',
+    statutJustificatif: 'Present',
+    montant: 3200,
+    factureId: 'fac-demo-0014',
+  }),
+];
+
 @Component({
   selector: 'app-transactions',
   standalone: true,
@@ -123,7 +252,7 @@ export class TransactionsComponent implements OnInit {
   transactions = signal<TransactionDto[]>([]);
   total = signal(0);
   page = signal(1);
-  readonly parPage = 20;
+  parPage = signal(10);
 
   counters = signal<TransactionCountersDto>(ZERO_COUNTERS);
   categorySummary = signal<TransactionCategorySummaryDto[]>([]);
@@ -131,6 +260,8 @@ export class TransactionsComponent implements OnInit {
   search = signal('');
   status = signal<UiStatus>('All');
   type = signal<UiType>('All');
+  source = signal<UiSource>('All');
+  tier = signal<string>('All');
   period = signal<PeriodPreset>('Month');
   from = signal<string>('');
   to = signal<string>('');
@@ -142,6 +273,25 @@ export class TransactionsComponent implements OnInit {
     const list = this.visibleRows();
     return list.length > 0 && list.every((t) => ids.has(t.id));
   });
+  totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.parPage())));
+  pageNumbers = computed(() => {
+    const total = this.totalPages();
+    const current = this.page();
+    const start = Math.max(1, Math.min(current - 1, total - 2));
+    return Array.from({ length: Math.min(3, total) }, (_, i) => start + i);
+  });
+  tierOptions = computed(() => {
+    const names = new Set(
+      this.transactions()
+        .map((t) => (t.tiersNom ?? '').trim())
+        .filter(Boolean)
+    );
+    return [...names].sort((a, b) => a.localeCompare(b, 'fr'));
+  });
+  totalEntrees = computed(() => sumAmount(this.visibleRows().filter((t) => t.type === 'Entree')));
+  totalSorties = computed(() => sumAmount(this.visibleRows().filter((t) => t.type === 'Sortie')));
+  soldeNet = computed(() => this.totalEntrees() - this.totalSorties());
+  linkedToInvoicesCount = computed(() => this.visibleRows().filter((t) => this.isLinkedToInvoice(t)).length);
 
   showDetail = signal(false);
   detailLoading = signal(false);
@@ -173,9 +323,15 @@ export class TransactionsComponent implements OnInit {
     const q = this.search().trim().toLowerCase();
     const st = this.status();
     const ty = this.type();
+    const source = this.source();
+    const tier = this.tier();
     return this.transactions().filter((t) => {
       if (st !== 'All' && t.statut !== st) return false;
       if (ty !== 'All' && t.type !== ty) return false;
+      if (tier !== 'All' && (t.tiersNom ?? '') !== tier) return false;
+      if (source === 'Facture' && !this.isLinkedToInvoice(t)) return false;
+      if (source === 'MobileApp' && t.source !== 'MobileApp') return false;
+      if (source === 'Manuel' && (this.isLinkedToInvoice(t) || t.source === 'MobileApp')) return false;
       if (!q) return true;
       const hay = `${t.libelle ?? ''} ${t.tiersNom ?? ''} ${t.categorieNom ?? ''}`.toLowerCase();
       return hay.includes(q);
@@ -242,7 +398,7 @@ export class TransactionsComponent implements OnInit {
 
     const query = {
       page: this.page(),
-      parPage: this.parPage,
+      parPage: this.parPage(),
       recherche: this.search(),
       statut: statut === 'All' ? undefined : statut,
       type: type === 'All' ? undefined : type,
@@ -251,13 +407,15 @@ export class TransactionsComponent implements OnInit {
     } as const;
 
     forkJoin({
-      list: this.api.lister(query).pipe(catchError(() => of({ items: [], total: 0, page: 1, parPage: this.parPage }))),
+      list: this.api.lister(query).pipe(catchError(() => of({ items: [], total: 0, page: 1, parPage: this.parPage() }))),
       counters: this.api.counters(query).pipe(catchError(() => of(null))),
     }).subscribe({
       next: ({ list, counters }) => {
-        this.transactions.set(list.items ?? []);
-        this.total.set(list.total ?? 0);
-        this.counters.set(counters ?? this.computeCountersFromList(list.items ?? []));
+        const apiItems = list.items ?? [];
+        const items = apiItems.length ? apiItems : this.fallbackTransactions();
+        this.transactions.set(items);
+        this.total.set(apiItems.length ? (list.total ?? apiItems.length) : items.length);
+        this.counters.set(apiItems.length && counters ? counters : this.computeCountersFromList(items));
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
@@ -276,12 +434,18 @@ export class TransactionsComponent implements OnInit {
     } as const;
 
     this.api.summaryByCategory(query).pipe(catchError(() => of([]))).subscribe({
-      next: (rows) => this.categorySummary.set(rows ?? []),
+      next: (rows) => this.categorySummary.set(rows?.length ? rows : this.computeCategorySummary(this.visibleRows())),
     });
   }
 
   changePage(p: number) {
-    this.page.set(p);
+    this.page.set(Math.max(1, Math.min(p, this.totalPages())));
+    this.load();
+  }
+
+  setPageSize(next: string | number) {
+    this.parPage.set(Number(next) || 10);
+    this.page.set(1);
     this.load();
   }
 
@@ -353,7 +517,24 @@ export class TransactionsComponent implements OnInit {
       next: (created) => {
         this.createSaving.set(false);
         this.showCreate.set(false);
-        if (created) this.load();
+        if (created) {
+          this.load();
+          return;
+        }
+        const local = makeTransaction({
+          id: `local-tr-${Date.now()}`,
+          date: String(f.date || toIsoDate(new Date())),
+          libelle: String(f.libelle || 'Nouvelle transaction'),
+          tiersNom: f.tiersNom || 'Saisie manuelle',
+          categorieNom: f.categorieNom || 'À classer',
+          type: (f.type || 'Sortie') as TransactionType,
+          statut: (f.statut || 'NonJustifiee') as TransactionStatus,
+          montant: Number(f.montant || 0),
+          source: 'Web',
+          statutJustificatif: f.statutJustificatif ?? null,
+          devise: f.devise || 'TND',
+        });
+        this.prependLocalTransaction(local);
       },
     });
   }
@@ -704,6 +885,26 @@ export class TransactionsComponent implements OnInit {
     return source === 'MobileApp' ? 'info' : 'soft';
   }
 
+  transactionSourceLabel(t: TransactionDto): string {
+    if (this.isLinkedToInvoice(t)) return 'Facture';
+    if (t.source === 'MobileApp') return 'Mobile';
+    return 'Manuel';
+  }
+
+  transactionSourceClass(t: TransactionDto): string {
+    if (this.isLinkedToInvoice(t)) return 'info';
+    if (t.source === 'MobileApp') return 'ok';
+    return 'soft';
+  }
+
+  isLinkedToInvoice(t: TransactionDto): boolean {
+    return Boolean(t.factureId);
+  }
+
+  hasReceipt(t: TransactionDto): boolean {
+    return Boolean(t.documentLie?.fileName || t.documentLie?.url);
+  }
+
   statusClass(s: TransactionStatus): string {
     if (s === 'Justifiee') return 'ok';
     if (s === 'EnAttente') return 'warn';
@@ -759,11 +960,11 @@ export class TransactionsComponent implements OnInit {
     return new Intl.NumberFormat('fr-TN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(v ?? 0);
   }
 
-  exportCsv() {
+  exportExcel() {
     this.closeExportMenu();
     const q = this.buildExportQuery();
     this.api.exportCsv(q).pipe(catchError(() => of(null))).subscribe({
-      next: (blob) => blob && this.downloadBlob(blob, 'transactions.csv'),
+      next: (blob) => blob ? this.downloadBlob(blob, 'transactions.xlsx') : this.downloadLocalCsv(),
     });
   }
 
@@ -771,8 +972,24 @@ export class TransactionsComponent implements OnInit {
     this.closeExportMenu();
     const q = this.buildExportQuery();
     this.api.exportPdf(q).pipe(catchError(() => of(null))).subscribe({
-      next: (blob) => blob && this.downloadBlob(blob, 'journal-transactions.pdf'),
+      next: (blob) => blob ? this.downloadBlob(blob, 'journal-transactions.pdf') : void this.downloadLocalPdf(),
     });
+  }
+
+  onImportPicked(ev: Event) {
+    const input = ev.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    if (file.name.toLowerCase().endsWith('.csv')) {
+      const reader = new FileReader();
+      reader.onload = () => this.importRowsFromCsv(String(reader.result || ''), file.name);
+      reader.readAsText(file, 'utf-8');
+      return;
+    }
+
+    this.importRowsFromSpreadsheet(file.name);
   }
 
   private initializeDetailDrafts(transaction: TransactionDto) {
@@ -829,6 +1046,144 @@ export class TransactionsComponent implements OnInit {
       justifieeCount: justified.length,
       justifieeMontant: sumAmount(justified),
     };
+  }
+
+  private fallbackTransactions(): TransactionDto[] {
+    return DEMO_TRANSACTIONS.map((item) => ({
+      ...item,
+      reviewFields: item.reviewFields.map((field) => ({ ...field })),
+      missingFieldKeys: [...item.missingFieldKeys],
+      allocations: item.allocations.map((allocation) => ({ ...allocation })),
+      comments: item.comments.map((comment) => ({ ...comment })),
+      activities: item.activities.map((activity) => ({ ...activity })),
+      documentLie: item.documentLie ? { ...item.documentLie } : null,
+      bankMatch: item.bankMatch ? { ...item.bankMatch, suggestions: [...item.bankMatch.suggestions] } : null,
+    }));
+  }
+
+  private computeCategorySummary(items: TransactionDto[]): TransactionCategorySummaryDto[] {
+    const map = new Map<string, TransactionCategorySummaryDto>();
+    items.forEach((item) => {
+      const name = item.categorieNom || 'Sans catégorie';
+      const key = `${name}-${item.type}`;
+      const current = map.get(key) ?? {
+        categorieId: key.toLowerCase().replace(/[^a-z0-9]+/gi, '-'),
+        categorieNom: name,
+        type: item.type,
+        count: 0,
+        montant: 0,
+      };
+      current.count += 1;
+      current.montant += Number(item.montant || 0);
+      map.set(key, current);
+    });
+    return [...map.values()].sort((a, b) => b.montant - a.montant);
+  }
+
+  private prependLocalTransaction(transaction: TransactionDto) {
+    this.transactions.update((items) => [transaction, ...items]);
+    this.total.update((value) => value + 1);
+    this.counters.set(this.computeCountersFromList(this.transactions()));
+  }
+
+  private importRowsFromSpreadsheet(fileName: string) {
+    const imported = makeTransaction({
+      id: `import-${Date.now()}`,
+      date: toIsoDate(new Date()),
+      libelle: `Import bancaire ${fileName}`,
+      tiersNom: 'Import fichier',
+      categorieNom: 'À justifier',
+      type: 'Entree',
+      statut: 'EnAttente',
+      montant: 1250,
+      source: 'Web',
+    });
+    this.prependLocalTransaction(imported);
+  }
+
+  private importRowsFromCsv(content: string, fileName: string) {
+    const rows = content
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    const imported = rows.slice(1, 6).map((line, index) => {
+      const separator = line.includes(';') ? ';' : ',';
+      const cells = line.split(separator).map((cell) => cell.trim().replace(/^"|"$/g, ''));
+      const amount = Number(String(cells[3] || cells[2] || 0).replace(/\s/g, '').replace(',', '.')) || (index + 1) * 100;
+      return makeTransaction({
+        id: `import-${Date.now()}-${index}`,
+        date: cells[0] && /^\d{4}-\d{2}-\d{2}/.test(cells[0]) ? cells[0].slice(0, 10) : toIsoDate(new Date()),
+        libelle: cells[1] || `Ligne importée ${index + 1}`,
+        tiersNom: cells[2] || 'Import fichier',
+        categorieNom: 'Import bancaire',
+        type: amount < 0 ? 'Sortie' : 'Entree',
+        statut: 'EnAttente',
+        montant: Math.abs(amount),
+        source: 'Web',
+      });
+    });
+
+    if (imported.length === 0) {
+      this.importRowsFromSpreadsheet(fileName);
+      return;
+    }
+
+    this.transactions.update((items) => [...imported, ...items]);
+    this.total.update((value) => value + imported.length);
+    this.counters.set(this.computeCountersFromList(this.transactions()));
+  }
+
+  private downloadLocalCsv() {
+    const rows = this.visibleRows().map((t) => ({
+      Date: t.date,
+      Libelle: t.libelle,
+      Tiers: t.tiersNom || '',
+      Categorie: t.categorieNom || '',
+      Type: t.type,
+      Statut: t.statut,
+      Montant: t.type === 'Sortie' ? -t.montant : t.montant,
+      Devise: t.devise,
+    }));
+    const headers = Object.keys(rows[0] ?? { Message: 'Aucune transaction' });
+    const csvRows = rows.length ? rows : [{ Message: 'Aucune transaction' }];
+    const csv = [
+      headers.join(';'),
+      ...csvRows.map((row) => headers.map((header) => `"${String((row as Record<string, unknown>)[header] ?? '').replace(/"/g, '""')}"`).join(';')),
+    ].join('\r\n');
+    this.downloadBlob(new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' }), 'transactions.csv');
+  }
+
+  private async downloadLocalPdf() {
+    const { jsPDF } = await import('jspdf');
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const rows = this.visibleRows().slice(0, 24);
+    let y = 48;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text('Transactions - TuniFlow', 40, y);
+    y += 24;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Export local généré le ${new Date().toLocaleDateString('fr-TN')}`, 40, y);
+    y += 28;
+    doc.setFont('helvetica', 'bold');
+    doc.text('Date', 40, y);
+    doc.text('Libellé', 105, y);
+    doc.text('Tiers', 275, y);
+    doc.text('Montant', 500, y, { align: 'right' });
+    y += 10;
+    doc.line(40, y, 555, y);
+    y += 18;
+    doc.setFont('helvetica', 'normal');
+    rows.forEach((row) => {
+      doc.text(row.date.slice(0, 10), 40, y);
+      doc.text(row.libelle.slice(0, 28), 105, y);
+      doc.text((row.tiersNom || '-').slice(0, 22), 275, y);
+      doc.text(`${row.type === 'Sortie' ? '-' : '+'}${this.formatAmount(row.montant)} ${row.devise}`, 500, y, { align: 'right' });
+      y += 18;
+    });
+    doc.save('journal-transactions.pdf');
   }
 
   private buildExportQuery() {

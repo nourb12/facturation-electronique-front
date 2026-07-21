@@ -29,7 +29,10 @@ export const jwtInterceptor: HttpInterceptorFn = (
   const router = inject(Router);
   const refreshSvc = inject(TokenRefreshService);
 
-  if (environment.demoMode) {
+  const token = auth.token;
+  const loginRoute = () => router.url.startsWith('/admin') ? ['/admin/login'] : ['/login/entreprise'];
+
+  if (environment.demoMode || token?.startsWith('local_demo_')) {
     return next(req);
   }
 
@@ -40,8 +43,6 @@ export const jwtInterceptor: HttpInterceptorFn = (
   }
 
   const isPublic = PUBLIC_ROUTES.some(route => req.url.includes(route));
-  const token = auth.token;
-
   const authReq = token && !isPublic
     ? req.clone({ headers: req.headers.set('Authorization', `Bearer ${token}`) })
     : req;
@@ -64,7 +65,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
             catchError(refreshErr => {
               refreshSvc.endRefresh(false);
               auth.clearSession();
-              router.navigate(['/login/entreprise']);
+              router.navigate(loginRoute());
               return throwError(() => refreshErr);
             })
           );
@@ -85,7 +86,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
 
       if (err.status === 403) {
         auth.clearSession();
-        router.navigate(['/login/entreprise']);
+        router.navigate(loginRoute());
         return throwError(() => err);
       }
 

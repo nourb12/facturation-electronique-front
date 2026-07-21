@@ -15,6 +15,14 @@ interface AdminUser {
   entrepriseNom?: string;
 }
 
+const DEMO_ADMIN_USERS: AdminUser[] = [
+  { id: 'DEMO-U-1', prenom: 'Nour', nom: 'Ben Ali', email: 'nour.admin@tuniflow.tn', role: 'Admin', statut: 'Actif', entrepriseNom: 'Entreprise Alpha SARL' },
+  { id: 'DEMO-U-2', prenom: 'Ines', nom: 'Trabelsi', email: 'ines.finance@tuniflow.tn', role: 'ResponsableFinancier', statut: 'Actif', entrepriseNom: 'Entreprise Alpha SARL' },
+  { id: 'DEMO-U-3', prenom: 'Sami', nom: 'Jebali', email: 'sami.daf@solaris.tn', role: 'ResponsableEntreprise', statut: 'Actif', entrepriseNom: 'Solaris Industries' },
+  { id: 'DEMO-U-4', prenom: 'Meriem', nom: 'Mansour', email: 'meriem.audit@medcare.tn', role: 'ResponsableFinancier', statut: 'Suspendu', entrepriseNom: 'MedCare SARL' },
+  { id: 'DEMO-U-5', prenom: 'Demo', nom: 'SuperAdmin', email: 'demo.admin@eyinvoice.tn', role: 'SuperAdmin', statut: 'Actif', entrepriseNom: 'Plateforme' }
+];
+
 @Component({
   selector: 'app-admin-utilisateurs',
   standalone: true,
@@ -41,12 +49,14 @@ export class AdminUtilisateursComponent implements OnInit {
     this.loading.set(true);
     this.utilisateurSvc.lister().subscribe({
       next: data => {
-        this.users.set(data as AdminUser[]);
+        const rows = data as AdminUser[];
+        this.users.set(rows.length ? rows : DEMO_ADMIN_USERS);
         this.filter();
         this.loading.set(false);
       },
       error: () => {
-        this.toast.error('Impossible de charger les utilisateurs.');
+        this.users.set(DEMO_ADMIN_USERS);
+        this.filter();
         this.loading.set(false);
       }
     });

@@ -11,7 +11,7 @@
       @if (saved) {
         <div class="save-toast" [@fadeIn]>Modifications enregistrees</div>
       }
-      <button class="btn-save btn-yellow" (click)="save()" [disabled]="saving()">Enregistrer</button>
+      <button class="btn-primary" (click)="save()" [disabled]="saving()">Enregistrer</button>
     </div>
   </header>
 
@@ -303,7 +303,7 @@
                             <input class="field-input" type="password" placeholder="••••••••"
                               [(ngModel)]="digiTokenPin" maxlength="8"/>
                           </div>
-                          <button class="btn-primary btn-yellow" (click)="connectDigiToken()" [disabled]="digiTokenConnecting || !digiTokenPin">
+                          <button class="btn-primary" (click)="connectDigiToken()" [disabled]="digiTokenConnecting || !digiTokenPin">
                             @if (digiTokenConnecting) { Connexion... } @else { Connecter le DigiToken }
                           </button>
                         </div>
@@ -361,7 +361,7 @@
                             <input class="field-input" type="password" placeholder="••••••••"
                               [(ngModel)]="certPassword"/>
                           </div>
-                          <button class="btn-primary btn-yellow" (click)="validateCertificat()" [disabled]="certValidating || !certPassword">
+                          <button class="btn-primary" (click)="validateCertificat()" [disabled]="certValidating || !certPassword">
                             @if (certValidating) { Validation... } @else { Valider le certificat }
                           </button>
                         </div>
@@ -643,7 +643,7 @@
                       </label>
                     </div>
 
-                    <button class="btn-primary btn-yellow" style="margin-top:14px; width:100%;" (click)="confirmerSurveillance()">
+                    <button class="btn-primary" style="margin-top:14px; width:100%;" (click)="confirmerSurveillance()">
                       Confirmer la configuration des alertes
                     </button>
                   } @else {
@@ -672,7 +672,7 @@
           @if (activeStepIndex !== 0) {
             <button class="btn-secondary" (click)="prevStep()">Retour</button>
           }
-          <button class="btn-primary btn-yellow" (click)="nextStep()" [disabled]="saving()">
+          <button class="btn-primary" (click)="nextStep()" [disabled]="saving()">
             @if (activeStepIndex === steps.length - 1) { Enregistrer } @else { Continuer }
           </button>
         </div>

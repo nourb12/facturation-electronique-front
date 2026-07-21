@@ -1,0 +1,134 @@
+<div class="modal-backdrop" (click)="onBackdrop($event)">
+  <div class="modal-box">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        {{ isEdit ? 'Modifier l\'événement' : 'Nouvel événement' }}
+      </h2>
+      <button class="modal-close" (click)="close()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+
+      <!-- Type selector -->
+      <div class="form-group">
+        <label class="form-label">Type d'événement</label>
+        <div class="type-grid">
+          @for (t of eventTypes; track t.key) {
+            <button class="type-btn"
+                    [class.active]="form().type === t.key"
+                    (click)="updateField('type', t.key)">
+              <i class="ti {{ t.icon }}"></i>
+              <span>{{ t.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Titre -->
+      <div class="form-group">
+        <label class="form-label">Titre <span class="required">*</span></label>
+        <input class="form-input"
+               type="text"
+               placeholder="Ex : Réunion bilan mensuel…"
+               [ngModel]="form().title"
+               (ngModelChange)="updateField('title', $event)" />
+      </div>
+
+      <!-- Date + heures -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date <span class="required">*</span></label>
+          <input class="form-input" type="date"
+                 [ngModel]="form().date"
+                 (ngModelChange)="updateField('date', $event)" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Début</label>
+          <input class="form-input" type="time"
+                 [ngModel]="form().startTime"
+                 (ngModelChange)="updateField('startTime', $event)" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fin</label>
+          <input class="form-input" type="time"
+                 [ngModel]="form().endTime"
+                 (ngModelChange)="updateField('endTime', $event)" />
+        </div>
+      </div>
+
+      <!-- Lien Zoom -->
+      @if (showZoomField()) {
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ti ti-video" style="font-size:12px"></i> Lien Zoom / Meet
+          </label>
+          <input class="form-input font-mono"
+                 type="url"
+                 placeholder="https://zoom.us/j/…"
+                 [ngModel]="form().zoomLink"
+                 (ngModelChange)="updateField('zoomLink', $event)" />
+        </div>
+      }
+
+      <!-- Champs facture -->
+      @if (showInvoiceFields()) {
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Client</label>
+            <input class="form-input"
+                   type="text"
+                   placeholder="Nom du client…"
+                   [ngModel]="form().linkedClientName"
+                   (ngModelChange)="updateField('linkedClientName', $event)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Montant (TND)</label>
+            <input class="form-input font-number"
+                   type="number"
+                   placeholder="0"
+                   [ngModel]="form().linkedAmount"
+                   (ngModelChange)="updateField('linkedAmount', +$event)" />
+          </div>
+        </div>
+      }
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label">Notes / Description</label>
+        <textarea class="form-input form-textarea"
+                  rows="3"
+                  placeholder="Informations complémentaires…"
+                  [ngModel]="form().description"
+                  (ngModelChange)="updateField('description', $event)"></textarea>
+      </div>
+
+      <!-- Rappel -->
+      <div class="form-group">
+        <label class="form-label"><i class="ti ti-bell" style="font-size:12px"></i> Rappel</label>
+        <select class="form-select"
+                [ngModel]="form().reminderMinutes"
+                (ngModelChange)="updateField('reminderMinutes', +$event)">
+          @for (r of reminderOptions; track r.value) {
+            <option [ngValue]="r.value">{{ r.label }}</option>
+          }
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn-ghost" (click)="close()">Annuler</button>
+      <button class="btn-primary" (click)="save()" [disabled]="!form().title.trim() || !form().date">
+        <i class="ti ti-check"></i>
+        {{ isEdit ? 'Mettre à jour' : 'Enregistrer' }}
+      </button>
+    </div>
+
+  </div>
+</div>

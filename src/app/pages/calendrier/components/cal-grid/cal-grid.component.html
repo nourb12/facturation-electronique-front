@@ -1,0 +1,12 @@
+<div class="cal-grid-wrap">
+  <div class="cal-day-headers">
+    @for (h of DAY_HEADERS; track h) {
+      <div class="day-header">{{ h }}</div>
+    }
+  </div>
+  <div class="cal-grid">
+    @for (day of grid(); track day.date.toISOString()) {
+      <app-cal-cell [day]="day"></app-cal-cell>
+    }
+  </div>
+</div>

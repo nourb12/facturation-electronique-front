@@ -48,7 +48,7 @@ export class AdminAuditComponent implements OnInit {
       : [...this.logs()];
   }
 
-  exportCsv() {
+  exportExcel() {
     const header = ['Date', 'Utilisateur', 'Action', 'Ressource', 'IP', 'Statut'];
     const rows = this.filtered.map(l => [
       l.date, l.utilisateur, l.action, l.ressource, l.ip,
@@ -58,7 +58,7 @@ export class AdminAuditComponent implements OnInit {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'audit_log.csv'; a.click();
+    a.href = url; a.download = 'audit_log.xlsx'; a.click();
     URL.revokeObjectURL(url);
   }
 }

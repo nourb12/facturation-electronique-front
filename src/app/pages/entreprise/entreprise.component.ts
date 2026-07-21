@@ -412,20 +412,52 @@ export class EntrepriseComponent implements OnInit {
 
   getEntrepriseValue(key: string) { return !!this.entreprise?.[key]; }
 
+  private compactPayload(payload: Record<string, any>) {
+    return Object.fromEntries(
+      Object.entries(payload).filter(([, value]) => {
+        if (value === undefined || value === null) return false;
+        if (typeof value === 'string' && value.trim() === '') return false;
+        return true;
+      })
+    );
+  }
+
+  private asText(value: any) {
+    if (value === undefined || value === null) return undefined;
+    return String(value);
+  }
+
+  private asNumber(value: any) {
+    if (value === undefined || value === null || value === '') return undefined;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+
+  private apiErrorMessage(err: any) {
+    const body = err?.error;
+    if (Array.isArray(body?.errors) && body.errors.length) return body.errors[0];
+    if (body?.errors && typeof body.errors === 'object') {
+      const first = Object.values(body.errors).flat()[0];
+      if (typeof first === 'string') return first;
+    }
+    return body?.message ?? 'Erreur.';
+  }
+
   save() {
     if (this.saving()) return;
     const id = this.auth.entrepriseId;
     if (!id) return;
-    const payload = {
+    const payload = this.compactPayload({
       nom: this.entreprise.raisonSociale,
       raisonSociale: this.entreprise.raisonSociale,
       nomCommercial: this.entreprise.nomCommercial,
       forme: this.entreprise.forme,
-      capital: this.entreprise.capital,
+      capital: this.asText(this.entreprise.capital),
       dateCreation: this.entreprise.dateCreation,
       activiteCode: this.entreprise.activiteCode,
       activiteLibelle: this.activiteLabel,
       adresse: this.entreprise.adresse,
+      ville: this.entreprise.ville || this.entreprise.gouvernorat,
       codePostal: this.entreprise.codePostal,
       gouvernorat: this.entreprise.gouvernorat,
       pays: this.entreprise.pays,
@@ -437,15 +469,8 @@ export class EntrepriseComponent implements OnInit {
       matriculeFiscal: this.entreprise.matriculeFiscal,
       numRNE: this.entreprise.numRNE,
       regimeTVA: this.entreprise.regimeTVA,
-      tauxTVAPrincipal: this.entreprise.tauxTVAPrincipal,
-      teifSignature: this.entreprise.teifSignature,
-      teifArchivage: this.entreprise.teifArchivage,
-      teifHorodatage: this.entreprise.teifHorodatage,
-      teifSandbox: this.entreprise.teifSandbox,
-      teifSurveille: this.entreprise.teifSurveille,
-      signatureType: this.signatureType,
-      surveillanceEmail: this.surveillanceEmail
-    } as any;
+      tauxTVAPrincipal: this.asNumber(this.entreprise.tauxTVAPrincipal)
+    });
     this.saving.set(true);
     this.svc.mettreAJour(id, payload).subscribe({
       next: (e) => {
@@ -458,7 +483,7 @@ export class EntrepriseComponent implements OnInit {
       },
       error: (err) => {
         this.saving.set(false);
-        this.toast.error(err?.error?.message ?? 'Erreur.');
+        this.toast.error(this.apiErrorMessage(err));
       }
     });
   }

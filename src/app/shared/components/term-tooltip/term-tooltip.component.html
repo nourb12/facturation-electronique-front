@@ -1,0 +1,17 @@
+<span class="term-tooltip" [attr.data-term]="tone">
+  <button
+    type="button"
+    class="term-trigger"
+    [attr.aria-label]="ariaLabel"
+    [attr.aria-describedby]="tooltipId">
+    <span class="term-info" aria-hidden="true">i</span>
+    <span class="term-label">{{ acronym }}</span>
+  </button>
+
+  <span class="term-panel" [id]="tooltipId" role="tooltip">
+    <span class="term-kicker">Info</span>
+    <strong class="term-full">{{ fullName }}</strong>
+    <span class="term-desc">{{ description }}</span>
+    <small class="term-source">{{ source }}</small>
+  </span>
+</span>

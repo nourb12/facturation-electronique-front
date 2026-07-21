@@ -1,0 +1,230 @@
+<section class="profit-page">
+  <header class="profit-topbar">
+    <div>
+      <p class="eyebrow">Rentabilité</p>
+      <h1>Profit</h1>
+      <p>Analyse automatique du chiffre d'affaires, des coûts, taxes, marges et risques.</p>
+    </div>
+    <div class="top-actions">
+      <button type="button" class="secondary-action" (click)="loadFactures()">
+        <i class="ti ti-refresh"></i>
+        Actualiser
+      </button>
+      <button type="button" class="primary-action" (click)="exportCsv()" [disabled]="rows().length === 0">
+        <i class="ti ti-download"></i>
+        Export CSV
+      </button>
+    </div>
+  </header>
+
+  <section class="profit-controls">
+    <div class="segmented" aria-label="Vue profit">
+      <button type="button" [class.active]="view() === 'documents'" (click)="view.set('documents')">
+        <i class="ti ti-file-invoice"></i>
+        Documents
+      </button>
+      <button type="button" [class.active]="view() === 'deals'" (click)="view.set('deals')">
+        <i class="ti ti-briefcase"></i>
+        Deals
+      </button>
+    </div>
+
+    <div class="segmented compact" aria-label="Période">
+      <button type="button" [class.active]="period() === 'mois'" (click)="period.set('mois')">Mois</button>
+      <button type="button" [class.active]="period() === 'trimestre'" (click)="period.set('trimestre')">Trimestre</button>
+      <button type="button" [class.active]="period() === 'annee'" (click)="period.set('annee')">Année</button>
+      <button type="button" [class.active]="period() === 'tout'" (click)="period.set('tout')">Tout</button>
+    </div>
+
+    <label class="search-box">
+      <i class="ti ti-search"></i>
+      <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Rechercher client, facture, deal...">
+    </label>
+  </section>
+
+  @if (loading()) {
+    <div class="loading-card">
+      <span class="spinner"></span>
+      Chargement de la rentabilité...
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="alert-card danger">
+        <i class="ti ti-alert-triangle"></i>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="kpi-grid">
+      <article class="kpi-card" data-tone="cash">
+        <span><i class="ti ti-coins"></i></span>
+        <div>
+          <p>Chiffre d'affaires HT</p>
+          <strong>{{ money(summary().revenue) }}</strong>
+          <small>{{ summary().documents }} document(s) inclus</small>
+        </div>
+      </article>
+      <article class="kpi-card" data-tone="profit">
+        <span><i class="ti ti-chart-line"></i></span>
+        <div>
+          <p>Profit net estimé</p>
+          <strong [class.negative]="summary().netProfit < 0">{{ money(summary().netProfit) }}</strong>
+          <small>Marge nette {{ summary().marginRate | number:'1.1-1' }}%</small>
+        </div>
+      </article>
+      <article class="kpi-card" data-tone="cost">
+        <span><i class="ti ti-calculator"></i></span>
+        <div>
+          <p>Coûts estimés</p>
+          <strong>{{ money(summary().cost) }}</strong>
+          <small>Seuil rentabilité {{ money(summary().breakEven) }}</small>
+        </div>
+      </article>
+      <article class="kpi-card" data-tone="risk">
+        <span><i class="ti ti-shield-exclamation"></i></span>
+        <div>
+          <p>Marges à risque</p>
+          <strong>{{ summary().riskCount }}</strong>
+          <small>Seuil alerte {{ warningMarginRate() | number:'1.0-0' }}%</small>
+        </div>
+      </article>
+    </div>
+
+    <div class="profit-grid">
+      <section class="panel assumptions">
+        <div class="panel-head">
+          <div>
+            <h2>Hypothèses de coût</h2>
+            <p>Ajuste les coûts pour simuler la marge par facture sans attendre un module achat complet.</p>
+          </div>
+        </div>
+
+        <div class="preset-row">
+          @for (preset of presets; track preset.label) {
+            <button type="button" (click)="setPreset(preset)">
+              {{ preset.label }}
+            </button>
+          }
+        </div>
+
+        <div class="slider-grid">
+          <label>
+            <span>Coût direct</span>
+            <input type="range" min="0" max="95" step="1" [ngModel]="directCostRate()" (ngModelChange)="directCostRate.set(+$event)">
+            <b>{{ directCostRate() }}%</b>
+          </label>
+          <label>
+            <span>Frais variables</span>
+            <input type="range" min="0" max="30" step="0.5" [ngModel]="variableFeeRate()" (ngModelChange)="variableFeeRate.set(+$event)">
+            <b>{{ variableFeeRate() }}%</b>
+          </label>
+          <label>
+            <span>Frais fixes / document</span>
+            <input type="number" min="0" step="5" [ngModel]="fixedCostPerDocument()" (ngModelChange)="fixedCostPerDocument.set(+$event)">
+            <b>TND</b>
+          </label>
+          <label>
+            <span>Seuil marge alerte</span>
+            <input type="range" min="0" max="50" step="1" [ngModel]="warningMarginRate()" (ngModelChange)="warningMarginRate.set(+$event)">
+            <b>{{ warningMarginRate() }}%</b>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel insight-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Analyse rapide</h2>
+            <p>Clients et deals les plus contributeurs au profit.</p>
+          </div>
+        </div>
+        <div class="insight-list">
+          @for (client of topClients(); track client.client) {
+            <div class="insight-row">
+              <div>
+                <strong>{{ client.client }}</strong>
+                <span>{{ money(client.revenue) }} CA</span>
+              </div>
+              <b [class.negative]="client.profit < 0">{{ money(client.profit) }}</b>
+            </div>
+          } @empty {
+            <div class="empty-state">Aucune donnée de profit pour cette sélection.</div>
+          }
+        </div>
+      </section>
+    </div>
+
+    @if (view() === 'documents') {
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Profit par document</h2>
+            <p>Chaque facture est analysée avec coût direct, frais, taxes et marge nette.</p>
+          </div>
+          <span class="count-chip">{{ rows().length }} ligne(s)</span>
+        </div>
+
+        <div class="profit-list">
+          @for (row of rows(); track row.id) {
+            <article class="profit-row" [attr.data-risk]="row.risk">
+              <div class="doc-cell">
+                <strong>{{ row.numero }}</strong>
+                <span>{{ row.client }}</span>
+                <small>{{ row.date | date:'dd/MM/yyyy' }} - {{ row.deal }}</small>
+              </div>
+              <div class="metrics-cell">
+                <div><span>CA HT</span><b>{{ money(row.revenue, row.devise) }}</b></div>
+                <div><span>Coûts</span><b>{{ money(row.totalCost, row.devise) }}</b></div>
+                <div><span>TVA / RS</span><b>{{ money(row.tax + row.withholding, row.devise) }}</b></div>
+                <div><span>Profit</span><b [class.negative]="row.netProfit < 0">{{ money(row.netProfit, row.devise) }}</b></div>
+              </div>
+              <div class="margin-cell">
+                <span class="risk-badge" [attr.data-risk]="row.risk">{{ riskLabel(row.risk) }}</span>
+                <strong>{{ row.marginRate | number:'1.1-1' }}%</strong>
+                <div class="bar"><span [style.width.%]="row.marginRate < 0 ? 0 : row.marginRate > 60 ? 60 : row.marginRate"></span></div>
+              </div>
+            </article>
+          } @empty {
+            <div class="empty-state">Aucune facture trouvée pour cette sélection.</div>
+          }
+        </div>
+      </section>
+    } @else {
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Profit par deal</h2>
+            <p>Regroupement par référence de facture, sinon par client et mois.</p>
+          </div>
+          <span class="count-chip">{{ deals().length }} deal(s)</span>
+        </div>
+
+        <div class="deal-grid">
+          @for (deal of deals(); track deal.key) {
+            <article class="deal-card" [attr.data-risk]="deal.risk">
+              <header>
+                <div>
+                  <span>{{ deal.client }}</span>
+                  <h3>{{ deal.label }}</h3>
+                </div>
+                <span class="risk-badge" [attr.data-risk]="deal.risk">{{ riskLabel(deal.risk) }}</span>
+              </header>
+              <dl>
+                <div><dt>Documents</dt><dd>{{ deal.documents }}</dd></div>
+                <div><dt>CA HT</dt><dd>{{ money(deal.revenue) }}</dd></div>
+                <div><dt>Coûts</dt><dd>{{ money(deal.totalCost) }}</dd></div>
+                <div><dt>Profit net</dt><dd [class.negative]="deal.netProfit < 0">{{ money(deal.netProfit) }}</dd></div>
+              </dl>
+              <footer>
+                <span>Marge {{ deal.marginRate | number:'1.1-1' }}%</span>
+                <div class="bar"><span [style.width.%]="deal.marginRate < 0 ? 0 : deal.marginRate > 60 ? 60 : deal.marginRate"></span></div>
+              </footer>
+            </article>
+          } @empty {
+            <div class="empty-state">Aucun deal trouvé pour cette sélection.</div>
+          }
+        </div>
+      </section>
+    }
+  }
+</section>

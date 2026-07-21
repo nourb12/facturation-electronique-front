@@ -1,0 +1,252 @@
+<div class="kb-shell" [class.modal-active]="modalOuverte() || detailCarte()">
+  <div class="kb-topbar">
+    <div class="kb-topbar-left">
+      <i class="ti ti-layout-kanban kb-icon" aria-hidden="true"></i>
+      <span class="kb-title">Board comptabilité</span>
+      <span class="kb-badge">{{ total() }} tâches</span>
+    </div>
+    <div class="kb-topbar-right">
+      <div class="kb-filter-row">
+        <button
+          *ngFor="let k of categorieKeys"
+          class="kb-filter-chip"
+          [class.active]="filtreCateg() === k"
+          [style.--chip-color]="CATEGORIES[k].color"
+          [style.--chip-bg]="CATEGORIES[k].bg"
+          (click)="setFiltreCateg(k)"
+          [attr.aria-pressed]="filtreCateg() === k">
+          {{ CATEGORIES[k].label }}
+        </button>
+      </div>
+      <div class="kb-search-wrap">
+        <i class="ti ti-search kb-search-icon" aria-hidden="true"></i>
+        <input
+          type="text"
+          class="kb-search"
+          placeholder="Rechercher..."
+          [ngModel]="filtreSearch()"
+          (ngModelChange)="filtreSearch.set($event)" />
+      </div>
+      <button class="kb-btn-primary" (click)="ouvrirModal()">
+        <i class="ti ti-plus" aria-hidden="true"></i> Nouvelle tâche
+      </button>
+    </div>
+  </div>
+
+  <div class="kb-stats">
+    <div class="stat-chip stat-urgent">
+      <i class="ti ti-alert-circle" aria-hidden="true"></i>
+      {{ urgentes() }} urgentes
+    </div>
+    <div class="stat-chip stat-en-cours">
+      <i class="ti ti-clock" aria-hidden="true"></i>
+      {{ enCours() }} en cours
+    </div>
+    <div class="stat-chip stat-done">
+      <i class="ti ti-check" aria-hidden="true"></i>
+      {{ pctDone() }}% terminé
+    </div>
+    <div class="stat-progress">
+      <div class="stat-progress-fill" [style.width.%]="pctDone()"></div>
+    </div>
+  </div>
+
+  <div class="kb-board">
+    <div
+      *ngFor="let col of COLONNES"
+      class="kb-col"
+      [class.drag-over]="dragOverCol === col.id"
+      (dragover)="onDragOver($event, col.id)"
+      (drop)="onDrop($event, col.id)"
+      (dragleave)="onDragLeave(col.id)">
+      <div class="kb-col-head">
+        <div class="kb-col-label">
+          <div class="kb-col-dot" [class]="col.dot"></div>
+          <span class="kb-col-name">{{ col.label }}</span>
+        </div>
+        <span class="kb-col-count">{{ cartesParColonne(col.id).length }}</span>
+      </div>
+
+      <div class="kb-col-progress">
+        <div
+          class="kb-col-progress-fill"
+          [class]="'prog-' + col.id"
+          [style.width]="col.id === 'done' ? '100%' : col.id === 'doing' ? (enCours() ? '60%' : '0%') : (cartesParColonne('todo').length ? '100%' : '0%')">
+        </div>
+      </div>
+
+      <div class="kb-cards" role="list">
+        <div
+          *ngFor="let carte of cartesParColonne(col.id); trackBy: trackById"
+          class="kb-card"
+          [class.dragging]="draggingId === carte.id"
+          draggable="true"
+          role="listitem"
+          [attr.aria-label]="carte.titre"
+          (dragstart)="onDragStart(carte.id)"
+          (dragend)="onDragEnd()"
+          (dblclick)="cycleColonne(carte)"
+          (click)="ouvrirDetail(carte)">
+          <div class="kb-card-top">
+            <span
+              class="kb-tag"
+              [style.color]="CATEGORIES[carte.categorie].color"
+              [style.background]="CATEGORIES[carte.categorie].bg">
+              {{ CATEGORIES[carte.categorie].label }}
+            </span>
+          </div>
+
+          <div class="kb-card-title">{{ carte.titre }}</div>
+          <div class="kb-card-desc" *ngIf="carte.description">{{ carte.description }}</div>
+
+          <div class="kb-card-meta">
+            <div class="kb-card-meta-left">
+              <span class="kb-prio" [style.color]="PRIORITES[carte.priorite].color">
+                <i class="ti ti-point-filled" aria-hidden="true"></i>
+                {{ PRIORITES[carte.priorite].label }}
+              </span>
+              <ng-container *ngIf="echeanceInfo(carte.echeance) as info">
+                <span class="kb-date" [class.urgent]="info.urgent" [class.depasse]="info.depasse">
+                  <i class="ti ti-calendar" aria-hidden="true"></i>
+                  {{ info.texte }}
+                  <span *ngIf="info.depasse">!</span>
+                </span>
+              </ng-container>
+            </div>
+            <div class="kb-avatar-row" aria-hidden="true">
+              <div
+                *ngFor="let idx of carte.assigneIdx.slice(0, 3)"
+                class="kb-avatar"
+                [style.background]="AVATARS[idx % 4].bg"
+                [style.color]="AVATARS[idx % 4].color">
+                {{ AVATARS[idx % 4].initiales }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="kb-add-card" (click)="ouvrirModal(col.id)">
+        <i class="ti ti-plus" aria-hidden="true"></i> Ajouter une tâche
+      </button>
+    </div>
+  </div>
+
+  <p class="kb-hint">
+    <i class="ti ti-info-circle" aria-hidden="true"></i>
+    Glissez-déposez les cartes entre colonnes · double-clic pour avancer · clic pour le détail
+  </p>
+</div>
+
+<div class="kb-modal-bg" [class.open]="modalOuverte()" (click)="fermerModal()" role="dialog" aria-modal="true" aria-labelledby="modal-titre">
+  <div class="kb-modal-box" (click)="$event.stopPropagation()">
+    <div class="kb-modal-head">
+      <span class="kb-modal-title" id="modal-titre">
+        <i class="ti ti-clipboard-plus" aria-hidden="true"></i> Nouvelle tâche
+      </span>
+      <button class="kb-modal-close" (click)="fermerModal()" aria-label="Fermer">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="kb-modal-body">
+      <div class="kb-field">
+        <label class="kb-label" for="f-titre">Titre <span class="required">*</span></label>
+        <input id="f-titre" type="text" class="kb-input" [(ngModel)]="form.titre" placeholder="Ex : Déclaration TVA" (keydown.enter)="soumettreFormulaire()" />
+        <span class="kb-field-err" *ngIf="formErreur">{{ formErreur }}</span>
+      </div>
+
+      <div class="kb-field">
+        <label class="kb-label" for="f-desc">Description</label>
+        <textarea id="f-desc" class="kb-input kb-textarea" [(ngModel)]="form.description" placeholder="Détails optionnels..."></textarea>
+      </div>
+
+      <div class="kb-field-row">
+        <div class="kb-field">
+          <label class="kb-label" for="f-cat">Catégorie</label>
+          <select id="f-cat" class="kb-input" [(ngModel)]="form.categorie">
+            <option *ngFor="let k of categorieKeys" [value]="k">{{ CATEGORIES[k].label }}</option>
+          </select>
+        </div>
+        <div class="kb-field">
+          <label class="kb-label" for="f-prio">Priorité</label>
+          <select id="f-prio" class="kb-input" [(ngModel)]="form.priorite">
+            <option value="haute">Haute</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="basse">Basse</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kb-field-row">
+        <div class="kb-field">
+          <label class="kb-label" for="f-date">Échéance</label>
+          <input id="f-date" type="date" class="kb-input" [(ngModel)]="form.echeance" />
+        </div>
+        <div class="kb-field">
+          <label class="kb-label" for="f-col">Colonne</label>
+          <select id="f-col" class="kb-input" [(ngModel)]="form.colonne">
+            <option *ngFor="let col of COLONNES" [value]="col.id">{{ col.label }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="kb-modal-foot">
+      <button class="kb-btn-cancel" (click)="fermerModal()">Annuler</button>
+      <button class="kb-btn-submit" (click)="soumettreFormulaire()">
+        <i class="ti ti-plus" aria-hidden="true"></i> Ajouter
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="kb-detail-bg" [class.open]="detailCarte() !== null" (click)="fermerDetail()" role="dialog" aria-modal="true" aria-label="Détail de la tâche">
+  <div class="kb-detail-panel" (click)="$event.stopPropagation()" *ngIf="detailCarte() as c">
+    <div class="kb-detail-head">
+      <span class="kb-tag" [style.color]="CATEGORIES[c.categorie].color" [style.background]="CATEGORIES[c.categorie].bg">
+        {{ CATEGORIES[c.categorie].label }}
+      </span>
+      <button class="kb-modal-close" (click)="fermerDetail()" aria-label="Fermer">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <h3 class="kb-detail-titre">{{ c.titre }}</h3>
+    <p class="kb-detail-desc" *ngIf="c.description">{{ c.description }}</p>
+
+    <div class="kb-detail-grid">
+      <div class="kb-detail-row">
+        <span class="kb-detail-label"><i class="ti ti-flag" aria-hidden="true"></i> Priorité</span>
+        <span class="kb-prio" [style.color]="PRIORITES[c.priorite].color">{{ PRIORITES[c.priorite].label }}</span>
+      </div>
+      <div class="kb-detail-row">
+        <span class="kb-detail-label"><i class="ti ti-layout-columns" aria-hidden="true"></i> Colonne</span>
+        <span class="kb-detail-val">{{ COLONNES | findCol : c.colonne }}</span>
+      </div>
+      <div class="kb-detail-row" *ngIf="echeanceInfo(c.echeance) as info">
+        <span class="kb-detail-label"><i class="ti ti-calendar" aria-hidden="true"></i> Échéance</span>
+        <span class="kb-date" [class.urgent]="info.urgent" [class.depasse]="info.depasse">
+          {{ info.texte }}<span *ngIf="info.depasse"> dépassée</span>
+        </span>
+      </div>
+      <div class="kb-detail-row">
+        <span class="kb-detail-label"><i class="ti ti-users" aria-hidden="true"></i> Assignés</span>
+        <div class="kb-avatar-row">
+          <div *ngFor="let idx of c.assigneIdx" class="kb-avatar" [style.background]="AVATARS[idx % 4].bg" [style.color]="AVATARS[idx % 4].color">
+            {{ AVATARS[idx % 4].initiales }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kb-detail-actions">
+      <button class="kb-btn-danger" (click)="supprimerCarte(c.id)">
+        <i class="ti ti-trash" aria-hidden="true"></i> Supprimer
+      </button>
+      <button class="kb-btn-submit" (click)="cycleColonne(c); fermerDetail()">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i> Avancer
+      </button>
+    </div>
+  </div>
+</div>

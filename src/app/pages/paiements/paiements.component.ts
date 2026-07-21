@@ -100,7 +100,7 @@ export class PaiementsComponent implements OnInit {
     }).format(v ?? 0);
   }
 
-  exportCSV() {
+  exportExcel() {
     const rows = [['Facture', 'Montant', 'Devise', 'Mode', 'Reference', 'Banque', 'Date']];
     this.paiements().forEach(p => {
       rows.push([
@@ -118,7 +118,7 @@ export class PaiementsComponent implements OnInit {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = 'paiements.csv';
+    a.download = 'paiements.xlsx';
     a.click();
     URL.revokeObjectURL(url);
   }

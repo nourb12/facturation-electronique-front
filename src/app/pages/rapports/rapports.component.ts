@@ -2,8 +2,6 @@ import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { jsPDF } from 'jspdf';
-import * as XLSX from 'xlsx';
 import {
   DashboardApiService,
   FactureApiService,
@@ -247,7 +245,7 @@ export class RapportsComponent implements OnInit {
     return this.formatMontant(v);
   }
 
-  exportCSV() {
+  private exportExcelSummary() {
     const s = this.stats();
     if (!s) return;
     const rows = [
@@ -263,21 +261,17 @@ export class RapportsComponent implements OnInit {
       ['Montant encaissé mois', s.montantEncaisseMois],
       ['Montant en attente', s.montantEnAttente],
     ];
-    const csv = rows.map(r => r.join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `rapport_factures_${this.exportStamp()}.csv`; a.click();
-    URL.revokeObjectURL(url);
+    this.downloadCsv(`rapport_factures_${this.exportStamp()}.csv`, rows);
   }
 
-  exportPDF() {
+  async exportPDF() {
     const { kpiLines, evoLines, tvaLines, delayLines, recapLines, hasData } = this.buildExportLines();
     if (!hasData) {
       this.showToast('Aucune donnée à exporter.');
       return;
     }
 
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     const margin = 40;
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -345,32 +339,14 @@ export class RapportsComponent implements OnInit {
       return;
     }
 
-    const wb = XLSX.utils.book_new();
-    const kpiSheet = XLSX.utils.json_to_sheet(rows.kpis.length ? rows.kpis : [{ Indicateur: 'Données indisponibles' }]);
-    XLSX.utils.book_append_sheet(wb, kpiSheet, 'KPIs');
-
-    if (rows.evolution.length) {
-      const evoSheet = XLSX.utils.json_to_sheet(rows.evolution);
-      XLSX.utils.book_append_sheet(wb, evoSheet, 'Evolution CA');
-    }
-
-    if (rows.tva.length) {
-      const tvaSheet = XLSX.utils.json_to_sheet(rows.tva);
-      XLSX.utils.book_append_sheet(wb, tvaSheet, 'TVA');
-    }
-
-    if (rows.delais.length) {
-      const delaiSheet = XLSX.utils.json_to_sheet(rows.delais);
-      XLSX.utils.book_append_sheet(wb, delaiSheet, 'Delais paiement');
-    }
-
-    if (rows.recap.length) {
-      const recapSheet = XLSX.utils.json_to_sheet(rows.recap);
-      XLSX.utils.book_append_sheet(wb, recapSheet, 'Recap mensuel');
-    }
-
-    XLSX.writeFile(wb, `rapport_factures_${this.exportStamp()}.xlsx`);
-    this.showToast('Export Excel généré.');
+    this.downloadCsvSections(`rapport_factures_${this.exportStamp()}.csv`, [
+      { title: 'KPIs', rows: rows.kpis.length ? rows.kpis : [{ Indicateur: 'Données indisponibles' }] },
+      { title: 'Evolution CA', rows: rows.evolution },
+      { title: 'TVA', rows: rows.tva },
+      { title: 'Delais paiement', rows: rows.delais },
+      { title: 'Recap mensuel', rows: rows.recap }
+    ]);
+    this.showToast('Export CSV généré.');
   }
 
   private showToast(msg: string) {
@@ -450,6 +426,47 @@ export class RapportsComponent implements OnInit {
     return { kpis, evolution, tva, delais, recap, hasData };
   }
 
+  private downloadCsv(fileName: string, rows: Array<Array<unknown>>) {
+    const csv = rows.map(row => row.map(value => this.csvEscape(value)).join(';')).join('\r\n');
+    this.triggerDownload(fileName, csv);
+  }
+
+  private downloadCsvSections(fileName: string, sections: Array<{ title: string; rows: Array<Record<string, unknown>> }>) {
+    const content = sections
+      .filter(section => section.rows.length > 0)
+      .map(section => [`# ${section.title}`, this.recordsToCsv(section.rows)].join('\r\n'))
+      .join('\r\n\r\n');
+
+    this.triggerDownload(fileName, content || this.recordsToCsv([{ Message: 'Données indisponibles' }]));
+  }
+
+  private recordsToCsv(rows: Array<Record<string, unknown>>): string {
+    if (!rows.length) return '';
+    const headers = Array.from(rows.reduce((set, row) => {
+      Object.keys(row).forEach(key => set.add(key));
+      return set;
+    }, new Set<string>()));
+
+    return [
+      headers.map(header => this.csvEscape(header)).join(';'),
+      ...rows.map(row => headers.map(header => this.csvEscape(row[header])).join(';'))
+    ].join('\r\n');
+  }
+
+  private csvEscape(value: unknown): string {
+    const normalized = String(value ?? '').replace(/\r?\n/g, ' ');
+    return /[";\r\n]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+  }
+
+  private triggerDownload(fileName: string, content: string) {
+    const blob = new Blob([`\ufeff${content}`], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
   private chargerRapports() {
     this.tvaBrut.set([]);
     this.delaisBrut.set([]);

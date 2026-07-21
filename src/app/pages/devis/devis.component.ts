@@ -2,17 +2,51 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   FactureApiService, FactureDto, ListeFacturesDto,
-  StatistiquesFacturesDto, ClientService, ClientDto,
+  StatistiquesFacturesDto, HistoriqueEntreeDto, ClientService, ClientDto,
   ProduitApiService, ProduitDto,
   TeifApiService, PaiementApiService, SignatureApiService, TtnApiService
 } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
-import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCounts } from '../../core/utils/document-page.utils';
+import { buildDocumentListParams, updateDocumentStatusCounts } from '../../core/utils/document-page.utils';
+
+type FactureFormLine = {
+  produitId: string;
+  designation: string;
+  description: string;
+  unite: string;
+  quantite: number;
+  prixUnitaire: number;
+  tauxRemise: number;
+  tauxTva: number;
+  montantHt: number;
+  montantTva: number;
+  montantTtc: number;
+};
+
+type FactureFormState = {
+  clientId: string;
+  typeFacture: 'Devis';
+  factureOrigineId?: string;
+  modePaiement: string;
+  dateEcheance: string;
+  reference?: string;
+  notes: string;
+  conditionsPaiement: string;
+  devise: string;
+  lignes: FactureFormLine[];
+};
+
+type PaiementFormState = {
+  montant: number;
+  mode: string;
+  datePaiement: string;
+  reference: string;
+  banque: string;
+};
 
 @Component({
   selector: 'app-devis',
@@ -40,7 +74,6 @@ import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCo
   ]
 })
 export class DevisComponent implements OnInit {
-  private router       = inject(Router);
   private factureSvc   = inject(FactureApiService);
   private clientSvc    = inject(ClientService);
   private produitSvc   = inject(ProduitApiService);
@@ -53,7 +86,7 @@ export class DevisComponent implements OnInit {
 
   loading       = signal(true);
   saving        = signal(false);
-  factures      = signal<any[]>([]);
+  factures      = signal<FactureDto[]>([]);
   total         = signal(0);
   stats         = signal<StatistiquesFacturesDto | null>(null);
   clients       = signal<ClientDto[]>([]);
@@ -79,17 +112,17 @@ export class DevisComponent implements OnInit {
   showPaiementModal  = signal(false);
 
   showHistoriqueModal = signal(false);
-  historiqueFacture   = signal<any[]>([]);
+  historiqueFacture   = signal<HistoriqueEntreeDto[]>([]);
   historiqueLoading   = signal(false);
 
-  selectedFacture    = signal<any | null>(null);
+  selectedFacture    = signal<FactureDto | null>(null);
   actionLoading      = signal(false);
   pdfLoading         = signal(false);
   teifLoading        = signal(false);
 
 
-  newFacture: any = {
-    clientId: '', typeFacture: 'Proforma',
+  newFacture: FactureFormState = {
+    clientId: '', typeFacture: 'Devis',
     modePaiement: 'Virement',
     dateEcheance: this.defaultEcheance(),
     notes: '', conditionsPaiement: '', devise: 'TND',
@@ -97,7 +130,7 @@ export class DevisComponent implements OnInit {
   };
 
 
-  paiementForm = {
+  paiementForm: PaiementFormState = {
     montant: 0, mode: 'Virement',
     datePaiement: new Date().toISOString().substring(0, 10),
     reference: '', banque: ''
@@ -115,7 +148,7 @@ export class DevisComponent implements OnInit {
     { key: 'Payee',     label: 'Payées',     count: 0 },
   ];
 
-  readonly typeFactureOptions   = ['Proforma'];
+  readonly typeFactureOptions   = ['Devis'];
   readonly modePaiementOptions = [
     { value: 'Virement',      labelKey: 'INVOICE.PAYMENT_MODES.BANK_TRANSFER' },
     { value: 'Cheque',        labelKey: 'INVOICE.PAYMENT_MODES.CHECK' },
@@ -137,9 +170,9 @@ export class DevisComponent implements OnInit {
   });
 
 
-  get totalHt()  { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantHt  || 0), 0); }
-  get totalTva() { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantTva || 0), 0); }
-  get totalTtc() { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantTtc || 0), 0); }
+  get totalHt()  { return this.newFacture.lignes.reduce((s, l) => s + (l.montantHt  || 0), 0); }
+  get totalTva() { return this.newFacture.lignes.reduce((s, l) => s + (l.montantTva || 0), 0); }
+  get totalTtc() { return this.newFacture.lignes.reduce((s, l) => s + (l.montantTtc || 0), 0); }
 
 
   get totalPages() { return Math.ceil(this.total() / this.parPage); }
@@ -157,7 +190,7 @@ export class DevisComponent implements OnInit {
     const params = buildDocumentListParams({
       page: this.currentPage(),
       parPage: this.parPage,
-      typeFacture: 'Proforma',
+      typeFacture: 'Devis',
       activeStatut: this.activeStatut,
       searchQuery: this.searchQuery,
       filtreClientId: this.filtreClientId,
@@ -219,7 +252,12 @@ export class DevisComponent implements OnInit {
       montantEnAttente,
       totalEnRetard,
       totalBrouillons: devis.filter(d => d.statut === 'Brouillon').length,
-    } as any);
+      totalValidees: devis.filter(d => d.statut === 'Validee').length,
+      totalTransmises: devis.filter(d => d.statut === 'Transmise').length,
+      totalAcceptees: devis.filter(d => d.statut === 'Acceptee').length,
+      totalRejetees: devis.filter(d => d.statut === 'Rejetee').length,
+      totalPayees: devis.filter(d => d.statut === 'Payee').length,
+    });
   }
 
   private updateStatutCounts() {
@@ -256,7 +294,7 @@ export class DevisComponent implements OnInit {
     this.recalculerTotaux();
   }
 
-  onProduitChange(ligne: any, produitId: string) {
+  onProduitChange(ligne: FactureFormLine, produitId: string) {
     const p = this.produits().find(pr => pr.id === produitId);
     if (p) {
       ligne.designation  = p.libelle;
@@ -268,7 +306,7 @@ export class DevisComponent implements OnInit {
   }
 
   recalculerTotaux() {
-    this.newFacture.lignes.forEach((l: any) => {
+    this.newFacture.lignes.forEach((l) => {
       const brut   = (l.quantite || 0) * (l.prixUnitaire || 0);
       const remise = brut * ((l.tauxRemise || 0) / 100);
       const ht     = brut - remise;
@@ -292,7 +330,7 @@ export class DevisComponent implements OnInit {
       notes:              this.newFacture.notes || undefined,
       conditionsPaiement: this.newFacture.conditionsPaiement || undefined,
       devise:             this.newFacture.devise,
-      lignes: this.newFacture.lignes.map((l: any) => ({
+      lignes: this.newFacture.lignes.map((l) => ({
         designation:  l.designation,
         quantite:     l.quantite,
         prixUnitaire: l.prixUnitaire,
@@ -320,59 +358,28 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  convertirEnFacture(f: any) {
+  convertirEnFacture(f: FactureDto) {
     if (!f || this.actionLoading()) return;
     this.actionLoading.set(true);
 
-    this.factureSvc.obtenirParId(f.id).subscribe({
-      next: (detail) => {
-        const req = {
-          clientId:           detail.clientId,
-          typeFacture:        'Facture',
-          factureOrigineId:   detail.id,
-          modePaiement:       detail.modePaiement,
-          dateEcheance:       new Date(detail.dateEcheance).toISOString(),
-          reference:          detail.reference || undefined,
-          notes:              detail.notes || undefined,
-          conditionsPaiement: detail.conditionsPaiement || undefined,
-          devise:             detail.devise,
-          lignes: detail.lignes.map((l: any) => ({
-            designation:  l.designation,
-            quantite:     l.quantite,
-            prixUnitaire: l.prixUnitaire,
-            tauxTva:      l.tauxTva,
-            tauxRemise:   l.tauxRemise || 0,
-            unite:        l.unite,
-            produitId:    l.produitId || undefined,
-            description:  l.description || undefined,
-          }))
-        };
-
-        this.factureSvc.creer(req).subscribe({
-          next: (created) => {
-            this.actionLoading.set(false);
-            this.toast.success(`Facture ${created.numero} créée à partir du devis ${detail.numero}.`);
-            this.loadAll();
-          },
-          error: (err) => {
-            this.actionLoading.set(false);
-            this.toast.error(err?.error?.message ?? 'Erreur conversion.');
-          }
-        });
+    this.factureSvc.convertirEnFacture(f.id).subscribe({
+      next: (created) => {
+        this.actionLoading.set(false);
+        this.toast.success(`Facture ${created.numero} creee a partir du devis ${f.numero}.`);
+        this.loadAll();
       },
       error: (err) => {
         this.actionLoading.set(false);
-        this.toast.error(err?.error?.message ?? 'Impossible de charger le devis.');
+        this.toast.error(err?.error?.message ?? 'Erreur conversion.');
       }
     });
   }
 
-
-  openDetail(f: any) { this.selectedFacture.set(f); this.showDetailModal.set(true); }
+  openDetail(f: FactureDto) { this.selectedFacture.set(f); this.showDetailModal.set(true); }
   closeDetail()      { this.showDetailModal.set(false); this.selectedFacture.set(null); }
 
 
-  voirHistorique(f: any) {
+  voirHistorique(f: FactureDto) {
     this.selectedFacture.set(f);
     this.historiqueFacture.set([]);
     this.historiqueLoading.set(true);
@@ -385,7 +392,7 @@ export class DevisComponent implements OnInit {
   }
 
 
-  valider(f: any) {
+  valider(f: FactureDto) {
     if (this.actionLoading()) return;
     this.actionLoading.set(true);
     this.factureSvc.valider(f.id).subscribe({
@@ -395,7 +402,7 @@ export class DevisComponent implements OnInit {
   }
 
 
-  genererXml(f: any) {
+  genererXml(f: FactureDto) {
     this.teifLoading.set(true);
     this.teifSvc.genererXml(f.id).subscribe({
       next: (res) => {
@@ -411,7 +418,7 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  validerTeif(f: any) {
+  validerTeif(f: FactureDto) {
     this.actionLoading.set(true);
     this.teifSvc.marquerConforme(f.id).subscribe({
       next: (updated) => { this.actionLoading.set(false); this.updateFacture(updated); this.toast.success('Facture marquée conforme TEIF.'); },
@@ -419,7 +426,7 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  signer(f: any) {
+  signer(f: FactureDto) {
     this.actionLoading.set(true);
     this.signatureSvc.demander(f.id).subscribe({
       next: (sig) => {
@@ -431,7 +438,7 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  envoyerTtn(f: any) {
+  envoyerTtn(f: FactureDto) {
     this.actionLoading.set(true);
     this.ttnSvc.envoyer(f.id).subscribe({
       next: ()    => { this.actionLoading.set(false); this.loadAll(); this.toast.success('Facture envoyée au système TTN.'); },
@@ -440,9 +447,9 @@ export class DevisComponent implements OnInit {
   }
 
 
-  ouvrirPaiement(f: any) {
+  ouvrirPaiement(f: FactureDto) {
     this.selectedFacture.set(f);
-    this.paiementForm.montant = f.montantRestant;
+    this.paiementForm.montant = f.montantRestant ?? 0;
     this.showPaiementModal.set(true);
   }
 
@@ -464,7 +471,7 @@ export class DevisComponent implements OnInit {
   }
 
 
-  telechargerPdf(f: any) {
+  telechargerPdf(f: FactureDto) {
     if (!f || this.pdfLoading()) return;
     this.pdfLoading.set(true);
     this.factureSvc.telechargerPdf(f.id).subscribe({
@@ -485,7 +492,7 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  telechargerXml(f: any) {
+  telechargerXml(f: FactureDto) {
     this.teifSvc.telechargerXml(f.id).subscribe({
       next: (blob: Blob) => {
         const url = URL.createObjectURL(blob);
@@ -497,7 +504,7 @@ export class DevisComponent implements OnInit {
     });
   }
 
-  exportCSV() {
+  exportExcel() {
     const rows = [['Numéro','Client','Statut','Total TTC','Devise','Date émission']];
     this.filteredFactures().forEach(f => {
       rows.push([f.numero, f.clientNom, f.statut, String(f.totalTtc), f.devise, f.dateEmission?.substring(0,10)]);
@@ -506,7 +513,7 @@ export class DevisComponent implements OnInit {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'devis.csv'; a.click();
+    a.href = url; a.download = 'devis.xlsx'; a.click();
     URL.revokeObjectURL(url);
   }
 
@@ -530,7 +537,7 @@ export class DevisComponent implements OnInit {
     return map[statut] ?? statut;
   }
 
-  private updateFacture(updated: any) {
+  private updateFacture(updated: FactureDto) {
     this.factures.update(list => list.map(f => f.id === updated.id ? updated : f));
     this.updateStatutCounts();
     if (this.selectedFacture()?.id === updated.id) this.selectedFacture.set(updated);
@@ -538,14 +545,14 @@ export class DevisComponent implements OnInit {
 
   private resetNewFacture() {
     this.newFacture = {
-      clientId: '', typeFacture: 'Proforma',
+      clientId: '', typeFacture: 'Devis',
       modePaiement: 'Virement', dateEcheance: this.defaultEcheance(),
       notes: '', conditionsPaiement: '', devise: 'TND',
       lignes: [this.newLigne()]
     };
   }
 
-  private newLigne(): any {
+  private newLigne(): FactureFormLine {
     return { produitId: '', designation: '', description: '', unite: 'U', quantite: 1, prixUnitaire: 0, tauxRemise: 0, tauxTva: 19, montantHt: 0, montantTva: 0, montantTtc: 0 };
   }
 

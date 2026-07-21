@@ -1,7 +1,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'https://api.eyinvoice.tn/api',
+  apiUrl: '/api',
   demoMode: false
 };
 

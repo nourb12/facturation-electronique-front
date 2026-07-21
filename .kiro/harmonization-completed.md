@@ -1,7 +1,7 @@
 # ✅ HARMONISATION DU DESIGN - RAPPORT FINAL
 
 ## 🎯 Objectif
-Harmoniser tous les composants UI de l'application TunisFlow pour garantir une cohérence visuelle parfaite.
+Harmoniser tous les composants UI de l'application TuniFlow pour garantir une cohérence visuelle parfaite.
 
 ---
 
@@ -300,7 +300,7 @@ Lente: 420ms cubic-bezier(.16,1,.3,1)
 
 ## ✅ CONCLUSION
 
-L'harmonisation du design de TunisFlow est maintenant **complète pour les composants principaux**.
+L'harmonisation du design de TuniFlow est maintenant **complète pour les composants principaux**.
 
 Le système de design est :
 - ✅ **Cohérent** - Tous les composants suivent les mêmes règles

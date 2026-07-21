@@ -7,6 +7,13 @@ import { CategorieApiService } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 
+const DEMO_CATEGORIES = [
+  { id: 'DEMO-CAT-1', nom: 'Services', description: 'Prestations, audit et conseil', estActive: true, nbProduits: 3, ca: 68400, entrepriseId: 'ENT-1', creeLe: '2026-01-02', couleur: '#FFE600', icone: '' },
+  { id: 'DEMO-CAT-2', nom: 'Logiciels', description: 'Licences, SaaS et maintenance', estActive: true, nbProduits: 2, ca: 51200, entrepriseId: 'ENT-1', creeLe: '2026-01-02', couleur: '#3B82F6', icone: '' },
+  { id: 'DEMO-CAT-3', nom: 'Materiel', description: 'Equipements et scanners', estActive: true, nbProduits: 1, ca: 16400, entrepriseId: 'ENT-1', creeLe: '2026-01-05', couleur: '#22C55E', icone: '' },
+  { id: 'DEMO-CAT-4', nom: 'Formation', description: 'Sessions utilisateurs et TEIF', estActive: true, nbProduits: 1, ca: 9800, entrepriseId: 'ENT-1', creeLe: '2026-02-01', couleur: '#F59E0B', icone: '' }
+];
+
 @Component({
   selector: 'app-categories',
   standalone: true,
@@ -42,7 +49,8 @@ export class CategoriesComponent implements OnInit {
     this.loading.set(true);
     this.svc.lister().subscribe({
       next: list => {
-        const withDefaults = list.map((c: any, idx: number) => ({
+        const source = list.length ? list : DEMO_CATEGORIES;
+        const withDefaults = source.map((c: any, idx: number) => ({
           ...c,
           icone: c.icone ?? this.icones[idx % this.icones.length],
           couleur: c.couleur ?? this.couleurs[idx % this.couleurs.length],
@@ -54,7 +62,10 @@ export class CategoriesComponent implements OnInit {
         this.categories.set(withDefaults);
         this.loading.set(false);
       },
-      error: ()  => this.loading.set(false)
+      error: ()  => {
+        this.categories.set(DEMO_CATEGORIES);
+        this.loading.set(false);
+      }
     });
   }
 

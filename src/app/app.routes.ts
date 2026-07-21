@@ -93,10 +93,132 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent)
       },
       {
+        path: 'analyse',
+        loadComponent: () =>
+          import('./pages/analyse/ia.component')
+            .then(m => m.IaComponent)
+      },
+      {
+        path: 'profit',
+        loadComponent: () =>
+          import('./pages/profit/profit.component')
+            .then(m => m.ProfitComponent)
+      },
+      {
+        path: 'paie',
+        loadComponent: () =>
+          import('./pages/paie/paie.component')
+            .then(m => m.PaieComponent)
+      },
+      {
+        path: 'ventes/devis',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'devis', businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/bons-commande',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'bon_commande', businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/bons-livraison',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'bon_livraison', businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/factures',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'facture', businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/factures-scannees',
+        loadComponent: () =>
+          import('./pages/factures-scannees/factures-scannees.component')
+            .then(m => m.FacturesScanneesComponent),
+        data: { businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/avoirs',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'avoir', businessFlow: 'vente' }
+      },
+      {
+        path: 'ventes/paiements',
+        loadComponent: () =>
+          import('./pages/paiements/paiements.component')
+            .then(m => m.PaiementsComponent),
+        data: { businessFlow: 'vente' }
+      },
+      {
+        path: 'achats/bons-reception',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'bon_livraison', businessFlow: 'achat', pageTitle: 'Bons de réception' }
+      },
+      {
+        path: 'achats/bons-commande',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'bon_commande', businessFlow: 'achat', pageTitle: 'Bons de commande achat' }
+      },
+      {
+        path: 'achats/factures-fournisseur',
+        loadComponent: () =>
+          import('./pages/factures-scannees/factures-scannees.component')
+            .then(m => m.FacturesScanneesComponent),
+        data: { businessFlow: 'achat', pageTitle: 'Factures fournisseur' }
+      },
+      {
+        path: 'achats/factures-scannees',
+        loadComponent: () =>
+          import('./pages/factures-scannees/factures-scannees.component')
+            .then(m => m.FacturesScanneesComponent),
+        data: { businessFlow: 'achat' }
+      },
+      {
+        path: 'achats/prestations',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent),
+        data: { documentType: 'paiement_emis', businessFlow: 'achat', pageTitle: 'Prestations de service' }
+      },
+      {
+        path: 'achats/paiements',
+        loadComponent: () =>
+          import('./pages/paiements/paiements.component')
+            .then(m => m.PaiementsComponent),
+        data: { businessFlow: 'achat' }
+      },
+      {
+        path: 'achats/retenue-source',
+        loadComponent: () =>
+          import('./pages/comptabilite/retenue-source/retenue-source.component')
+            .then(m => m.RetenueSourceComponent),
+        data: { businessFlow: 'achat' }
+      },
+      {
         path: 'factures',
         loadComponent: () =>
           import('./pages/factures/factures.component')
             .then(m => m.FacturesComponent)
+      },
+      {
+        path: 'documents',
+        loadComponent: () =>
+          import('./pages/documents/documents.component')
+            .then(m => m.DocumentsComponent)
       },
       {
         path: 'devis',
@@ -141,6 +263,12 @@ export const routes: Routes = [
             .then(m => m.TransactionsComponent)
       },
       {
+        path: 'factures-scannees',
+        loadComponent: () =>
+          import('./pages/factures-scannees/factures-scannees.component')
+            .then(m => m.FacturesScanneesComponent)
+      },
+      {
         path: 'entreprise',
         loadComponent: () =>
           import('./pages/entreprise/entreprise.component')
@@ -151,6 +279,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/entreprise/personnalisation/personnalisation.component')
             .then(m => m.PersonnalisationComponent)
+      },
+      {
+        path: 'calendrier',
+        loadChildren: () =>
+          import('./pages/calendrier/calendrier.module')
+            .then(m => m.CalendrierModule)
       },
       {
         path: 'profil',
@@ -175,6 +309,60 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/comptabilite/taxes/taxes.component')
             .then(m => m.TaxesComponent)
+      },
+      {
+        path: 'comptabilite/declarations/tva',
+        loadComponent: () =>
+          import('./pages/comptabilite/declarations/tva/declarations-tva.component')
+            .then(m => m.DeclarationsTvaComponent)
+      },
+      {
+        path: 'comptabilite/fiscal/tva',
+        loadComponent: () =>
+          import('./pages/comptabilite/declarations/tva/declarations-tva.component')
+            .then(m => m.DeclarationsTvaComponent)
+      },
+      {
+        path: 'comptabilite/retenue-source',
+        loadComponent: () =>
+          import('./pages/comptabilite/retenue-source/retenue-source.component')
+            .then(m => m.RetenueSourceComponent)
+      },
+      {
+        path: 'comptabilite/fiscal/rs',
+        loadComponent: () =>
+          import('./pages/comptabilite/retenue-source/retenue-source.component')
+            .then(m => m.RetenueSourceComponent)
+      },
+      {
+        path: 'comptabilite/tresorerie',
+        loadComponent: () =>
+          import('./pages/comptabilite/tresorerie/tresorerie.component')
+            .then(m => m.TresorerieComponent)
+      },
+      {
+        path: 'comptabilite/rapprochement',
+        loadComponent: () =>
+          import('./pages/comptabilite/tresorerie/tresorerie.component')
+            .then(m => m.TresorerieComponent)
+      },
+      {
+        path: 'comptabilite/audit',
+        loadComponent: () =>
+          import('./pages/admin/admin-audit/admin-audit.component')
+            .then(m => m.AdminAuditComponent)
+      },
+      {
+        path: 'comptabilite',
+        loadComponent: () =>
+          import('./pages/comptabilite/comptabilite/comptabilite.component')
+            .then(m => m.ComptabiliteComponent)
+      },
+      {
+        path: 'comptabilite/:section',
+        loadComponent: () =>
+          import('./pages/comptabilite/comptabilite/comptabilite.component')
+            .then(m => m.ComptabiliteComponent)
       },
       {
         path: 'rapports',
@@ -251,7 +439,6 @@ export const routes: Routes = [
       },
     ]
   },
-
 
   {
     path: 'not-found',

@@ -12,7 +12,7 @@ describe('ToastService', () => {
     jasmine.clock().uninstall();
   });
 
-  it('show ajoute et retire le toast après la durée', () => {
+  it('show ajoute et retire le toast aprÃ¨s la durÃ©e', () => {
     service.show('success', 'ok', 1000);
     expect(service.toasts().length).toBe(1);
     const id = service.toasts()[0].id;
@@ -24,7 +24,7 @@ describe('ToastService', () => {
     expect(service.toasts().find(t => t.id === id)).toBeUndefined();
   });
 
-  it('helpers success/error/warning/info délèguent à show', () => {
+  it('helpers success/error/warning/info dÃ©lÃ¨guent Ã  show', () => {
     spyOn<any>(service, 'show').and.callThrough();
     service.success('a');
     service.error('b');

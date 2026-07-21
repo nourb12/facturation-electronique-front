@@ -1,0 +1,130 @@
+<aside class="sr-wrap">
+
+  <!-- Date sélectionnée -->
+  <div class="sr-date-block">
+    <div class="sr-date-label">{{ selectedLabel() }}</div>
+    <div class="sr-date-sub">
+      {{ selectedEvents().length }} événement(s) · {{ selectedTasks().length }} tâche(s)
+    </div>
+  </div>
+
+  <!-- KPIs rapides -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi--warn">
+      <div class="kpi-val">{{ kpis().overdueCount }}</div>
+      <div class="kpi-lbl">Impayées</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">{{ kpis().weekEcheances }}</div>
+      <div class="kpi-lbl">Échéances semaine</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">{{ kpis().meetingsToday }}</div>
+      <div class="kpi-lbl">Réunions</div>
+    </div>
+    <div class="kpi-card kpi--ok">
+      <div class="kpi-val">{{ kpis().tasksDoneToday }}/{{ kpis().tasksTotalToday }}</div>
+      <div class="kpi-lbl">Tâches faites</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Événements du jour -->
+  <div class="sr-section-header">
+    <span class="sr-section-label">Événements du jour</span>
+    <button class="btn-add-evt" (click)="svc.openModal()">
+      <i class="ti ti-plus"></i>
+    </button>
+  </div>
+
+  @if (selectedEvents().length === 0) {
+    <div class="empty-state">
+      <i class="ti ti-calendar-off"></i>
+      <span>Aucun événement</span>
+    </div>
+  }
+
+  <div class="events-list">
+    @for (evt of selectedEvents(); track evt.id) {
+      <div class="evt-card">
+        <span class="evt-dot" [style.background]="META[evt.type].color"></span>
+        <div class="evt-body">
+          <div class="evt-title">
+            <i class="ti {{ META[evt.type].icon }}" style="font-size:11px; opacity:.7"></i>
+            {{ evt.title }}
+          </div>
+          @if (evt.startTime) {
+            <div class="evt-meta">{{ evt.startTime }}{{ evt.endTime ? ' – ' + evt.endTime : '' }}</div>
+          }
+          @if (evt.linkedClientName) {
+            <div class="evt-meta">
+              <i class="ti ti-building" style="font-size:10px"></i>
+              {{ evt.linkedClientName }}
+              @if (evt.linkedAmount) {
+                · <strong>{{ evt.linkedAmount | number:'1.0-0' }} TND</strong>
+              }
+            </div>
+          }
+          @if (evt.zoomLink) {
+            <a class="zoom-link" [href]="evt.zoomLink" target="_blank">
+              <i class="ti ti-video"></i> Rejoindre Zoom
+            </a>
+          }
+        </div>
+        <div class="evt-actions">
+          <button class="act-btn" (click)="editEvent(evt.id)" title="Modifier">
+            <i class="ti ti-pencil"></i>
+          </button>
+          <button class="act-btn act-btn--del" (click)="deleteEvent(evt.id)" title="Supprimer">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <hr class="divider">
+
+  <!-- Tâches du jour -->
+  <div class="sr-section-header">
+    <span class="sr-section-label">Tâches d'aujourd'hui</span>
+  </div>
+
+  <!-- Input ajout tâche -->
+  <div class="task-input-row">
+    <input class="task-input"
+           type="text"
+           placeholder="Ajouter une tâche…"
+           [ngModel]="newTaskTitle()"
+           (ngModelChange)="newTaskTitle.set($event)"
+           (keydown)="onKeydown($event)" />
+    <button class="task-add-btn" (click)="addTask()">
+      <i class="ti ti-plus"></i>
+    </button>
+  </div>
+
+  <!-- Liste tâches -->
+  <div class="task-list">
+    @if (selectedTasks().length === 0) {
+      <div class="empty-state">
+        <i class="ti ti-checklist"></i>
+        <span>Aucune tâche</span>
+      </div>
+    }
+    @for (task of selectedTasks(); track task.id) {
+      <div class="task-item" [class.done]="task.done">
+        <input type="checkbox"
+               class="task-cb"
+               [checked]="task.done"
+               (change)="svc.toggleTask(task.id)" />
+        <span class="priority-dot" [style.background]="getPriorityColor(task.priority)"></span>
+        <span class="task-title">{{ task.title }}</span>
+        <button class="act-btn act-btn--del task-del" (click)="deleteTask(task.id)" title="Supprimer">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+    }
+  </div>
+
+</aside>

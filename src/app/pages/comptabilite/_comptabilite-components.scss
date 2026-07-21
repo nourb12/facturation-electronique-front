@@ -1,0 +1,569 @@
+// =============================================================================
+// COMPTABILITÉ - COMPOSANTS HARMONISÉS
+// =============================================================================
+// Styles standardisés pour tous les composants de comptabilité
+// =============================================================================
+
+@use './comptabilite-tokens' as *;
+
+// ── BOUTONS ────────────────────────────────────────────────────────────────
+
+.btn-primary {
+  @include flex-center;
+  gap: $space-sm;
+  height: 40px;
+  padding: 0 $space-lg;
+  border: none;
+  border-radius: $radius-md;
+  background: $tuniflow;
+  color: $tuniflow-text;
+  font-family: $fb;
+  font-size: $font-lg;
+  font-weight: $weight-bold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform $transition-base, box-shadow $transition-base, opacity $transition-base;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(var(--c-tuniflow-rgb), .34);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  // Variantes de taille
+  &--sm {
+    height: 32px;
+    padding: 0 $space-md;
+    font-size: $font-base;
+  }
+
+  &--lg {
+    height: 44px;
+    padding: 0 $space-xl;
+    font-size: $font-xl;
+  }
+}
+
+.btn-secondary {
+  @include flex-center;
+  gap: $space-sm;
+  height: 40px;
+  padding: 0 $space-lg;
+  border: 1px solid $b1;
+  border-radius: $radius-md;
+  background: $card;
+  color: $tp;
+  font-family: $fb;
+  font-size: $font-lg;
+  font-weight: $weight-semibold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: $surf;
+    border-color: $tuniflow-glow;
+    color: $tp;
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    height: 32px;
+    padding: 0 $space-md;
+    font-size: $font-base;
+  }
+
+  &--lg {
+    height: 44px;
+    padding: 0 $space-xl;
+    font-size: $font-xl;
+  }
+}
+
+.btn-ghost {
+  @include flex-center;
+  gap: $space-sm;
+  height: 40px;
+  padding: 0 $space-lg;
+  border: 1px solid $b1;
+  border-radius: $radius-md;
+  background: transparent;
+  color: $ts;
+  font-family: $fb;
+  font-size: $font-lg;
+  font-weight: $weight-semibold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: $surf;
+    border-color: $tuniflow-glow;
+    color: $tp;
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    height: 32px;
+    padding: 0 $space-md;
+    font-size: $font-base;
+  }
+
+  &--lg {
+    height: 44px;
+    padding: 0 $space-xl;
+    font-size: $font-xl;
+  }
+}
+
+.btn-icon {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid $b1;
+  border-radius: $radius-md;
+  background: $card;
+  color: $ts;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: $surf;
+    border-color: $tuniflow-glow;
+    color: $tp;
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    width: 32px;
+    height: 32px;
+  }
+
+  &--lg {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+// ── CARTES ─────────────────────────────────────────────────────────────────
+
+.card {
+  background: $card;
+  border: 1px solid $b1;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-sm;
+  transition: border-color $transition-base, transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    border-color: $tuniflow-glow;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-md;
+  padding: $space-lg;
+  border-bottom: 1px solid $b0;
+
+  h2 {
+    margin: 0;
+    color: $tp;
+    font-size: $font-2xl;
+    font-weight: $weight-extrabold;
+  }
+
+  p {
+    margin: $space-sm 0 0;
+    color: $ts;
+    font-size: $font-base;
+    line-height: 1.5;
+  }
+}
+
+.card-body {
+  padding: $space-lg;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  padding: $space-lg;
+  border-top: 1px solid $b0;
+}
+
+// ── BADGES ────────────────────────────────────────────────────────────────
+
+.badge {
+  @include flex-center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border-radius: $radius-full;
+  background: $tuniflow-dim;
+  color: $tuniflow;
+  font-family: $fm;
+  font-size: $font-xs;
+  font-weight: $weight-bold;
+  white-space: nowrap;
+
+  &--ok {
+    background: $ok-soft;
+    color: $ok;
+  }
+
+  &--warn {
+    background: $warn-soft;
+    color: $warn;
+  }
+
+  &--err {
+    background: $err-soft;
+    color: $err;
+  }
+
+  &--info {
+    background: $info-soft;
+    color: $info;
+  }
+}
+
+// ── INPUTS ────────────────────────────────────────────────────────────────
+
+.input-field {
+  width: 100%;
+  height: 40px;
+  padding: 0 $space-md;
+  border: 1px solid $b1;
+  border-radius: $radius-md;
+  background: $surf;
+  color: $tp;
+  font-family: $fb;
+  font-size: $font-lg;
+  font-weight: $weight-medium;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: $tt;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  &--error {
+    border-color: $err;
+    box-shadow: 0 0 0 3px $err-dim;
+  }
+
+  &--sm {
+    height: 32px;
+    font-size: $font-base;
+  }
+
+  &--lg {
+    height: 44px;
+    font-size: $font-xl;
+  }
+}
+
+// ── LABELS ────────────────────────────────────────────────────────────────
+
+.label {
+  display: block;
+  margin-bottom: $space-sm;
+  color: $ts;
+  font-size: $font-xs;
+  font-weight: $weight-bold;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+
+  .required {
+    color: $err;
+    margin-left: 2px;
+  }
+}
+
+// ── TABLES ────────────────────────────────────────────────────────────────
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid $b0;
+  border-radius: $radius-lg;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-base;
+
+  thead th {
+    padding: $space-md;
+    background: var(--table-header-bg);
+    border-bottom: 1px solid $b0;
+    color: $ts;
+    font-size: $font-xs;
+    font-weight: $weight-bold;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $b0;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: var(--table-row-hover);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  td {
+    padding: $space-md;
+    color: $tp;
+    vertical-align: middle;
+  }
+}
+
+// ── MODALES ───────────────────────────────────────────────────────────────
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: $space-lg;
+  background: rgba(15, 23, 42, .42);
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  width: min(680px, 100%);
+  max-height: min(760px, calc(100vh - $space-2xl));
+  overflow: auto;
+  background: $card;
+  border: 1px solid $b1;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-xl;
+  animation: scaleIn $transition-base;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-lg;
+  padding: $space-lg;
+  border-bottom: 1px solid $b0;
+
+  h2 {
+    margin: 0;
+    color: $tp;
+    font-size: $font-3xl;
+    font-weight: $weight-black;
+  }
+
+  p {
+    margin: $space-sm 0 0;
+    color: $ts;
+    font-size: $font-base;
+    line-height: 1.5;
+  }
+}
+
+.modal-body {
+  padding: $space-lg;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-md;
+  padding: $space-lg;
+  border-top: 1px solid $b0;
+}
+
+// ── FORMULAIRES ────────────────────────────────────────────────────────────
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  margin-bottom: $space-lg;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-lg;
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-error {
+  padding: $space-md;
+  border: 1px solid $err-dim;
+  border-radius: $radius-md;
+  background: $err-dim;
+  color: $err;
+  font-size: $font-base;
+  font-weight: $weight-bold;
+}
+
+// ── GRILLES ───────────────────────────────────────────────────────────────
+
+.grid-4 {
+  @include responsive-grid(4, 2, 1);
+}
+
+.grid-3 {
+  @include responsive-grid(3, 2, 1);
+}
+
+.grid-2 {
+  @include responsive-grid(2, 1, 1);
+}
+
+// ── ESPACEMENTS ────────────────────────────────────────────────────────────
+
+.p-xs { padding: $space-xs; }
+.p-sm { padding: $space-sm; }
+.p-md { padding: $space-md; }
+.p-lg { padding: $space-lg; }
+.p-xl { padding: $space-xl; }
+.p-2xl { padding: $space-2xl; }
+
+.px-xs { padding-left: $space-xs; padding-right: $space-xs; }
+.px-sm { padding-left: $space-sm; padding-right: $space-sm; }
+.px-md { padding-left: $space-md; padding-right: $space-md; }
+.px-lg { padding-left: $space-lg; padding-right: $space-lg; }
+.px-xl { padding-left: $space-xl; padding-right: $space-xl; }
+
+.py-xs { padding-top: $space-xs; padding-bottom: $space-xs; }
+.py-sm { padding-top: $space-sm; padding-bottom: $space-sm; }
+.py-md { padding-top: $space-md; padding-bottom: $space-md; }
+.py-lg { padding-top: $space-lg; padding-bottom: $space-lg; }
+.py-xl { padding-top: $space-xl; padding-bottom: $space-xl; }
+
+.m-xs { margin: $space-xs; }
+.m-sm { margin: $space-sm; }
+.m-md { margin: $space-md; }
+.m-lg { margin: $space-lg; }
+.m-xl { margin: $space-xl; }
+
+.gap-xs { gap: $space-xs; }
+.gap-sm { gap: $space-sm; }
+.gap-md { gap: $space-md; }
+.gap-lg { gap: $space-lg; }
+.gap-xl { gap: $space-xl; }
+
+// ── UTILITAIRES ────────────────────────────────────────────────────────────
+
+.truncate {
+  @include truncate;
+}
+
+.line-clamp-2 {
+  @include line-clamp(2);
+}
+
+.line-clamp-3 {
+  @include line-clamp(3);
+}
+
+.flex-center {
+  @include flex-center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+.flex-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.opacity-50 {
+  opacity: .5;
+}
+
+.opacity-75 {
+  opacity: .75;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}

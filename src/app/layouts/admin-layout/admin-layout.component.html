@@ -3,9 +3,8 @@
     <div class="sb-grid-bg" aria-hidden="true"></div>
 
     <div class="sb-top">
-      <a class="sb-logo" routerLink="/admin/dashboard" aria-label="TunisFlow">
-        <span class="sb-brand-pill">TunisFlow</span>
-        <span class="sb-brand-sub" *ngIf="!collapsed">{{ 'APP.TAGLINE' | translate }}</span>
+      <a class="sb-logo" routerLink="/admin/dashboard" aria-label="TuniFlow">
+        <span class="sb-brand-pill">TuniFlow</span>
       </a>
       <button class="sb-toggle" type="button" (click)="toggle()" [attr.aria-pressed]="collapsed" [attr.aria-label]="'COMMON.ARIA.COLLAPSE_SIDEBAR' | translate">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -14,7 +13,7 @@
 
     <div class="sb-badge" *ngIf="!collapsed">
       <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      {{ 'AUTH.PANELS.ADMIN.BADGE' | translate }}
+      Accès admin
     </div>
 
     <span class="sb-section" *ngIf="!collapsed">{{ 'ADMIN.SIDEBAR.SECTION_SUPERVISION' | translate }}</span>

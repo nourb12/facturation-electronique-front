@@ -7,7 +7,7 @@ $warn: #F59E0B; $warn2: rgba(245,158,11,.1);
 $err: #EF4444; $err2: rgba(239,68,68,.1);
 $info: #3B82F6; $info2: rgba(59,130,246,.1);
 $ease: cubic-bezier(.16,1,.3,1);
-$fd: 'Playfair Display',Georgia,serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans',sans-serif;
 $fm: 'JetBrains Mono',monospace;
 
@@ -73,7 +73,7 @@ $fm: 'JetBrains Mono',monospace;
 }
 .kpi-body { display:flex; flex-direction:column; gap:5px; }
 .kpi-title { font-size:11px; color:$ts; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
-.kpi-value { font-family:$fm; font-size:1.5rem; font-weight:700; color:$tp; line-height:1; }
+.kpi-value { font-family:var(--font-number); font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; font-size:1.5rem; font-weight:700; color:$tp; line-height:1; }
 .kpi-sub   { font-size:11px; color:$ts; }
 .kpi-meta  { display:flex; align-items:center; gap:8px; }
 .kpi-delta { font-size:11px; font-weight:700; padding:3px 8px; border-radius:99px; display:inline-flex; align-items:center; gap:4px; }

@@ -34,7 +34,7 @@ export class AdminDashboardComponent implements OnInit {
   auditLog = [
     { action: 'Connexion admin', date: 'Aujourd\'hui · 09:12' },
     { action: 'Suspension utilisateur #U-431', date: 'Hier · 18:44' },
-    { action: 'Export CSV factures', date: '12/03 · 10:02' },
+    { action: 'Export Excel factures', date: '12/03 · 10:02' },
     { action: 'Création entreprise SOLARIS', date: '11/03 · 16:30' }
   ];
 

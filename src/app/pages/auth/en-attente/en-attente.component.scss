@@ -1,4 +1,4 @@
-@use '../../../../styles/tokens' as *;
+﻿@use '../../../../styles/tokens' as *;
 
 @keyframes orbFloat {
   0%,100% { transform:translate(0,0); }
@@ -35,9 +35,9 @@
 
 :host { display:block; }
 
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SHELL
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 .ea-shell {
   min-height:100vh;
   background: var(--bg-abyss);
@@ -53,7 +53,7 @@
   -webkit-font-smoothing:antialiased;
 }
 
-// ── Fond décoratif ──
+// â”€â”€ Fond dÃ©coratif â”€â”€
 .ea-bg {
   position:absolute; inset:0;
   pointer-events:none;
@@ -87,7 +87,7 @@
   }
 }
 
-// ── Logo ──
+// â”€â”€ Logo â”€â”€
 .ea-logo {
   position:absolute;
   top:28px; left:32px;
@@ -108,9 +108,9 @@
   &__sub  { font-size:11px; color:$ts; }
 }
 
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CARD
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 .ea-card {
   position:relative;
   width:100%;
@@ -162,7 +162,7 @@
   }
 }
 
-// ── Icône animée — anneaux qui tournent ──
+// â”€â”€ IcÃ´ne animÃ©e â€” anneaux qui tournent â”€â”€
 .ea-icon {
   position:relative;
   width:72px; height:72px;
@@ -192,7 +192,7 @@
   }
 }
 
-// ── Textes ──
+// â”€â”€ Textes â”€â”€
 .ea-title {
   font-size:22px;
   font-weight:700;
@@ -214,7 +214,7 @@
   font-weight:500;
 }
 
-// ── Badge compteur polling ──
+// â”€â”€ Badge compteur polling â”€â”€
 .ea-poll-badge {
   display:inline-flex;
   align-items:center;
@@ -241,7 +241,7 @@
   }
 }
 
-// ── Timeline ──
+// â”€â”€ Timeline â”€â”€
 .ea-timeline {
   width:100%;
   display:flex;
@@ -328,14 +328,14 @@
   }
 }
 
-// ── Séparateur ──
+// â”€â”€ SÃ©parateur â”€â”€
 .ea-divider {
   width:100%; height:1px;
   background: $b0;
   margin:4px 0 18px;
 }
 
-// ── Grille d'infos ──
+// â”€â”€ Grille d'infos â”€â”€
 .ea-info-grid {
   width:100%;
   display:grid;
@@ -388,7 +388,7 @@
   }
 }
 
-// ── Message statut ──
+// â”€â”€ Message statut â”€â”€
 .ea-status-msg {
   display:flex;
   align-items:center;
@@ -419,7 +419,7 @@
   }
 }
 
-// ── Actions ──
+// â”€â”€ Actions â”€â”€
 .ea-actions {
   display:flex;
   flex-direction:column;
@@ -454,8 +454,8 @@
 
 .ea-spinner {
   width:14px; height:14px;
-  border:2px solid rgba(0,0,0,.2);
-  border-top-color:#0A0A0A;
+  border:2px solid rgba(148,163,184,.35);
+  border-top-color:var(--tp, #475569);
   border-radius:50%;
   animation:spin .7s linear infinite;
   display:inline-block;
@@ -466,9 +466,9 @@
   &:hover { text-decoration:underline; }
 }
 
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TOAST (activation compte)
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 .ea-toast {
   position:fixed;
   bottom:28px; left:50%;

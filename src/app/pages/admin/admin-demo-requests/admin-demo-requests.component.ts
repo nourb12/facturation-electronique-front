@@ -29,6 +29,8 @@ export class AdminDemoRequestsComponent implements OnInit {
   private http = inject(HttpClient);
   
   loading = signal(true);
+  loadError = signal<string | null>(null);
+  actionError = signal<string | null>(null);
   requests = signal<DemoRequest[]>([]);
   selectedRequest = signal<DemoRequest | null>(null);
   
@@ -80,6 +82,7 @@ export class AdminDemoRequestsComponent implements OnInit {
 
   loadRequests() {
     this.loading.set(true);
+    this.loadError.set(null);
     this.http.get<DemoRequest[]>(`${environment.apiUrl}/demo/requests`)
       .subscribe({
         next: (data) => {
@@ -88,6 +91,7 @@ export class AdminDemoRequestsComponent implements OnInit {
         },
         error: (err) => {
           console.error('Erreur lors du chargement des demandes:', err);
+          this.loadError.set('Impossible de charger les demandes de demo. Verifiez la connexion API puis reessayez.');
           this.loading.set(false);
           // Données de démo pour le développement
           this.requests.set([
@@ -135,6 +139,7 @@ export class AdminDemoRequestsComponent implements OnInit {
   }
 
   updateStatus(request: DemoRequest, newStatus: DemoRequest['status']) {
+    this.actionError.set(null);
     this.http.patch(`${environment.apiUrl}/demo/requests/${request.id}/status`, { status: newStatus })
       .subscribe({
         next: () => {
@@ -146,7 +151,7 @@ export class AdminDemoRequestsComponent implements OnInit {
         },
         error: (err) => {
           console.error('Erreur lors de la mise à jour:', err);
-          alert('Erreur lors de la mise à jour du statut');
+          this.actionError.set('Le statut n’a pas pu etre mis a jour. Reessayez apres verification du backend.');
         }
       });
   }
@@ -213,7 +218,7 @@ export class AdminDemoRequestsComponent implements OnInit {
     }).format(date);
   }
 
-  exportToCSV() {
+  exportToExcel() {
     const reqs = this.filteredRequests();
     const headers = ['ID', 'Prénom', 'Nom', 'Email', 'Entreprise', 'Téléphone', 'Date souhaitée', 'Heure', 'Statut', 'Date de demande'];
     const rows = reqs.map(r => [
@@ -233,7 +238,7 @@ export class AdminDemoRequestsComponent implements OnInit {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `demandes-demo-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `demandes-demo-${new Date().toISOString().split('T')[0]}.xlsx`;
     link.click();
   }
 }

@@ -1,0 +1,97 @@
+<section class="cash-page">
+  <header class="cash-header">
+    <div>
+      <p>Comptabilité</p>
+      <h1>Trésorerie</h1>
+      <span>Soldes banque/caisse, flux attendus et obligations DGI à 30 jours.</span>
+    </div>
+    <nav>
+      <a routerLink="/comptabilite/consultation">Balance</a>
+      <a routerLink="/comptabilite/declarations/tva">TVA</a>
+      <a routerLink="/comptabilite/retenue-source">RS</a>
+      <button type="button" (click)="exportPdf()">PDF</button>
+    </nav>
+  </header>
+
+  @if (loading()) {
+    <div class="loading-card"><span></span> Chargement trésorerie...</div>
+  } @else {
+    <div class="cash-alert" [attr.data-level]="riskLevel()">
+      <i class="ti ti-alert-triangle"></i>
+      <div>
+        <strong>{{ riskLevel() === 'danger' ? 'Tension de trésorerie' : riskLevel() === 'warning' ? 'Décaissements fiscaux à surveiller' : 'Trésorerie maîtrisée' }}</strong>
+        <span>Solde projeté à 30 jours : {{ money(soldeProjete30j()) }}</span>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <article>
+        <span>Solde banque 532</span>
+        <strong>{{ money(data().soldeBanque) }}</strong>
+      </article>
+      <article>
+        <span>Solde caisse 531</span>
+        <strong>{{ money(data().soldeCaisse) }}</strong>
+      </article>
+      <article>
+        <span>Encaissements 30j</span>
+        <strong>{{ money(data().encaissements30j) }}</strong>
+      </article>
+      <article>
+        <span>Décaissements 30j</span>
+        <strong>{{ money(data().decaissements30j) }}</strong>
+      </article>
+    </div>
+
+    <div class="cash-grid">
+      <section class="panel panel-wide">
+        <div class="panel-head">
+          <div>
+            <h2>Flux des 8 prochaines semaines</h2>
+            <p>Encaissements factures attendus vs TVA, RS et charges prévisionnelles.</p>
+          </div>
+          <strong>{{ money(soldeDisponible()) }} disponible</strong>
+        </div>
+
+        <div class="flow-chart">
+          @for (row of data().flux; track row.label) {
+            <article>
+              <div class="week-meta">
+                <strong>{{ row.label }}</strong>
+                <span>{{ formatDate(row.debut) }} - {{ formatDate(row.fin) }}</span>
+              </div>
+              <div class="bars">
+                <span class="bar in" [style.width.%]="pct(row.encaissements)"></span>
+                <span class="bar out" [style.width.%]="pct(row.decaissements)"></span>
+              </div>
+              <div class="week-values">
+                <span>+{{ money(row.encaissements) }}</span>
+                <span>-{{ money(row.decaissements) }}</span>
+                <b [class.negative]="row.net < 0">{{ money(row.net) }}</b>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head compact">
+          <h2>Alertes automatiques</h2>
+          <span>{{ data().alertes.length }}</span>
+        </div>
+        <div class="alert-list">
+          @for (alert of data().alertes; track alert.code) {
+            <article [attr.data-level]="alert.level">
+              <i class="ti" [class.ti-receipt-tax]="alert.code !== 'RETARD'" [class.ti-clock-exclamation]="alert.code === 'RETARD'"></i>
+              <div>
+                <strong>{{ alert.label }}</strong>
+                <span>{{ alert.code === 'RETARD' ? alert.montant + ' facture(s)' : money(alert.montant) }}</span>
+              </div>
+              <b>{{ alert.echeance }}</b>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  }
+</section>

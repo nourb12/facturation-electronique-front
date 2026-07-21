@@ -66,6 +66,7 @@
     "ITEMS": {
       "DASHBOARD": "Dashboard",
       "INVOICES": "Invoices",
+      "SCANNED_INVOICES": "Scanned invoices",
       "QUOTES": "Quotes",
       "CREDIT_NOTES": "Credit notes",
       "PAYMENTS": "Payments",
@@ -74,13 +75,48 @@
       "CATEGORIES": "Categories",
       "MY_COMPANY": "My company",
       "CUSTOMIZATION": "Customization",
+      "CALENDAR": "Calendar",
       "USERS": "Users",
       "TRANSACTIONS": "Transactions",
       "FISCAL_PARAMS": "Fiscal parameters",
       "TAXES": "Taxes",
+      "ACCOUNTING_DASHBOARD": "Accounting",
+      "CHART_OF_ACCOUNTS": "Chart of accounts",
+      "ACCOUNTING_ENTRIES": "Accounting entries",
+      "LEGAL_JOURNALS": "Legal journals",
+      "ACCOUNTING_CONSULTATION": "Consultation",
+      "ASSET_MANAGEMENT": "Asset management",
+      "FINANCIAL_STATEMENTS": "Financial statements",
+      "ACCOUNTING_PERIODS": "Accounting periods",
+      "ANALYTIC_ACCOUNTING": "Cost accounting",
       "REPORTS": "Reports",
       "LOGOUT": "Logout"
     }
+  },
+  "ACCOUNTING": {
+    "BADGE": "Company owner dashboard",
+    "TITLE": "Accounting",
+    "SUBTITLE": "Complete accounting control: Tunisian chart of accounts, legal journals, NCT statements, taxation, assets and cost accounting.",
+    "SEARCH": "Search an account, voucher, journal...",
+    "REFRESH": "Refresh"
+  },
+  "SCANNED_INVOICES": {
+    "TITLE": "Scanned invoices",
+    "SUBTITLE": "{{total}} to review",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Search (label, counterparty, type…)",
+      "TYPE_ALL": "All types"
+    },
+    "ACTIONS": {
+      "OPEN": "Open",
+      "CONFIRM": "Confirm",
+      "SIGN": "Sign",
+      "PREV": "Previous",
+      "NEXT": "Next"
+    },
+    "NO_FILE": "No file",
+    "MISSING_FIELDS": "{{count}} field(s) to complete",
+    "EMPTY": "No scanned invoices to review."
   },
   "ADMIN": {
     "SIDEBAR": {
@@ -110,7 +146,7 @@
       "FEATURES": "Features",
       "COMPLIANCE": "Compliance",
       "SECURITY": "Security",
-      "WHY": "Why TunisFlow",
+      "WHY": "Why TuniFlow",
       "AUDIENCE": "Who is it for",
       "CONTACT": "Contact"
     },

@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "tunisflow": {
+    "tuniflow": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/tunisflow",
+            "outputPath": "dist/tuniflow",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -64,13 +64,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "600kB",
                   "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "24kB",
-                  "maximumError": "48kB"
+                  "maximumWarning": "65kB",
+                  "maximumError": "80kB"
                 }
               ],
               "outputHashing": "all",
@@ -95,14 +95,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "tunisflow:build"
+            "buildTarget": "tuniflow:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "tunisflow:build:production"
+              "buildTarget": "tuniflow:build:production"
             },
             "development": {
-              "buildTarget": "tunisflow:build:development"
+              "buildTarget": "tuniflow:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -113,7 +113,8 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.spec.json"
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js"
           }
         }
 

@@ -405,6 +405,7 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
     this.auth.register(req).subscribe({
       next: () => {
         this.loadingSignal.set(false);
+        this.sendPostRegisterNotifications(req);
         this.clearState();
         this.animDir.set('forward');
         this.currentStep.set(5);
@@ -430,6 +431,26 @@ export class OnboardingWizardComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  private sendPostRegisterNotifications(req: RegisterRequest): void {
+    this.auth.envoyerBienvenue({
+      email: req.email,
+      prenom: req.prenom,
+      nom: req.nom,
+      nomEntreprise: req.nomEntreprise,
+      matriculeFiscal: req.matriculeFiscal,
+      role: 'Responsable entreprise'
+    }).subscribe({ error: () => {} });
+
+    const telephone = req.telephone || this.form.telephone || this.form.respTel;
+    if (telephone?.trim()) {
+      this.auth.envoyerSmsVerification(telephone.trim(), this.generateSmsCode()).subscribe({ error: () => {} });
+    }
+  }
+
+  private generateSmsCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
   goToDashboardNow(): void {

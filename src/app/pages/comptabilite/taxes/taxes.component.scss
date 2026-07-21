@@ -1,34 +1,21 @@
-// ── Design tokens ──────────────────────────────────────────────────────────
-$tuniflow:      var(--c-tuniflow);
-$tuniflow-dim:  rgba(var(--c-tuniflow-rgb), .08);
-$tuniflow-glow: rgba(var(--c-tuniflow-rgb), .22);
-$void:    var(--bg-void);
-$surf:    var(--bg-surf);
-$card:    var(--bg-card);
-$edge:    var(--bg-edge);
-$b0:      var(--b0);
-$b1:      var(--b1);
-$b2:      var(--b2);
-$tp:      var(--tp);
-$ts:      var(--ts);
-$tt:      var(--tt);
-$ok:      #22C55E;
-$err:     #EF4444;
-$info:    #3B82F6;
-$warn:    #F59E0B;
-$fd:      'Playfair Display', Georgia, serif;
-$fb:      'DM Sans', sans-serif;
-$fm:      'JetBrains Mono', monospace;
-$ease:    cubic-bezier(.16, 1, .3, 1);
+﻿@use '../_comptabilite-tokens' as *;
+@use '../_comptabilite-components' as *;
 
-// ── Host ─────────────────────────────────────────────────────────────────────
-:host { display: block; width: 100%; }
+// â”€â”€ Host â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .page-wrap {
   padding: 28px 32px;
   background: $void;
   min-height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .page-header {
@@ -61,15 +48,17 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   color: $ts;
 }
 
-// ── Layout ───────────────────────────────────────────────────────────────────
+// â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .taxes-layout {
   display: grid;
-  grid-template-columns: 2.3fr 1fr;
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 300px);
+  gap: 14px;
   align-items: start;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-// ── Card ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .card {
   background: $card;
   border: 1px solid $b1;
@@ -77,14 +66,42 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   box-shadow: 0 2px 8px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.05);
 }
 
-// ── Toolbar ──────────────────────────────────────────────────────────────────
+.taxes-list,
+.taxes-form {
+  min-width: 0;
+  outline: none !important;
+  border: 1px solid rgba(226, 232, 240, .95) !important;
+  box-shadow: 0 18px 46px rgba(15, 23, 42, .06) !important;
+  transform: none !important;
+
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:focus-within {
+    border-color: rgba(226, 232, 240, .95) !important;
+    box-shadow: 0 18px 46px rgba(15, 23, 42, .06) !important;
+    transform: none !important;
+    outline: none !important;
+  }
+}
+
+// â”€â”€ Toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .table-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
+  padding: 12px 14px;
   border-bottom: 1px solid $b0;
   gap: 12px;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .cols-wrap { position: relative; }
@@ -149,6 +166,45 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   input { accent-color: $tuniflow; }
 }
 
+.filter-select {
+  height: 36px;
+  max-width: 180px;
+  padding: 0 28px 0 10px;
+  border: 1px solid $b1;
+  border-radius: 10px;
+  background: $surf;
+  color: $tp;
+  font-family: $fb;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color .15s $ease, box-shadow .15s $ease;
+
+  &:focus {
+    outline: none;
+    border-color: $tuniflow-glow;
+    box-shadow: 0 0 0 3px $tuniflow-dim;
+  }
+}
+
+.reset-filter {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba($warn, .35);
+  border-radius: 10px;
+  background: rgba($warn, .08);
+  color: darken(#F59E0B, 16%);
+  font-family: $fb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s $ease, background .15s $ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba($warn, .14);
+  }
+}
+
 // Search
 .search-box {
   display: flex;
@@ -158,7 +214,8 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   background: $surf;
   border: 1px solid $b1;
   border-radius: 10px;
-  min-width: 220px;
+  min-width: 200px;
+  max-width: 240px;
   transition: border-color .15s $ease;
 
   &:focus-within { border-color: $tuniflow-glow; background: $card; }
@@ -192,25 +249,42 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   &:hover { background: rgba($err, .15); color: $err; }
 }
 
-// ── Table ─────────────────────────────────────────────────────────────────────
-.table-box { padding: 0 18px 4px; }
+// â”€â”€ Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+.table-box {
+  padding: 0 12px 4px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.col-title { width: 21%; }
+.col-rate { width: 7%; }
+.col-type { width: 7%; }
+.col-teif { width: 7%; }
+.col-date { width: 13%; }
+.col-status { width: 12%; }
+.col-usage { width: 17%; }
+.col-actions { width: 7%; }
 
 .taxe-table {
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 11.5px;
 
   thead th {
     text-align: left;
-    padding: 10px;
+    padding: 9px 7px;
     color: $tt;
     font-size: 10.5px;
     text-transform: uppercase;
-    letter-spacing: .09em;
+    letter-spacing: .055em;
     font-weight: 600;
     border-bottom: 1px solid $b0;
-    border-right: 1px solid rgba(0, 0, 0, .04);
+    border-right: 1px solid rgba(226,232,240,.75);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     
     &:last-child {
       border-right: none;
@@ -221,12 +295,19 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
     transition: background .12s;
     &:hover { background: color-mix(in srgb, $tuniflow 4%, transparent); }
 
+    &.row-inactive {
+      opacity: .62;
+      background: rgba(248, 250, 252, .72);
+    }
+
     td {
-      padding: 11px 10px;
+      padding: 10px 7px;
       border-bottom: 1px solid $b0;
-      border-right: 1px solid rgba(0, 0, 0, .04);
+      border-right: 1px solid rgba(226,232,240,.75);
       color: $tp;
       vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
       
       &:last-child {
         border-right: none;
@@ -237,16 +318,29 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   }
 }
 
-.act-col  { width: 40px; text-align: right; }
+.act-col  { text-align: right; }
 .title-cell { font-weight: 600; color: $tp; }
-.type-col { min-width: 170px; }
+.title-cell {
+  span,
+  small {
+    display: block;
+  }
+
+  small {
+    margin-top: 3px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: $tt;
+  }
+}
+.type-col { min-width: 0; }
 
 .rate-badge {
   display: inline-flex;
-  padding: 3px 8px;
+  padding: 3px 7px;
   border-radius: 7px;
   font-family: $fm;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 500;
   background: rgba($info, .10);
   color: $info;
@@ -255,23 +349,103 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
 .type-badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 9px;
+  justify-content: center;
+  width: 48px;
+  min-width: 48px;
+  padding: 4px 0;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-    white-space: nowrap;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .025em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge--tva   { background: rgba($info, .12); color: $info; }
 .badge--fodec { background: rgba($ok,   .12); color: darken(#22C55E, 10%); }
 .badge--dc    { background: rgba($warn, .15); color: darken(#F59E0B, 10%); }
 
+.teif-badge,
+.usage-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.teif-badge {
+  min-width: 30px;
+  cursor: help;
+}
+
+.teif-badge--s { background: rgba($info, .12); color: $info; }
+.teif-badge--e { background: rgba($ok, .13); color: darken(#22C55E, 12%); }
+.teif-badge--z { background: rgba(100, 116, 139, .12); color: #64748B; }
+.teif-badge--o { background: rgba($warn, .16); color: darken(#F59E0B, 14%); }
+
+.date-cell {
+  color: $ts;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.status-toggle,
+.form-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid $b1;
+  background: $surf;
+  color: $ts;
+  border-radius: 999px;
+  font-family: $fb;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .15s $ease;
+
+  span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $tt;
+  }
+
+  &.is-active {
+    border-color: rgba($ok, .25);
+    background: rgba($ok, .11);
+    color: darken(#22C55E, 18%);
+
+    span { background: $ok; }
+  }
+}
+
+.status-toggle {
+  padding: 6px 8px;
+}
+
+.usage-badge {
+  background: rgba(100, 116, 139, .1);
+  color: #64748B;
+
+  &--used {
+    background: rgba($tuniflow, .18);
+    color: color-mix(in srgb, $tuniflow 70%, #111827);
+  }
+}
+
 .row-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 8px;
   border: 1px solid $b1;
   background: $surf;
@@ -282,7 +456,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   &:hover { border-color: $tuniflow-glow; background: $tuniflow-dim; color: $tp; }
 }
 
-// ── Skeleton ─────────────────────────────────────────────────────────────────
+// â”€â”€ Skeleton â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .table-skeleton { padding: 8px 0; }
 
 .skeleton-row {
@@ -310,7 +484,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   to   { background-position: -200% 0; }
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
+// â”€â”€ Empty state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -361,7 +535,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   &:hover { border-color: $tuniflow-glow; background: $tuniflow-dim; }
 }
 
-// ── Footer ───────────────────────────────────────────────────────────────────
+// â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .table-footer {
   display: flex;
   align-items: center;
@@ -423,9 +597,9 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   text-align: center;
 }
 
-// ── Form aside ────────────────────────────────────────────────────────────────
+// â”€â”€ Form aside â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .taxes-form {
-  padding: 20px;
+  padding: 18px;
   position: sticky;
   top: 18px;
   transition: box-shadow .2s $ease;
@@ -484,8 +658,8 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   &:hover { background: $edge; color: $tp; }
 }
 
-// ── Form internals ────────────────────────────────────────────────────────────
-.form-body { display: flex; flex-direction: column; gap: 14px; }
+// â”€â”€ Form internals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+.form-body { display: flex; flex-direction: column; gap: 12px; }
 
 .form-group {
   display: flex;
@@ -509,13 +683,15 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
 }
 
 .form-group input[type="text"],
-.form-group input[type="number"] {
-  padding: 9px 12px;
+.form-group input[type="number"],
+.form-group input[type="date"],
+.field-select {
+  padding: 9px 10px;
   border-radius: 10px;
   border: 1px solid $b1;
   background: $surf;
   font-family: $fb;
-  font-size: 12.5px;
+  font-size: 12px;
   color: $tp;
   transition: border-color .15s $ease;
   width: 100%;
@@ -526,6 +702,27 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
     box-shadow: 0 0 0 3px $tuniflow-dim;
   }
   &.input-error { border-color: rgba($err, .5); box-shadow: 0 0 0 3px rgba($err, .08); }
+}
+
+.field-select {
+  height: 39px;
+  cursor: pointer;
+}
+
+.date-input {
+  min-height: 39px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.form-switch {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 12px;
 }
 
 .input-addon-wrap {
@@ -556,7 +753,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   gap: 5px;
   padding: 6px 13px;
   border-radius: 999px;
-  border: 1px solid $b1;
+  border: 1px solid rgba(203, 213, 225, .9) !important;
   background: $surf;
   font-family: $fb;
   font-size: 11.5px;
@@ -564,13 +761,18 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   cursor: pointer;
   transition: all .15s $ease;
 
-  &:hover { border-color: $b2; color: $tp; }
+  &:hover {
+    border-color: rgba(var(--c-tuniflow-rgb), .34);
+    background: rgba(var(--c-tuniflow-rgb), .06);
+    color: $tp;
+  }
 
   &.chip-active {
-    background: $tuniflow;
-    border-color: $tuniflow;
-    color: var(--tuniflow-btn-text);
-    font-weight: 600;
+    background: rgba(255, 230, 0, .22);
+    border-color: rgba(234, 179, 8, .34) !important;
+    color: $tp;
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(234, 179, 8, .08);
   }
 }
 
@@ -588,7 +790,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   padding: 10px 12px;
 }
 
-// ── Form footer ────────────────────────────────────────────────────────────────
+// â”€â”€ Form footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .form-foot {
   display: flex;
   gap: 8px;
@@ -652,7 +854,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   display: inline-block;
   width: 12px;
   height: 12px;
-  border: 2px solid rgba(0,0,0,.2);
+  border: 2px solid rgba(148,163,184,.35);
   border-top-color: var(--tuniflow-btn-text);
   border-radius: 50%;
   animation: spin .6s linear infinite;
@@ -660,9 +862,10 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-// ── Responsive ────────────────────────────────────────────────────────────────
+// â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 @media (max-width: 1100px) {
-  .taxes-layout { grid-template-columns: 1.8fr 1fr; }
+  .taxes-layout { grid-template-columns: 1fr; }
+  .taxes-form { position: static; }
 }
 
 @media (max-width: 960px) {
@@ -672,13 +875,26 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
 }
 
 @media (max-width: 640px) {
-  .table-toolbar { flex-direction: column; align-items: stretch; }
-  .search-box { min-width: unset; }
+  .table-toolbar,
+  .toolbar-left,
+  .toolbar-right {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box,
+  .filter-select,
+  .reset-filter {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .form-row { grid-template-columns: 1fr; }
   .chip-group { flex-wrap: wrap; }
 }
 
 
-// ── Action buttons ────────────────────────────────────────────────────────────
+// â”€â”€ Action buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .action-buttons {
   display: flex;
   align-items: center;
@@ -694,7 +910,7 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
   }
 }
 
-// ── Delete Modal ──────────────────────────────────────────────────────────────
+// â”€â”€ Delete Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -735,6 +951,12 @@ $ease:    cubic-bezier(.16, 1, .3, 1);
     background: rgba($err, .12);
     color: $err;
     border: 1.5px solid rgba($err, .25);
+  }
+
+  &--warning {
+    background: rgba($warn, .14);
+    color: darken(#F59E0B, 14%);
+    border: 1.5px solid rgba($warn, .28);
   }
 }
 

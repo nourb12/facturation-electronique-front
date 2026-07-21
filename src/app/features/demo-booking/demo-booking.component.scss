@@ -1,5 +1,5 @@
-// ============================================================
-// VARIABLES — alignées sur le thème landing EY-Factify
+﻿// ============================================================
+// VARIABLES â€” alignÃ©es sur le thÃ¨me landing EY-Factify
 // ============================================================
 $tuniflow:      var(--c-tuniflow, #FFE600);
 $tuniflow-dim:  rgba(var(--c-tuniflow-rgb, 255 230 0), .07);
@@ -15,7 +15,7 @@ $fast: 150ms cubic-bezier(.16, 1, .3, 1);
 $base: 260ms cubic-bezier(.16, 1, .3, 1);
 $slow: 420ms cubic-bezier(.16, 1, .3, 1);
 
-$fd: 'Playfair Display', Georgia, serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans', sans-serif;
 $fm: 'JetBrains Mono', monospace;
 
@@ -54,7 +54,7 @@ $fm: 'JetBrains Mono', monospace;
 }
 
 // ============================================================
-// NAV (harmonisée avec landing)
+// NAV (harmonisÃ©e avec landing)
 // ============================================================
 .navbar {
   padding: 10px 24px 0;
@@ -71,7 +71,7 @@ $fm: 'JetBrains Mono', monospace;
   align-items: center;
   gap: 16px;
   background: var(--navbar-bg, rgba(255,255,255,.9));
-  border: 1px solid var(--navbar-border, rgba(0,0,0,.08));
+  border: 1px solid var(--navbar-border, rgba(203,213,225,.76));
   border-radius: 16px;
   box-shadow: var(--navbar-shadow, 0 4px 24px rgba(0,0,0,.06));
   backdrop-filter: blur(16px);
@@ -162,7 +162,7 @@ $fm: 'JetBrains Mono', monospace;
   color: var(--tp, #0A0A0A);
   text-decoration: none;
   border-radius: 10px;
-  border: 1px solid var(--b1, rgba(0,0,0,.08));
+  border: 1px solid var(--b1, rgba(203,213,225,.76));
   background: transparent;
   transition: all $fast;
   cursor: pointer;
@@ -173,13 +173,13 @@ $fm: 'JetBrains Mono', monospace;
 
   &:hover {
     background: var(--bg-ghost, rgba(0,0,0,.04));
-    border-color: var(--b2, rgba(0,0,0,.12));
+    border-color: var(--b2, rgba(203,213,225,.85));
     transform: translateX(-2px);
   }
 
   &:active {
     color: var(--tp, #0A0A0A);
-    border-color: var(--b2, rgba(0,0,0,.18));
+    border-color: var(--b2, rgba(148,163,184,.48));
     background: var(--b0, rgba(0,0,0,.03));
   }
 }
@@ -302,7 +302,7 @@ $fm: 'JetBrains Mono', monospace;
   align-items: center;
   gap: 0;
   background: var(--bg-depth, #f5f5f5);
-  border: 1px solid var(--b1, rgba(0,0,0,.08));
+  border: 1px solid var(--b1, rgba(203,213,225,.76));
   border-radius: $r99;
   padding: 6px 20px;
   gap: 8px;
@@ -342,7 +342,7 @@ $fm: 'JetBrains Mono', monospace;
   height: 24px;
   border-radius: 50%;
   background: transparent;
-  border: 1.5px solid var(--b1, rgba(0,0,0,.1));
+  border: 1.5px solid var(--b1, rgba(203,213,225,.8));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,7 +379,7 @@ $fm: 'JetBrains Mono', monospace;
 // ============================================================
 .db-card {
   background: var(--bg-card, #fff);
-  border: 1px solid var(--b1, rgba(0,0,0,.08));
+  border: 1px solid var(--b1, rgba(203,213,225,.76));
   border-radius: $r24;
   overflow: hidden;
   box-shadow: 0 8px 48px rgba(0,0,0,.06);
@@ -416,7 +416,7 @@ $fm: 'JetBrains Mono', monospace;
 .db-cal-info {
   padding: 36px 28px;
   background: var(--bg-depth, #f8f8f8);
-  border-right: 1px solid var(--b0, rgba(0,0,0,.05));
+  border-right: 1px solid var(--b0, rgba(226,232,240,.78));
 
   @media (max-width: 768px) {
     border-right: none;
@@ -458,7 +458,7 @@ $fm: 'JetBrains Mono', monospace;
   gap: 10px;
   margin-bottom: 28px;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--b0, rgba(0,0,0,.06));
+  border-bottom: 1px solid var(--b0, rgba(226,232,240,.82));
 }
 
 .db-meta-item {
@@ -504,7 +504,7 @@ $fm: 'JetBrains Mono', monospace;
 // RIGHT CALENDAR
 .db-cal-right {
   padding: 28px 24px 20px;
-  border-right: 1px solid var(--b0, rgba(0,0,0,.05));
+  border-right: 1px solid var(--b0, rgba(226,232,240,.78));
 
   @media (max-width: 1024px) {
     border-right: none;
@@ -530,7 +530,7 @@ $fm: 'JetBrains Mono', monospace;
   height: 32px;
   border-radius: $r8;
   background: transparent;
-  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border: 1px solid var(--b1, rgba(203,213,225,.8));
   color: var(--ts, #555);
   cursor: pointer;
   display: flex;
@@ -539,7 +539,7 @@ $fm: 'JetBrains Mono', monospace;
   transition: all $fast;
 
   &:hover {
-    border-color: var(--b2, rgba(0,0,0,.18));
+    border-color: var(--b2, rgba(148,163,184,.48));
     color: var(--tp, #0A0A0A);
     background: var(--b0, rgba(0,0,0,.03));
   }
@@ -590,7 +590,7 @@ $fm: 'JetBrains Mono', monospace;
   }
 
   &--today {
-    border-color: var(--b2, rgba(0,0,0,.15));
+    border-color: var(--b2, rgba(148,163,184,.44));
     color: var(--tp, #0A0A0A);
     font-weight: 700;
   }
@@ -626,7 +626,7 @@ $fm: 'JetBrains Mono', monospace;
   color: var(--tt, #999);
   margin-top: 14px;
   padding-top: 14px;
-  border-top: 1px solid var(--b0, rgba(0,0,0,.05));
+  border-top: 1px solid var(--b0, rgba(226,232,240,.78));
 }
 
 // ============================================================
@@ -641,7 +641,7 @@ $fm: 'JetBrains Mono', monospace;
   max-height: 600px;
 
   @media (max-width: 1024px) {
-    border-top: 1px solid var(--b0, rgba(0,0,0,.06));
+    border-top: 1px solid var(--b0, rgba(226,232,240,.82));
     background: transparent;
     max-height: none;
   }
@@ -662,7 +662,7 @@ $fm: 'JetBrains Mono', monospace;
   gap: 8px;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--b0, rgba(0,0,0,.06));
+  border-bottom: 1px solid var(--b0, rgba(226,232,240,.82));
 }
 
 .db-slots-date {
@@ -693,7 +693,7 @@ $fm: 'JetBrains Mono', monospace;
   padding: 10px 8px;
   border-radius: $r10;
   background: transparent;
-  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border: 1px solid var(--b1, rgba(203,213,225,.8));
   font-family: $fm;
   font-size: 13px;
   font-weight: 600;
@@ -740,7 +740,7 @@ $fm: 'JetBrains Mono', monospace;
   gap: 12px;
   padding: 16px;
   background: var(--bg-card, #fff);
-  border: 1px solid var(--b1, rgba(0,0,0,.08));
+  border: 1px solid var(--b1, rgba(203,213,225,.76));
   border-radius: $r12;
   margin-top: auto;
 }
@@ -754,7 +754,7 @@ $fm: 'JetBrains Mono', monospace;
   color: var(--tp, #0A0A0A);
   text-transform: capitalize;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--b0, rgba(0,0,0,.06));
+  border-bottom: 1px solid var(--b0, rgba(226,232,240,.82));
 }
 
 .db-btn-ey--full {
@@ -804,7 +804,7 @@ $fm: 'JetBrains Mono', monospace;
   font-weight: 600;
   color: var(--ts, #555);
   background: transparent;
-  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border: 1px solid var(--b1, rgba(203,213,225,.8));
   border-radius: $r12;
   cursor: pointer;
   text-decoration: none;
@@ -815,7 +815,7 @@ $fm: 'JetBrains Mono', monospace;
   &:hover:not(:disabled) {
     color: var(--tp, #0A0A0A);
     background: var(--bg-ghost, rgba(0,0,0,.04));
-    border-color: var(--b2, rgba(0,0,0,.18));
+    border-color: var(--b2, rgba(148,163,184,.48));
   }
 
   &:disabled {
@@ -844,7 +844,7 @@ $fm: 'JetBrains Mono', monospace;
   font-weight: 500;
   color: var(--ts, #555);
   background: transparent;
-  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border: 1px solid var(--b1, rgba(203,213,225,.8));
   border-radius: $r8;
   padding: 6px 14px;
   cursor: pointer;
@@ -853,7 +853,7 @@ $fm: 'JetBrains Mono', monospace;
 
   &:hover {
     color: var(--tp, #0A0A0A);
-    border-color: var(--b2, rgba(0,0,0,.18));
+    border-color: var(--b2, rgba(148,163,184,.48));
   }
 }
 
@@ -923,7 +923,7 @@ $fm: 'JetBrains Mono', monospace;
   font-family: $fb;
   color: var(--tp, #0A0A0A);
   background: var(--bg-void, #fff);
-  border: 1px solid var(--b1, rgba(0,0,0,.1));
+  border: 1px solid var(--b1, rgba(203,213,225,.8));
   border-radius: $r10;
   outline: none;
   transition: border-color $fast, box-shadow $fast;
@@ -981,8 +981,8 @@ $fm: 'JetBrains Mono', monospace;
 .db-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(0,0,0,.2);
-  border-top-color: #000;
+  border: 2px solid rgba(148,163,184,.35);
+  border-top-color: var(--tp, #475569);
   border-radius: 50%;
   animation: spin .7s linear infinite;
   display: inline-block;
@@ -1025,7 +1025,7 @@ $fm: 'JetBrains Mono', monospace;
 
 .db-confirm-card {
   background: var(--bg-depth, #f8f8f8);
-  border: 1px solid var(--b0, rgba(0,0,0,.06));
+  border: 1px solid var(--b0, rgba(226,232,240,.82));
   border-radius: $r14;
   padding: 18px 20px;
   display: flex;
@@ -1065,7 +1065,7 @@ $fm: 'JetBrains Mono', monospace;
   padding: 24px;
   font-size: 11.5px;
   color: var(--tm, #bbb);
-  border-top: 1px solid var(--b0, rgba(0,0,0,.05));
+  border-top: 1px solid var(--b0, rgba(226,232,240,.78));
 }
 
 // ============================================================

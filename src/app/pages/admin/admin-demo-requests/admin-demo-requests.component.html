@@ -24,17 +24,23 @@
       </div>
     </div>
     <div class="dt-right">
-      <button class="dt-btn-new ghost" (click)="exportToCSV()">
+      <button class="btn-ghost" (click)="exportToExcel()">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M14 10v2.667A1.333 1.333 0 0112.667 14H3.333A1.333 1.333 0 012 12.667V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4.667 6.667L8 10l3.333-3.333M8 10V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Exporter CSV
+        Télécharger Excel
       </button>
     </div>
   </header>
 
   <main class="dash-content">
+
+    @if (loadError() || actionError()) {
+      <div class="dash-error" role="alert">
+        {{ actionError() || loadError() }}
+      </div>
+    }
 
     @if (loading()) {
       <div class="dash-loading">

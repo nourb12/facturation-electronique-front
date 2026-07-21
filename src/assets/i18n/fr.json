@@ -1,25 +1,25 @@
-﻿{
+{
   "APP": {
     "TAGLINE": "La plateforme fiscale des entreprises tunisiennes",
     "ADMIN_CONSOLE": "Console d'administration",
-    "BADGE_TEIF_CERTIFIED": "TEIF 2026 Â· CertifiÃ© DGI"
+    "BADGE_TEIF_CERTIFIED": "TEIF 2026 · Certifié DGI"
   },
   "TRUST": {
-    "AES_256": "DonnÃ©es chiffrÃ©es AES-256",
-    "HOSTED_TN": "HÃ©bergÃ© en Tunisie",
-    "TWO_FACTOR_REQUIRED": "AccÃ¨s restreint Ã¢â‚¬â€ 2FA obligatoire",
-    "SESSIONS_AUDITED": "Toutes les sessions sont auditÃ©es",
-    "ACCESS_DEFINED_BY_COMPANY": "AccÃ¨s dÃ©fini par votre entreprise",
-    "TWO_FACTOR_RECOMMENDED": "2FA recommandÃ©",
+    "AES_256": "Données chiffrées AES-256",
+    "HOSTED_TN": "Hébergé en Tunisie",
+    "TWO_FACTOR_REQUIRED": "Accès restreint — 2FA obligatoire",
+    "SESSIONS_AUDITED": "Toutes les sessions sont auditées",
+    "ACCESS_DEFINED_BY_COMPANY": "Accès défini par votre entreprise",
+    "TWO_FACTOR_RECOMMENDED": "2FA recommandé",
     "TEIF_2026_COMPLIANT": "Conforme TEIF 2026"
   },
   "AUTH": {
     "SIGN_IN": "Connexion",
     "PASSWORD": "Mot de passe",
-    "FORGOT_PASSWORD": "Mot de passe oubliÃ© ?",
-    "SUBMITTING": "Connexion en coursâ€¦",
-    "VERIFYING": "VÃ©rificationâ€¦",
-    "BACK_TO_SIGN_IN": "Retour ÃƒÂ  la connexion",
+    "FORGOT_PASSWORD": "Mot de passe oublié ?",
+    "SUBMITTING": "Connexion en cours…",
+    "VERIFYING": "Vérification…",
+    "BACK_TO_SIGN_IN": "Retour à la connexion",
     "ROLES": {
       "ENTREPRISE": "Responsable Entreprise",
       "FINANCIER": "Responsable Financier"
@@ -30,39 +30,39 @@
         "HEADLINE_A": "Facturez, suivez,",
         "HEADLINE_B": "restez conforme.",
         "HEADLINE_EM": "Tout en un.",
-        "DESC": "AccÃ©dez ÃƒÂ  votre tableau de bord, pilotez vos factures TEIF 2026 et suivez votre conformitÃ© DGI en temps rÃ©el.",
+        "DESC": "Accédez à votre tableau de bord, pilotez vos factures TEIF 2026 et suivez votre conformité DGI en temps réel.",
         "FEATURES": {
-          "UBL": "Facturation UBL 2.1 certifiÃ©e DGI",
-          "TEIF": "ConformitÃ© TEIF 2026 automatique",
+          "UBL": "Facturation UBL 2.1 certifiée DGI",
+          "TEIF": "Conformité TEIF 2026 automatique",
           "DASH": "Comptabilité, TVA et suivi clients"
         }
       },
       "ADMIN": {
-        "BADGE": "AccÃ¨s Administrateur",
+        "BADGE": "Accès Administrateur",
         "HEADLINE_A": "Console",
         "HEADLINE_B": "d'administration",
-        "HEADLINE_EM": "TunisFlow.",
-        "DESC": "AccÃ¨s rÃ©servÃ© aux administrateurs systÃ¨me. Toutes les actions sont auditÃ©es et tracÃ©es.",
-        "SCOPE_TITLE": "PÃ©rimÃ¨tre d'accÃ¨s",
+        "HEADLINE_EM": "TuniFlow.",
+        "DESC": "Accès réservé aux administrateurs système. Toutes les actions sont auditées et tracées.",
+        "SCOPE_TITLE": "Périmètre d'accès",
         "SCOPE": {
           "COMPANIES": "Gestion des entreprises",
           "USERS": "Gestion des utilisateurs",
           "AUDIT": "Journal d'audit complet",
-          "SETTINGS": "ParamÃ¨tres systÃ¨me"
+          "SETTINGS": "Paramètres système"
         }
       },
       "FINANCIER": {
         "BADGE": "Espace Responsable Financier",
-        "HEADLINE_A": "Votre accÃ¨s",
+        "HEADLINE_A": "Votre accès",
         "HEADLINE_B": "financier",
-        "HEADLINE_EM": "sÃ©curisÃ©.",
-        "DESC": "Consultez les factures, suivez les impayÃ©s et exportez vos rapports comptables selon vos droits dÃ©finis par l'entreprise.",
-        "PERMISSIONS_TITLE": "AccÃ¨s typique du rÃ´le",
+        "HEADLINE_EM": "sécurisé.",
+        "DESC": "Consultez les factures, suivez les impayés et exportez vos rapports comptables selon vos droits définis par l'entreprise.",
+        "PERMISSIONS_TITLE": "Accès typique du rôle",
         "PERMISSIONS": {
           "INVOICES": "Consultation des factures",
           "DASHBOARD": "Comptabilité, TVA et suivi clients",
-          "EXPORTS": "Export selon droits accordÃ©s",
-          "ADMIN": "Administration (non accordÃ©e)"
+          "EXPORTS": "Export selon droits accordés",
+          "ADMIN": "Administration (non accordée)"
         }
       }
     },
@@ -70,155 +70,155 @@
       "TITLE_A": "Bon retour.",
       "TITLE_B": "Vos factures et votre comptabilité vous attendent.",
       "NO_ACCOUNT": "Pas encore de compte ?",
-      "CREATE_SPACE": "CrÃ©er votre espace",
+      "CREATE_SPACE": "Créer votre espace",
       "EMAIL_LABEL": "Email professionnel",
       "EMAIL_PLACEHOLDER": "vous@entreprise.tn",
       "REMEMBER_ME": "Se souvenir de moi pendant 30 jours",
-      "SUBMIT": "AccÃ©der ÃƒÂ  mon espace",
-      "SUBMIT_FINANCIER": "AccÃ©der ÃƒÂ  mon espace financier",
+      "SUBMIT": "Accéder à mon espace",
+      "SUBMIT_FINANCIER": "Accéder à mon espace financier",
       "SHOW": "Afficher",
       "HIDE": "Masquer",
-      "INVITATION_SUBTITLE": "Votre compte a Ã©tÃ© crÃ©Ã© par invitation.",
+      "INVITATION_SUBTITLE": "Votre compte a été créé par invitation.",
       "COMPANY_CODE_LABEL": "Code entreprise",
       "COMPANY_CODE_PLACEHOLDER": "Ex: TECH-2026-A",
       "OPTIONAL": "facultatif"
     },
     "ADMIN_LOGIN": {
-      "EYEBROW": "AccÃ¨s restreint Â· Admin",
+      "EYEBROW": "Accès restreint · Admin",
       "TITLE_A": "Authentification",
       "TITLE_B": "administrateur.",
-      "SUBTITLE": "Connexion sÃ©curisÃ©e Ã¢â‚¬â€ session auditÃ©e.",
+      "SUBTITLE": "Connexion sécurisée — session auditée.",
       "IDENT_LABEL": "Identifiant administrateur",
       "IDENT_PLACEHOLDER": "admin.ey / votre identifiant",
-      "PASSWORD_PLACEHOLDER": "Minimum 8 caractÃ¨res",
-      "NOTICE": "Un code 2FA vous sera demandÃ© ÃƒÂ  l'Ã©tape suivante. Assurez-vous d'avoir accÃ¨s ÃƒÂ  votre application d'authentification.",
-      "CONTINUE": "Continuer vers la vÃ©rification 2FA"
+      "PASSWORD_PLACEHOLDER": "Minimum 8 caractères",
+      "NOTICE": "Un code 2FA vous sera demandé à l'étape suivante. Assurez-vous d'avoir accès à votre application d'authentification.",
+      "CONTINUE": "Continuer vers la vérification 2FA"
     },
     "ADMIN_OTP": {
-      "EYEBROW": "VÃ©rification Â· 2FA",
+      "EYEBROW": "Vérification · 2FA",
       "TITLE_A": "Code de",
-      "TITLE_B": "vÃ©rification.",
-      "SUBTITLE": "Entrez le code ÃƒÂ  6 chiffres gÃ©nÃ©rÃ© par votre application 2FA.",
+      "TITLE_B": "vérification.",
+      "SUBTITLE": "Entrez le code à 6 chiffres généré par votre application 2FA.",
       "OTP_LABEL": "Code OTP",
       "OTP_PLACEHOLDER": "000 000",
-      "OTP_HINT": "Valable 30 secondes Ã¢â‚¬â€ ne partagez jamais ce code.",
-      "SUBMIT": "AccÃ©der ÃƒÂ  la console",
+      "OTP_HINT": "Valable 30 secondes — ne partagez jamais ce code.",
+      "SUBMIT": "Accéder à la console",
       "BACK": "Revenir aux identifiants"
     },
     "ROLE_SELECTION": {
       "TITLE_A": "Quel est",
-      "TITLE_B": "votre rÃ´le ?",
-      "DESC": "Votre rÃ´le dÃ©termine vos accÃ¨s et les fonctionnalitÃ©s disponibles sur la plateforme.",
+      "TITLE_B": "votre rôle ?",
+      "DESC": "Votre rôle détermine vos accès et les fonctionnalités disponibles sur la plateforme.",
       "CARD_ENTREPRISE_TITLE": "Responsable d'entreprise",
-      "CARD_ENTREPRISE_DESC": "GÃ©rant, DG, PDG Ã¢â‚¬â€ accÃ¨s complet ÃƒÂ  la configuration et aux donnÃ©es fiscales.",
+      "CARD_ENTREPRISE_DESC": "Gérant, DG, PDG — accès complet à la configuration et aux données fiscales.",
       "CARD_FINANCIER_TITLE": "Responsable financier",
-      "CARD_FINANCIER_DESC": "DAF, comptable, RAF Ã¢â‚¬â€ gestion des factures, TVA et rapports financiers.",
-      "ARIA_ENTREPRISE": "SÃ©lectionner le rÃ´le Responsable d'entreprise",
-      "ARIA_FINANCIER": "SÃ©lectionner le rÃ´le Responsable financier",
-      "BACK_HOME": "Retour ÃƒÂ  l'accueil"
+      "CARD_FINANCIER_DESC": "DAF, comptable, RAF — gestion des factures, TVA et rapports financiers.",
+      "ARIA_ENTREPRISE": "Sélectionner le rôle Responsable d'entreprise",
+      "ARIA_FINANCIER": "Sélectionner le rôle Responsable financier",
+      "BACK_HOME": "Retour à l'accueil"
     },
     "FORGOT": {
-      "BADGE": "RÃ©initialisation sÃ©curisÃ©e",
-      "HEADLINE_A": "RÃ©cupÃ©rez",
+      "BADGE": "Réinitialisation sécurisée",
+      "HEADLINE_A": "Récupérez",
       "HEADLINE_B": "votre",
-      "HEADLINE_EM": "accÃ¨s sÃ©curisÃ©.",
-      "DESC": "3 Ã©tapes simples pour rÃ©initialiser votre mot de passe en toute sÃ©curitÃ©. Le processus prend moins d'une minute.",
+      "HEADLINE_EM": "accès sécurisé.",
+      "DESC": "3 étapes simples pour réinitialiser votre mot de passe en toute sécurité. Le processus prend moins d'une minute.",
       "STEPS": {
         "EMAIL_LABEL": "Saisie de l'email",
         "EMAIL_HINT": "Votre adresse professionnelle",
-        "OTP_LABEL": "Code de vÃ©rification",
-        "OTP_HINT": "OTP ÃƒÂ  6 chiffres Â· 10 min",
+        "OTP_LABEL": "Code de vérification",
+        "OTP_HINT": "OTP à 6 chiffres · 10 min",
         "NEW_PW_LABEL": "Nouveau mot de passe",
-        "NEW_PW_HINT": "Minimum 8 caractÃ¨res"
+        "NEW_PW_HINT": "Minimum 8 caractères"
       },
       "FOOTER": {
-        "SSL_AES": "Lien sÃ©curisÃ© SSL Â· AES-256",
+        "SSL_AES": "Lien sécurisé SSL · AES-256",
         "CODE_VALID_10": "Code valable 10 minutes",
-        "EY_ENCRYPTED": "DonnÃ©es chiffrÃ©es EY Tunisia"
+        "EY_ENCRYPTED": "Données chiffrées EY Tunisia"
       },
       "STEP": {
-        "OF": "Ã‰tape {{current}} sur {{total}}",
-        "STEP2": "Ã‰tape 2 sur 3 Â· VÃ©rification",
-        "STEP3": "Ã‰tape 3 sur 3 Â· SÃ©curisation"
+        "OF": "Étape {{current}} sur {{total}}",
+        "STEP2": "Étape 2 sur 3 · Vérification",
+        "STEP3": "Étape 3 sur 3 · Sécurisation"
       },
       "TITLE_EMAIL_A": "Votre email",
       "TITLE_EMAIL_EM": "professionnel.",
-      "SUBTITLE_EMAIL": "Renseignez l'adresse associÃ©e ÃƒÂ  votre compte TunisFlow. Nous vous enverrons un code de vÃ©rification immÃ©diatement.",
+      "SUBTITLE_EMAIL": "Renseignez l'adresse associée à votre compte TuniFlow. Nous vous enverrons un code de vérification immédiatement.",
       "EMAIL_PLACEHOLDER": "vous@ey-tunisie.com",
-      "EMAIL_HINT_SPAM": "VÃ©rifiez votre dossier spam si vous ne recevez pas l'email.",
-      "SENDING": "Envoi en coursâ€¦",
-      "SEND_CODE": "Envoyer le code de vÃ©rification",
+      "EMAIL_HINT_SPAM": "Vérifiez votre dossier spam si vous ne recevez pas l'email.",
+      "SENDING": "Envoi en cours…",
+      "SEND_CODE": "Envoyer le code de vérification",
       "TITLE_CODE_A": "Code de",
       "TITLE_CODE_EM": "confirmation.",
-      "SUBTITLE_CODE": "Un code ÃƒÂ  6 chiffres a Ã©tÃ© envoyÃ© ÃƒÂ ",
+      "SUBTITLE_CODE": "Un code à 6 chiffres a été envoyé à",
       "RESEND_IN": "Renvoyer le code dans",
-      "NO_CODE": "Vous n'avez pas reÃ§u le code ?",
-      "RESEND": "Renvoyer Ã¢â€ â€™",
-      "VERIFY_CODE": "VÃ©rifier le code",
+      "NO_CODE": "Vous n'avez pas reçu le code ?",
+      "RESEND": "Renvoyer →",
+      "VERIFY_CODE": "Vérifier le code",
       "EDIT_EMAIL": "Modifier l'adresse email",
       "TITLE_NEW_PW_A": "Nouveau",
       "TITLE_NEW_PW_EM": "mot de passe.",
-      "SUBTITLE_NEW_PW": "Choisissez un mot de passe fort d'au moins 8 caractÃ¨res, avec majuscules, chiffres et symboles.",
+      "SUBTITLE_NEW_PW": "Choisissez un mot de passe fort d'au moins 8 caractères, avec majuscules, chiffres et symboles.",
       "NEW_PASSWORD_LABEL": "Nouveau mot de passe",
-      "NEW_PASSWORD_PLACEHOLDER": "Minimum 8 caractÃ¨res",
+      "NEW_PASSWORD_PLACEHOLDER": "Minimum 8 caractères",
       "CONFIRM_PASSWORD_LABEL": "Confirmer le mot de passe",
-      "CONFIRM_PASSWORD_PLACEHOLDER": "RÃ©pÃ©tez votre mot de passe",
-      "UPDATING": "Mise ÃƒÂ  jourâ€¦",
-      "RESET_ACTION": "RÃ©initialiser mon mot de passe",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Répétez votre mot de passe",
+      "UPDATING": "Mise à jour…",
+      "RESET_ACTION": "Réinitialiser mon mot de passe",
       "BACK_TO_OTP": "Revenir au code OTP"
     },
     "WAITING": {
-      "TITLE_A": "Demande envoyÃ©e",
-      "TITLE_B": "avec succÃ¨s.",
-      "DESC_A": "Votre dossier est en cours d'examen par notre Ã©quipe. Vous recevrez vos identifiants par email ÃƒÂ ",
+      "TITLE_A": "Demande envoyée",
+      "TITLE_B": "avec succès.",
+      "DESC_A": "Votre dossier est en cours d'examen par notre équipe. Vous recevrez vos identifiants par email à",
       "DESC_B": "sous 48h ouvrables.",
-      "POLL_NEXT_A": "Prochaine vÃ©rification dans",
+      "POLL_NEXT_A": "Prochaine vérification dans",
       "POLL_NEXT_B": "s",
-      "REFERENCE": "RÃ©fÃ©rence dossier",
-      "REFERENCE_HINT": "Conservez cette rÃ©fÃ©rence pour tout suivi.",
+      "REFERENCE": "Référence dossier",
+      "REFERENCE_HINT": "Conservez cette référence pour tout suivi.",
       "TIMELINE": {
         "SUBMITTED": "Dossier soumis",
-        "RECEIVED": "ReÃ§u avec succÃ¨s",
+        "RECEIVED": "Reçu avec succès",
         "IN_REVIEW": "Examen en cours",
         "IN_REVIEW_SUB": "48h ouvrables",
-        "GRANTED": "AccÃ¨s accordÃ©",
+        "GRANTED": "Accès accordé",
         "GRANTED_SUB": "Email + identifiants"
       },
-      "WAIT_BEFORE_RETRY": "Attendez {{seconds}}s avant de rÃ©essayer",
-      "WAIT_SECONDS": "Patienter {{seconds}}sâ€¦",
-      "ARIA_CHECK_STATUS": "VÃ©rifier le statut du compte",
+      "WAIT_BEFORE_RETRY": "Attendez {{seconds}}s avant de réessayer",
+      "WAIT_SECONDS": "Patienter {{seconds}}s…",
+      "ARIA_CHECK_STATUS": "Vérifier le statut du compte",
       "SUPPORT": "Pour toute question :",
-      "TOAST_ACTIVE_REDIRECT": "Compte activÃ© ! Redirection en coursâ€¦"
+      "TOAST_ACTIVE_REDIRECT": "Compte activé ! Redirection en cours…"
     },
     "ACCESS_REQUEST": {
-      "SIDEBAR_BADGE": "Portail d'accÃ¨s entreprise",
+      "SIDEBAR_BADGE": "Portail d'accès entreprise",
       "SIDEBAR_TITLE": "Rejoignez-nous",
       "SIDEBAR_TITLE_A": "Rejoignez",
       "SIDEBAR_TITLE_EM": "nous.",
-      "SIDEBAR_DESC": "Soumettez votre demande d'accÃ¨s. Notre Ã©quipe valide votre dossier et vous envoie vos identifiants sous 48h ouvrables.",
-      "STEP1_EYEBROW": "Ã‰tape 1 Ã¢â‚¬â€ Informations entreprise",
+      "SIDEBAR_DESC": "Soumettez votre demande d'accès. Notre équipe valide votre dossier et vous envoie vos identifiants sous 48h ouvrables.",
+      "STEP1_EYEBROW": "Étape 1 — Informations entreprise",
       "STEP1_TITLE_A": "Informations",
       "STEP1_TITLE_EM": "de l'entreprise.",
       "LOGO": {
         "LABEL": "Logo entreprise",
-        "HINT": "(optionnel Ã¢â‚¬â€ jpg, png, svg Ã¢â‚¬â€ max 2 Mo)",
+        "HINT": "(optionnel — jpg, png, svg — max 2 Mo)",
         "PICK": "Cliquer pour choisir un fichier",
-        "PICK_HINT": "jpg, png, svg Ã¢â‚¬â€ 2 Mo max",
-        "UPLOADED": "Logo chargÃ© avec succÃ¨s",
+        "PICK_HINT": "jpg, png, svg — 2 Mo max",
+        "UPLOADED": "Logo chargé avec succès",
         "REMOVE": "Supprimer"
       },
       "STEPS": {
         "STEP1": {
           "LABEL": "Informations entreprise",
-          "DESC": "IdentitÃ© lÃ©gale et coordonnÃ©es"
+          "DESC": "Identité légale et coordonnées"
         },
         "STEP2": {
-          "LABEL": "Responsable lÃ©gal",
+          "LABEL": "Responsable légal",
           "DESC": "Contact principal de l'entreprise"
         },
         "STEP3": {
           "LABEL": "Documents justificatifs",
-          "DESC": "PiÃ¨ces requises pour validation KYC"
+          "DESC": "Pièces requises pour validation KYC"
         }
       }
     }
@@ -232,7 +232,7 @@
       "FEATURES": "Fonctionnalités",
       "COMPLIANCE": "Conformité",
       "SECURITY": "Sécurité",
-      "WHY": "Pourquoi TunisFlow",
+      "WHY": "Pourquoi TuniFlow",
       "AUDIENCE": "Pour qui",
       "CONTACT": "Contact"
     },
@@ -240,15 +240,15 @@
       "SIGN_IN": "Se connecter",
       "REQUEST_ACCESS": "Demander l'accès",
       "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
-      "SEE_DEMO": "Voir le fonctionnement"
+      "SEE_DEMO": "Demander Démo"
     }
   },
   "NAV": {
     "SECTIONS": {
       "MAIN": "Principal",
-      "REFERENTIAL": "RÃ©fÃ©rentiel",
+      "REFERENTIAL": "Référentiel",
       "COMPANY": "Mon entreprise",
-      "ACCOUNTING": "ComptabilitÃ©",
+      "ACCOUNTING": "Comptabilité",
       "ANALYTICS": "Analyses"
     },
     "ITEMS": {
@@ -259,15 +259,15 @@
       "PAYMENTS": "Paiements",
       "CLIENTS": "Clients",
       "PRODUCTS": "Produits",
-      "CATEGORIES": "CatÃ©gories",
+      "CATEGORIES": "Catégories",
       "MY_COMPANY": "Mon entreprise",
       "CUSTOMIZATION": "Personnalisation",
       "USERS": "Utilisateurs",
       "TRANSACTIONS": "Transactions",
-      "FISCAL_PARAMS": "ParamÃ¨tres fiscaux",
+      "FISCAL_PARAMS": "Paramètres fiscaux",
       "TAXES": "Taxes",
       "REPORTS": "Rapports",
-      "LOGOUT": "DÃ©connexion"
+      "LOGOUT": "Déconnexion"
     }
   },
   "ADMIN": {
@@ -275,17 +275,17 @@
       "SUBTITLE": "Supervision & administration",
       "ROLE": "Super Administrateur",
       "SECTION_SUPERVISION": "Supervision",
-      "SECTION_SYSTEM": "SystÃ¨me",
+      "SECTION_SYSTEM": "Système",
       "ITEMS": {
         "DASHBOARD": "Tableau de bord",
         "COMPANIES": "Entreprises",
         "KYC_REQUESTS": "Demandes KYC",
-        "DEMO_REQUESTS": "Demandes de dÃ©mo",
+        "DEMO_REQUESTS": "Demandes de démo",
         "USERS": "Utilisateurs",
         "INVOICES_GLOBAL": "Factures globales",
         "AUDIT": "Journal d'audit",
-        "SETTINGS": "ParamÃ¨tres",
-        "LOGOUT": "DÃ©connexion"
+        "SETTINGS": "Paramètres",
+        "LOGOUT": "Déconnexion"
       }
     }
   },
@@ -293,25 +293,25 @@
     "CANCEL": "Annuler",
     "CLOSE": "Fermer",
     "SAVE": "Enregistrer",
-    "SAVING": "Enregistrementâ€¦",
-    "COPIED": "CopiÃ© !",
+    "SAVING": "Enregistrement…",
+    "COPIED": "Copié !",
     "COPY": "Copier",
-    "CHECK_NOW": "VÃ©rifier maintenant",
-    "BACK_HOME": "Retour ÃƒÂ  l'accueil",
+    "CHECK_NOW": "Vérifier maintenant",
+    "BACK_HOME": "Retour à l'accueil",
     "ACTIONS": {
       "EDIT": "Modifier",
       "DELETE": "Supprimer",
       "ADD": "Ajouter",
-      "UPDATE": "Mettre ÃƒÂ  jour",
-      "RESET": "RÃ©initialiser",
+      "UPDATE": "Mettre à jour",
+      "RESET": "Réinitialiser",
       "EXPORT_CSV": "Exporter CSV",
-      "DETAIL": "Voir le dÃ©tail",
+      "DETAIL": "Voir le détail",
       "CLEAR_SEARCH": "Effacer la recherche"
     },
     "TABLE": {
       "COLUMNS": "Colonnes",
       "VISIBLE_COLUMNS": "Colonnes visibles",
-      "SEARCH": "Rechercherâ€¦",
+      "SEARCH": "Rechercher…",
       "ROWS": "Lignes",
       "OF": "sur"
     },
@@ -322,7 +322,7 @@
       "MENU": "Menu",
       "PRIMARY_NAV": "Navigation principale",
       "ADMIN_NAV": "Navigation administration",
-      "COLLAPSE_SIDEBAR": "RÃ©duire la barre latÃ©rale"
+      "COLLAPSE_SIDEBAR": "Réduire la barre latérale"
     }
   },
   "ERRORS": {
@@ -336,7 +336,7 @@
       "CLIENT": "Client",
       "TYPE": "Type de document",
       "PAYMENT_MODE": "Mode de paiement",
-      "DUE_DATE": "Date d'Ã©chÃ©ance",
+      "DUE_DATE": "Date d'échéance",
       "NOTES": "Notes"
     },
     "TYPE": {
@@ -347,8 +347,8 @@
     },
     "PAYMENT_MODES": {
       "BANK_TRANSFER": "Virement bancaire",
-      "CHECK": "ChÃ¨que",
-      "CASH": "EspÃ¨ces",
+      "CHECK": "Chèque",
+      "CASH": "Espèces",
       "CARD": "Carte bancaire",
       "BILL_OF_EXCHANGE": "Lettre de change"
     },
@@ -357,29 +357,29 @@
       "TTC": "Total TTC"
     },
     "ACTIONS": {
-      "GENERATE_XML": "GÃ©nÃ©rer le XML TEIF"
+      "GENERATE_XML": "Générer le XML TEIF"
     }
   },
   "FACTURES": {
     "TITLE_A": "Mes",
     "TITLE_EM": "factures.",
-    "SUBTITLE": "{{count}} factures Â· {{drafts}} brouillon(s)",
-    "SEARCH_PLACEHOLDER": "Rechercher par numÃ©ro, clientâ€¦",
-    "LOADING": "Chargement des facturesâ€¦",
-    "EMPTY": "Aucune facture trouvÃ©e.",
+    "SUBTITLE": "{{count}} factures · {{drafts}} brouillon(s)",
+    "SEARCH_PLACEHOLDER": "Rechercher par numéro, client…",
+    "LOADING": "Chargement des factures…",
+    "EMPTY": "Aucune facture trouvée.",
     "FILTERS": {
       "ALL": "Toutes",
       "DRAFT": "Brouillon",
-      "VALIDATED": "ValidÃ©e",
+      "VALIDATED": "Validée",
       "COMPLIANT": "Conforme",
       "SENT": "Transmise",
-      "ACCEPTED": "AcceptÃ©e",
-      "REJECTED": "RejetÃ©e",
-      "PAID": "PayÃ©e"
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Rejetée",
+      "PAID": "Payée"
     },
     "KPI": {
-      "ISSUED_MONTH": "Ã‰mis ce mois",
-      "PAID": "EncaissÃ©",
+      "ISSUED_MONTH": "Émis ce mois",
+      "PAID": "Encaissé",
       "PENDING": "En attente",
       "OVERDUE": "En retard"
     },
@@ -387,7 +387,7 @@
       "INVOICES": "facture(s)"
     },
     "TABLE": {
-      "NUMBER": "NumÃ©ro",
+      "NUMBER": "Numéro",
       "STATUS": "Statut",
       "ACTIONS": "Actions"
     },
@@ -396,25 +396,25 @@
     },
     "STATUTS": {
       "BROUILLON": "Brouillon",
-      "VALIDEE": "ValidÃ©e",
+      "VALIDEE": "Validée",
       "CONFORME": "Conforme",
       "TRANSMISE": "Transmise",
-      "ACCEPTEE": "AcceptÃ©e",
-      "REJETEE": "RejetÃ©e",
-      "PAYEE": "PayÃ©e",
-      "PARTIELLEMENT_PAYEE": "Part. payÃ©e",
-      "ANNULEE": "AnnulÃ©e"
+      "ACCEPTEE": "Acceptée",
+      "REJETEE": "Rejetée",
+      "PAYEE": "Payée",
+      "PARTIELLEMENT_PAYEE": "Part. payée",
+      "ANNULEE": "Annulée"
     },
     "STATUS": {
       "DRAFT": "Brouillon",
-      "VALIDATED": "ValidÃ©e",
+      "VALIDATED": "Validée",
       "COMPLIANT": "Conforme",
       "SENT": "Transmise",
-      "ACCEPTED": "AcceptÃ©e",
-      "REJECTED": "RejetÃ©e",
-      "PAID": "PayÃ©e",
-      "PARTIALLY_PAID": "Partiellement payÃ©e",
-      "CANCELLED": "AnnulÃ©e"
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Rejetée",
+      "PAID": "Payée",
+      "PARTIALLY_PAID": "Partiellement payée",
+      "CANCELLED": "Annulée"
     },
     "ACTIONS": {
       "VALIDATE": "Valider",
@@ -422,47 +422,47 @@
       "SIGN": "Signer",
       "SEND_TTN": "Envoyer TTN",
       "RECORD_PAYMENT": "Enregistrer paiement",
-      "DOWNLOAD_XML": "TÃ©lÃ©charger XML",
-      "DOWNLOAD_XML_TEIF": "TÃ©lÃ©charger XML TEIF",
-      "DOWNLOAD_PDF": "TÃ©lÃ©charger PDF",
-      "GENERATING": "GÃ©nÃ©rationâ€¦",
-      "CREATE_CREDIT_NOTE": "CrÃ©er un avoir"
+      "DOWNLOAD_XML": "Télécharger XML",
+      "DOWNLOAD_XML_TEIF": "Télécharger XML TEIF",
+      "DOWNLOAD_PDF": "Télécharger PDF",
+      "GENERATING": "Génération…",
+      "CREATE_CREDIT_NOTE": "Créer un avoir"
     },
     "CREATE": {
       "TITLE_A": "Nouvelle",
       "TITLE_EM": "facture.",
       "SUBTITLE": "Remplissez les informations de la facture.",
-      "SELECT_CLIENT_PLACEHOLDER": "SÃ©lectionner un clientâ€¦",
-      "NOTES_PLACEHOLDER": "Conditions de paiement, remarquesâ€¦",
+      "SELECT_CLIENT_PLACEHOLDER": "Sélectionner un client…",
+      "NOTES_PLACEHOLDER": "Conditions de paiement, remarques…",
       "LINES_TITLE": "Lignes de facturation",
       "ADD_LINE": "Ajouter une ligne",
       "PRODUCT_PLACEHOLDER": "Produit (optionnel)",
-      "DESIGNATION_PLACEHOLDER": "DÃ©signation",
-      "QTY_PLACEHOLDER": "QtÃ©",
+      "DESIGNATION_PLACEHOLDER": "Désignation",
+      "QTY_PLACEHOLDER": "Qté",
       "UNIT_PRICE_PLACEHOLDER": "Prix unitaire",
-      "SUBMIT": "CrÃ©er la facture",
-      "SUBMITTING": "CrÃ©ation en coursâ€¦"
+      "SUBMIT": "Créer la facture",
+      "SUBMITTING": "Création en cours…"
     },
     "PAYMENT": {
       "TITLE_A": "Enregistrer un",
       "TITLE_EM": "paiement.",
-      "SUBTITLE": "Facture {{number}} Â· Restant : {{amount}} TND",
+      "SUBTITLE": "Facture {{number}} · Restant : {{amount}} TND",
       "FIELDS": {
         "AMOUNT": "Montant",
         "MODE": "Mode de paiement",
         "DATE": "Date de paiement",
-        "REFERENCE": "RÃ©fÃ©rence",
-        "REFERENCE_PLACEHOLDER": "NÂ° chÃ¨que, virementâ€¦",
+        "REFERENCE": "Référence",
+        "REFERENCE_PLACEHOLDER": "N° chèque, virement…",
         "BANK": "Banque",
         "BANK_PLACEHOLDER": "Nom de la banque"
       }
     },
     "DETAIL": {
-      "REMAINING": "Restant dÃ»",
+      "REMAINING": "Restant dû",
       "LINES_TITLE": "Lignes de la facture",
       "LINES_TABLE": {
-        "DESIGNATION": "DÃ©signation",
-        "QTY": "QtÃ©",
+        "DESIGNATION": "Désignation",
+        "QTY": "Qté",
         "UNIT_PRICE": "Prix U.",
         "DISCOUNT": "Remise",
         "VAT": "TVA",
@@ -475,7 +475,7 @@
     "TAXES": {
       "TITLE_A": "Gestion des",
       "TITLE_EM": "taxes",
-      "SUBTITLE": "Configurez les taux de TVA, FODEC et droits de consommation applicables ÃƒÂ  vos factures.",
+      "SUBTITLE": "Configurez les taux de TVA, FODEC et droits de consommation applicables à vos factures.",
       "COLUMNS": {
         "TITLE": "Titre",
         "RATE": "Taux",
@@ -487,10 +487,10 @@
         "DROIT_CONSOMMATION": "Droit de conso."
       },
       "EMPTY": {
-        "SEARCH_TITLE": "Aucun rÃ©sultat pour Ã‚Â« {{query}} Ã‚Â»",
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
         "SEARCH_SUB": "Essayez un autre terme de recherche.",
-        "NO_DATA_TITLE": "Aucune taxe configurÃ©e",
-        "NO_DATA_SUB": "CrÃ©ez votre premiÃ¨re taxe via le formulaire."
+        "NO_DATA_TITLE": "Aucune taxe configurée",
+        "NO_DATA_SUB": "Créez votre première taxe via le formulaire."
       },
       "FORM": {
         "TITLE_NEW": "Nouvelle taxe",
@@ -501,33 +501,33 @@
           "RATE": "Taux",
           "TYPE": "Type"
         },
-        "ERROR_RATE_GT0": "Le taux doit Ãªtre supÃ©rieur ÃƒÂ  0."
+        "ERROR_RATE_GT0": "Le taux doit être supérieur à 0."
       }
     },
     "FISCAL_PARAMS": {
-      "TITLE_A": "ParamÃ¨tres",
+      "TITLE_A": "Paramètres",
       "TITLE_EM": "fiscaux.",
-      "SUBTITLE": "Configurez les retenues ÃƒÂ  la source, timbre fiscal et autres paramÃ¨tres de calcul.",
+      "SUBTITLE": "Configurez les retenues à la source, timbre fiscal et autres paramètres de calcul.",
       "COLUMNS": {
-        "LABEL": "LibellÃ©",
-        "VALUE_DEFAULT": "Valeur / DÃ©faut",
+        "LABEL": "Libellé",
+        "VALUE_DEFAULT": "Valeur / Défaut",
         "ORDER": "Ordre de calcul",
         "USAGE": "Utilisation",
         "CONDITION": "Condition"
       },
       "EMPTY": {
-        "SEARCH_TITLE": "Aucun rÃ©sultat pour Ã‚Â« {{query}} Ã‚Â»",
+        "SEARCH_TITLE": "Aucun résultat pour « {{query}} »",
         "SEARCH_SUB": "Essayez un autre terme de recherche.",
-        "NO_DATA_TITLE": "Aucun paramÃ¨tre fiscal configurÃ©",
-        "NO_DATA_SUB": "CrÃ©ez votre premier paramÃ¨tre via le formulaire."
+        "NO_DATA_TITLE": "Aucun paramètre fiscal configuré",
+        "NO_DATA_SUB": "Créez votre premier paramètre via le formulaire."
       },
       "FORM": {
-        "TITLE_NEW": "Nouveau paramÃ¨tre",
-        "TITLE_EDIT": "Modifier le paramÃ¨tre",
+        "TITLE_NEW": "Nouveau paramètre",
+        "TITLE_EDIT": "Modifier le paramètre",
         "FIELDS": {
-          "LABEL": "LibellÃ©",
-          "LABEL_PLACEHOLDER": "Ex : Retenue ÃƒÂ  la source 15%",
-          "VALUE_DEFAULT": "Valeur / DÃ©faut",
+          "LABEL": "Libellé",
+          "LABEL_PLACEHOLDER": "Ex : Retenue à la source 15%",
+          "VALUE_DEFAULT": "Valeur / Défaut",
           "TYPE": "Type",
           "SIGN": "Signe",
           "ORDER": "Ordre de calcul",
@@ -539,15 +539,15 @@
         },
         "ORDER": {
           "BEFORE_VAT": "Avant TVA",
-          "AFTER_VAT": "AprÃ¨s TVA"
+          "AFTER_VAT": "Après TVA"
         },
         "USAGE": {
           "MANUAL": "Manuel",
           "AUTO": "Automatique"
         },
         "WITHHOLDING": {
-          "LABEL": "Inclure retenue ÃƒÂ  la source",
-          "SUB": "Applicable aux factures B2B soumises ÃƒÂ  la RS"
+          "LABEL": "Inclure retenue à la source",
+          "SUB": "Applicable aux factures B2B soumises à la RS"
         },
         "DOCS": {
           "TITLE": "Documents cibles",
@@ -558,7 +558,7 @@
       },
       "ORDRE": {
         "AVANT_TVA": "Avant TVA",
-        "APRES_TVA": "AprÃ¨s TVA"
+        "APRES_TVA": "Après TVA"
       },
       "UTILISATION": {
         "MANUEL": "Manuel",
@@ -571,11 +571,11 @@
     }
   },
   "PW_STRENGTH": {
-    "VERY_WEAK": "TrÃ¨s faible",
+    "VERY_WEAK": "Très faible",
     "WEAK": "Faible",
     "MEDIUM": "Moyen",
     "STRONG": "Fort",
-    "VERY_STRONG": "TrÃ¨s fort"
+    "VERY_STRONG": "Très fort"
   }
 }
 

@@ -2,17 +2,51 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   FactureApiService, FactureDto, ListeFacturesDto,
-  StatistiquesFacturesDto, ClientService, ClientDto,
+  StatistiquesFacturesDto, HistoriqueEntreeDto, ClientService, ClientDto,
   ProduitApiService, ProduitDto,
   TeifApiService, PaiementApiService, SignatureApiService, TtnApiService
 } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
-import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCounts } from '../../core/utils/document-page.utils';
+import { buildDocumentListParams, updateDocumentStatusCounts } from '../../core/utils/document-page.utils';
+
+type FactureFormLine = {
+  produitId: string;
+  designation: string;
+  description: string;
+  unite: string;
+  quantite: number;
+  prixUnitaire: number;
+  tauxRemise: number;
+  tauxTva: number;
+  montantHt: number;
+  montantTva: number;
+  montantTtc: number;
+};
+
+type FactureFormState = {
+  clientId: string;
+  typeFacture: 'Avoir';
+  factureOrigineId?: string;
+  modePaiement: string;
+  dateEcheance: string;
+  reference?: string;
+  notes: string;
+  conditionsPaiement: string;
+  devise: string;
+  lignes: FactureFormLine[];
+};
+
+type PaiementFormState = {
+  montant: number;
+  mode: string;
+  datePaiement: string;
+  reference: string;
+  banque: string;
+};
 
 @Component({
   selector: 'app-avoirs',
@@ -40,7 +74,6 @@ import { buildDocumentListParams, createDocumentStatuses, updateDocumentStatusCo
   ]
 })
 export class AvoirsComponent implements OnInit {
-  private router       = inject(Router);
   private factureSvc   = inject(FactureApiService);
   private clientSvc    = inject(ClientService);
   private produitSvc   = inject(ProduitApiService);
@@ -53,7 +86,7 @@ export class AvoirsComponent implements OnInit {
 
   loading       = signal(true);
   saving        = signal(false);
-  factures      = signal<any[]>([]);
+  factures      = signal<FactureDto[]>([]);
   total         = signal(0);
   stats         = signal<StatistiquesFacturesDto | null>(null);
   clients       = signal<ClientDto[]>([]);
@@ -79,16 +112,16 @@ export class AvoirsComponent implements OnInit {
   showPaiementModal  = signal(false);
 
   showHistoriqueModal = signal(false);
-  historiqueFacture   = signal<any[]>([]);
+  historiqueFacture   = signal<HistoriqueEntreeDto[]>([]);
   historiqueLoading   = signal(false);
 
-  selectedFacture    = signal<any | null>(null);
+  selectedFacture    = signal<FactureDto | null>(null);
   actionLoading      = signal(false);
   pdfLoading         = signal(false);
   teifLoading        = signal(false);
 
 
-  newFacture: any = {
+  newFacture: FactureFormState = {
     clientId: '', typeFacture: 'Avoir',
     modePaiement: 'Virement',
     dateEcheance: this.defaultEcheance(),
@@ -97,7 +130,7 @@ export class AvoirsComponent implements OnInit {
   };
 
 
-  paiementForm = {
+  paiementForm: PaiementFormState = {
     montant: 0, mode: 'Virement',
     datePaiement: new Date().toISOString().substring(0, 10),
     reference: '', banque: ''
@@ -137,9 +170,9 @@ export class AvoirsComponent implements OnInit {
   });
 
 
-  get totalHt()  { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantHt  || 0), 0); }
-  get totalTva() { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantTva || 0), 0); }
-  get totalTtc() { return this.newFacture.lignes.reduce((s: number, l: any) => s + (l.montantTtc || 0), 0); }
+  get totalHt()  { return this.newFacture.lignes.reduce((s, l) => s + (l.montantHt  || 0), 0); }
+  get totalTva() { return this.newFacture.lignes.reduce((s, l) => s + (l.montantTva || 0), 0); }
+  get totalTtc() { return this.newFacture.lignes.reduce((s, l) => s + (l.montantTtc || 0), 0); }
 
 
   get totalPages() { return Math.ceil(this.total() / this.parPage); }
@@ -329,7 +362,12 @@ export class AvoirsComponent implements OnInit {
       montantEnAttente,
       totalEnRetard,
       totalBrouillons: avoirs.filter(a => a.statut === 'Brouillon').length,
-    } as any);
+      totalValidees: avoirs.filter(a => a.statut === 'Validee').length,
+      totalTransmises: avoirs.filter(a => a.statut === 'Transmise').length,
+      totalAcceptees: avoirs.filter(a => a.statut === 'Acceptee').length,
+      totalRejetees: avoirs.filter(a => a.statut === 'Rejetee').length,
+      totalPayees: avoirs.filter(a => a.statut === 'Payee').length,
+    });
   }
 
   private updateStatutCounts() {
@@ -366,7 +404,7 @@ export class AvoirsComponent implements OnInit {
     this.recalculerTotaux();
   }
 
-  onProduitChange(ligne: any, produitId: string) {
+  onProduitChange(ligne: FactureFormLine, produitId: string) {
     const p = this.produits().find(pr => pr.id === produitId);
     if (p) {
       ligne.designation  = p.libelle;
@@ -378,7 +416,7 @@ export class AvoirsComponent implements OnInit {
   }
 
   recalculerTotaux() {
-    this.newFacture.lignes.forEach((l: any) => {
+    this.newFacture.lignes.forEach((l) => {
       const brut   = (l.quantite || 0) * (l.prixUnitaire || 0);
       const remise = brut * ((l.tauxRemise || 0) / 100);
       const ht     = brut - remise;
@@ -402,7 +440,7 @@ export class AvoirsComponent implements OnInit {
       notes:              this.newFacture.notes || undefined,
       conditionsPaiement: this.newFacture.conditionsPaiement || undefined,
       devise:             this.newFacture.devise,
-      lignes: this.newFacture.lignes.map((l: any) => ({
+      lignes: this.newFacture.lignes.map((l) => ({
         designation:  l.designation,
         quantite:     l.quantite,
         prixUnitaire: l.prixUnitaire,
@@ -429,11 +467,11 @@ export class AvoirsComponent implements OnInit {
       }
     });
   }
-  openDetail(f: any) { this.selectedFacture.set(f); this.showDetailModal.set(true); }
+  openDetail(f: FactureDto) { this.selectedFacture.set(f); this.showDetailModal.set(true); }
   closeDetail()      { this.showDetailModal.set(false); this.selectedFacture.set(null); }
 
 
-  voirHistorique(f: any) {
+  voirHistorique(f: FactureDto) {
     this.selectedFacture.set(f);
     this.historiqueFacture.set([]);
     this.historiqueLoading.set(true);
@@ -446,7 +484,7 @@ export class AvoirsComponent implements OnInit {
   }
 
 
-  valider(f: any) {
+  valider(f: FactureDto) {
     if (this.actionLoading()) return;
     this.actionLoading.set(true);
     this.factureSvc.valider(f.id).subscribe({
@@ -456,7 +494,7 @@ export class AvoirsComponent implements OnInit {
   }
 
 
-  genererXml(f: any) {
+  genererXml(f: FactureDto) {
     this.teifLoading.set(true);
     this.teifSvc.genererXml(f.id).subscribe({
       next: (res) => {
@@ -472,7 +510,7 @@ export class AvoirsComponent implements OnInit {
     });
   }
 
-  validerTeif(f: any) {
+  validerTeif(f: FactureDto) {
     this.actionLoading.set(true);
     this.teifSvc.marquerConforme(f.id).subscribe({
       next: (updated) => { this.actionLoading.set(false); this.updateFacture(updated); this.toast.success('Facture marquée conforme TEIF.'); },
@@ -480,7 +518,7 @@ export class AvoirsComponent implements OnInit {
     });
   }
 
-  signer(f: any) {
+  signer(f: FactureDto) {
     this.actionLoading.set(true);
     this.signatureSvc.demander(f.id).subscribe({
       next: (sig) => {
@@ -492,7 +530,7 @@ export class AvoirsComponent implements OnInit {
     });
   }
 
-  envoyerTtn(f: any) {
+  envoyerTtn(f: FactureDto) {
     this.actionLoading.set(true);
     this.ttnSvc.envoyer(f.id).subscribe({
       next: ()    => { this.actionLoading.set(false); this.loadAll(); this.toast.success('Facture envoyée au système TTN.'); },
@@ -501,9 +539,9 @@ export class AvoirsComponent implements OnInit {
   }
 
 
-  ouvrirPaiement(f: any) {
+  ouvrirPaiement(f: FactureDto) {
     this.selectedFacture.set(f);
-    this.paiementForm.montant = f.montantRestant;
+    this.paiementForm.montant = f.montantRestant ?? 0;
     this.showPaiementModal.set(true);
   }
 
@@ -525,7 +563,7 @@ export class AvoirsComponent implements OnInit {
   }
 
 
-  telechargerPdf(f: any) {
+  telechargerPdf(f: FactureDto) {
     if (!f || this.pdfLoading()) return;
     this.pdfLoading.set(true);
     this.factureSvc.telechargerPdf(f.id).subscribe({
@@ -546,7 +584,7 @@ export class AvoirsComponent implements OnInit {
     });
   }
 
-  telechargerXml(f: any) {
+  telechargerXml(f: FactureDto) {
     this.teifSvc.telechargerXml(f.id).subscribe({
       next: (blob: Blob) => {
         const url = URL.createObjectURL(blob);
@@ -558,7 +596,7 @@ export class AvoirsComponent implements OnInit {
     });
   }
 
-  exportCSV() {
+  exportExcel() {
     const rows = [['Numéro','Client','Statut','Total TTC','Devise','Date émission']];
     this.filteredFactures().forEach(f => {
       rows.push([f.numero, f.clientNom, f.statut, String(f.totalTtc), f.devise, f.dateEmission?.substring(0,10)]);
@@ -567,8 +605,12 @@ export class AvoirsComponent implements OnInit {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'avoirs.csv'; a.click();
+    a.href = url; a.download = 'avoirs.xlsx'; a.click();
     URL.revokeObjectURL(url);
+  }
+
+  exportCSV() {
+    this.exportExcel();
   }
 
   getStatutClass(statut: string): string {
@@ -591,7 +633,7 @@ export class AvoirsComponent implements OnInit {
     return map[statut] ?? statut;
   }
 
-  private updateFacture(updated: any) {
+  private updateFacture(updated: FactureDto) {
     this.factures.update(list => list.map(f => f.id === updated.id ? updated : f));
     this.updateStatutCounts();
     if (this.selectedFacture()?.id === updated.id) this.selectedFacture.set(updated);
@@ -606,7 +648,7 @@ export class AvoirsComponent implements OnInit {
     };
   }
 
-  private newLigne(): any {
+  private newLigne(): FactureFormLine {
     return { produitId: '', designation: '', description: '', unite: 'U', quantite: 1, prixUnitaire: 0, tauxRemise: 0, tauxTva: 19, montantHt: 0, montantTva: 0, montantTtc: 0 };
   }
 

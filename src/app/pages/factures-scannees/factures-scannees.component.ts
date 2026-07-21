@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Data } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { catchError, of } from 'rxjs';
 
@@ -23,6 +24,7 @@ export class FacturesScanneesComponent implements OnInit {
   private readonly signatureSvc = inject(SignatureApiService);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly Math = Math;
 
@@ -36,6 +38,20 @@ export class FacturesScanneesComponent implements OnInit {
 
   search = signal('');
   typeFilter = signal<UiTypeFilter>('All');
+  businessFlow = signal<'vente' | 'achat' | 'general'>('general');
+  routePageTitle = signal('');
+
+  readonly pageTitle = computed(() => this.routePageTitle() || (
+    this.businessFlow() === 'vente' ? 'Factures client scannées' :
+    this.businessFlow() === 'achat' ? 'Factures fournisseur scannées' :
+    this.translate.instant('SCANNED_INVOICES.TITLE')
+  ));
+
+  readonly pageContext = computed(() => {
+    if (this.businessFlow() === 'vente') return 'Ventes';
+    if (this.businessFlow() === 'achat') return 'Achats';
+    return 'Tous flux';
+  });
 
   readonly typeOptions = computed(() => {
     const set = new Set<string>();
@@ -54,11 +70,11 @@ export class FacturesScanneesComponent implements OnInit {
       if (type !== 'All' && (t.documentType ?? '') !== type) return false;
       if (!q) return true;
       const hay = [
-        t.libelle,
+        this.cleanLabel(t.libelle),
         t.tiersNom ?? '',
-        t.documentType ?? '',
+        this.cleanLabel(t.documentType),
         t.date ?? '',
-        t.documentLie?.fileName ?? '',
+        this.cleanLabel(t.documentLie?.fileName),
       ].join(' ').toLowerCase();
       return hay.includes(q);
     });
@@ -75,12 +91,19 @@ export class FacturesScanneesComponent implements OnInit {
   readonly averageConfidence = computed(() => {
     const rows = this.rows();
     if (rows.length === 0) return 0;
-    const sum = rows.reduce((acc, t) => acc + (t.ocrOverallConfidence ?? 0), 0);
+    const sum = rows.reduce((acc, t) => acc + this.normalizeConfidence(t.ocrOverallConfidence), 0);
     return Math.round((sum / rows.length) * 100);
   });
 
   ngOnInit(): void {
+    this.route.data.subscribe(data => this.applyRouteContext(data));
     this.load();
+  }
+
+  private applyRouteContext(data: Data): void {
+    const flow = data['businessFlow'] === 'achat' || data['businessFlow'] === 'vente' ? data['businessFlow'] : 'general';
+    this.businessFlow.set(flow);
+    this.routePageTitle.set(typeof data['pageTitle'] === 'string' ? data['pageTitle'] : '');
   }
 
   refreshData(): void {
@@ -155,13 +178,13 @@ export class FacturesScanneesComponent implements OnInit {
   }
 
   openDocument(t: TransactionDto) {
-    const url = t.documentLie?.url;
+    const url = this.documentUrl(t);
     if (!url) return;
     window.open(url, '_blank', 'noopener');
   }
 
   isImageDocument(t: TransactionDto): boolean {
-    const url = (t.documentLie?.url ?? '').toLowerCase();
+    const url = this.documentUrl(t).toLowerCase();
     const type = (t.documentLie?.contentType ?? '').toLowerCase();
     return type.startsWith('image/')
       || url.endsWith('.png')
@@ -171,9 +194,22 @@ export class FacturesScanneesComponent implements OnInit {
   }
 
   isPdfDocument(t: TransactionDto): boolean {
-    const url = (t.documentLie?.url ?? '').toLowerCase();
+    const url = this.documentUrl(t).toLowerCase();
     const type = (t.documentLie?.contentType ?? '').toLowerCase();
     return type.includes('pdf') || url.endsWith('.pdf');
+  }
+
+  documentUrl(t: TransactionDto): string {
+    const url = (t.documentLie?.url ?? '').trim();
+    if (!url) return '/EY.png';
+    if (/^(https?:|blob:|data:)/i.test(url)) return url;
+    return url.startsWith('/') ? url : `/${url.replace(/^\/+/, '')}`;
+  }
+
+  onPreviewError(event: Event): void {
+    const img = event.target as HTMLImageElement | null;
+    if (!img || img.src.endsWith('/EY.png')) return;
+    img.src = '/EY.png';
   }
 
   canSign(t: TransactionDto): boolean {
@@ -217,7 +253,23 @@ export class FacturesScanneesComponent implements OnInit {
   }
 
   formatConfidence(v?: number | null): string {
-    const n = typeof v === 'number' ? v : 0;
-    return `${Math.round(n * 100)}%`;
+    return `${Math.round(this.normalizeConfidence(v) * 100)}%`;
+  }
+
+  isHighConfidence(t: TransactionDto): boolean {
+    return this.normalizeConfidence(t.ocrOverallConfidence) >= 0.8;
+  }
+
+  cleanLabel(value?: string | null): string {
+    return (value ?? '')
+      .replace(/\bOCR\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
+  private normalizeConfidence(value?: number | null): number {
+    const n = typeof value === 'number' && Number.isFinite(value) ? value : 0;
+    if (n <= 1) return Math.max(0, n);
+    return Math.max(0, Math.min(n / 100, 1));
   }
 }

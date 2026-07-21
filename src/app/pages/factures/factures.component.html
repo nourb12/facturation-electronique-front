@@ -10,9 +10,9 @@
         </div>
       </div>
       <div class="dt-right">
-        <button class="btn-ghost" (click)="exportCSV()">
+        <button class="btn-ghost" (click)="exportExcel()">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M4 7l2.5 2.5L9 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 11h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          CSV
+          Télécharger Excel
         </button>
         <button class="btn-primary" (click)="ouvrirCreation()">
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -114,12 +114,14 @@
               <th class="th-right">Total TTC</th>
               <th>Échéance</th>
               <th>Statut</th>
+              <th>Paiement</th>
+              <th>Transmission TTN</th>
               <th class="th-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             @if (filteredFactures().length === 0) {
-              <tr><td colspan="8" class="empty-cell"><div class="recent-empty"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="24" height="28" rx="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/><path d="M10 10h12M10 15h12M10 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".4"/></svg><span>Aucune facture trouvée</span></div></td></tr>
+              <tr><td colspan="10" class="empty-cell"><div class="recent-empty"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="24" height="28" rx="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/><path d="M10 10h12M10 15h12M10 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".4"/></svg><span>Aucune facture trouvée</span></div></td></tr>
             }
             @for (f of filteredFactures(); track f.id) {
               <tr class="ft-row" [class.retard]="f.estEnRetard" (click)="ouvrirDetail(f)">
@@ -144,12 +146,14 @@
                   </span>
                 </td>
                 <td><span class="badge" [ngClass]="'badge--' + getStatutClass(f.statut)">{{ statutLabelKey(f.statut) | translate }}</span></td>
+                <td><span class="badge" [ngClass]="'badge--' + paiementClass(f)">{{ paiementLabel(f) }}</span></td>
+                <td><span class="badge" [ngClass]="'badge--' + transmissionTtnClass(f)">{{ transmissionTtnLabel(f) }}</span></td>
                 <td (click)="$event.stopPropagation()">
                   <div class="ft-actions">
                     <button class="act-btn act-btn--ghost" title="Détail" (click)="ouvrirDetail(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h5M4 7.5h5M4 10h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
                     @if (f.statut === 'Brouillon') {
                       <button class="act-btn act-btn--ey" title="Modifier" (click)="ouvrirEdition(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 9.5l1.5-.5 7-7-1-1-7 7-.5 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
-                      <button class="act-btn act-btn--ok" title="Finaliser" (click)="valider(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+                      <button class="act-btn act-btn--ok" title="Valider la facture" (click)="valider(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
                     }
                     @if (f.statut === 'Validee' && !f.xmlGenere) {
                       <button class="act-btn act-btn--info" title="Générer XML TEIF" (click)="genererXml(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 4l3-3 3 3M5 1v7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 10h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
@@ -159,6 +163,9 @@
                     }
                     @if (f.xmlGenere) {
                       <button class="act-btn act-btn--ghost" title="Télécharger XML" (click)="telechargerXml(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M4 7l2.5 2.5L9 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 11h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+                    }
+                    @if (f.statut === 'Validee' && f.xmlGenere) {
+                      <button class="act-btn act-btn--info" title="Soumettre a l'admin fiscal" (click)="soumettreValidationFiscale(f)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h7M6.5 3 10 6.5 6.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 2h11v9H1V2z" stroke="currentColor" stroke-width="1.2"/></svg></button>
                     }
                   </div>
                 </td>
@@ -191,16 +198,24 @@
           @if (draft().numero) { <span class="tbar-numero">{{ draft().numero }}</span> }
         </div>
         <div class="tbar-actions">
-          <button class="btn-tbar-ghost" (click)="sauvegarderBrouillon()" [disabled]="saving()">Enregistrer brouillon</button>
-          <button class="btn-tbar-pdf" (click)="telechargerPdf(draftAsFacture())">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h5M4 7.5h5M4 10h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            Aperçu PDF
+          <button class="btn-tbar-ghost" (click)="sauvegarderBrouillon()" [disabled]="saving()">
+            @if (saving()) { Enregistrement... } @else { Enregistrer brouillon }
           </button>
-          <button class="btn-tbar-primary" (click)="finaliser()" [disabled]="saving() || !draft().clientId">
-            @if (saving()) { Enregistrement... } @else { Finaliser }
+          <button class="btn-tbar-pdf" (click)="ouvrirApercuXml()" [disabled]="saving()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M4 5h5M4 7.5h5M4 10h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Aperçu XML
+          </button>
+          <button class="btn-tbar-primary" (click)="finaliser()" [disabled]="saving()">
+            @if (saving()) { Validation... } @else { Valider la facture }
           </button>
         </div>
       </div>
+
+      @if (formError()) {
+        <div class="editor-error">
+          {{ formError() }}
+        </div>
+      }
 
       <div class="editor-split">
 
@@ -303,7 +318,7 @@
                     <div class="recap-row recap-remise"><span>Retenue à la source ({{ draft().tauxRetenue }}%)</span><span class="recap-val">– {{ retenueAmount() | number:'1.3-3' }} TND</span></div>
                   }
                   <div class="recap-divider"></div>
-                  <div class="recap-row recap-ttc"><span>Total TTC</span><span class="recap-ttc-val">{{ totalTtc() | number:'1.3-3' }} TND</span></div>
+                  <div class="recap-row recap-ttc"><span>{{ draft().activerRetenue ? 'NET A PAYER' : 'Total TTC' }}</span><span class="recap-ttc-val">{{ netAPayer() | number:'1.3-3' }} TND</span></div>
                   <div class="recap-lettres">Arrêtée la présente facture à la somme de :<br/><strong>{{ montantEnLettres() }}</strong></div>
                 </div>
               </div>
@@ -321,6 +336,19 @@
               </div>
 
               @if (personnalisation()?.pdf?.footerText) { <div class="doc-footer">{{ personnalisation()?.pdf?.footerText }}</div> }
+              <div class="doc-signature-row">
+                @if (cachetUrl()) {
+                  <div class="doc-stamp"><img [src]="cachetUrl()" alt="Cachet"/></div>
+                }
+                <div class="doc-signature-box">
+                  <div class="doc-signature-label">Signature</div>
+                  @if (signatureUrl()) {
+                    <img [src]="signatureUrl()" alt="Signature"/>
+                  } @else {
+                    <a href="/entreprise/personnalisation?section=pdf">Ajouter signature</a>
+                  }
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -385,7 +413,9 @@
                 <label class="toggle-row"><span class="toggle-label">Retenue à la source</span><input type="checkbox" class="toggle-cb" [(ngModel)]="draft().activerRetenue"/></label>
               </div>
               @if (draft().activerRetenue) {
-                <div class="param-row"><label class="param-label">Taux retenue (%)</label><input class="param-input" type="number" [(ngModel)]="draft().tauxRetenue" min="0" max="100" step="0.5"/></div>
+                <div class="param-row"><label class="param-label">Taux retenue (%)</label><select class="param-select" [(ngModel)]="draft().tauxRetenue"><option [ngValue]="0">Exonere 0%</option><option [ngValue]="1.5">RS 1.5%</option><option [ngValue]="3">RS 3%</option><option [ngValue]="5">RS 5%</option><option [ngValue]="10">RS 10%</option><option [ngValue]="15">RS 15%</option><option [ngValue]="20">RS 20%</option><option [ngValue]="25">RS 25%</option></select></div>
+                <div class="param-row"><label class="param-label">Montant RS</label><div class="param-readonly">{{ retenueAmount() | number:'1.3-3' }} TND</div></div>
+                <div class="param-row"><label class="param-label">Net a payer</label><div class="param-readonly param-readonly--strong">{{ netAPayer() | number:'1.3-3' }} TND</div></div>
               }
             </div>
 
@@ -545,6 +575,16 @@
                 <span>Total TTC</span>
                 <span>{{ selectedFacture()?.totalTtc | number:'1.3-3' }} TND</span>
               </div>
+              @if (selectedFacture()?.appliquerRS || selectedFacture()?.montantRS) {
+                <div class="pps-tot-row">
+                  <span>Retenue a la source</span>
+                  <span>- {{ selectedFacture()?.montantRS | number:'1.3-3' }} TND</span>
+                </div>
+                <div class="pps-tot-row pps-ttc">
+                  <span>Net a payer</span>
+                  <span>{{ selectedFacture()?.netAPayer | number:'1.3-3' }} TND</span>
+                </div>
+              }
             </div>
             
             @if (selectedFacture()?.modePaiement) {
@@ -556,12 +596,26 @@
                 </div>
               </div>
             }
+
+            <div class="doc-signature-row">
+              @if (cachetUrl()) {
+                <div class="doc-stamp"><img [src]="cachetUrl()" alt="Cachet"/></div>
+              }
+              <div class="doc-signature-box">
+                <div class="doc-signature-label">Signature</div>
+                @if (signatureUrl()) {
+                  <img [src]="signatureUrl()" alt="Signature"/>
+                } @else {
+                  <a href="/entreprise/personnalisation?section=pdf">Ajouter signature</a>
+                }
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="detail-sidebar">
           <div class="ds-amount">
-            <div class="dsa-val">{{ selectedFacture()?.totalTtc | number:'1.3-3' }} TND</div>
+            <div class="dsa-val">{{ (selectedFacture()?.netAPayer ?? selectedFacture()?.totalTtc) | number:'1.3-3' }} TND</div>
             <div class="dsa-sub">dont {{ selectedFacture()?.totalTva | number:'1.3-3' }} TND de TVA</div>
           </div>
           
@@ -596,10 +650,13 @@
           <div class="ds-section ds-section-actions">
             @if (selectedFacture()?.statut === 'Brouillon') {
               <button class="ds-btn-ghost" (click)="ouvrirEdition(selectedFacture()!)">✎ Modifier</button>
-              <button class="ds-btn-primary" (click)="valider(selectedFacture()!)">Finaliser</button>
+              <button class="ds-btn-primary" (click)="valider(selectedFacture()!)">Valider la facture</button>
             }
             @if (selectedFacture()?.statut === 'Validee' && !selectedFacture()?.xmlGenere) {
               <button class="ds-btn-ghost" (click)="genererXml(selectedFacture()!)">Générer XML TEIF</button>
+            }
+            @if (selectedFacture()?.statut === 'Validee' && selectedFacture()?.xmlGenere) {
+              <button class="ds-btn-primary" (click)="soumettreValidationFiscale(selectedFacture()!)">Soumettre a l'admin fiscal</button>
             }
             @if (selectedFacture()?.statut === 'Acceptee' || selectedFacture()?.statut === 'PartiellemntPayee') {
               <button class="ds-btn-primary" (click)="ouvrirPaiement(selectedFacture()!)">Enregistrer paiement</button>
@@ -722,5 +779,25 @@
     </div>
   }
 
-</div>
+  @if (showXmlModal()) {
+    <div class="modal-overlay" [@fadeIn] (click)="fermerApercuXml()">
+      <div class="modal modal--lg xml-preview-modal" [@modalIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Aperçu <em>XML TEIF</em></h2>
+            <p class="modal-sub">Prévisualisation brute du document courant.</p>
+          </div>
+          <button class="modal-close" (click)="fermerApercuXml()">×</button>
+        </div>
+        <div class="modal-body">
+          <pre class="xml-preview-code">{{ xmlPreview() }}</pre>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="copierXml()">Copier le XML</button>
+          <button class="btn-primary" (click)="telechargerXmlPreview()">Télécharger .xml</button>
+        </div>
+      </div>
+    </div>
+  }
 
+</div>

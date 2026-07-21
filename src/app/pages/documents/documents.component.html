@@ -1,0 +1,285 @@
+﻿<section class="docs-page">
+  <header class="docs-hero">
+    <div>
+      <p class="eyebrow">Flux documentaire</p>
+      <h1>{{ pageTitle() }}</h1>
+      <p>{{ pageSubtitle() }}</p>
+    </div>
+    <div class="hero-actions">
+      @if (view() === 'editor') {
+        <button class="btn-secondary" type="button" (click)="closeEditor()">
+          <i class="ti ti-arrow-left"></i>
+          Liste
+        </button>
+      }
+      <button class="btn-primary" type="button" (click)="openCreateEditor(activeType().key)">
+        <i class="ti ti-plus"></i>
+        Nouveau {{ activeType().label }}
+      </button>
+    </div>
+  </header>
+
+  <main class="docs-content">
+    @if (view() === 'list') {
+    <nav class="type-strip" aria-label="Types de documents">
+      @for (type of visibleTypes(); track type.key) {
+        <button
+          type="button"
+          class="type-pill"
+          [class.active]="selectedType() === type.key"
+          [style.--doc-color]="type.color"
+          [title]="type.label"
+          (click)="selectType(type.key)">
+          <span class="type-icon"><i [class]="type.icon"></i></span>
+          <strong>{{ type.prefix }}</strong>
+        </button>
+      }
+    </nav>
+
+    <section class="docs-main">
+      <div class="section-head">
+        <div>
+          <p>{{ activeType().description }}</p>
+          <h2>Dashboard {{ activeType().label }}</h2>
+        </div>
+        <div class="filters">
+          <label>
+            <i class="ti ti-search"></i>
+            <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Rechercher document, client, origine..." />
+          </label>
+          <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+            @for (status of statuses(); track status) {
+              <option [ngValue]="status">{{ status }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        @for (metric of metrics(); track metric.label) {
+          <article class="metric-card" [style.--metric-color]="metric.color">
+            <i [class]="metric.icon"></i>
+            <div>
+              <span>{{ metric.label }}</span>
+              <strong>{{ metric.value }}</strong>
+              <small>{{ metric.hint }}</small>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (loading()) {
+        <div class="loading-state">
+          <span class="spinner"></span>
+          Chargement des documents...
+        </div>
+      } @else {
+        <div class="content-grid">
+          <section class="doc-list">
+            <div class="table-wrap">
+              <table>
+                <colgroup>
+                  <col class="col-document" />
+                  <col class="col-client" />
+                  <col class="col-date" />
+                  <col class="col-origin" />
+                  <col class="col-status" />
+                  @if (isInvoiceTable()) {
+                    <col class="col-payment" />
+                    <col class="col-transmission" />
+                  }
+                  <col class="col-total" />
+                  <col class="col-cycle" />
+                  <col class="col-edit" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Origine</th>
+                    <th>Statut</th>
+                    @if (isInvoiceTable()) {
+                      <th>Paiement</th>
+                      <th>Transmission TTN</th>
+                    }
+                    <th class="align-right">Total TTC</th>
+                    <th>Cycle</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (doc of visibleDocuments(); track doc.id) {
+                    <tr [class.selected]="selectedDocument()?.id === doc.id" (click)="selectDocument(doc)">
+                      <td>
+                        <strong class="doc-num">{{ doc.numero }}</strong>
+                        <small>{{ activeType().label }}</small>
+                      </td>
+                      <td>
+                        <strong class="client-name">{{ doc.client }}</strong>
+                        @if (doc.echeance) { <small>Échéance : {{ doc.echeance }}</small> }
+                      </td>
+                      <td class="mono">{{ doc.date }}</td>
+                      <td class="origin-cell">{{ doc.linkedTo || '-' }}</td>
+                      <td><span class="status-pill" [class]="statusClass(doc.statut)">{{ doc.statut }}</span></td>
+                      @if (isInvoiceTable()) {
+                        <td><span class="status-pill" [class]="paymentClass(doc)">{{ paymentLabel(doc) }}</span></td>
+                        <td><span class="status-pill" [class]="transmissionClass(doc)">{{ transmissionLabel(doc) }}</span></td>
+                      }
+                      <td class="amount align-right">{{ money(doc.total) }}</td>
+                      <td>
+                        @if (cycleButtonLabel(doc); as cycleLabel) {
+                          <button
+                            class="cycle-action"
+                            type="button"
+                            [class.done]="!!doc.convertedTo"
+                            [disabled]="!canConvert(doc) && !doc.convertedTo"
+                            (click)="handleCycle(doc); $event.stopPropagation()"
+                            [title]="cycleTitle(doc)">
+                            {{ cycleLabel }}
+                          </button>
+                        } @else {
+                          <span class="cycle-empty">-</span>
+                        }
+                      </td>
+                      <td>
+                        <div class="row-actions">
+                        @if (canAdvanceStatus(doc)) {
+                          <button
+                            class="icon-action validate"
+                            type="button"
+                            (click)="advanceStatus(doc); $event.stopPropagation()"
+                            [title]="'Changer le statut vers ' + nextStatusLabel(doc)">
+                            <i class="ti ti-check"></i>
+                          </button>
+                        }
+                        <button class="icon-action edit" type="button" (click)="openEditEditor(doc); $event.stopPropagation()" title="Modifier">
+                          <i class="ti ti-pencil"></i>
+                        </button>
+                        <button class="icon-action delete" type="button" (click)="remove(doc); $event.stopPropagation()" title="Supprimer">
+                          <i class="ti ti-trash"></i>
+                        </button>
+                        </div>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td [attr.colspan]="isInvoiceTable() ? 10 : 8">
+                        <div class="empty-state">Aucun document pour ce filtre.</div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside class="trace-panel">
+            <div class="trace-head">
+              <div>
+                <p class="panel-title">Traçabilité</p>
+                <h3>{{ selectedDocument()?.numero || activeType().label }}</h3>
+              </div>
+              @if (selectedDocument(); as doc) {
+                <span class="status-pill" [class]="statusClass(doc.statut)">{{ doc.statut }}</span>
+              }
+            </div>
+            @if (selectedDocument(); as doc) {
+              <div class="trace-card">
+                <div class="trace-summary">
+                  <strong>{{ doc.client }}</strong>
+                  <span>Total TTC : {{ money(doc.total) }}</span>
+                  @if (doc.linkedTo) { <span>Origine : {{ doc.linkedTo }}</span> }
+                  @if (doc.convertedTo) { <span>Document suivant : {{ doc.convertedTo }}</span> }
+                </div>
+                <ol>
+                  @for (event of doc.history; track event) {
+                    <li>{{ event }}</li>
+                  }
+                </ol>
+                @if (canConvert(doc)) {
+                  <button type="button" class="wide-action" (click)="convert(doc)">{{ actionLabel(doc) }}</button>
+                }
+              </div>
+            } @else {
+              <div class="empty-state compact">Sélectionnez une ligne pour voir l’origine, les conversions et l’historique.</div>
+            }
+          </aside>
+        </div>
+      }
+    </section>
+    } @else {
+      @if (editorDraft(); as draft) {
+        <section class="document-editor document-editor--facture">
+          <div class="editor-topbar">
+            <div class="tbar-main">
+              <div class="tbar-info">
+                <div class="tbar-kicker">
+                  <span class="tbar-doc-type">{{ documentLabel(draft.type) }}</span>
+                  <span class="tbar-numero"><span>Référence</span>{{ draft.numero }}</span>
+                </div>
+                <h2 class="tbar-title">{{ draft.id ? 'Modification' : 'Création' }}</h2>
+              </div>
+            </div>
+            <div class="tbar-actions">
+              <button class="btn-tbar-ghost" type="button" (click)="saveEditor()"><i class="ti ti-device-floppy"></i> Enregistrer brouillon</button>
+              <button class="btn-tbar-pdf" type="button" (click)="ouvrirApercuXml()"><i class="ti ti-file-code"></i> Aperçu XML</button>
+              <button class="btn-tbar-pdf" type="button" (click)="exporterPdf()" [disabled]="pdfLoading()"><i class="ti ti-file-type-pdf"></i> PDF</button>
+              <button class="btn-tbar-primary" type="button" (click)="saveEditor(true)"><i class="ti ti-check"></i> Valider</button>
+            </div>
+          </div>
+
+          <div class="editor-grid editor-split">
+            <div class="template-preview editor-preview">
+              <div class="preview-scroll">
+                <div class="facture-doc" [style.--doc-accent]="docAccent()">
+                  <div class="doc-header">
+                    <div class="doc-emetteur">@if (logoFactureUrl()) { <img class="doc-logo" [src]="logoFactureUrl()" alt="Logo"/> }<div class="doc-emetteur-info"><div class="doc-rs">{{ entreprise()?.raisonSociale || entreprise()?.nom || 'Votre entreprise' }}</div><div class="doc-addr">{{ entreprise()?.adresse || 'Tunis, Tunisie' }}</div>@if (entreprise()?.matriculeFiscal) { <div class="doc-mf">MF : {{ entreprise()?.matriculeFiscal }}</div> }@if (entreprise()?.telephone) { <div class="doc-tel">Tel : {{ entreprise()?.telephone }}</div> }</div></div>
+                    <div class="doc-title-block"><div class="doc-type-label">{{ documentLabel(draft.type) }}</div><div class="doc-meta"><div class="doc-meta-row"><span>N°</span><strong>{{ draft.numero }}</strong></div><div class="doc-meta-row"><span>Emission</span><strong>{{ draft.date | date:'dd/MM/yyyy' }}</strong></div><div class="doc-meta-row"><span>Echeance</span><strong>{{ draft.echeance | date:'dd/MM/yyyy' }}</strong></div>@if (draft.typeVente) { <div class="doc-meta-row"><span>Type</span><strong>{{ draft.typeVente }}</strong></div> }</div></div>
+                  </div>
+                  <div class="doc-parties">
+                    <div class="doc-client-block"><div class="doc-block-label">Emetteur ou emettrice</div><div class="doc-client-name">{{ entreprise()?.raisonSociale || entreprise()?.nom || 'Votre entreprise' }}</div>@if (entreprise()?.matriculeFiscal) { <div class="doc-client-mf">MF : {{ entreprise()?.matriculeFiscal }}</div> }</div>
+                    <div class="doc-client-block"><div class="doc-block-label">{{ partyLabel(draft.type) }}</div>@if (draft.client) { <div class="doc-client-name">{{ draft.client }}</div>@if (clientSelectionne()?.adresse) { <div class="doc-client-addr">{{ clientSelectionne()?.adresse }}</div> }@if (draft.afficherMfClient && draft.clientCode) { <div class="doc-client-mf">MF : {{ draft.clientCode }}</div> } } @else { <div class="doc-placeholder">- Selectionner un client -</div> }</div>
+                  </div>
+                  @if (draft.textLibre) { <div class="doc-textlibre">{{ draft.textLibre }}</div> }
+                  @if (draft.titre) { <div class="doc-section-titre">{{ draft.titre }}</div> }
+                  @if (draft.description) { <div class="doc-section-desc">{{ draft.description }}</div> }
+                  <div class="doc-section-header">{{ sectionDefaultTitle(draft.type) }}</div>
+                  <table class="doc-lines-table"><thead><tr><th class="col-designation">Produits</th><th class="col-qty">Qte</th><th class="col-pu">Prix u. HT</th><th class="col-rem">Rem.</th><th class="col-tva">TVA (%)</th><th class="col-ht">Total HT</th><th class="col-ttc">Total TTC</th></tr></thead><tbody>@for (line of draft.lignes; track line) { <tr><td class="col-designation"><div class="line-desig">{{ line.designation || '-' }}</div>@if (line.description) { <div class="line-desc">{{ line.description }}</div> }</td><td class="col-qty">{{ line.quantite }} {{ line.unite }}</td><td class="col-pu num-cell">{{ line.prixUnitaire | number:'1.3-3' }}</td><td class="col-rem num-cell">@if (line.tauxRemise) { {{ line.tauxRemise }}% }</td><td class="col-tva num-cell">{{ line.tauxTva }}%</td><td class="col-ht num-cell">{{ lineHt(line) | number:'1.3-3' }}</td><td class="col-ttc num-cell bold-cell">{{ (lineHt(line) + lineTva(line)) | number:'1.3-3' }}</td></tr> }</tbody></table>
+                  <div class="doc-totaux-zone"><div class="doc-tva-detail"><div class="tva-detail-title">Details TVA</div><table class="tva-table"><thead><tr><th>Taux</th><th>Montant TVA</th><th>Base HT</th></tr></thead><tbody>@for (tva of groupesTva(); track tva.taux) { <tr><td>{{ tva.taux }}%</td><td class="num-cell">{{ tva.montantTva | number:'1.3-3' }} {{ draft.devise }}</td><td class="num-cell">{{ tva.baseHt | number:'1.3-3' }} {{ draft.devise }}</td></tr> }</tbody></table></div><div class="doc-recap"><div class="recap-row"><span>Total HT</span><span class="recap-val">{{ editorTotalHt(draft) | number:'1.3-3' }} {{ draft.devise }}</span></div>@if (draft.remiseGlobale) { <div class="recap-row recap-remise"><span>Remise</span><span class="recap-val">- {{ draft.remiseGlobale | number:'1.3-3' }} {{ draft.devise }}</span></div> }<div class="recap-row"><span>Total TVA</span><span class="recap-val">{{ editorTotalTva(draft) | number:'1.3-3' }} {{ draft.devise }}</span></div>@if (draft.timbreFiscal) { <div class="recap-row"><span>Timbre fiscal</span><span class="recap-val">1,000 {{ draft.devise }}</span></div> }@if (draft.activerRetenue && draft.tauxRetenue) { <div class="recap-row recap-remise"><span>Retenue a la source ({{ draft.tauxRetenue }}%)</span><span class="recap-val">- {{ retenueAmount(draft) | number:'1.3-3' }} {{ draft.devise }}</span></div> }<div class="recap-divider"></div><div class="recap-row recap-ttc"><span>{{ draft.activerRetenue ? 'NET A PAYER' : 'Total TTC' }}</span><span class="recap-ttc-val">{{ netAPayer(draft) | number:'1.3-3' }} {{ draft.devise }}</span></div><div class="recap-lettres">Arretee la presente piece a la somme de :<br/><strong>{{ montantEnLettres() }}</strong></div></div></div>
+                  <div class="doc-paiement"><div class="doc-paiement-label">Paiement</div><div class="doc-paiement-rows"><div class="dp-row"><span>Moyen de paiement</span><span>{{ draft.modePaiement }}</span></div>@if (draft.reference) { <div class="dp-row"><span>Reference</span><span class="dp-mono">{{ draft.reference }}</span></div> }</div>@if (draft.conditionsPaiement) { <div class="dp-note">{{ draft.conditionsPaiement }}</div> }</div>
+                  @if (footerText()) { <div class="doc-footer">{{ footerText() }}</div> }
+                  <div class="doc-signature-row">@if (cachetUrl()) { <div class="doc-stamp"><img [src]="cachetUrl()" alt="Cachet"/></div> }<div class="doc-signature-box"><div class="doc-signature-label">Signature</div>@if (signatureUrl()) { <img [src]="signatureUrl()" alt="Signature"/> } @else { <a href="/entreprise/personnalisation?section=pdf">Ajouter signature</a> }</div></div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="editor-panel editor-params"><div class="params-header"><span class="params-title">Parametres</span></div><div class="params-scroll">
+              <div class="param-section"><div class="param-section-title">Client</div>@if (!draft.client) { <div class="client-search-wrap"><input class="param-input" type="text" placeholder="Rechercher ou creer un client..." [(ngModel)]="rechercheClient" (input)="rechercherClients()" (focus)="showClientDropdown.set(true)" />@if (showClientDropdown() && clientsFiltres().length > 0) { <div class="client-dropdown">@for (client of clientsFiltres(); track client.id) { <div class="client-opt" (click)="selectionnerClient(client)"><div class="co-init">{{ client.nom.substring(0,2).toUpperCase() }}</div><div><div class="co-name">{{ client.nom }}</div><div class="co-mf">{{ client.matriculeFiscal || client.email }}</div></div></div> }</div> }</div> } @else { <div class="client-selected"><div class="cs-info"><div class="cs-init">{{ draft.client.substring(0,2).toUpperCase() }}</div><div><div class="cs-name">{{ draft.client }}</div><div class="cs-mf">{{ draft.clientCode || '-' }}</div></div></div><button class="cs-change" type="button" (click)="changerClient()">✎</button></div> }</div>
+              <div class="param-section"><div class="param-section-title">Document</div><div class="param-row"><label class="param-label">Type</label><select class="param-select" [ngModel]="draft.type" (ngModelChange)="updateDraftType($event)">@for (type of visibleTypes(); track type.key) { <option [ngValue]="type.key">{{ type.label }}</option> }</select></div><div class="param-row"><label class="param-label">Type de vente</label><input class="param-input" [ngModel]="draft.typeVente" (ngModelChange)="updateDraft({ typeVente: $event })" /></div><div class="param-row"><label class="param-label">Devise</label><select class="param-select" [ngModel]="draft.devise" (ngModelChange)="updateDraft({ devise: $event })"><option value="TND">TND</option><option value="EUR">EUR</option><option value="USD">USD</option></select></div><div class="param-row"><label class="param-label">Numero</label><input class="param-input" [ngModel]="draft.numero" (ngModelChange)="updateDraft({ numero: $event })" /></div></div>
+              <div class="param-section"><div class="param-section-title">Dates</div><div class="param-row"><label class="param-label">Date d'emission</label><input class="param-input" type="date" [ngModel]="draft.date" (ngModelChange)="updateDraft({ date: $event })" /></div><div class="param-row"><label class="param-label">Date d'echeance</label><input class="param-input" type="date" [ngModel]="draft.echeance" (ngModelChange)="updateDraft({ echeance: $event })" /></div></div>
+              <div class="param-section"><div class="param-section-title">Contenu</div><div class="param-row"><label class="param-label">Texte libre</label><input class="param-input" [ngModel]="draft.textLibre" (ngModelChange)="updateDraft({ textLibre: $event })" /></div><div class="param-row"><label class="param-label">Titre du document</label><input class="param-input" [ngModel]="draft.titre" (ngModelChange)="updateDraft({ titre: $event })" /></div><div class="param-row"><label class="param-label">Description</label><textarea class="param-textarea" rows="2" [ngModel]="draft.description" (ngModelChange)="updateDraft({ description: $event })"></textarea></div><div class="param-row"><label class="param-label">Notes internes</label><textarea class="param-textarea" rows="2" [ngModel]="draft.notes" (ngModelChange)="updateDraft({ notes: $event })"></textarea></div><div class="param-toggles"><label class="toggle-row"><span class="toggle-label">Afficher MF client</span><input type="checkbox" class="toggle-cb" [ngModel]="draft.afficherMfClient" (ngModelChange)="updateDraft({ afficherMfClient: $event })" /></label><label class="toggle-row"><span class="toggle-label">Timbre fiscal (1,000 TND)</span><input type="checkbox" class="toggle-cb" [ngModel]="draft.timbreFiscal" (ngModelChange)="updateDraft({ timbreFiscal: $event })" /></label><label class="toggle-row"><span class="toggle-label">Afficher RIB / IBAN</span><input type="checkbox" class="toggle-cb" [ngModel]="draft.afficherIban" (ngModelChange)="updateDraft({ afficherIban: $event })" /></label><label class="toggle-row"><span class="toggle-label">Retenue a la source</span><input type="checkbox" class="toggle-cb" [ngModel]="draft.activerRetenue" (ngModelChange)="updateDraft({ activerRetenue: $event })" /></label></div></div>
+              <div class="param-section"><div class="param-section-title">Conditions de paiement</div><div class="param-row"><label class="param-label">Delai</label><select class="param-select" [ngModel]="draft.delaiPaiement" (ngModelChange)="onDelaiChange($event)"><option [ngValue]="0">Paiement immediat</option><option [ngValue]="15">15 jours</option><option [ngValue]="30">30 jours</option><option [ngValue]="45">45 jours</option><option [ngValue]="60">60 jours</option><option [ngValue]="90">90 jours</option></select></div><div class="param-row"><label class="param-label">Mode</label><div class="mode-btns">@for (mode of modePaiementOptions; track mode) { <button class="mode-btn" type="button" [class.active]="draft.modePaiement === mode" (click)="updateDraft({ modePaiement: mode })">{{ mode }}</button> }</div></div><div class="param-row"><label class="param-label">Reference paiement</label><input class="param-input" [ngModel]="draft.reference" (ngModelChange)="updateDraft({ reference: $event })" /></div><div class="param-row"><label class="param-label">Conditions generales</label><textarea class="param-textarea" rows="2" [ngModel]="draft.conditionsPaiement" (ngModelChange)="updateDraft({ conditionsPaiement: $event })"></textarea></div></div>
+              <div class="param-section"><div class="param-section-title">Produits & Sections</div>@for (line of draft.lignes; track line; let i = $index) { <div class="ligne-block"><div class="ligne-hd"><span class="ligne-num-badge">{{ i + 1 }}</span><select class="lp-produit-sel" [ngModel]="line.produitId" (ngModelChange)="onProduitChange(line, $event)"><option value="">Choisir un produit...</option>@for (produit of produits; track produit.id) { <option [value]="produit.id">{{ produit.code }} - {{ produit.libelle }}</option> }</select><button class="ligne-del-btn" type="button" (click)="removeLine(i)" [disabled]="draft.lignes.length <= 1">×</button></div><input class="lp-input" [ngModel]="line.designation" (ngModelChange)="updateLine(i, { designation: $event })" placeholder="Designation *" /><textarea class="lp-textarea" rows="1" [ngModel]="line.description" (ngModelChange)="updateLine(i, { description: $event })"></textarea><div class="ligne-grid"><div class="lg-field"><label class="lg-label">Qte</label><input class="lg-input" type="number" [ngModel]="line.quantite" (ngModelChange)="updateLine(i, { quantite: +$event })" /></div><div class="lg-field"><label class="lg-label">Unite</label><select class="lg-input" [ngModel]="line.unite" (ngModelChange)="updateLine(i, { unite: $event })"><option value="U">Unite</option><option value="Heure">Heure</option><option value="Jour">Jour</option><option value="Forfait">Forfait</option></select></div><div class="lg-field"><label class="lg-label">PU HT</label><input class="lg-input" type="number" [ngModel]="line.prixUnitaire" (ngModelChange)="updateLine(i, { prixUnitaire: +$event })" /></div><div class="lg-field"><label class="lg-label">Rem. %</label><input class="lg-input" type="number" [ngModel]="line.tauxRemise" (ngModelChange)="updateLine(i, { tauxRemise: +$event })" /></div><div class="lg-field lg-field--tva"><label class="lg-label">TVA</label><div class="tva-btns">@for (tva of [0,7,13,19]; track tva) { <button class="tva-btn" type="button" [class.active]="line.tauxTva === tva" (click)="updateLine(i, { tauxTva: tva })">{{ tva }}%</button> }</div></div><div class="lg-field"><label class="lg-label">Total TTC</label><div class="lg-total">{{ (lineHt(line) + lineTva(line)) | number:'1.3-3' }}</div></div></div></div> }<div class="section-footer"><button class="btn-add-line" type="button" (click)="addLine()"><i class="ti ti-plus"></i> Ajouter une ligne</button></div><div class="param-row"><label class="param-label">Montant remise globale</label><input class="param-input" type="number" [ngModel]="draft.remiseGlobale" (ngModelChange)="updateDraft({ remiseGlobale: +$event })" /></div></div>
+            </div></aside>
+          </div>
+        </section>
+        @if (showXmlModal()) {
+          <div class="xml-modal-backdrop">
+            <div class="xml-modal">
+              <div class="xml-modal-head">
+                <strong>Apercu XML TEIF</strong>
+                <button type="button" (click)="fermerApercuXml()">×</button>
+              </div>
+              <pre>{{ xmlPreview() }}</pre>
+              <div class="xml-modal-actions">
+                <button class="btn-tbar-ghost" type="button" (click)="copierXml()">Copier</button>
+                <button class="btn-tbar-primary" type="button" (click)="telechargerXmlPreview()">Telecharger XML</button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    }
+  </main>
+</section>

@@ -52,12 +52,12 @@ interface LangOption {
     .lang { position: relative; display: inline-flex; align-items: center; }
 
     .lang-btn {
-      height: 38px;
-      min-width: 44px;
-      padding: 0 10px;
+      height: 34px;
+      min-width: 42px;
+      padding: 0 9px;
       border-radius: 999px;
       border: 1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.72);
       backdrop-filter: blur(10px);
       display: inline-flex;
       align-items: center;
@@ -88,8 +88,8 @@ interface LangOption {
     }
 
     .flag {
-      width: 18px;
-      height: 12px;
+      width: 17px;
+      height: 11px;
       border-radius: 3px;
       box-shadow: 0 0 0 1px rgba(0,0,0,.10);
       object-fit: cover;
@@ -97,7 +97,7 @@ interface LangOption {
     }
 
     .chev {
-      font-size: 12px;
+      font-size: 11px;
       opacity: .75;
       margin-top: 1px;
       color: var(--ts, #6B7280);

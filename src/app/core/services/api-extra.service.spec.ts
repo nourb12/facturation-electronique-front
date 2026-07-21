@@ -69,12 +69,15 @@ describe('ApiServices (extra)', () => {
     expect(req.request.body).toEqual(body);
     req.flush({});
 
-    const teif = { version: '2.1' };
+    const teif = {
+      parametresTeif: JSON.stringify({ sandbox: true }),
+      versionTeif: '2.1',
+    };
     service.configurerTeif('e1', teif).subscribe();
     req = httpMock.expectOne(`${base}/entreprises/e1/teif`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(teif);
-    req.flush({});
+    req.flush({ message: 'Paramètres TEIF mis à jour.' });
 
     service.listerToutes().subscribe();
     req = httpMock.expectOne(`${base}/entreprises`);

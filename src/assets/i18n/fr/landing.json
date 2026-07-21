@@ -8,7 +8,7 @@
       "FEATURES": "Fonctionnalités",
       "COMPLIANCE": "Conformité",
       "SECURITY": "Sécurité",
-      "WHY": "Pourquoi TunisFlow",
+      "WHY": "Pourquoi TuniFlow",
       "AUDIENCE": "Entreprises concernées",
       "MOBILE": "Mobile",
       "PRICING": "Tarifs",
@@ -16,26 +16,28 @@
     },
     "CTA": {
       "SIGN_IN": "Se connecter",
-      "REQUEST_ACCESS": "Demander l'accès",
+      "REQUEST_ACCESS": "Demander un accès",
       "REQUEST_ACCESS_LONG": "Demander votre espace entreprise",
-      "SEE_DEMO": "Voir le fonctionnement"
+      "SEE_DEMO": "Voir une démo"
     },
     "HERO": {
-      "TITLE_TOP": "La plateforme de",
+      "TITLE_TOP": "La Plateforme de",
       "TITLE_BOTTOM": "qu'il vous faut",
       "DESC": "De la facturation électronique au suivi comptable, pilotez votre activité avec une plateforme unifiée, sécurisée et conforme.",
       "WORDS": {
         "INVOICING": "facturation électronique",
         "ACCOUNTING": "suivi comptable",
-        "RISK": "analyse de risque",
-        "PURCHASING": "gestion d'achat",
-        "SALES": "gestion de vente"
-      }
+        "COMPLIANCE": "conformité fiscale"
+      },
+      "URGENCY_BADGE": "Déjà obligatoire pour certaines opérations selon la DGI"
     },
     "TRUST": {
-      "COMPLIANT": "Conforme TEIF 2026",
+      "COMPLIANT": "Conforme TEIF et DGI",
       "UBL": "Format UBL 2.1",
-      "DGI_LT_2S": "Transmission DGI < 2s"
+      "DGI_LT_2S": "Transmission DGI < 2 s",
+      "NO_COMMITMENT": "Sans engagement",
+      "HOSTED_TUNISIA": "Données hébergées en Tunisie",
+      "LOCAL_SUPPORT": "Support en français et en arabe"
     },
     "PREVIEW": {
       "BREAD_DASHBOARD": "Dashboard",
@@ -68,82 +70,82 @@
       }
     },
     "WORKFLOW": {
-      "EYEBROW": "Comment ça fonctionne",
-      "TITLE_LINE1": "De l'inscription à la transmission DGI",
+      "EYEBROW": "Comment ça marche",
+      "TITLE_LINE1": "Comment ça marche",
       "TITLE_HIGHLIGHT": "5 étapes",
-      "TITLE_LINE2": "automatisées",
-      "DESC": "Un processus entièrement digital. Votre conformité TEIF 2026 est garantie à chaque étape.",
+      "TITLE_LINE2": "",
+      "DESC": "Un processus entièrement digital, en 5 étapes.",
       "ITEMS": {
         "STEP1": {
-          "TITLE": "Inscription & upload",
+          "TITLE": "Inscription",
           "DESC": "Créez votre espace entreprise et déposez vos documents légaux : matricule fiscal, RNE et CIN du responsable.",
           "TAG": "Onboarding digital"
         },
         "STEP2": {
-          "TITLE": "Validation KYC",
+          "TITLE": "Vérification d'identité",
           "DESC": "Votre dossier est analysé automatiquement, puis scoré selon les exigences de conformité et d'identité.",
           "TAG": "Vérification automatique"
         },
         "STEP3": {
-          "TITLE": "Création de facture",
+          "TITLE": "Facturation électronique",
           "DESC": "Créez vos factures dans une interface guidée avec les données fiscales obligatoires déjà cadrées.",
           "TAG": "Interface guidée"
         },
         "STEP4": {
-          "TITLE": "Génération UBL 2.1",
+          "TITLE": "Conformité",
           "DESC": "La facture est convertie au format officiel, signée électroniquement et sécurisée par empreinte SHA-256.",
           "TAG": "Format officiel DGI"
         },
         "STEP5": {
-          "TITLE": "Transmission DGI",
+          "TITLE": "Transmission",
           "DESC": "Envoi direct vers la DGI via l'API officielle avec accusé de réception et traçabilité complète.",
           "TAG": "< 2s · Certifié"
         }
       }
     },
     "FEATURES": {
-      "EYEBROW": "Fonctionnalités métier",
-      "TITLE_LINE1": "Tout le cycle de facturation TEIF",
-      "TITLE_EM": "natif et automatisé",
-      "DESC": "Six fonctionnalités essentielles conçues pour les entreprises tunisiennes : conformité DGI native, validation KYC, signature électronique et audit trail complet.",
+      "EYEBROW": "Facturation électronique",
+      "TITLE_LINE1": "Toute votre facturation électronique",
+      "TITLE_EM": "pensée pour la TEIF",
+      "DESC": "Six fonctions conçues pour émettre, calculer, générer, signer, transmettre et suivre vos factures électroniques tunisiennes dans un seul flux clair.",
       "LEARN_MORE": "En savoir plus",
       "MODAL_REQUEST": "Demander votre espace",
       "ITEMS": {
-        "KYC": {
-          "TAG": "Onboarding",
-          "TITLE": "Validation KYC entreprise",
-          "DESC": "Upload de documents, vérification automatique d'identité et validation du dossier conforme aux exigences DGI.",
-          "DETAIL": "Le module KYC collecte et vérifie automatiquement les documents légaux : matricule fiscal, registre RNE et CIN du responsable. Chaque dossier est scoré et validé avant toute émission de facture."
+        "INVOICE": {
+          "TAG": "Saisie",
+          "TITLE": "Création de facture guidée",
+          "DESC": "Composez vos factures avec un écran clair, les champs utiles et un aperçu immédiat du document avant validation.",
+          "DETAIL": "La saisie centralise le client, les lignes, les conditions de paiement et les références de facture dans un seul parcours. L'équipe prépare un document propre rapidement, sans ressaisie ni aller-retour inutile."
         },
-        "SCORE": {
-          "TAG": "Conformité",
-          "TITLE": "Score de conformité automatique",
-          "DESC": "Score TEIF calculé en temps réel sur chaque facture, avec alertes instantanées en cas d'écart réglementaire.",
-          "DETAIL": "Un moteur de règles analyse chaque facture selon les critères TEIF 2026 : format, données obligatoires, TVA et signature. Le score est mis à jour automatiquement et archivé dans l'audit trail."
+        "TAXES": {
+          "TAG": "Fiscalité",
+          "TITLE": "TVA, FODEC et timbre auto",
+          "DESC": "Les montants HT, TVA, FODEC, timbre fiscal et TTC sont recalculés automatiquement selon vos paramètres tunisiens.",
+          "DETAIL": "Le moteur de calcul applique les règles fiscales utiles à la facturation tunisienne dès la saisie. Les totaux sont mis à jour en temps réel pour limiter les écarts avant l'émission finale."
         },
         "UBL": {
           "TAG": "Format",
           "TITLE": "Génération UBL 2.1",
-          "DESC": "Génération automatique de factures au format UBL 2.1 conforme DGI Tunisie, sans intervention manuelle.",
-          "DETAIL": "Le moteur de génération produit des documents XML UBL 2.1 conformes aux schémas officiels DGI Tunisie. Les données sont validées syntaxiquement et sémantiquement avant chaque envoi."
-        },
-        "API": {
-          "TAG": "Intégration",
-          "TITLE": "Transmission DGI (API)",
-          "DESC": "Connexion directe à l'API officielle DGI Tunisie avec accusés de réception automatiques et traçabilité complète.",
-          "DETAIL": "Chaque facture est transmise via l'API officielle DGI Tunisie avec accusé de réception horodaté. En cas d'erreur, le système retente automatiquement et alerte le responsable."
+          "DESC": "Chaque facture est convertie automatiquement en XML UBL 2.1 prêt pour le circuit de facturation électronique tunisien.",
+          "DETAIL": "La plateforme produit un document structuré au format UBL 2.1 à partir des données de la facture. La conversion reste homogène, lisible et exploitable pour les contrôles de format et la transmission."
         },
         "SIGNATURE": {
-          "TAG": "Sécurité",
-          "TITLE": "Signature électronique",
-          "DESC": "Signature qualifiée avec empreinte cryptographique SHA-256. Chaque facture est inaltérable et auditable.",
-          "DETAIL": "Chaque facture est signée électroniquement via un mécanisme de hachage SHA-256. La signature garantit l'intégrité du document et son authenticité auprès de la DGI."
+          "TAG": "Signature",
+          "TITLE": "Signature électronique prête",
+          "DESC": "La facture est préparée pour une signature électronique fiable avec contrôle d'intégrité avant l'envoi.",
+          "DETAIL": "Le document généré est mis en forme pour un circuit de signature électronique cohérent. L'intégrité de la facture est vérifiée avant diffusion afin de garder une pièce finale exploitable et conforme."
         },
-        "AUDIT": {
-          "TAG": "Traçabilité",
-          "TITLE": "Audit trail complet",
-          "DESC": "Journal des créations, validations, transmissions et archivages, exportable pour contrôle fiscal.",
-          "DETAIL": "Chaque action sur une facture est horodatée et archivée dans un journal immuable. L'audit trail est exportable en PDF ou CSV pour faciliter les contrôles fiscaux."
+        "TRANSMISSION": {
+          "TAG": "Transmission",
+          "TITLE": "Envoi TTN / DGI simplifié",
+          "DESC": "Le document validé est préparé puis transmis via le canal retenu avec retour clair sur le résultat.",
+          "DETAIL": "Une fois validée et convertie, la facture suit un flux d'envoi structuré vers le canal choisi. Les retours de transmission sont centralisés de façon simple pour accélérer le traitement côté équipe."
+        },
+        "STATUS": {
+          "TAG": "Suivi",
+          "TITLE": "Statuts, rejets et avoirs",
+          "DESC": "Suivez l'état de chaque facture, repérez les rejets et relancez rapidement une correction ou un avoir.",
+          "DETAIL": "La plateforme centralise les statuts d'avancement de la facture et aide l'équipe à corriger, annuler ou réémettre un document si nécessaire. Le suivi reste concentré sur toute la vie de la facture."
         }
       }
     },
@@ -151,7 +153,7 @@
       "EYEBROW": "Conformité réglementaire",
       "TITLE_LINE1": "100% conforme",
       "TITLE_EM": "TEIF 2026 & DGI",
-      "DESC": "TunisFlow a été conçu dès le départ pour répondre aux exigences de la TEIF 2026 et de la DGI Tunisie. Chaque fonctionnalité est certifiée et auditable.",
+      "DESC": "TuniFlow a été conçu dès le départ pour répondre aux exigences de la TEIF 2026 et de la DGI Tunisie. Chaque fonctionnalité est certifiée et auditable.",
       "DOC_LINK": "Lire la documentation TEIF",
       "SCORE_TITLE": "Score de conformité TEIF",
       "SCORE_BADGE": "2026 ✓",
@@ -174,63 +176,312 @@
       }
     },
     "WHY": {
-      "EYEBROW": "Pourquoi TunisFlow",
-      "TITLE_LINE1": "La fin du dépôt papier",
-      "TITLE_EM": "une plateforme, tout inclus",
+      "EYEBROW": "Pilotage financier",
+      "TITLE_LINE1": "Facturation, comptabilité",
+      "TITLE_EM": "et trésorerie dans un seul espace",
+      "DESC": "TuniFlow réunit la facturation électronique, le suivi comptable et la trésorerie dans une même expérience pour réduire les ressaisies et donner une vue plus claire à l'équipe finance.",
       "ITEMS": {
-        "PAPERLESS": {
-          "TITLE": "Remplace le dépôt papier",
-          "DESC": "Plus de déplacements au bureau des impôts. Tout est transmis électroniquement à la DGI avec accusé de réception."
+        "FLOW": {
+          "TAG": "Facturation",
+          "TITLE": "Un cycle de vente plus fluide",
+          "DESC": "De la création de facture jusqu’au statut d’envoi, l’équipe suit le document dans un seul parcours au lieu de multiplier les écrans et les ressaisies.",
+          "POINTS": [
+            "Création, validation et émission dans le même flux",
+            "Format électronique prêt pour la transmission",
+            "Statuts visibles sans sortir du dossier client"
+          ]
         },
-        "AUTOMATION": {
-          "TITLE": "Validation automatisée",
-          "DESC": "Chaque facture est validée automatiquement selon les règles TEIF 2026. Zéro erreur humaine, zéro rejet évitable."
+        "ACCOUNTING": {
+          "TAG": "Comptabilité",
+          "TITLE": "La comptabilité suit les factures",
+          "DESC": "Les écritures, journaux et bases fiscales se mettent à jour à partir de l’activité de facturation pour réduire les doubles saisies côté finance.",
+          "POINTS": [
+            "Journaux et mouvements reliés aux factures",
+            "TVA, FODEC et timbre mieux cadrés",
+            "Vision plus propre pour le suivi comptable"
+          ]
         },
-        "SCORE": {
-          "TITLE": "Score conformité temps réel",
-          "DESC": "Un score de conformité TEIF est calculé en continu sur chaque facture. Vous savez toujours où vous en êtes."
+        "CASH": {
+          "TAG": "Trésorerie",
+          "TITLE": "Encaissements et relances centralisés",
+          "DESC": "Paiements, retards, relances et reste à encaisser sont suivis dans la même plateforme pour donner une lecture simple de la trésorerie.",
+          "POINTS": [
+            "Paiements partiels ou complets visibles rapidement",
+            "Relances et retards suivis sans tableau séparé",
+            "Lecture claire du restant dû par client"
+          ]
+        },
+        "CONTROL": {
+          "TAG": "Pilotage",
+          "TITLE": "Conformité et contrôle au quotidien",
+          "DESC": "L’équipe garde une vue continue sur les statuts, les contrôles de format et les points à corriger avant ou après transmission.",
+          "POINTS": [
+            "Contrôles TEIF intégrés au workflow",
+            "Rejets et corrections traités plus vite",
+            "Tableau de bord plus lisible pour la direction financière"
+          ]
+        },
+        "ACTIVATION": {
+          "TAG": "Accompagnement",
+          "TITLE": "Un déploiement plus rapide et plus lisible",
+          "DESC": "L’équipe avance avec un accompagnement local, un délai d’activation court et une offre plus facile à comparer.",
+          "POINTS": [
+            "Activation moyenne en 2 jours ouvrés",
+            "Support local en français et en arabe",
+            "Tarification lisible sans frais cachés"
+          ]
         }
       }
     },
     "TOP": {
       "ITEMS": {
-        "COMPANIES": "Entreprises tunisiennes concernées",
-        "FINE": "Amende maximale par facture",
-        "TTN_RATE": "Factures via TTN / TEIF",
-        "EFFECTIVE_DATE": "Date d'entrée en vigueur"
+        "COMPLIANCE": {
+          "LABEL": "Contrôle de conformité avant envoi",
+          "NOTE": "Format, TVA et champs obligatoires vérifiés dans le workflow."
+        },
+        "TAX": {
+          "LABEL": "Prix et factures contextualisés",
+          "NOTE": "Affichage HT/TTC avec TVA tunisienne explicitée."
+        },
+        "TRANSMISSION": {
+          "LABEL": "Transmission électronique préparée",
+          "NOTE": "Canal TTN/e-Fatoora configurable selon l'intégration retenue."
+        },
+        "AUDIT": {
+          "LABEL": "Traçabilité exportable",
+          "NOTE": "Historique horodaté pour contrôle interne et suivi fiscal."
+        }
       }
     },
     "AUDIENCE": {
       "EYEBROW": "Entreprises concernées",
-      "TITLE_LINE1": "Conçu pour toutes les entreprises",
-      "TITLE_EM": "tunisiennes soumises à la TEIF",
+      "TITLE_LINE1": "Pour les entreprises qui",
+      "TITLE_EM": "vendent, facturent et suivent leurs paiements",
+      "DESC": "TuniFlow centralise la facturation électronique, le suivi comptable et les encaissements dans un espace simple à piloter.",
       "ITEMS": {
         "SME": {
-          "TITLE": "PME tunisiennes",
-          "DESC": "La solution idéale pour les petites et moyennes entreprises soumises à la TEIF 2026.",
+          "TITLE": "Entreprises qui facturent chaque mois",
+          "DESC": "Pour créer les bons documents et suivre les règlements sans fichiers dispersés.",
           "POINTS": [
-            "Onboarding rapide en 5 min",
-            "Interface intuitive sans formation",
-            "Tarifs adaptés aux PME"
+            "Devis, factures et avoirs au même endroit",
+            "Paiements et relances suivis rapidement",
+            "TVA et reste à encaisser plus lisibles"
           ]
         },
         "ACCOUNTANTS": {
-          "TITLE": "Experts-comptables",
-          "DESC": "Gérez plusieurs entreprises clientes depuis un seul espace multi-entités.",
+          "TITLE": "Entreprises avec un suivi comptable",
+          "DESC": "Pour relier plus proprement la facturation au travail comptable.",
           "POINTS": [
-            "Multi-clients centralisé",
-            "Rapports TVA automatisés",
-            "Audit trail exportable"
+            "Factures et écritures regroupées",
+            "États et exports plus faciles à préparer",
+            "Moins de doubles saisies au quotidien"
           ]
         },
         "ENTERPRISE": {
-          "TITLE": "Grandes entreprises",
-          "DESC": "Une architecture scalable pour les grandes structures avec des volumes élevés de facturation.",
+          "TITLE": "Entreprises avec plusieurs équipes",
+          "DESC": "Pour garder une vue commune quand le volume et les intervenants augmentent.",
           "POINTS": [
-            "API REST complète",
-            "Gestion multi-filiales",
-            "SLA garantie 99.9%"
+            "Plusieurs équipes ou sites dans le même espace",
+            "Statuts partagés avec les bons intervenants",
+            "Vue consolidée sur activité et paiements"
           ]
+        }
+      }
+    },
+    "PRICING": {
+      "EYEBROW": "Tarifs transparents",
+      "TITLE_LINE1": "Choisissez le plan",
+      "TITLE_LINE2": "adapté à votre",
+      "TITLE_EM": "entreprise",
+      "DESC_PREFIX": "Tous les plans incluent la conformité",
+      "DESC_MIDDLE": "la signature électronique et la transmission",
+      "DESC_SUFFIX": "Essai 30 jours offerts sur Starter, sans frais cachés.",
+      "MONTHLY": "Mensuel",
+      "YEARLY": "Annuel",
+      "BILLING_TOGGLE_LABEL": "Choix de facturation",
+      "TAX_TOGGLE_LABEL": "Choix d'affichage du prix",
+      "HT": "HT",
+      "TTC": "TTC",
+      "RECOMMENDED_SME": "Recommandé PME",
+      "CUSTOM_PRICE": "Sur devis",
+      "PER_MONTH": "/ mois",
+      "PER_MONTH_HT": "/ mois HT",
+      "ANNUAL_COMPARE": "Au lieu de {{price}} DT/mois",
+      "FREE_START": "/ mois · Essai inclus",
+      "CUSTOM_PRICING": "Tarification personnalisée",
+      "TAX_NOTE": "TVA tunisienne {{rate}}% appliquée aux plans payants. Vous pouvez afficher les prix en HT ou TTC.",
+      "TAX_DETAIL": "HT: {{ht}} DT · TVA {{rate}}%: +{{vat}} DT · TTC: {{ttc}} DT",
+      "TAX_CUSTOM": "Le devis précisera les montants HT et TTC avec la TVA tunisienne {{rate}}% applicable.",
+      "INCLUDED": "Inclus",
+      "EVERYTHING_STARTER_PLUS": "Tout Starter, plus :",
+      "EVERYTHING_GROWTH_PLUS": "Tout Growth, plus :",
+      "EVERYTHING_PRO_PLUS": "Tout Pro, plus :",
+      "BADGES": {
+        "AI": "IA",
+        "API": "API",
+        "SOON": "Bientôt"
+      },
+      "LIMITS": {
+        "INVOICES": "factures",
+        "INVOICES_MONTH": "factures/mois",
+        "USER": "utilisateur",
+        "USERS": "utilisateurs",
+        "COMPANY": "entreprise",
+        "COMPANIES": "entreprises",
+        "STORAGE": "stockage"
+      },
+      "GUARANTEE": {
+        "COMPLIANCE": "<strong>100% conforme</strong> TEIF & TTN",
+        "ACCESS": "<strong>Accès immédiat</strong> après validation KYC",
+        "NO_COMMITMENT": "<strong>Sans engagement</strong> — résiliable à tout moment",
+        "HOSTED": "Données hébergées <strong>en Tunisie</strong>"
+      },
+      "PLANS": {
+        "STARTER": {
+          "TAGLINE": "Pour valider le workflow avec un essai 30 jours, puis continuer à petit budget.",
+          "CTA": "Demander l'accès",
+          "FEATURES": {
+            "TRIAL": "Essai <strong>30 jours offerts</strong>",
+            "INVOICES": "Jusqu'à <strong>30 factures/mois</strong>",
+            "XML": "Génération <strong>XML TEIF</strong> conforme",
+            "TRANSMISSION": "Transmission <strong>TTN / e-Fatoora</strong>",
+            "PDF": "Export <strong>PDF facture</strong>",
+            "USER": "<strong>1 utilisateur</strong>"
+          }
+        },
+        "GROWTH": {
+          "TAGLINE": "Pour les PME qui dépassent le démarrage et veulent une transition sans saut brutal.",
+          "CTA": "Choisir Growth →",
+          "FEATURES": {
+            "INVOICES": "Jusqu'à <strong>100 factures/mois</strong>",
+            "USERS": "Jusqu'à <strong>3 utilisateurs</strong>",
+            "ACCOUNTING": "<strong>Suivi comptable</strong> essentiel",
+            "TAXES": "TVA multi-taux, <strong>FODEC</strong> et timbre",
+            "REPORTS": "Exports <strong>PDF & Excel</strong>",
+            "SUPPORT": "Support email prioritaire"
+          }
+        },
+        "PRO": {
+          "TAGLINE": "Pour les PME tunisiennes qui ont besoin d'un workflow fiscal complet et automatisé.",
+          "CTA": "Démarrer Pro →",
+          "FEATURES": {
+            "UNLIMITED": "Factures <strong>illimitées</strong>",
+            "USERS": "Jusqu'à <strong>5 utilisateurs</strong>",
+            "ACCOUNTING": "<strong>Suivi comptable</strong> complet — journaux, encaissements, décaissements",
+            "PAYMENTS": "<strong>Gestion paiements</strong>, relances auto email & SMS",
+            "DASHBOARD": "<strong>Pilotage</strong> — CA, taux d'encaissement",
+            "EXPORTS": "Export rapports <strong>PDF & Excel</strong>",
+            "CREDIT_NOTES": "<strong>Devis & avoirs</strong> (notes de crédit)",
+            "TAXES": "Gestion taxes — <strong>TVA multi-taux, FODEC, timbre</strong>",
+            "SIGNATURE": "Signature électronique <strong>TunTrust</strong>",
+            "EXTRACTION": "<strong>Extraction automatique</strong> — CIN, patente, RNE, RIB",
+            "RISK": "Score <strong>risque par facture</strong>",
+            "PREDICTION": "Prédiction <strong>retards de paiement</strong>"
+          }
+        },
+        "ENTERPRISE": {
+          "TAGLINE": "Pour les grandes entreprises et cabinets comptables gérant plusieurs entités.",
+          "CTA": "Contacter l'équipe →",
+          "FEATURES": {
+            "USERS": "Utilisateurs <strong>illimités</strong>",
+            "MULTI_COMPANY": "Multi-entreprises — <strong>tableau de bord centralisé</strong>",
+            "MOBILE": "Application <strong>mobile Flutter</strong> + OCR terrain",
+            "ANOMALIES": "Détection <strong>anomalies avancée</strong> + alertes personnalisées",
+            "STORAGE": "Stockage <strong>illimité</strong>",
+            "SUPPORT": "Support prioritaire <strong>dédié</strong>",
+            "AUDIT": "Audit complet + <strong>archivage légal 10 ans</strong>"
+          }
+        }
+      }
+    },
+    "BIZ_SECTION": {
+      "EYEBROW": "Fonctionnalités",
+      "TITLE_LINE1": "De la facture",
+      "TITLE_LINE2": "au",
+      "TITLE_EM": "paiement",
+      "DESC": "Cinq blocs pour émettre, suivre, comptabiliser et piloter votre activité sans multiplier les outils.",
+      "ITEMS": {
+        "INVOICE": {
+          "TITLE": "Cycle de facturation complet",
+          "DESC_BEFORE_TEIF": "Créez vos devis, factures, avoirs et bons de livraison dans le même flux. Un devis devient facture en un clic. Contrôle",
+          "DESC_AFTER_TEIF": "intégré.",
+          "STATS": {
+            "INVOICES": "Factures ce mois",
+            "ACCEPTED_TTN": "Acceptées TTN",
+            "TRANSMISSION": "Transmission"
+          }
+        },
+        "ACCOUNTING": {
+          "TITLE": "Suivi comptable automatisé",
+          "DESC_BEFORE_FODEC": "Les écritures, encaissements et décaissements suivent l'activité de facturation. La gestion fiscale couvre aussi le",
+          "DESC_AFTER_FODEC": ".",
+          "TAGS": {
+            "JOURNALS": "Journaux",
+            "VAT": "TVA multi-taux",
+            "FODEC": "FODEC",
+            "STAMP": "Timbre fiscal"
+          }
+        },
+        "CASH": {
+          "TITLE": "Trésorerie en temps réel",
+          "DESC": "Suivez les paiements, les retards et les relances dans le même espace pour garder une lecture claire des encaissements.",
+          "STATS": {
+            "COLLECTED": "Encaissé",
+            "PENDING": "En attente",
+            "LATE": "En retard"
+          }
+        },
+        "ONBOARDING": {
+          "TITLE": "Onboarding digital",
+          "DESC_BEFORE_RNE": "Le dossier d'entreprise est validé à partir des pièces utiles (CIN, patente,",
+          "DESC_AFTER_RNE": "RIB). Vérification",
+          "DESC_AFTER_KYC": "avant l'accès à la plateforme.",
+          "TAGS": {
+            "SCORE": "Score niveau client",
+            "ADMIN": "Validation admin",
+            "LANGUAGES": "Arabe · Français · Anglais"
+          }
+        },
+        "REPORTS": {
+          "TITLE": "Rapports & Analytics",
+          "DESC": "Tableaux de bord, exports et signaux d'alerte pour suivre l'activité, repérer les retards et mieux piloter la performance.",
+          "TAGS": {
+            "AI": "IA Prédictive",
+            "ANOMALIES": "Détection anomalies",
+            "PDF": "Export PDF",
+            "EXCEL": "Export Excel"
+          }
+        }
+      }
+    },
+    "MOBILE_SECTION": {
+      "EYEBROW": "Application mobile",
+      "TITLE_LINE1": "TuniFlow",
+      "TITLE_LINE2": "dans votre",
+      "TITLE_EM": "poche",
+      "DESC": "Scannez vos documents papier depuis votre téléphone et envoyez-les à votre plateforme pour validation, traitement et attribution d'un statut légal. Assurez le suivi complet de votre activité comptable, où que vous soyez.",
+      "ALT_DARK": "TuniFlow mobile en mode sombre",
+      "ALT_LIGHT": "TuniFlow mobile en mode clair",
+      "BADGES": {
+        "OCR": "Lecture automatique de vos factures",
+        "STATUS": "Suivi validé sur la plateforme"
+      },
+      "FEATURES": {
+        "CAPTURE": {
+          "TITLE": "Photo de vos documents",
+          "DESC": "Photographiez vos documents papier directement depuis votre smartphone."
+        },
+        "EXTRACTION": {
+          "TITLE": "Lecture des informations",
+          "DESC": "L'application récupère les informations utiles de vos documents en arabe, en français et en anglais."
+        },
+        "PREFILL": {
+          "TITLE": "Champs déjà préparés",
+          "DESC": "Les informations remontent dans la plateforme pour accélérer la gestion et le traitement."
+        },
+        "VALIDATION": {
+          "TITLE": "Envoi et suivi",
+          "DESC": "Les données sont vérifiées puis intégrées à la plateforme avec un suivi clair à chaque étape."
         }
       }
     },
@@ -257,6 +508,10 @@
         "ARCHIVE": {
           "TITLE": "Archivage 10 ans",
           "DESC": "Conservation légale des factures pendant 10 ans minimum, conforme aux obligations DGI Tunisie."
+        },
+        "HOSTING_PRIORITY": {
+          "TITLE": "Hébergement en Tunisie et sécurité contrôlée",
+          "DESC": "Vos données fiscales restent hébergées en Tunisie sur une infrastructure surveillée, chiffrée et réservée au cadre réglementaire local."
         }
       },
       "LOGS": {
@@ -286,7 +541,7 @@
       }
     },
     "CTA_SECTION": {
-      "EYEBROW": "TunisFlow · TEIF 2026",
+      "EYEBROW": "TuniFlow · TEIF 2026",
       "TITLE": "Prêt à passer au zéro papier ?",
       "DESC": "Demandez votre espace entreprise en moins de 5 minutes. Onboarding 100% digital, sans déplacement ni dossier papier.",
       "LOGIN": "Déjà client ? Se connecter",
@@ -309,6 +564,43 @@
         "CERTIFIED": "Certifié TEIF 2026",
         "DGI": "Transmission DGI < 2s",
         "HOSTED": "Hébergé en Tunisie"
+      }
+    },
+    "TERMS": {
+      "TEIF": {
+        "FULL": "Téléservice de Facturation Interactive et Fiscale",
+        "DESC": "Cadre tunisien de facturation électronique qui structure la génération, la validation et la transmission fiscale des factures.",
+        "SOURCE": "DGI Tunisie · Loi de finances 2024"
+      },
+      "UBL": {
+        "FULL": "Universal Business Language 2.1",
+        "DESC": "Format XML normalisé utilisé pour représenter les factures électroniques et leurs données obligatoires.",
+        "SOURCE": "OASIS UBL 2.1"
+      },
+      "TTN": {
+        "FULL": "Tunisia TradeNet / e-Fatoora",
+        "DESC": "Canal officiel de transmission et de suivi des factures électroniques dans l’écosystème fiscal tunisien.",
+        "SOURCE": "TTN · DGI Tunisie"
+      },
+      "FODEC": {
+        "FULL": "Fonds de Développement de la Compétitivité",
+        "DESC": "Contribution fiscale appliquée à certaines activités ou familles de produits selon la réglementation tunisienne.",
+        "SOURCE": "DGI Tunisie"
+      },
+      "KYC": {
+        "FULL": "Know Your Customer",
+        "DESC": "Contrôle d’identité et des documents légaux avant l’activation d’un espace entreprise.",
+        "SOURCE": "Procédure conformité"
+      },
+      "AES": {
+        "FULL": "Advanced Encryption Standard",
+        "DESC": "Standard de chiffrement utilisé pour protéger les données sensibles au repos et en transit.",
+        "SOURCE": "NIST FIPS 197"
+      },
+      "RNE": {
+        "FULL": "Registre National des Entreprises",
+        "DESC": "Référentiel officiel d’immatriculation et d’identification des entreprises en Tunisie.",
+        "SOURCE": "RNE Tunisie"
       }
     },
     "FOOTER": {
@@ -338,11 +630,64 @@
           "TRAINING": "Formation"
         }
       },
-      "LEGAL": "© {{year}} TunisFlow. Tous droits réservés. TEIF 2026 · DGI Tunisie · UBL 2.1",
+      "LEGAL": "© {{year}} TuniFlow. Tous droits réservés. TEIF 2026 · DGI Tunisie · UBL 2.1",
       "LINKS": {
         "PRIVACY": "Confidentialité",
         "TERMS": "Conditions d'utilisation",
         "NOTICES": "Mentions légales"
+      }
+    },
+    "TRUST_STRIP": {
+      "EYEBROW": "Adopté par des PME et cabinets comptables en Tunisie",
+      "TITLE": "Des entreprises tunisiennes nous font déjà confiance",
+      "DESC": "Ajoutez une preuve sociale claire dès le premier écran : adoption, activation et satisfaction sont visibles immédiatement.",
+      "STATS": {
+        "ACTIVE_COMPANIES": {
+          "LABEL": "Entreprises actives",
+          "DETAIL": "Comptes déjà opérationnels sur la plateforme"
+        },
+        "DGI_ACCEPTANCE": {
+          "LABEL": "Factures acceptées DGI",
+          "DETAIL": "Transmission validée sans reprise manuelle"
+        },
+        "SATISFACTION": {
+          "LABEL": "Satisfaction client",
+          "DETAIL": "Retour global des entreprises accompagnées"
+        },
+        "ACTIVATION": {
+          "LABEL": "Délai moyen d’activation",
+          "DETAIL": "Temps moyen avant mise en service"
+        }
+      },
+      "TESTIMONIAL": {
+        "QUOTE": "On n'a plus à se soucier de la conformité, tout se fait automatiquement."
+      }
+    },
+    "FAQ": {
+      "EYEBROW": "Questions fréquentes",
+      "TITLE": "Les réponses aux points qui bloquent la décision",
+      "DESC": "Avant l’activation, les équipes veulent surtout comprendre le délai, l’hébergement, la reprise de l’existant et la gestion des rejets.",
+      "ITEMS": {
+        "OLD_INVOICES": {
+          "QUESTION": "Que deviennent mes anciennes factures ?",
+          "ANSWER": "Vos anciennes factures restent consultables dans votre organisation. La mise en place de TuniFlow concerne d’abord le nouveau flux de facturation électronique, puis l’équipe vous accompagne si une reprise de données est nécessaire."
+        },
+        "ACTIVATION": {
+          "QUESTION": "Combien de temps pour être opérationnel ?",
+          "ANSWER": "L’activation dépend du dossier et du niveau de préparation, mais le parcours est conçu pour aller vite. Une fois les documents validés, l’équipe peut ouvrir votre espace en quelques jours ouvrés."
+        },
+        "CANCELLATION": {
+          "QUESTION": "Puis-je résilier facilement ?",
+          "ANSWER": "Oui. L’offre met en avant une mise en place accompagnée sans engagement long imposé. Les modalités exactes restent précisées dans la proposition commerciale ou le contrat."
+        },
+        "HOSTING": {
+          "QUESTION": "Où sont hébergées mes données ?",
+          "ANSWER": "Les données sont hébergées en Tunisie avec des mécanismes de chiffrement, de journalisation et d’archivage pensés pour les contraintes fiscales locales."
+        },
+        "DGI_REJECTION": {
+          "QUESTION": "Que se passe-t-il si une facture est rejetée par la DGI ?",
+          "ANSWER": "La facture garde un statut clair dans la plateforme. L’équipe identifie le motif du rejet, corrige les données concernées puis relance le traitement sans perdre la traçabilité."
+        }
       }
     }
   }

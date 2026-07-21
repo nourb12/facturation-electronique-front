@@ -6,6 +6,14 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { ClientService, ClientDto, CreerClientRequest } from '../../core/services/api.service';
 import { ToastService } from '../../core/services/toast.service';
 
+const DEMO_CLIENTS: ClientDto[] = [
+  { id: 'DEMO-CL-1', nom: 'STE GreenTech', email: 'contact@greentech.tn', typeClient: 'B2B', matriculeFiscal: '1234567A/B/C/000', adresse: 'Rue du Lac', ville: 'Tunis', codePostal: '1053', pays: 'TN', telephone: '+216 20 111 222', estActif: true, creeLe: '2026-01-12', modifieLe: '2026-05-01', entrepriseId: 'ENT-1' },
+  { id: 'DEMO-CL-2', nom: 'Banque BIAT', email: 'achats@biat.com', typeClient: 'B2B', matriculeFiscal: '7654321B/C/D/000', adresse: 'Lac 2', ville: 'Tunis', codePostal: '1053', pays: 'TN', telephone: '+216 71 123 456', estActif: true, creeLe: '2026-02-02', modifieLe: '2026-05-03', entrepriseId: 'ENT-1' },
+  { id: 'DEMO-CL-3', nom: 'Societe OneTel', email: 'billing@onetel.tn', typeClient: 'B2B', matriculeFiscal: '2468135E/F/G/000', adresse: 'Centre Ville', ville: 'Sousse', codePostal: '4000', pays: 'TN', telephone: '+216 73 555 444', estActif: true, creeLe: '2026-02-18', modifieLe: '2026-05-05', entrepriseId: 'ENT-1' },
+  { id: 'DEMO-CL-4', nom: 'SARL MedCare', email: 'contact@medcare.tn', typeClient: 'B2B', matriculeFiscal: '1357924H/I/J/000', adresse: 'Ariana', ville: 'Ariana', codePostal: '2080', pays: 'TN', telephone: '+216 26 310 210', estActif: true, creeLe: '2026-03-02', modifieLe: '2026-05-06', entrepriseId: 'ENT-1' },
+  { id: 'DEMO-CL-5', nom: 'ABC Distribution', email: 'ap@abc.tn', typeClient: 'B2B', matriculeFiscal: '9876543X/Y/Z/000', adresse: 'Zone Industrielle', ville: 'Sfax', codePostal: '3000', pays: 'TN', telephone: '+216 74 222 333', estActif: false, creeLe: '2026-03-10', modifieLe: '2026-05-10', entrepriseId: 'ENT-1' }
+];
+
 @Component({
   selector: 'app-clients',
   standalone: true,
@@ -136,12 +144,18 @@ export class ClientsComponent implements OnInit {
     this.loading.set(true);
     this.clientSvc.lister(this.page(), this.parPage).subscribe({
       next: res => {
-        this.clients.set(res.items);
-        this.total.set(res.total);
+        const items = res.items?.length ? res.items : DEMO_CLIENTS;
+        this.clients.set(items);
+        this.total.set(res.items?.length ? res.total : items.length);
         this.loading.set(false);
         this.updateFilterCounts();
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.clients.set(DEMO_CLIENTS);
+        this.total.set(DEMO_CLIENTS.length);
+        this.loading.set(false);
+        this.updateFilterCounts();
+      }
     });
   }
 

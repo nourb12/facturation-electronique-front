@@ -399,8 +399,7 @@
 
   // Tous les paragraphes et textes
   p,
-  span:not(.badge):not(.btn-arrow),
-  div:not([class*="bg-"]):not([class*="card"]):not([class*="box"]) {
+  span:not(.badge):not(.btn-arrow) {
     color: inherit;
   }
 
@@ -649,7 +648,7 @@
     color: #000000 !important;
   }
 
-  // Nav name (logo TunisFlow)
+  // Nav name (logo TuniFlow)
   .nav-name {
     color: #000000 !important;
   }

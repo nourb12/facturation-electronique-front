@@ -144,6 +144,8 @@ export interface FactureDto {
   dateEmission: string; dateEcheance: string;
   datePaiement?: string;
   totalHt: number; totalTva: number; totalTtc: number;
+  appliquerRS: boolean; codeRS?: string; tauxRS: number;
+  baseRS: number; montantRS: number; netAPayer: number;
   montantPaye: number; montantRestant: number;
   estEnRetard: boolean; notes?: string;
   conditionsPaiement?: string;
@@ -182,9 +184,15 @@ export class FactureApiService extends ApiService {
   creer(req: any)                    { return this.http.post<FactureDto>(this.url, req); }
   mettreAJour(id: string, req: any)  { return this.http.put<FactureDto>(`${this.url}/${id}`, req); }
   valider(id: string)                { return this.http.post<FactureDto>(`${this.url}/${id}/valider`, {}); }
+  soumettreValidationFiscale(id: string) {
+    return this.http.post<FactureDto>(`${this.url}/${id}/soumettre-validation-fiscale`, {});
+  }
   rejeter(id: string, motif: string) { return this.http.post<FactureDto>(`${this.url}/${id}/rejeter`, { motif }); }
   annuler(id: string, motif: string) { return this.http.post<FactureDto>(`${this.url}/${id}/annuler`, { motif }); }
   remettreBrouillon(id: string)      { return this.http.post<FactureDto>(`${this.url}/${id}/remettre-brouillon`, {}); }
+  convertirEnFacture(id: string, req: { dateEcheance?: string; reference?: string } = {}) {
+    return this.http.post<FactureDto>(`${this.url}/${id}/convertir-facture`, req);
+  }
 
   
   telechargerPdf(id: string) {
@@ -194,6 +202,138 @@ export class FactureApiService extends ApiService {
   
   obtenirHistorique(id: string) {
     return this.http.get<HistoriqueEntreeDto[]>(`${this.url}/${id}/historique`);
+  }
+}
+
+export interface BalanceLigneDto {
+  compte: string;
+  intitule: string;
+  debit: number;
+  credit: number;
+  soldeDebiteur: number;
+  soldeCrediteur: number;
+}
+
+export interface ComptabilitePayload {
+  kpis: any[];
+  alertes: any[];
+  calendrierFiscal: any[];
+  planComptable: any[];
+  ecritures: any[];
+  journaux: any[];
+  balance: BalanceLigneDto[];
+  grandLivre: any[];
+  actifs: any[];
+  etats: any[];
+  exercices: any[];
+  analytique: any[];
+}
+
+@Injectable({ providedIn: 'root' })
+export class ComptabiliteApiService extends ApiService {
+  private url = `${this.base}/comptabilite`;
+
+  private buildParams(params?: Record<string, unknown>) {
+    let httpParams = new HttpParams();
+    Object.entries(params ?? {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        httpParams = httpParams.set(key, String(value));
+      }
+    });
+    return httpParams;
+  }
+
+  dashboard()       { return this.http.get<ComptabilitePayload>(`${this.url}/dashboard`); }
+  planComptable()   { return this.http.get<any[]>(`${this.url}/plan-comptable`); }
+  ajouterCompte(req: any) { return this.http.post<any>(`${this.url}/plan-comptable`, req); }
+  ecritures()       { return this.http.get<any[]>(`${this.url}/ecritures`); }
+  ecrituresFiltrees(params?: { journal?: string; dateDebut?: string; dateFin?: string; compte?: string; search?: string }) {
+    return this.http.get<any[]>(`${this.base}/ecritures`, { params: this.buildParams(params) });
+  }
+  creerEcriture(req: any) {
+    return this.http.post<any>(`${this.base}/ecritures`, req);
+  }
+  balanceReelle() {
+    return this.http.get<BalanceLigneDto[]>(`${this.base}/ecritures/balance`);
+  }
+  grandLivreReel(params?: { compte?: string; dateDebut?: string; dateFin?: string }) {
+    return this.http.get<any[]>(`${this.base}/ecritures/grand-livre`, { params: this.buildParams(params) });
+  }
+  exportEcrituresPdf(params?: Record<string, unknown>) {
+    return this.http.get(`${this.base}/ecritures/export/pdf`, { params: this.buildParams(params), responseType: 'blob' });
+  }
+  exportEcrituresExcel(params?: Record<string, unknown>) {
+    return this.http.get(`${this.base}/ecritures/export/excel`, { params: this.buildParams(params), responseType: 'blob' });
+  }
+  journaux()        { return this.http.get<any[]>(`${this.url}/journaux`); }
+  balance()         { return this.http.get<BalanceLigneDto[]>(`${this.url}/balance`); }
+  grandLivre()      { return this.http.get<any[]>(`${this.url}/grand-livre`); }
+  actifs()          { return this.http.get<any[]>(`${this.url}/actifs`); }
+  etats()           { return this.http.get<any[]>(`${this.url}/etats`); }
+  exercices()       { return this.http.get<any[]>(`${this.url}/exercices`); }
+  analytique()      { return this.http.get<any[]>(`${this.url}/analytique`); }
+  calendrierFiscal(){ return this.http.get<any[]>(`${this.url}/calendrier-fiscal`); }
+  declarationsTva() { return this.http.get<any>(`${this.url}/declarations/tva`); }
+  declarationTva(params?: { mois?: number | string; annee?: number | string }) {
+    return this.http.get<any>(`${this.base}/declarations/tva`, { params: this.buildParams(params) });
+  }
+  declarationRs(params?: { mois?: number | string; annee?: number | string }) {
+    return this.http.get<any>(`${this.base}/declarations/rs`, { params: this.buildParams(params) });
+  }
+  liasseDgi(params?: { annee?: number | string }) {
+    return this.http.get<any>(`${this.base}/declarations/liasse-dgi`, { params: this.buildParams(params) });
+  }
+  retenueSource()   { return this.http.get<any>(`${this.url}/retenue-source`); }
+  tresorerie()       { return this.http.get<any>(`${this.url}/tresorerie`); }
+  lettrageNonLettres() {
+    return this.http.get<any[]>(`${this.base}/lettrage/non-lettres`);
+  }
+  rapprocherLettrage(req: any) {
+    return this.http.post<any>(`${this.base}/lettrage`, req);
+  }
+  importerRapprochement(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${this.base}/rapprochement/import`, formData);
+  }
+  rapprochementEcarts() {
+    return this.http.get<any[]>(`${this.base}/rapprochement/ecarts`);
+  }
+  audit(params?: { entite?: string; action?: string; dateDebut?: string; dateFin?: string }) {
+    return this.http.get<any[]>(`${this.base}/audit`, { params: this.buildParams(params) });
+  }
+}
+
+export interface DocumentFluxDto {
+  id: string;
+  type: string;
+  numero: string;
+  client: string;
+  total: number;
+  statut: string;
+  date: string;
+  echeance?: string | null;
+  linkedTo?: string | null;
+  convertedTo?: string | null;
+  history: string[];
+  source?: string | null;
+}
+
+export interface DocumentsDashboardDto {
+  documents: DocumentFluxDto[];
+  generatedAt?: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class DocumentsApiService extends ApiService {
+  private url = `${this.base}/documents`;
+
+  dashboard() {
+    return this.http.get<DocumentsDashboardDto>(`${this.url}/dashboard`);
+  }
+
+  convertir(id: string) {
+    return this.http.post<DocumentFluxDto>(`${this.url}/${encodeURIComponent(id)}/convertir`, {});
   }
 }
 
@@ -344,14 +484,62 @@ export class RapportsApiService extends ApiService {
 
 
 
+
+export interface EntrepriseDto {
+  id: string;
+  nom?: string;
+  raisonSociale?: string;
+  nomCommercial?: string;
+  forme?: string;
+  capital?: string | number | null;
+  dateCreation?: string | null;
+  activiteCode?: string | null;
+  activiteLibelle?: string | null;
+  adresse?: string | null;
+  ville?: string | null;
+  codePostal?: string | null;
+  gouvernorat?: string | null;
+  pays?: string | null;
+  telephone?: string | null;
+  tel?: string | null;
+  fax?: string | null;
+  email?: string | null;
+  siteWeb?: string | null;
+  matriculeFiscal?: string | null;
+  numRNE?: string | null;
+  regimeTVA?: string | null;
+  tauxTVAPrincipal?: number | string | null;
+  teifSignature?: boolean;
+  teifArchivage?: boolean;
+  teifHorodatage?: boolean;
+  teifSandbox?: boolean;
+  teifSurveille?: boolean;
+  scoreConformite?: number;
+}
+
+export type MettreAJourEntrepriseRequest = Partial<Omit<EntrepriseDto, 'id' | 'scoreConformite'>>;
+
+export interface ConfigurerTeifRequest {
+  parametresTeif: string;
+  versionTeif: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class EntrepriseApiService extends ApiService {
   private url = `${this.base}/entreprises`;
 
-  obtenirParId(id: string)              { return this.http.get<any>(`${this.url}/${id}`); }
-  mettreAJour(id: string, req: any)     { return this.http.put<any>(`${this.url}/${id}`, req); }
-  configurerTeif(id: string, req: any)  { return this.http.put<any>(`${this.url}/${id}/teif`, req); }
-  listerToutes()                        { return this.http.get<any[]>(this.url); }
+  obtenirParId(id: string) { return this.http.get<EntrepriseDto>(`${this.url}/${id}`); }
+  mettreAJour(id: string, req: MettreAJourEntrepriseRequest) {
+    return this.http.put<EntrepriseDto>(`${this.url}/${id}`, req);
+  }
+  configurerTeif(id: string, req: ConfigurerTeifRequest) {
+    return this.http.put<MessageResponse>(`${this.url}/${id}/teif`, req);
+  }
+  listerToutes() { return this.http.get<EntrepriseDto[]>(this.url); }
 }
 export interface PersonnalisationDto {
   id: string;
@@ -386,6 +574,10 @@ export interface TaxeDto {
   titre: string;
   taux: number;
   type: string;
+  codeTEIF?: 'S' | 'E' | 'Z' | 'O' | string;
+  dateEffet?: string;
+  estActif?: boolean;
+  nombreUtilisations?: number;
   description?: string;
   creeLe: string;
   modifieLe: string;
@@ -395,17 +587,46 @@ export interface CreerTaxeRequest {
   titre: string;
   taux: number;
   type: string;
+  codeTEIF?: 'S' | 'E' | 'Z' | 'O' | string;
+  dateEffet?: string;
+  estActif?: boolean;
   description?: string;
+}
+
+export interface TaxeUtilisationsDto {
+  taxeId: string;
+  nombreUtilisations: number;
+  peutSupprimer: boolean;
+}
+
+export interface TaxeListParams {
+  search?: string;
+  type?: string;
+  estActif?: boolean | null;
 }
 
 @Injectable({ providedIn: 'root' })
 export class TaxeApiService extends ApiService {
   private url = `${this.base}/taxes`;
 
-  lister() { return this.http.get<TaxeDto[]>(this.url); }
+  lister(params?: TaxeListParams) {
+    let httpParams = new HttpParams();
+    if (params?.search) httpParams = httpParams.set('search', params.search);
+    if (params?.type && params.type !== 'Tous') httpParams = httpParams.set('type', params.type);
+    if (params?.estActif !== undefined && params.estActif !== null) {
+      httpParams = httpParams.set('estActif', String(params.estActif));
+    }
+    return this.http.get<TaxeDto[]>(this.url, { params: httpParams });
+  }
   creer(req: CreerTaxeRequest) { return this.http.post<TaxeDto>(this.url, req); }
   mettreAJour(id: string, req: CreerTaxeRequest) {
     return this.http.put<TaxeDto>(`${this.url}/${id}`, req);
+  }
+  toggleActif(id: string) {
+    return this.http.put<TaxeDto>(`${this.url}/${id}/toggle-actif`, {});
+  }
+  utilisations(id: string) {
+    return this.http.get<TaxeUtilisationsDto>(`${this.url}/${id}/utilisations`);
   }
   supprimer(id: string) { return this.http.delete(`${this.url}/${id}`); }
 }
@@ -418,8 +639,14 @@ export interface ParametreFiscalDto {
   signe: string;
   ordreCalcul: string;
   utilisation: string;
+  codeDGI?: string;
+  typeFournisseur?: string;
+  seuilMinimum?: number | null;
+  dateEffet?: string;
   inclureRetenueSource: boolean;
+  inclureRS?: boolean;
   documentsCibles: string[];
+  nombreUtilisations?: number;
   estActif: boolean;
   creeLe: string;
   modifieLe: string;
@@ -432,18 +659,54 @@ export interface CreerParametreFiscalRequest {
   signe: string;
   ordreCalcul: string;
   utilisation: string;
+  codeDGI?: string;
+  typeFournisseur?: string;
+  seuilMinimum?: number | null;
+  dateEffet?: string;
   inclureRetenueSource: boolean;
+  inclureRS?: boolean;
   documentsCibles: string[];
+  estActif?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ParametreFiscalApiService extends ApiService {
   private url = `${this.base}/parametres-fiscaux`;
 
-  lister() { return this.http.get<ParametreFiscalDto[]>(this.url); }
+  lister(params?: {
+    search?: string;
+    type?: string;
+    utilisation?: string;
+    estActif?: boolean | null;
+    typeFournisseur?: string;
+    dateDebut?: string;
+    dateFin?: string;
+  }) {
+    let httpParams = new HttpParams();
+    if (params?.search) httpParams = httpParams.set('search', params.search);
+    if (params?.type && params.type !== 'Tous') httpParams = httpParams.set('type', params.type);
+    if (params?.utilisation && params.utilisation !== 'Tous') httpParams = httpParams.set('utilisation', params.utilisation);
+    if (params?.estActif !== undefined && params.estActif !== null) httpParams = httpParams.set('estActif', String(params.estActif));
+    if (params?.typeFournisseur && params.typeFournisseur !== 'Tous') httpParams = httpParams.set('typeFournisseur', params.typeFournisseur);
+    if (params?.dateDebut) httpParams = httpParams.set('dateDebut', params.dateDebut);
+    if (params?.dateFin) httpParams = httpParams.set('dateFin', params.dateFin);
+    return this.http.get<ParametreFiscalDto[]>(this.url, { params: httpParams });
+  }
   creer(req: CreerParametreFiscalRequest) { return this.http.post<ParametreFiscalDto>(this.url, req); }
   mettreAJour(id: string, req: CreerParametreFiscalRequest) {
     return this.http.put<ParametreFiscalDto>(`${this.url}/${id}`, req);
+  }
+  toggleActif(id: string) {
+    return this.http.put<ParametreFiscalDto>(`${this.url}/${id}/toggle-actif`, {});
+  }
+  utilisations(id: string) {
+    return this.http.get<{ parametreFiscalId: string; nombreUtilisations: number; peutSupprimer: boolean }>(`${this.url}/${id}/utilisations`);
+  }
+  exporterExcel(params?: any) {
+    return this.http.get(`${this.url}/export/excel`, { params: params ?? {}, responseType: 'blob' });
+  }
+  exporterPdf(params?: any) {
+    return this.http.get(`${this.url}/export/pdf`, { params: params ?? {}, responseType: 'blob' });
   }
   supprimer(id: string) { return this.http.delete(`${this.url}/${id}`); }
 }

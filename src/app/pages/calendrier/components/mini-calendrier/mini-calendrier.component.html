@@ -1,0 +1,16 @@
+<div class="mini-cal">
+  <div class="mini-header">
+    <button class="mini-nav" (click)="svc.prevMonth()"><i class="ti ti-chevron-left"></i></button>
+    <span class="mini-month">{{ monthLabel() }}</span>
+    <button class="mini-nav" (click)="svc.nextMonth()"><i class="ti ti-chevron-right"></i></button>
+  </div>
+  <div class="mini-grid">
+    @for (lbl of DAY_LABELS; track $index) { <div class="mini-day-lbl">{{ lbl }}</div> }
+    @for (day of days(); track day.date.toISOString()) {
+      <div class="mini-day" [class.other]="!day.isCurrentMonth" [class.today]="day.isToday" [class.selected]="day.isSelected && !day.isToday" (click)="select(day)">
+        {{ day.dayNum }}
+        @if (day.hasEvent && day.isCurrentMonth) { <span class="mini-dot"></span> }
+      </div>
+    }
+  </div>
+</div>

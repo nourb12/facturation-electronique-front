@@ -1,4 +1,4 @@
-﻿import {
+import {
   Component, signal, computed, inject, OnDestroy, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -361,9 +361,7 @@ export class DemandeAccesComponent implements OnDestroy {
     this.draftAvailable.set(false);
     this.lastSavedDraft = '';
     this.draftSavedAt.set(null);
-  }
-
-  // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â DONNÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°ES ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â
+  }  // DONNEES
   readonly formesJuridiques: SelectOption[] = [
     { value: 'SARL', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SARL' },
     { value: 'SA', labelKey: 'AUTH.ACCESS_REQUEST.OPTIONS.LEGAL_FORMS.SA' },
@@ -779,14 +777,14 @@ export class DemandeAccesComponent implements OnDestroy {
   onFileSelect(event: Event, doc: DocumentItem): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (file) this.attachFile(doc, file);
+    if (file) void this.attachFile(doc, file);
   }
 
   onDrop(event: DragEvent, doc: DocumentItem): void {
     event.preventDefault();
     this.dragTarget.set(null);
     const file = event.dataTransfer?.files[0];
-    if (file) this.attachFile(doc, file);
+    if (file) void this.attachFile(doc, file);
   }
 
   onDragOver(event: DragEvent, key: string): void {
@@ -796,28 +794,35 @@ export class DemandeAccesComponent implements OnDestroy {
 
   onDragLeave(): void { this.dragTarget.set(null); }
 
-  private attachFile(doc: DocumentItem, file: File): void {
+  private async attachFile(doc: DocumentItem, file: File): Promise<void> {
     const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
-    doc.loading = false;
+    doc.loading = true;
+    doc.error = null;
+    this.touchDocuments();
 
     if (!allowed.includes(file.type)) {
       doc.error = this.t('AUTH.ACCESS_REQUEST.DOCS.ERRORS.UNSUPPORTED_FORMAT');
+      doc.loading = false;
       this.touchDocuments();
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    const optimizedFile = file.type.startsWith('image/')
+      ? await this.compressImageForUpload(file)
+      : file;
+
+    if (optimizedFile.size > 5 * 1024 * 1024) {
       doc.error = this.t('AUTH.ACCESS_REQUEST.DOCS.ERRORS.FILE_TOO_LARGE');
+      doc.loading = false;
       this.touchDocuments();
       return;
     }
 
-    doc.file = file;
+    doc.file = optimizedFile;
     doc.error = null;
-    doc.loading = true;
     this.touchDocuments();
 
-    if (file.type.startsWith('image/')) {
+    if (optimizedFile.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = e => {
         doc.preview = (e.target as FileReader).result as string;
@@ -829,7 +834,7 @@ export class DemandeAccesComponent implements OnDestroy {
         doc.loading = false;
         this.touchDocuments();
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(optimizedFile);
     } else {
       doc.preview = null;
       doc.loading = false;
@@ -842,6 +847,53 @@ export class DemandeAccesComponent implements OnDestroy {
       return n;
     });
     this.scheduleDraftSave();
+  }
+
+  private compressImageForUpload(file: File): Promise<File> {
+    if (file.size <= 900 * 1024) return Promise.resolve(file);
+
+    return new Promise(resolve => {
+      const image = new Image();
+      const url = URL.createObjectURL(file);
+
+      image.onload = () => {
+        URL.revokeObjectURL(url);
+        const maxSide = 1600;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+
+        ctx.drawImage(image, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          if (!blob || blob.size >= file.size) {
+            resolve(file);
+            return;
+          }
+
+          const baseName = file.name.replace(/\.[^.]+$/, '') || 'justificatif';
+          resolve(new File([blob], `${baseName}.jpg`, {
+            type: 'image/jpeg',
+            lastModified: Date.now()
+          }));
+        }, 'image/jpeg', 0.78);
+      };
+
+      image.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(file);
+      };
+
+      image.src = url;
+    });
   }
 
   removeFile(doc: DocumentItem): void {
@@ -956,6 +1008,7 @@ export class DemandeAccesComponent implements OnDestroy {
     this.http.post<{ reference: string }>(`${environment.apiUrl}/auth/demande-acces`, fd).subscribe({
       next: (res) => {
         this.submitting.set(false);
+        this.notifyAfterAccessRequest();
         this.clearDraft();
         this.confirmationRef = res?.reference || `MZN-${this.form.matriculeFiscal.slice(0, 7).toUpperCase()}-${new Date().getFullYear()}`;
         this.step.set('confirmation');
@@ -971,6 +1024,35 @@ export class DemandeAccesComponent implements OnDestroy {
         this.errors.update(e => ({ ...e, submit: msg }));
       }
     });
+  }
+
+  private notifyAfterAccessRequest(): void {
+    const email = this.form.respEmail.trim();
+    const telephone = (this.form.respTel || this.form.telEntreprise).trim();
+    const prenom = this.form.respPrenom.trim() || this.form.nomEntreprise.trim() || 'Client';
+    const nom = this.form.respNom.trim();
+
+    if (email) {
+      this.http.post(`${environment.apiUrl}/notifications/email/bienvenue`, {
+        email,
+        prenom,
+        nom,
+        nomEntreprise: this.form.nomEntreprise.trim() || this.form.raisonSociale.trim(),
+        matriculeFiscal: this.form.matriculeFiscal.trim(),
+        role: this.displayRespFonction() || 'Responsable entreprise'
+      }).subscribe({ error: () => {} });
+    }
+
+    if (telephone) {
+      this.http.post(`${environment.apiUrl}/notifications/sms/verification`, {
+        telephone,
+        code: this.generateSmsCode()
+      }).subscribe({ error: () => {} });
+    }
+  }
+
+  private generateSmsCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
   goToLogin(): void { this.router.navigate(['/login/entreprise']); }

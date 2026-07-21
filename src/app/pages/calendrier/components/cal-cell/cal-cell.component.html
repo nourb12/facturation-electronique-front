@@ -1,0 +1,32 @@
+<div class="cal-cell"
+     [class.today]="day.isToday"
+     [class.other-month]="!day.isCurrentMonth"
+     [class.selected]="isSelected"
+     (click)="selectDay()">
+
+  <div class="cell-top">
+    <span class="cell-num" [class.today-num]="day.isToday">
+      {{ day.date.getDate() }}
+    </span>
+    @if (day.tasks.length > 0) {
+      <span class="task-count" title="{{ day.tasks.length }} tâche(s)">
+        {{ day.tasks.length }}
+      </span>
+    }
+  </div>
+
+  @for (evt of visibleEvents; track evt.id) {
+    <div class="evt-chip"
+         [style.background]="META[evt.type].bg"
+         [style.color]="META[evt.type].color"
+         (click)="openEvent(evt, $event)"
+         [title]="evt.title">
+      <i class="ti {{ META[evt.type].icon }}" style="font-size:9px; flex-shrink:0"></i>
+      <span class="evt-text">{{ evt.title }}</span>
+    </div>
+  }
+
+  @if (hiddenCount > 0) {
+    <div class="more-label">+{{ hiddenCount }} autre{{ hiddenCount > 1 ? 's' : '' }}</div>
+  }
+</div>

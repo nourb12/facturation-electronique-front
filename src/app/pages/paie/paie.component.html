@@ -1,0 +1,308 @@
+<section class="payroll-page">
+  <header class="payroll-topbar">
+    <div>
+      <p class="eyebrow">Ressources humaines</p>
+      <h1>Paie et salaires</h1>
+      <p>Fiches de paie, retenues sociales, paiements salariés et écritures comptables.</p>
+    </div>
+    <div class="top-actions">
+      <button type="button" class="secondary-action" (click)="generateFiches()">
+        <i class="ti ti-file-plus"></i>
+        Générer fiches
+      </button>
+      <button type="button" class="primary-action" (click)="exportCsv()">
+        <i class="ti ti-download"></i>
+        Export CSV
+      </button>
+    </div>
+  </header>
+
+  <nav class="payroll-nav" aria-label="Navigation paie">
+    @for (item of views; track item.key) {
+      <button type="button" [class.active]="view() === item.key" (click)="setView(item.key)">
+        <i [class]="'ti ' + item.icon"></i>
+        {{ item.label }}
+      </button>
+    }
+  </nav>
+
+  <section class="payroll-controls">
+    <label>
+      <span>Période</span>
+      <input type="month" [ngModel]="periode()" (ngModelChange)="periode.set($event)">
+    </label>
+    <label>
+      <span>Employé</span>
+      <select [ngModel]="selectedEmploye()" (ngModelChange)="selectedEmploye.set($event)">
+        <option value="">Tous les employés</option>
+        @for (e of employes(); track e.id) {
+          <option [value]="e.id">{{ e.nom }}</option>
+        }
+      </select>
+    </label>
+    <label class="search-box">
+      <i class="ti ti-search"></i>
+      <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Recherche nom, CIN, CNSS...">
+    </label>
+  </section>
+
+  <div class="kpi-grid">
+    <article class="kpi-card" data-tone="staff">
+      <span><i class="ti ti-users"></i></span>
+      <div><p>Employés actifs</p><strong>{{ summary().employes }}</strong><small>{{ summary().fiches }} fiche(s) ce mois</small></div>
+    </article>
+    <article class="kpi-card" data-tone="brut">
+      <span><i class="ti ti-cash"></i></span>
+      <div><p>Masse salariale brute</p><strong>{{ money(summary().brut) }}</strong><small>Base charges de personnel</small></div>
+    </article>
+    <article class="kpi-card" data-tone="net">
+      <span><i class="ti ti-credit-card-pay"></i></span>
+      <div><p>Net à payer</p><strong>{{ money(summary().net) }}</strong><small>{{ summary().payees }} fiche(s) payée(s)</small></div>
+    </article>
+    <article class="kpi-card" data-tone="tax">
+      <span><i class="ti ti-building-bank"></i></span>
+      <div><p>Retenues CNSS / IRPP</p><strong>{{ money(summary().retenues) }}</strong><small>À déclarer</small></div>
+    </article>
+  </div>
+
+  @if (view() === 'dashboard') {
+    <div class="dashboard-grid cockpit-grid">
+      <section class="panel panel-wide process-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Pilotage paie mensuelle</h2>
+            <p>Vue opérationnelle du cycle : préparation, validation, paiement et déclarations.</p>
+          </div>
+          <span class="period-chip">{{ periode() }}</span>
+        </div>
+        <div class="process-strip">
+          <article>
+            <span><i class="ti ti-users"></i></span>
+            <div><strong>{{ summary().employes }}</strong><small>salariés actifs</small></div>
+          </article>
+          <article>
+            <span><i class="ti ti-file-dollar"></i></span>
+            <div><strong>{{ summary().fiches }}</strong><small>bulletins générés</small></div>
+          </article>
+          <article>
+            <span><i class="ti ti-credit-card-pay"></i></span>
+            <div><strong>{{ summary().payees }}</strong><small>paiements effectués</small></div>
+          </article>
+        </div>
+
+        <div class="progress-panel">
+          <div>
+            <span>Avancement paiement</span>
+            <b>{{ paymentProgress() }}%</b>
+          </div>
+          <div class="progress-bar"><span [style.width.%]="paymentProgress()"></span></div>
+          <small>{{ draftCount() }} brouillon(s), {{ validatedCount() }} fiche(s) validée(s), {{ summary().payees }} fiche(s) payée(s)</small>
+        </div>
+
+        <div class="quick-actions">
+          <button type="button" (click)="generateFiches()">
+            <i class="ti ti-file-plus"></i>
+            Générer fiches
+          </button>
+          <button type="button" (click)="validateAllDrafts()" [disabled]="draftCount() === 0">
+            <i class="ti ti-checks"></i>
+            Valider brouillons
+          </button>
+          <button type="button" (click)="payAllValidated()" [disabled]="validatedCount() === 0">
+            <i class="ti ti-credit-card-pay"></i>
+            Payer salaires
+          </button>
+          <button type="button" (click)="setView('declarations')">
+            <i class="ti ti-building-bank"></i>
+            CNSS / IRPP
+          </button>
+        </div>
+
+        <div class="declaration-summary">
+          @for (d of declarations().slice(0, 2); track d.code) {
+            <article>
+              <span>{{ d.code }}</span>
+              <div>
+                <strong>{{ d.label }}</strong>
+                <small>{{ d.echeance }} · {{ d.statut }}</small>
+              </div>
+              <b>{{ money(d.montant) }}</b>
+            </article>
+          }
+        </div>
+
+        <div class="payroll-steps">
+          <article data-state="done">
+            <i class="ti ti-check"></i>
+            <div><strong>Préparation</strong><span>Données employés et bases salariales prêtes.</span></div>
+          </article>
+          <article [attr.data-state]="draftCount() ? 'watch' : 'done'">
+            <i class="ti ti-file-check"></i>
+            <div><strong>Validation</strong><span>{{ draftCount() ? 'Bulletins à valider' : 'Bulletins validés' }}</span></div>
+          </article>
+          <article [attr.data-state]="validatedCount() ? 'watch' : 'done'">
+            <i class="ti ti-wallet"></i>
+            <div><strong>Paiement</strong><span>{{ validatedCount() ? 'Ordres de virement à lancer' : 'Paiements à jour' }}</span></div>
+          </article>
+          <article data-state="info">
+            <i class="ti ti-building-bank"></i>
+            <div><strong>Déclarations</strong><span>CNSS et IRPP alimentés automatiquement.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel department-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Équipe et masse salariale</h2>
+            <p>Répartition active par département avec coût brut estimé.</p>
+          </div>
+        </div>
+        <div class="department-list">
+          @for (dept of departmentStats(); track dept.name) {
+            <article>
+              <header>
+                <span>{{ dept.name }}</span>
+                <b>{{ dept.active }}/{{ dept.count }}</b>
+              </header>
+              <div class="dept-bar"><span [style.width.%]="dept.percent"></span></div>
+              <footer>
+                <small>{{ dept.percent }}% des actifs</small>
+                <strong>{{ money(dept.brut) }}</strong>
+              </footer>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  }
+
+  @if (view() === 'employes') {
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>Employés</h2><p>Identité, CNSS, RIB et base salariale.</p></div>
+        <span class="count-chip">{{ filteredEmployes().length }} employé(s)</span>
+      </div>
+      <div class="cards-grid">
+        @for (e of filteredEmployes(); track e.id) {
+          <article class="employee-card" [class.off]="!e.actif">
+            <header>
+              <div class="avatar">{{ e.nom.slice(0, 2).toUpperCase() }}</div>
+              <div><h3>{{ e.nom }}</h3><span>{{ e.poste }}</span></div>
+              <b>{{ e.actif ? 'Actif' : 'Inactif' }}</b>
+            </header>
+            <dl>
+              <div><dt>Matricule</dt><dd>{{ e.matricule }}</dd></div>
+              <div><dt>Departement</dt><dd>{{ e.departement }}</dd></div>
+              <div><dt>CIN</dt><dd>{{ e.cin }}</dd></div>
+              <div><dt>CNSS</dt><dd>{{ e.cnss }}</dd></div>
+              <div class="wide"><dt>RIB</dt><dd>{{ e.rib }}</dd></div>
+              <div><dt>Salaire base</dt><dd>{{ money(e.salaireBase) }}</dd></div>
+            </dl>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
+  @if (view() === 'fiches') {
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>Fiches de paie</h2><p>Brut, CNSS, IRPP, avances et net a payer.</p></div>
+        <span class="count-chip">{{ filteredFiches().length }} fiche(s)</span>
+      </div>
+      <div class="payroll-list">
+        @for (f of filteredFiches(); track f.id) {
+          <article class="payroll-row" [attr.data-status]="f.statut">
+            <div class="main-cell">
+              <strong>{{ employeName(f.employeId) }}</strong>
+              <span>{{ employeById(f.employeId)?.poste }} - {{ f.periode }}</span>
+            </div>
+            <div class="metric-cell"><span>Brut</span><b>{{ money(f.brut) }}</b></div>
+            <div class="metric-cell"><span>CNSS</span><b>{{ money(f.cnssSalarie) }}</b></div>
+            <div class="metric-cell"><span>IRPP</span><b>{{ money(f.irpp) }}</b></div>
+            <div class="metric-cell net"><span>Net</span><b>{{ money(f.net) }}</b></div>
+            <div class="row-actions">
+              <span class="status">{{ statusLabel(f.statut) }}</span>
+              @if (f.statut === 'Brouillon') {
+                <button type="button" (click)="validateFiche(f.id)">Valider</button>
+              }
+              @if (f.statut === 'Validee') {
+                <button type="button" (click)="payFiche(f.id)">Payer</button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
+  @if (view() === 'declarations') {
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>Déclarations sociales et fiscales</h2><p>CNSS, IRPP et contrôles de masse salariale.</p></div>
+      </div>
+      <div class="declaration-grid">
+        @for (d of declarations(); track d.code) {
+          <article>
+            <span>{{ d.code }}</span>
+            <h3>{{ d.label }}</h3>
+            <strong>{{ money(d.montant) }}</strong>
+            <footer><small>{{ d.echeance }}</small><b>{{ d.statut }}</b></footer>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
+  @if (view() === 'paiements') {
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>Paiements salaires</h2><p>Liste bancaire et statut de reglement.</p></div>
+      </div>
+      <div class="responsive-table">
+        <table>
+          <thead><tr><th>Employé</th><th>RIB</th><th>Période</th><th>Net</th><th>Statut</th><th>Date paiement</th></tr></thead>
+          <tbody>
+            @for (f of filteredFiches(); track f.id) {
+              <tr>
+                <td><strong>{{ employeName(f.employeId) }}</strong></td>
+                <td class="mono">{{ employeById(f.employeId)?.rib }}</td>
+                <td class="mono">{{ f.periode }}</td>
+                <td class="money">{{ money(f.net) }}</td>
+                <td><span class="status">{{ statusLabel(f.statut) }}</span></td>
+                <td>{{ f.datePaiement || '-' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+
+  @if (view() === 'ecritures') {
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>Écritures comptables paie</h2><p>Génération automatique vers le journal de paie.</p></div>
+        <span class="balance-chip">Équilibrée</span>
+      </div>
+      <div class="responsive-table">
+        <table>
+          <thead><tr><th>Date</th><th>Journal</th><th>Compte</th><th>Libellé</th><th>Débit</th><th>Crédit</th></tr></thead>
+          <tbody>
+            @for (e of ecritures(); track e.id) {
+              <tr>
+                <td class="mono">{{ e.date }}</td>
+                <td><span class="journal-chip">{{ e.journal }}</span></td>
+                <td class="mono">{{ e.compte }}</td>
+                <td>{{ e.libelle }}</td>
+                <td class="money">{{ e.debit ? money(e.debit) : '-' }}</td>
+                <td class="money">{{ e.credit ? money(e.credit) : '-' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</section>

@@ -1,4 +1,4 @@
-$tuniflow: var(--c-tuniflow);
+﻿$tuniflow: var(--c-tuniflow);
 $tuniflow-dim: rgba(var(--c-tuniflow-rgb), 0.08);
 $card: var(--bg-card);
 $void: var(--bg-void);
@@ -18,7 +18,7 @@ $critical2: rgba(220, 38, 38, 0.1);
 $info: #3b82f6;
 $info2: rgba(59, 130, 246, 0.1);
 $ease: cubic-bezier(0.16, 1, 0.3, 1);
-$fd: 'Playfair Display', Georgia, serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans', sans-serif;
 $fm: 'JetBrains Mono', monospace;
 
@@ -193,7 +193,7 @@ $fm: 'JetBrains Mono', monospace;
 .spinner-sm {
   width: 13px;
   height: 13px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(148,163,184,.35);
   border-top-color: currentColor;
 }
 
@@ -309,7 +309,9 @@ $fm: 'JetBrains Mono', monospace;
 .sc-num {
   margin-bottom: 12px;
   color: var(--sc, #{$tuniflow});
-  font-family: $fm;
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
   font-size: 2.75rem;
   font-weight: 900;
   line-height: 1;
@@ -456,7 +458,7 @@ $fm: 'JetBrains Mono', monospace;
   flex-shrink: 0;
   align-self: flex-start;
   padding: 2px 7px;
-  border: 1px solid currentColor;
+  border: 1px solid rgba(148, 163, 184, 0.35);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.22);
   font-size: 9px;

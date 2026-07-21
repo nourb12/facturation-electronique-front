@@ -2,7 +2,7 @@
 
 ## 🎨 Palette de couleurs extraite du site EY
 
-Ce document présente les couleurs exactes utilisées dans le dark mode du site EY officiel, maintenant appliquées à TunisFlow.
+Ce document présente les couleurs exactes utilisées dans le dark mode du site EY officiel, maintenant appliquées à TuniFlow.
 
 ---
 
@@ -220,7 +220,7 @@ border: 1px solid var(--b3);  // rgba(255,255,255,.25)
 
 ## 🎯 RÉSULTAT ATTENDU
 
-Après application de ces couleurs, votre application TunisFlow aura :
+Après application de ces couleurs, votre application TuniFlow aura :
 
 ✅ **Le même look professionnel que le site EY**  
 ✅ **Une lisibilité parfaite en dark mode**  

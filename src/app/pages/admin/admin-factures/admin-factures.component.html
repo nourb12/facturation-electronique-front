@@ -1,12 +1,12 @@
 <div class="dash-layout">
-
   <header class="dash-topbar">
     <div class="dt-left">
       <div class="dt-title-block">
         <h1 class="dt-title">Factures admin</h1>
-        <span class="dt-bc">Vue globale plateforme</span>
+        <span class="dt-bc">Validation fiscale simulee, XML TEIF et transmission</span>
       </div>
     </div>
+
     <div class="dt-center">
       <div class="dt-search">
         <span class="dt-search-ico">
@@ -15,24 +15,31 @@
             <path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </span>
-        <input type="text" placeholder="N° ou entreprise..." [(ngModel)]="q" (input)="filter()" />
+        <input type="text" placeholder="Numero, entreprise ou client..." [(ngModel)]="q" (input)="filter()" />
       </div>
     </div>
+
     <div class="dt-right">
       <select class="dt-select" [(ngModel)]="statutFilter" (change)="filter()">
         <option value="">Tous statuts</option>
         <option value="Brouillon">Brouillon</option>
-        <option value="Émise">Émise</option>
-        <option value="Payée">Payée</option>
-        <option value="EnRetard">En retard</option>
-        <option value="Annulée">Annulée</option>
+        <option value="Validee">Validee</option>
+        <option value="EnAttenteAdmin">En attente admin</option>
+        <option value="Conforme">Conforme v0</option>
+        <option value="Transmise">Transmise</option>
+        <option value="Acceptee">Acceptee</option>
+        <option value="Rejetee">Rejetee</option>
       </select>
     </div>
   </header>
 
   <main class="dash-content">
+    @if (toast(); as t) {
+      <div class="toast" [class.toast--error]="t.type === 'error'">
+        {{ t.message }}
+      </div>
+    }
 
-    <!-- KPIs -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-icon ey">
@@ -44,9 +51,10 @@
         <div class="kpi-body">
           <div class="kpi-title">Factures</div>
           <div class="kpi-value">{{ stats().total }}</div>
-          <div class="kpi-sub">Total plateforme</div>
+          <div class="kpi-sub">Total filtre</div>
         </div>
       </div>
+
       <div class="kpi-card">
         <div class="kpi-icon ok">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -55,11 +63,12 @@
           </svg>
         </div>
         <div class="kpi-body">
-          <div class="kpi-title">Payées</div>
-          <div class="kpi-value">{{ stats().payees }}</div>
-          <div class="kpi-sub">Montants recouvrés</div>
+          <div class="kpi-title">Conformes</div>
+          <div class="kpi-value">{{ stats().conformes }}</div>
+          <div class="kpi-sub">XML controle</div>
         </div>
       </div>
+
       <div class="kpi-card">
         <div class="kpi-icon warn">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -68,11 +77,12 @@
           </svg>
         </div>
         <div class="kpi-body">
-          <div class="kpi-title">En retard</div>
-          <div class="kpi-value">{{ stats().retard }}</div>
-          <div class="kpi-sub">À relancer</div>
+          <div class="kpi-title">A valider</div>
+          <div class="kpi-value">{{ stats().aValider }}</div>
+          <div class="kpi-sub">En attente admin</div>
         </div>
       </div>
+
       <div class="kpi-card">
         <div class="kpi-icon info">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -81,14 +91,13 @@
           </svg>
         </div>
         <div class="kpi-body">
-          <div class="kpi-title">Brouillons</div>
-          <div class="kpi-value">{{ stats().brouillon }}</div>
-          <div class="kpi-sub">À finaliser</div>
+          <div class="kpi-title">Transmises</div>
+          <div class="kpi-value">{{ stats().transmises }}</div>
+          <div class="kpi-sub">Simulation fiscale</div>
         </div>
       </div>
     </div>
 
-    <!-- Total TTC banner -->
     <div class="alert-card">
       <div class="alert-icon">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -97,15 +106,14 @@
         </svg>
       </div>
       <div class="alert-body">
-        <div class="alert-title">Total TTC affiché</div>
+        <div class="alert-title">Controle fiscal simule</div>
         <div class="alert-text">
           <strong>{{ stats().totalTtc | number:'1.3-3' }} TND</strong>
-          — {{ stats().total }} élément(s) filtrés
+          - {{ stats().total }} element(s) filtre(s). L'admin verifie les champs obligatoires, le XML TEIF, puis marque la facture transmise ou rejetee.
         </div>
       </div>
     </div>
 
-    <!-- Liste -->
     <div class="box">
       <div class="box-header">
         <div class="box-title">Liste des factures</div>
@@ -117,31 +125,90 @@
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
             <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
           </svg>
-          Aucune facture trouvée
+          Aucune facture trouvee
         </div>
       }
 
-      @for (f of filtered; track f.numero) {
-        <div class="list-row">
-          <div class="lr-avatar">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M8 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5L8 1z" stroke="currentColor" stroke-width="1.2"/>
-              <path d="M8 1v4h4" stroke="currentColor" stroke-width="1.2"/>
-            </svg>
+      @if (filtered.length > 0) {
+        <div class="invoice-table">
+          <div class="invoice-head">
+            <span>Facture</span>
+            <span>Workflow</span>
+            <span>Montant</span>
+            <span>Actions</span>
           </div>
-          <div class="lr-body">
-            <div class="lr-fiscal">{{ f.numero }}</div>
-            <div class="lr-title">{{ f.entrepriseNom }}</div>
-            <div class="lr-meta"><span>{{ f.clientNom }}</span></div>
-          </div>
-          <div class="lr-right">
-            <div class="lr-amount">{{ f.totalTTC | number:'1.3-3' }} TND</div>
-            <span class="badge" [ngClass]="getBadge(f.statut)">{{ f.statut }}</span>
-            <div class="lr-date">{{ f.dateEmission | date:'dd/MM/yyyy' }}</div>
-          </div>
+
+          @for (f of filtered; track f.id) {
+            <div class="list-row">
+              <div class="lr-main">
+                <div class="lr-avatar">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M8 1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5L8 1z" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M8 1v4h4" stroke="currentColor" stroke-width="1.2"/>
+                  </svg>
+                </div>
+                <div class="lr-doc">
+                  <div class="lr-fiscal">{{ f.numero }}</div>
+                  <div class="lr-title">{{ f.entrepriseNom }}</div>
+                  <div class="lr-meta">{{ f.clientNom }} · {{ f.dateEmission | date:'dd/MM/yyyy' }}</div>
+                </div>
+              </div>
+
+              <div class="lr-workflow">
+                <div class="workflow-meta">
+                  <span [class.ready]="f.xmlGenere">XML {{ f.xmlGenere ? 'genere' : 'absent' }}</span>
+                  <span>Signature {{ f.signatureStatut || '-' }}</span>
+                  <span>Transmission {{ f.echangeStatut || '-' }}</span>
+                </div>
+                <div class="fiscal-checklist">
+                  @for (item of checklist(f); track item.label) {
+                    <span [class.ok]="item.ok">{{ item.ok ? 'OK' : '!' }} {{ item.label }}</span>
+                  }
+                </div>
+              </div>
+
+              <div class="lr-right">
+                <div class="lr-amount">{{ f.totalTTC | number:'1.3-3' }} TND</div>
+                <span class="status-text">{{ f.statut }}</span>
+              </div>
+
+              <div class="lr-actions">
+                <button type="button" class="action-btn" (click)="voirXml(f)" [disabled]="!!loadingAction()">
+                  {{ isLoading(f, 'xml') ? 'XML...' : 'Voir XML' }}
+                </button>
+                <button type="button" class="action-btn action-btn--ok" (click)="validerV0(f)" [disabled]="!!loadingAction()">
+                  {{ isLoading(f, 'v0') ? 'Validation...' : 'Valider' }}
+                </button>
+                <button type="button" class="action-btn action-btn--ttn" (click)="envoyerTtn(f)" [disabled]="!!loadingAction()">
+                  {{ isLoading(f, 'ttn') ? 'Envoi TTN...' : 'Envoyer TTN' }}
+                </button>
+                <button type="button" class="action-btn action-btn--danger" (click)="rejeterTransmissionFiscale(f)" [disabled]="!!loadingAction()">
+                  {{ isLoading(f, 'fiscal-reject') ? 'Rejet...' : 'Rejeter' }}
+                </button>
+              </div>
+            </div>
+          }
         </div>
       }
     </div>
   </main>
-</div>
 
+  @if (xmlModal(); as xml) {
+    <div class="xml-backdrop" (click)="fermerXml()">
+      <section class="xml-modal" (click)="$event.stopPropagation()">
+        <header class="xml-head">
+          <div>
+            <p>XML TEIF simulation</p>
+            <h2>{{ xml.numero }}</h2>
+          </div>
+          <button type="button" class="xml-close" (click)="fermerXml()">Fermer</button>
+        </header>
+        <div class="xml-hash">
+          <span>Hash SHA-256</span>
+          <code>{{ xml.hashIntegrite }}</code>
+        </div>
+        <pre class="xml-code">{{ xml.xmlContent }}</pre>
+      </section>
+    </div>
+  }
+</div>

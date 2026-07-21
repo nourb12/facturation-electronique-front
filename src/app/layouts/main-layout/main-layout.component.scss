@@ -1,15 +1,15 @@
-// MAIN LAYOUT â€” EY e-Invoicing
+// MAIN LAYOUT — EY e-Invoicing
 // ================================================================
 //  CORRECTIONS :
-//  âœ… Sidebar TOUJOURS sombre (dark/light identique)
-//  âœ… Textes sidebar utilisent var(--sidebar-*) â†’ pas de rgba(255,255,255) hardcodÃ©
-//  âœ… main-content suit --bg-void (gris en light, noir en dark)
-//  âœ… Topbar mobile suit le thÃ¨me
+//  ✅ Sidebar TOUJOURS sombre (dark/light identique)
+//  ✅ Textes sidebar utilisent var(--sidebar-*) → pas de rgba(255,255,255) hardcodé
+//  ✅ main-content suit --bg-void (gris en light, noir en dark)
+//  ✅ Topbar mobile suit le thème
 // ================================================================
 $side-w: 220px;
 $ease: cubic-bezier(.16,1,.3,1);
 $fast: 160ms $ease;
-$fd: 'Playfair Display', Georgia, serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans', sans-serif;
 
 @keyframes slideInLeft  { from{transform:translateX(-100%);opacity:0} to{transform:translateX(0);opacity:1} }
@@ -24,11 +24,11 @@ $fb: 'DM Sans', sans-serif;
   transition:background 300ms $ease,color 300ms $ease;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// SIDEBAR â€” TOUJOURS SOMBRE dans les deux modes
-// Utilise uniquement les tokens --sidebar-* dÃ©finis
-// en dark dans styles.scss pour les deux thÃ¨mes
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════
+// SIDEBAR — TOUJOURS SOMBRE dans les deux modes
+// Utilise uniquement les tokens --sidebar-* définis
+// en dark dans styles.scss pour les deux thèmes
+// ══════════════════════════════════════════════════
 .sidebar {
   position:fixed; top:0; left:0; width:$side-w; height:100vh;
   background:var(--sidebar-bg);
@@ -36,7 +36,7 @@ $fb: 'DM Sans', sans-serif;
   display:flex; flex-direction:column; padding:32px 24px 28px; z-index:100;
   overflow-y:auto; overflow-x:hidden; transition:transform 300ms $ease;
 
-  // Scrollbar discrÃ¨te sombre
+  // Scrollbar discrète sombre
   &::-webkit-scrollbar { width:2px; }
   &::-webkit-scrollbar-thumb { background:rgba(255,255,255,.06); border-radius:1px; }
 }
@@ -50,7 +50,7 @@ $fb: 'DM Sans', sans-serif;
   background-size:40px 40px;
 }
 
-// â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Logo ──────────────────────────────────────────
 .sb-logo {
   display:flex; align-items:center; gap:10px; text-decoration:none;
   margin-bottom:28px; position:relative; z-index:1; flex-shrink:0;
@@ -67,7 +67,7 @@ $fb: 'DM Sans', sans-serif;
 
 .sb-wordmark { display:flex; flex-direction:column; min-width:0; }
 
-// Toujours blanc â€” sidebar toujours sombre
+// Toujours blanc — sidebar toujours sombre
 .sb-name {
   font-size:13px; font-weight:600;
   color:var(--sidebar-text);
@@ -79,7 +79,7 @@ $fb: 'DM Sans', sans-serif;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
-// â”€â”€ Section labels â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Section labels ────────────────────────────────
 .sb-section {
   font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em;
   color:var(--sidebar-section);
@@ -88,7 +88,7 @@ $fb: 'DM Sans', sans-serif;
   &:first-of-type { margin-top:0; }
 }
 
-// â”€â”€ Items navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Items navigation ──────────────────────────────
 .sb-item {
   display:flex; align-items:center; gap:9px; padding:10px 11px;
   border-radius:10px; font-size:13px; font-weight:500;
@@ -123,7 +123,187 @@ $fb: 'DM Sans', sans-serif;
   }
 }
 
-// â”€â”€ Toggle thÃ¨me â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Toggle thème ──────────────────────────────────
+.sb-perso-tree {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 8px 10px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255,255,255,.08);
+}
+
+.sb-perso-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sb-perso-group-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sidebar-text);
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background $fast, border-color $fast, color $fast;
+
+  &:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text-act);
+  }
+}
+
+.sb-perso-chevron {
+  margin-left: auto;
+  color: var(--sidebar-section);
+  transition: transform $fast;
+
+  .sb-perso-group.open & {
+    transform: rotate(180deg);
+  }
+}
+
+.sb-perso-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 13px;
+}
+
+.sb-perso-subitem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background $fast, color $fast, border-color $fast;
+
+  &:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text-act);
+  }
+
+  &.active {
+    background: rgba(255,230,0,.10);
+    color: var(--sidebar-text-act);
+    border-color: rgba(255,230,0,.22);
+  }
+}
+
+.sb-business-tree {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 8px;
+}
+
+.sb-business-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sb-business-group-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 11px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sidebar-text);
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background $fast, border-color $fast, color $fast;
+
+  > svg:not(.sb-business-chevron) {
+    display: block;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    opacity: .50;
+    transition: opacity $fast;
+  }
+
+  &:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text-act);
+
+    > svg:not(.sb-business-chevron) {
+      opacity: .80;
+    }
+  }
+}
+
+.sb-business-chevron {
+  margin-left: auto;
+  color: var(--sidebar-section);
+  transition: transform $fast;
+
+  .sb-business-group.open & {
+    transform: rotate(180deg);
+  }
+}
+
+.sb-business-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-left: 10px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255,255,255,.08);
+}
+
+.sb-business-subitem {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-family: $fb;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background $fast, color $fast, border-color $fast;
+
+  &:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text-act);
+  }
+
+  &.active {
+    background: rgba(255,230,0,.10);
+    color: var(--sidebar-text-act);
+    border-color: rgba(255,230,0,.22);
+  }
+}
+
 .sb-theme-row {
   display:flex; align-items:center; gap:10px;
   padding:6px 10px; margin-top:16px; position:relative; z-index:1;
@@ -134,7 +314,7 @@ $fb: 'DM Sans', sans-serif;
   font-family:$fb; letter-spacing:.04em;
 }
 
-// â”€â”€ Profil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Profil ────────────────────────────────────────
 .sb-profil {
   display:flex; align-items:center; gap:10px; padding:10px;
   border-radius:10px;
@@ -163,7 +343,7 @@ $fb: 'DM Sans', sans-serif;
   color:var(--sidebar-section);
 }
 
-// â”€â”€ Logout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Logout ────────────────────────────────────────
 .sb-logout {
   display:flex; align-items:center; gap:8px; padding:8px 10px; width:100%;
   border-radius:8px; background:transparent; border:1px solid transparent;
@@ -181,9 +361,9 @@ $fb: 'DM Sans', sans-serif;
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// TOPBAR MOBILE â€” suit le thÃ¨me (fond card)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════
+// TOPBAR MOBILE — suit le thème (fond card)
+// ══════════════════════════════════════════════════
 .topbar {
   display:none; position:fixed; top:0; left:0; right:0; height:52px;
   background:var(--header-bg);
@@ -220,15 +400,15 @@ $fb: 'DM Sans', sans-serif;
   }
 }
 
-// â”€â”€ Overlay mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Overlay mobile ────────────────────────────────
 .sb-overlay {
   display:none; position:fixed; inset:0; background:rgba(0,0,0,.65);
   backdrop-filter:blur(4px); z-index:99; animation:fadeInOverlay 200ms $ease both;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════
 // CONTENU PRINCIPAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════
 .main-content {
   margin-left:$side-w; flex:1; min-height:100vh;
   background:var(--bg-void);   // gris en light, noir en dark
@@ -236,7 +416,7 @@ $fb: 'DM Sans', sans-serif;
   transition:background 300ms $ease;
 }
 
-// â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Responsive ────────────────────────────────────
 @media (max-width:768px) {
   .topbar { display:flex; }
   .sb-overlay { display:block; }
@@ -246,6 +426,14 @@ $fb: 'DM Sans', sans-serif;
     &.open { transform:translateX(0); box-shadow:8px 0 40px rgba(0,0,0,.5); animation:slideInLeft 300ms $ease both; }
   }
   .main-content { margin-left:0; padding-top:52px; }
+}
+
+.sb-item--sub {
+  padding-left:18px;
+  font-size:12px;
+  color:var(--sidebar-section);
+
+  svg { width:14px; height:14px; }
 }
 
 

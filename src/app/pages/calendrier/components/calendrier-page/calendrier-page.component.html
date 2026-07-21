@@ -1,0 +1,107 @@
+<div class="cal-page" [@fadeSlide]>
+  <div class="cal-header">
+    <div>
+      <h1 class="cal-page-title">Calendrier</h1>
+      <p class="cal-page-sub">Échéances · Réunions · Tâches · Deadlines fiscales</p>
+    </div>
+
+    <div class="cal-header-actions">
+      <div class="workspace-switch" role="tablist" aria-label="Vue calendrier">
+        <button
+          type="button"
+          class="workspace-tab"
+          [class.active]="activeWorkspace() === 'calendar'"
+          (click)="activeWorkspace.set('calendar')"
+          role="tab"
+          [attr.aria-selected]="activeWorkspace() === 'calendar'">
+          <i class="ti ti-calendar" aria-hidden="true"></i>
+          Calendrier
+        </button>
+        <button
+          type="button"
+          class="workspace-tab"
+          [class.active]="activeWorkspace() === 'kanban'"
+          (click)="activeWorkspace.set('kanban')"
+          role="tab"
+          [attr.aria-selected]="activeWorkspace() === 'kanban'">
+          <i class="ti ti-layout-kanban" aria-hidden="true"></i>
+          Kanban
+        </button>
+      </div>
+
+      @if (activeWorkspace() === 'calendar') {
+        <button class="btn-new-event" (click)="svc.openModal()">
+          <i class="ti ti-plus"></i> Nouvel événement
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (activeWorkspace() === 'calendar') {
+    <div class="cal-layout">
+      <aside class="cal-sidebar-left">
+        <app-mini-calendrier></app-mini-calendrier>
+        <hr class="divider">
+        <div class="legend-section">
+          <span class="section-label">Types d'événements</span>
+          @for (item of legendItems; track item.type) {
+            <div class="legend-item">
+              <span class="legend-dot" [style.background]="item.color"></span>
+              {{ item.label }}
+            </div>
+          }
+        </div>
+        <hr class="divider">
+        <div class="legend-section">
+          <span class="section-label">Filtres</span>
+          <div class="legend-item">
+            <i class="ti ti-building" style="font-size:13px"></i> Mon entreprise
+          </div>
+          <div class="legend-item">
+            <i class="ti ti-users" style="font-size:13px"></i> Toute l'équipe
+          </div>
+        </div>
+      </aside>
+
+      <div class="cal-center">
+        <div class="cal-toolbar">
+          <div class="toolbar-left">
+            <button class="nav-arrow" (click)="svc.prevMonth()" aria-label="Mois précédent"><i class="ti ti-chevron-left"></i></button>
+            <button class="nav-arrow" (click)="svc.nextMonth()" aria-label="Mois suivant"><i class="ti ti-chevron-right"></i></button>
+            <button class="today-btn" (click)="svc.goToday()">Aujourd'hui</button>
+            <span class="current-month-label">{{ monthLabel() }}</span>
+          </div>
+          <div class="toolbar-right">
+            @for (v of views; track v.key) {
+              <button
+                class="view-btn"
+                [class.active]="svc.viewMode() === v.key"
+                (click)="svc.viewMode.set($any(v.key))">
+                {{ v.label }}
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (svc.viewMode() === 'month') {
+          <app-cal-grid></app-cal-grid>
+        } @else {
+          <div class="placeholder-view">
+            <i class="ti ti-calendar-week" style="font-size:36px; opacity:.25"></i>
+            <p>Vue {{ svc.viewMode() }} à implémenter</p>
+          </div>
+        }
+      </div>
+
+      <app-sidebar-right></app-sidebar-right>
+    </div>
+  } @else {
+    <div class="kanban-host">
+      <app-kanban></app-kanban>
+    </div>
+  }
+
+  @if (svc.showModal()) {
+    <app-event-form-modal></app-event-form-modal>
+  }
+</div>

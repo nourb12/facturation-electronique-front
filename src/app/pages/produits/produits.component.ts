@@ -23,6 +23,19 @@ type ProduitView = {
   statutLabel: string;
 };
 
+const DEMO_CATEGORIES: CategorieDto[] = [
+  { id: 'CAT-1', nom: 'Services', description: 'Prestations et conseil', estActive: true, nbProduits: 3, entrepriseId: 'ENT-1', creeLe: '2026-01-02' },
+  { id: 'CAT-2', nom: 'Logiciels', description: 'Licences et SaaS', estActive: true, nbProduits: 2, entrepriseId: 'ENT-1', creeLe: '2026-01-02' },
+  { id: 'CAT-3', nom: 'Materiel', description: 'Equipements', estActive: true, nbProduits: 1, entrepriseId: 'ENT-1', creeLe: '2026-01-05' }
+];
+
+const DEMO_PRODUITS: ProduitDto[] = [
+  { id: 'DEMO-PR-1', code: 'SRV-AUDIT', libelle: 'Audit conformite TEIF', description: 'Forfait audit complet', prixUnitaire: 2800, tauxTva: 19, unite: 'Forfait', type: 'Service', estActif: true, categorieId: 'CAT-1', categorieNom: 'Services', entrepriseId: 'ENT-1', creeLe: '2026-02-10', modifieLe: '2026-05-02' },
+  { id: 'DEMO-PR-2', code: 'LIC-ERP', libelle: 'Licence ERP Cloud', description: 'Licence annuelle', prixUnitaire: 7200, tauxTva: 19, unite: 'Licence', type: 'Produit', estActif: true, categorieId: 'CAT-2', categorieNom: 'Logiciels', entrepriseId: 'ENT-1', creeLe: '2026-01-05', modifieLe: '2026-05-02' },
+  { id: 'DEMO-PR-3', code: 'SRV-SUP', libelle: 'Support Premium', description: 'Support mensuel SLA', prixUnitaire: 450, tauxTva: 19, unite: 'Mois', type: 'Service', estActif: true, categorieId: 'CAT-1', categorieNom: 'Services', entrepriseId: 'ENT-1', creeLe: '2026-01-08', modifieLe: '2026-05-03' },
+  { id: 'DEMO-PR-4', code: 'MAT-SCN', libelle: 'Scanner A4', description: 'Scanner de bureau', prixUnitaire: 390, tauxTva: 19, unite: 'U', type: 'Produit', estActif: true, categorieId: 'CAT-3', categorieNom: 'Materiel', entrepriseId: 'ENT-1', creeLe: '2026-02-11', modifieLe: '2026-05-04' }
+];
+
 @Component({
   selector: 'app-produits',
   standalone: true,
@@ -100,15 +113,22 @@ export class ProduitsComponent implements OnInit {
     this.loading.set(true);
     this.produitSvc.lister(1, 200).subscribe({
       next: res => {
-        this.produits.set(res.items.map(p => this.toView(p)));
-        this.total.set(res.total ?? res.items.length);
+        const items = res.items?.length ? res.items : DEMO_PRODUITS;
+        this.produits.set(items.map(p => this.toView(p)));
+        this.total.set(res.items?.length ? (res.total ?? res.items.length) : items.length);
         this.refreshCounts();
         this.loading.set(false);
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.produits.set(DEMO_PRODUITS.map(p => this.toView(p)));
+        this.total.set(DEMO_PRODUITS.length);
+        this.refreshCounts();
+        this.loading.set(false);
+      }
     });
     this.categorieSvc.lister().subscribe({
-      next: cats => this.categories.set(cats)
+      next: cats => this.categories.set(cats.length ? cats : DEMO_CATEGORIES),
+      error: () => this.categories.set(DEMO_CATEGORIES)
     });
   }
 

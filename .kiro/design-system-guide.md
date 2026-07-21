@@ -1,4 +1,4 @@
-# 🎨 TunisFlow Design System - Guide du Développeur
+# 🎨 TuniFlow Design System - Guide du Développeur
 
 ## 📚 Table des matières
 1. [Introduction](#introduction)
@@ -16,7 +16,7 @@
 
 ## Introduction
 
-Ce guide présente le système de design harmonisé de TunisFlow. Tous les composants sont définis dans `src/styles/_harmonized-components.scss` et sont automatiquement disponibles dans toute l'application.
+Ce guide présente le système de design harmonisé de TuniFlow. Tous les composants sont définis dans `src/styles/_harmonized-components.scss` et sont automatiquement disponibles dans toute l'application.
 
 ### Principe de base
 **NE JAMAIS redéfinir les composants de base dans les fichiers de composants.**  

@@ -64,6 +64,7 @@
     "ITEMS": {
       "DASHBOARD": "لوحة القيادة",
       "INVOICES": "الفواتير",
+      "SCANNED_INVOICES": "الفواتير الممسوحة",
       "QUOTES": "عروض الأسعار",
       "CREDIT_NOTES": "إشعارات الدائن",
       "PAYMENTS": "المدفوعات",
@@ -72,13 +73,48 @@
       "CATEGORIES": "الفئات",
       "MY_COMPANY": "شركتي",
       "CUSTOMIZATION": "التخصيص",
+      "CALENDAR": "التقويم",
       "USERS": "المستخدمون",
       "TRANSACTIONS": "المعاملات",
       "FISCAL_PARAMS": "المعاملات الجبائية",
       "TAXES": "الضرائب",
+      "ACCOUNTING_DASHBOARD": "المحاسبة",
+      "CHART_OF_ACCOUNTS": "مخطط الحسابات",
+      "ACCOUNTING_ENTRIES": "القيود المحاسبية",
+      "LEGAL_JOURNALS": "الدفاتر القانونية",
+      "ACCOUNTING_CONSULTATION": "الاستعلام",
+      "ASSET_MANAGEMENT": "إدارة الأصول",
+      "FINANCIAL_STATEMENTS": "القوائم المالية",
+      "ACCOUNTING_PERIODS": "السنوات المحاسبية",
+      "ANALYTIC_ACCOUNTING": "المحاسبة التحليلية",
       "REPORTS": "التقارير",
       "LOGOUT": "تسجيل الخروج"
     }
+  },
+  "ACCOUNTING": {
+    "BADGE": "لوحة مسؤول المؤسسة",
+    "TITLE": "المحاسبة",
+    "SUBTITLE": "تحكم محاسبي كامل: مخطط الحسابات التونسي، الدفاتر القانونية، قوائم NCT، الجباية، الأصول والتحليل.",
+    "SEARCH": "ابحث عن حساب أو وثيقة أو دفتر...",
+    "REFRESH": "تحديث"
+  },
+  "SCANNED_INVOICES": {
+    "TITLE": "الفواتير الممسوحة",
+    "SUBTITLE": "{{total}} بحاجة إلى المراجعة",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "بحث (الوصف، الطرف، النوع…)",
+      "TYPE_ALL": "كل الأنواع"
+    },
+    "ACTIONS": {
+      "OPEN": "فتح",
+      "CONFIRM": "تأكيد",
+      "SIGN": "توقيع",
+      "PREV": "السابق",
+      "NEXT": "التالي"
+    },
+    "NO_FILE": "لا يوجد ملف",
+    "MISSING_FIELDS": "{{count}} حقل(حقول) ناقص",
+    "EMPTY": "لا توجد فواتير ممسوحة للمراجعة."
   },
   "ADMIN": {
     "SIDEBAR": {
@@ -108,7 +144,7 @@
       "FEATURES": "المميزات",
       "COMPLIANCE": "الامتثال",
       "SECURITY": "الأمان",
-      "WHY": "لماذا TunisFlow",
+      "WHY": "لماذا TuniFlow",
       "AUDIENCE": "لمن هو",
       "CONTACT": "اتصل بنا"
     },

@@ -114,7 +114,7 @@ export class ForgotPasswordComponent implements OnDestroy {
     }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.successMsg.set('AUTH.FORGOT.SUCCESS_REDIRECT');
+        this.successMsg.set('Mot de passe mis à jour. Redirection vers la connexion...');
         setTimeout(() => this.router.navigate(['/login/entreprise']), 2000);
       },
       error: (err: any) => {
@@ -169,9 +169,9 @@ export class ForgotPasswordComponent implements OnDestroy {
     return '#EF4444';
   }
   get pwLabel() {
-    if (this.pwStrength >= 3) return 'AUTH.FORGOT.PW_STRENGTH.STRONG';
-    if (this.pwStrength === 2) return 'AUTH.FORGOT.PW_STRENGTH.MEDIUM';
-    return 'AUTH.FORGOT.PW_STRENGTH.WEAK';
+    if (this.pwStrength >= 3) return 'PW_STRENGTH.STRONG';
+    if (this.pwStrength === 2) return 'PW_STRENGTH.MEDIUM';
+    return 'PW_STRENGTH.WEAK';
   }
 
   private startOtpCountdown() {

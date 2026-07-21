@@ -64,7 +64,7 @@ describe('AuthService', () => {
     expect(service.user).toBeNull();
   });
 
-  it('login envoie la requête et stocke la session', () => {
+  it('login envoie la requÃªte et stocke la session', () => {
     const request: LoginRequest = { email: 'john@doe.tn', motDePasse: 'secret' };
 
     service.login(request).subscribe();
@@ -80,7 +80,7 @@ describe('AuthService', () => {
 
   it('refreshTokens renvoie une erreur si aucun token', (done) => {
     service.refreshTokens().subscribe({
-      next: () => fail('devait être en erreur'),
+      next: () => fail('devait Ãªtre en erreur'),
       error: err => {
         expect(err).toBeTruthy();
         done();
@@ -104,5 +104,18 @@ describe('AuthService', () => {
 
     expect(service.token).toBe('new-at');
     expect(service.refreshToken).toBe('new-rt');
+  });
+  it('refreshTokenEntreprise appelle la route backend et stocke la session', () => {
+    service.refreshTokenEntreprise().subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/refresh/entreprise`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({});
+
+    const refreshed: AuthResponse = { ...mockResponse, accessToken: 'enterprise-at', refreshToken: 'enterprise-rt' };
+    req.flush(refreshed);
+
+    expect(service.token).toBe('enterprise-at');
+    expect(service.refreshToken).toBe('enterprise-rt');
   });
 });

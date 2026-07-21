@@ -1,210 +1,135 @@
-
-<div class="auth-layout" [@pageIn]>
-
-  
+<div class="auth-layout auth-layout--admin" [@pageIn]>
   <aside class="left-panel">
-    <div class="lp-orb lp-orb--1"></div>
-    <div class="lp-orb lp-orb--2"></div>
-
-    <a class="lp-logo" routerLink="/landing" aria-label="TunisFlow">
-      <span class="lp-brand-pill">TunisFlow</span>
-      <span class="lp-brand-sub">La plateforme fiscale des entreprises tunisiennes</span>
+    <a class="brand-row" routerLink="/landing" aria-label="TuniFlow">
+      <span class="brand-pill">TuniFlow</span>
+      <span class="brand-sub">Facturation électronique certifiée Tunisie</span>
     </a>
 
     <div class="lp-content">
-      <div class="lp-badge">
-        <span class="lp-badge-dot"></span>
-        Accès Administrateur
-      </div>
-
-      <h2 class="lp-headline">
-        Console<br>
-        d'administration<br>
-        <em>TunisFlow.</em>
-      </h2>
-
-      <p class="lp-desc">
-        Accès réservé aux administrateurs système. Toutes les actions sont auditées et tracées.
+      <div class="role-kicker">Accès administrateur</div>
+      <h2 class="hero-title">Console<br><em>admin.</em></h2>
+      <p class="hero-copy">
+        Un espace central pour gérer les demandes, les comptes et les paramètres de la plateforme.
       </p>
 
-      <div class="lp-checklist" aria-label="Fonctionnalités administrateur">
-        <div class="lp-check">
-          <span class="lp-check-icon" aria-hidden="true">
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span>Tableau de bord & statistiques</span>
-        </div>
-        <div class="lp-check">
-          <span class="lp-check-icon" aria-hidden="true">
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span>Gestion des entreprises & demandes KYC</span>
-        </div>
-        <div class="lp-check">
-          <span class="lp-check-icon" aria-hidden="true">
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span>Gestion des utilisateurs & rôles</span>
-        </div>
-        <div class="lp-check">
-          <span class="lp-check-icon" aria-hidden="true">
-            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-              <path d="M1 4.5l2.5 3L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span>Audit, factures & paramètres système</span>
-        </div>
+      <div class="hero-points" aria-label="Fonctionnalités administrateur">
+        <div class="hero-point"><i class="ti ti-dashboard" aria-hidden="true"></i><span>Suivre l’activité</span></div>
+        <div class="hero-point"><i class="ti ti-building" aria-hidden="true"></i><span>Traiter les demandes</span></div>
+        <div class="hero-point"><i class="ti ti-shield-lock" aria-hidden="true"></i><span>Gérer les accès</span></div>
       </div>
-
     </div>
 
     <div class="lp-footer">
-      <div class="lp-footer-item">
-        <span class="lp-footer-dot lp-footer-dot--ey"></span>
-        2FA obligatoire
-      </div>
-      <div class="lp-footer-item">
-        <span class="lp-footer-dot lp-footer-dot--ey"></span>
-        Sessions auditées
-      </div>
+      <div class="lp-footer-item"><span class="lp-footer-dot lp-footer-dot--ey"></span>2FA obligatoire</div>
+      <div class="lp-footer-item"><span class="lp-footer-dot"></span>Sessions tracées</div>
     </div>
   </aside>
 
-  
   <main class="right-panel">
-    <div class="rp-orb"></div>
-
-    <div class="form-wrap" [class.form-wrap--shake]="shake()">
-
-      
+    <div class="form-shell" [class.form-shell--shake]="shake()">
       @if (!showOtp()) {
+        <section class="form-card" aria-label="Connexion administrateur">
+          <header class="form-header">
+            <div class="form-eyebrow">Accès restreint &middot; Admin</div>
+            <h1 class="form-title">Connexion<br><em>administrateur.</em></h1>
+            <p class="form-subtitle">Connexion sécurisée avec vérification forte avant l'accès à la console.</p>
+          </header>
 
-        <div class="form-header">
-          <div class="form-eyebrow">Accès restreint · Admin</div>
-          <h1 class="form-title">
-            Authentification<br><em>administrateur.</em>
-          </h1>
-          <p class="form-subtitle">Connexion sécurisée — session auditée.</p>
-        </div>
-
-        @if (errorMsg()) {
-          <div class="alert-error" [@fadeIn]>
-            <div class="alert-bar"></div>
-            {{ errorMsg() | translate }}
-          </div>
-        }
-
-        <div class="form-body">
-
-          <div class="form-group">
-            <label class="form-label" for="identifiant">
-              Identifiant administrateur <span class="form-req">·</span>
-            </label>
-            <input id="identifiant" class="form-input form-input--mono"
-              type="text" autocomplete="username"
-              placeholder="admin.ey / votre identifiant"
-              [(ngModel)]="form.identifiant"
-              [class.form-input--valid]="form.identifiant.length >= 3"/>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="password">
-              Mot de passe <span class="form-req">·</span>
-            </label>
-            <div class="input-wrap">
-              <input id="password" class="form-input form-input--pr"
-                [type]="showPassword() ? 'text' : 'password'"
-                autocomplete="current-password" placeholder="Minimum 8 caractères"
-                [(ngModel)]="form.password"
-                [class.form-input--valid]="form.password.length >= 8"/>
-              <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
-                {{ showPassword() ? 'Masquer' : 'Afficher' }}
-              </button>
+          @if (errorMsg()) {
+            <div class="alert-error" [@fadeIn]>
+              <div class="alert-bar"></div>
+              {{ errorMsg() | translate }}
             </div>
-          </div>
+          }
 
-          <div class="security-notice">
-            <div class="sn-bar"></div>
-            <div class="sn-text">
-              Un code 2FA vous sera demandé à l'étape suivante. Assurez-vous d'avoir accès à votre application d'authentification.
+          <div class="form-body">
+            <div class="form-group">
+              <label class="form-label" for="identifiant">Identifiant administrateur <span class="form-req">*</span></label>
+              <input
+                id="identifiant"
+                class="form-input"
+                type="text"
+                autocomplete="username"
+                placeholder="admin@tuniflow.tn"
+                [(ngModel)]="form.identifiant"
+                [class.form-input--valid]="form.identifiant.length >= 3">
             </div>
+
+            <div class="form-group">
+              <label class="form-label" for="password">Mot de passe <span class="form-req">*</span></label>
+              <div class="input-wrap">
+                <input
+                  id="password"
+                  class="form-input form-input--pr"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  autocomplete="current-password"
+                  placeholder="Minimum 8 caractères"
+                  [(ngModel)]="form.password"
+                  [class.form-input--valid]="form.password.length >= 8">
+                <button type="button" class="input-eye" (click)="togglePassword()" tabindex="-1">
+                  {{ showPassword() ? 'Masquer' : 'Afficher' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="security-note">
+              <div class="sn-bar"></div>
+              Un code 2FA sera demandé à l'étape suivante. Assurez-vous d'avoir accès à votre application d'authentification.
+            </div>
+
+            <button class="btn-submit" [disabled]="!canSubmit || loading()" (click)="onSubmit()">
+              @if (loading()) {
+                <span class="btn-spinner"></span>
+                Vérification...
+              } @else {
+                Continuer vers la vérification 2FA
+              }
+            </button>
           </div>
+        </section>
+      } @else {
+        <section class="form-card" aria-label="Vérification administrateur" [@fadeIn]>
+          <header class="form-header">
+            <div class="form-eyebrow">Vérification &middot; 2FA</div>
+            <h1 class="form-title">Code de<br><em>vérification.</em></h1>
+            <p class="form-subtitle">Entrez le code à 6 chiffres généré par votre application 2FA.</p>
+          </header>
 
-          <button class="btn-submit"
-            [disabled]="!canSubmit || loading()"
-            (click)="onSubmit()">
-            @if (loading()) {
-              <span class="btn-spinner"></span>
-              Vérification...
-            } @else {
-              Continuer vers la vérification 2FA
-            }
-          </button>
+          @if (errorMsg()) {
+            <div class="alert-error" [@fadeIn]>
+              <div class="alert-bar"></div>
+              {{ errorMsg() | translate }}
+            </div>
+          }
 
-        </div>
-      }
+          <div class="form-body">
+            <div class="form-group">
+              <label class="form-label" for="otp">Code OTP <span class="form-req">*</span></label>
+              <input
+                id="otp"
+                class="form-input form-input--otp"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                [(ngModel)]="form.otp">
+              <span class="form-hint">Valable quelques secondes. Ne partagez jamais ce code.</span>
+            </div>
 
-      
-      @if (showOtp()) {
+            <button class="btn-submit" [disabled]="form.otp.length !== 6 || loading()" (click)="verifyOtp()">
+              @if (loading()) {
+                <span class="btn-spinner"></span>
+                Vérification...
+              } @else {
+                Accéder à la console
+              }
+            </button>
 
-        <div class="form-header" [@pageIn]>
-          <div class="form-eyebrow">Vérification · 2FA</div>
-          <h1 class="form-title">
-            Code de<br><em>vérification.</em>
-          </h1>
-          <p class="form-subtitle">
-            Entrez le code à 6 chiffres généré par votre application 2FA.
-          </p>
-        </div>
-
-        @if (errorMsg()) {
-          <div class="alert-error" [@fadeIn]>
-            <div class="alert-bar"></div>
-            {{ errorMsg() | translate }}
+            <button type="button" class="btn-back" (click)="show2FA.set(false)">Revenir aux identifiants</button>
           </div>
-        }
-
-        <div class="form-body">
-
-          <div class="form-group">
-            <label class="form-label" for="otp">Code OTP <span class="form-req">·</span></label>
-            <input id="otp" class="form-input form-input--otp"
-              type="text" inputmode="numeric" maxlength="6"
-              autocomplete="one-time-code"
-              placeholder="000 000"
-              [(ngModel)]="form.otp"/>
-            <span class="form-hint">
-              Valable 30 secondes — ne partagez jamais ce code.
-            </span>
-          </div>
-
-          <button class="btn-submit"
-            [disabled]="form.otp.length !== 6 || loading()"
-            (click)="verifyOtp()">
-            @if (loading()) {
-              <span class="btn-spinner"></span>
-              Vérification...
-            } @else {
-              Accéder à la console
-            }
-          </button>
-
-          <button class="btn-back" (click)="show2FA.set(false)">
-            Revenir aux identifiants
-          </button>
-
-        </div>
+        </section>
       }
     </div>
   </main>
-
 </div>
-
-
-

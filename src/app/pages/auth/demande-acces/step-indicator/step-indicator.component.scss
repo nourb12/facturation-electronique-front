@@ -1,4 +1,4 @@
-$tuniflow: #FFE600;
+﻿$tuniflow: #FFE600;
 $ok: #22C55E;
 $ok-bg: rgba(34,197,94,.08);
 $edge: #1a1a1a;
@@ -128,7 +128,9 @@ $r99: 9999px;
 }
 
 .wiz-progress-pct {
-  font-family: $fm;
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
   font-size: 11px;
   color: $tt;
 }
@@ -247,7 +249,7 @@ $r99: 9999px;
 
   .lp-step-node {
     background: #F1F2F6;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     color: #111827;
   }
 
@@ -268,7 +270,7 @@ $r99: 9999px;
 
   .wiz-step-node {
     background: #F1F2F6;
-    border-color: rgba(0,0,0,.12);
+    border-color: rgba(203,213,225,.85);
     color: #111827;
   }
 

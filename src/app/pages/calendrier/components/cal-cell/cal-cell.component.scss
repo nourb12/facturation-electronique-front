@@ -1,0 +1,103 @@
+$ey: var(--c-tuniflow);
+$b0: var(--b0); $b1: var(--b1);
+$tp: var(--tp); $ts: var(--ts); $tt: var(--tt);
+$ease: cubic-bezier(.16,1,.3,1);
+
+.cal-cell {
+  border-right: 1px solid $b0;
+  border-bottom: 1px solid $b0;
+  padding: 6px 5px;
+  min-height: 96px;
+  cursor: pointer;
+  transition: background .12s;
+  position: relative;
+  overflow: hidden;
+
+  &:nth-child(7n) { border-right: none; }
+  &:hover { background: rgba(var(--c-tuniflow-rgb), .03); }
+
+  &.today { background: rgba(var(--c-tuniflow-rgb), .06); }
+
+  &.other-month {
+    background: var(--bg-void);
+    .cell-num { color: $tt; opacity: .4; }
+  }
+
+  &.selected {
+    box-shadow: inset 0 0 0 2px rgba(var(--c-tuniflow-rgb), .4);
+  }
+}
+
+.cell-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.cell-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: $ts;
+  line-height: 1;
+
+  &.today-num {
+    background: $ey;
+    color: var(--tuniflow-btn-text);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+  }
+}
+
+.task-count {
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(var(--c-tuniflow-rgb), .12);
+  color: $ey;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.evt-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity .1s;
+  max-width: 100%;
+
+  &:hover { opacity: .8; }
+}
+
+.evt-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.more-label {
+  font-size: 10px;
+  color: $tt;
+  cursor: pointer;
+  padding: 1px 2px;
+  &:hover { color: $ts; }
+}

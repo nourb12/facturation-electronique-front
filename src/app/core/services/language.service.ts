@@ -98,9 +98,7 @@ export class LanguageService {
     const root = this.document.documentElement;
 
     root.lang = lang;
-    // Keep a stable LTR layout across all languages.
-    // Arabic changes the copy and font, but not the visual structure.
-    root.dir = 'ltr';
+    root.dir = lang === 'ar' ? 'rtl' : 'ltr';
   }
 }
 

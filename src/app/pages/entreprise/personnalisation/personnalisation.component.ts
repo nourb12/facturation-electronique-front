@@ -3,14 +3,17 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { Subscription } from 'rxjs';
 import { PersonnalisationApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { Pipe, PipeTransform } from '@angular/core';
 
 // --- PIPE: filtre catégories ----------------------------------
-@Pipe({ name: 'catFilter', standalone: true, pure: false })
+@Pipe({ name: 'catFilter', standalone: true })
 export class CatFilterPipe implements PipeTransform {
   transform(cats: any[], search: string): any[] {
     if (!search) return cats;
@@ -137,6 +140,9 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private api = inject(PersonnalisationApiService);
   private toast = inject(ToastService);
   private confirmSvc = inject(ConfirmationService);
+  private sanitizer = inject(DomSanitizer);
+  private route = inject(ActivatedRoute);
+  private routeSub?: Subscription;
 
   private defaultData: any;
 
@@ -147,6 +153,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   @ViewChild('enteteRef') enteteRef!: ElementRef<HTMLDivElement>;
   @ViewChild('piedRef') piedRef!: ElementRef<HTMLDivElement>;
   @ViewChild('sigImportInput') sigImportInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('cachetInput') cachetInput!: ElementRef<HTMLInputElement>;
 
   activeSectionKey = signal<string>('numerotation');
   saving = signal(false);
@@ -155,11 +162,19 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
 
   // --- PDF SECTION SIGNALS ----------------------------------------
   pdfActiveTab = signal<string>('modeles');
+  selectedPreviewType = signal<string>('facture');
+  selectedPreviewModele = signal<string>('standard');
+  templatePreviewUrl = computed<SafeResourceUrl>(() => {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`/templates/${this.previewTemplateFileName()}`);
+  });
   dragIndex: number | null = null;
   sigMode = signal<'draw' | 'type' | 'import'>('draw');
   sigTyped = '';
   private ctx: CanvasRenderingContext2D | null = null;
   private drawing = false;
+  private removeCanvasListeners?: () => void;
+  readonly maxImageUploadSize = 2 * 1024 * 1024;
+  readonly allowedImageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
 
   // --- NAV GROUPS ---------------------------------------------
   navGroups = [
@@ -256,6 +271,11 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
 
   groupesEntete = ['Entreprise', 'Document'];
   groupesPied   = ['Entreprise', 'Conditions', 'Document'];
+  languesPdf = [
+    ['fr', 'Français'],
+    ['ar', 'العربية'],
+    ['en', 'English'],
+  ] as const;
 
   optionsAffichage = [
     { key: 'showLogo',            label: 'Logo de l\'entreprise',            hint: 'En haut à gauche de chaque document' },
@@ -350,7 +370,11 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     pdf: {
       logoUrl: '', primaryColor: '#E8C84A', font: 'Helvetica', paperSize: 'A4',
       matriculeFiscal: '', rne: '', rc: '', iban: '', footerText: '',
-      options: { showLogo: true, showSignature: true, showTimbre: true, showMentionArrete: true, showIban: true, showQrCode: false },
+      options: {
+        showLogo: true, showSignature: true, showTimbre: true, showMentionArrete: true, showIban: true, showQrCode: false,
+        showAdresseFactu: true, showAdresseLivraison: false, showPhotosArticles: false, showSolde: true, showDetailTaxes: true,
+        remiseSousTotal: true, cgvSurFacture: true, mentionExoneration: true, mentionPenalite: true
+      },
       // Extended PDF data
       modeles: {
         facture: 'standard', devis: 'standard', avoir: 'standard', bon_commande: 'standard',
@@ -368,8 +392,11 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       ],
       quantiteMode: 'simple',
       enteteText: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
+      enteteTexte: '{{entreprise.nom}} · {{entreprise.adresse}}, {{entreprise.ville}}\nTél : {{entreprise.telephone}} · MF : {{entreprise.matricule_fiscal}}',
+      piedDePageTexte: 'Toute facture non réglée dans les délais sera majorée d’une pénalité de retard.',
       enteteImageUrl: '',
       sigImageUrl: '',
+      signatureUrl: '',
       cachetUrl: '',
       signatureActive: true,
       hashActive: true,
@@ -486,8 +513,18 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   // --- SECTION NAVIGATION -------------------------------------
   setSection(key: string) {
     if (this.isDirty()) {
-      if (!confirm('Modifications non enregistrées. Continuer sans sauvegarder ?')) return;
-      this.isDirty.set(false);
+      this.confirmSvc.confirm({
+        title: 'Quitter sans enregistrer ?',
+        message: 'Des modifications ne sont pas encore enregistrées. Vous pouvez continuer, mais elles seront perdues.',
+        confirmText: 'Continuer',
+        cancelText: 'Rester',
+        confirmClass: 'warning',
+        onConfirm: () => {
+          this.isDirty.set(false);
+          this.activeSectionKey.set(key);
+        }
+      });
+      return;
     }
     this.activeSectionKey.set(key);
   }
@@ -582,6 +619,17 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     return override;
   }
 
+  /** Aligne les anciens champs PDF sauvegardes avec le nouveau design personnalisation. */
+  private normalizePdfData() {
+    const pdf = this.data.pdf;
+    pdf.enteteTexte = pdf.enteteTexte || pdf.enteteText || '';
+    pdf.enteteText = pdf.enteteTexte;
+    pdf.piedDePageTexte = pdf.piedDePageTexte || pdf.footerText || '';
+    pdf.footerText = pdf.piedDePageTexte;
+    pdf.signatureUrl = pdf.signatureUrl || pdf.sigImageUrl || '';
+    pdf.sigImageUrl = pdf.signatureUrl;
+  }
+
   private load() {
     this.api.obtenir().subscribe({
       next: (res: any) => {
@@ -591,11 +639,15 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
         } else {
           this.data = this.clone(this.defaultData);
         }
+        this.normalizePdfData();
+        this.syncNextIds();
         this.isDirty.set(false);
       },
       error: (err) => {
         this.toast.error(err?.error?.message ?? 'Impossible de charger la personnalisation.');
         this.data = this.clone(this.defaultData);
+        this.normalizePdfData();
+        this.syncNextIds();
         this.isDirty.set(false);
       }
     });
@@ -610,6 +662,8 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
         const payload = res?.donnees ?? res?.data ?? res;
         if (payload) {
           this.data = this.mergeDeep(this.clone(this.defaultData), payload);
+          this.normalizePdfData();
+          this.syncNextIds();
         }
         this.isDirty.set(false);
         this.toast.success('Personnalisation enregistrée.');
@@ -622,8 +676,17 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   resetSection() {
-    if (!confirm('Réinitialiser cette section aux valeurs par défaut ?')) return;
+    this.confirmSvc.confirm({
+      title: 'Réinitialiser cette section ?',
+      message: `La section « ${this.activeSection().label} » reviendra aux valeurs par défaut. Les changements locaux seront remplacés.`,
+      confirmText: 'Réinitialiser',
+      cancelText: 'Annuler',
+      confirmClass: 'warning',
+      onConfirm: () => this.applyResetSection()
+    });
+  }
 
+  private applyResetSection() {
     const d = this.clone(this.defaultData);
     switch (this.activeSectionKey()) {
       case 'numerotation':
@@ -666,17 +729,29 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
         this.data = this.clone(d);
         break;
     }
+    this.normalizePdfData();
+    this.syncNextIds();
     this.isDirty.set(true);
   }
 
   // --- SEQUENCE PREVIEW ----------------------------------------
   buildPreview(seq: Sequence): string {
     const year = new Date().getFullYear();
+    const month = String(new Date().getMonth() + 1).padStart(2, '0');
     const num = String(seq.nextNum).padStart(seq.digits, '0');
-    const parts = [seq.prefix];
+    const parts = [];
+    if (seq.prefix?.trim()) parts.push(seq.prefix.trim());
     if (seq.includeYear) parts.push(String(year));
+    if (seq.reset === 'mensuelle') parts.push(month);
     parts.push(num);
     return parts.join(seq.sep);
+  }
+
+  sequenceDynamicLabel(seq: Sequence): string {
+    const tokens = [];
+    if (seq.includeYear) tokens.push('YYYY');
+    if (seq.reset === 'mensuelle') tokens.push('MM');
+    return tokens.length ? tokens.join(seq.sep || ' ') : 'Aucune';
   }
 
   // --- FORMAT NEXT NUMBER --------------------------------------
@@ -712,11 +787,10 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   triggerLogoUpload() { this.logoInput?.nativeElement.click(); }
 
   onLogoChange(ev: Event) {
-    const file = (ev.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => { this.data.pdf.logoUrl = e.target?.result; this.markDirty(); };
-    reader.readAsDataURL(file);
+    this.readImageFile(ev, url => {
+      this.data.pdf.logoUrl = url;
+      this.markDirty();
+    });
   }
 
   // --- CATEGORIES ----------------------------------------------
@@ -724,8 +798,20 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
 
   addCategory(type: 'vente' | 'achat') {
     const arr = type === 'vente' ? this.data.categoriesVente : this.data.categoriesAchat;
-    arr.push({ id: this.nextCatId++, label: 'Nouvelle catégorie', compte: '', tva: 19, docs: 0 });
+    this.syncNextIds();
+    arr.push({
+      id: this.nextCatId++,
+      label: type === 'vente' ? 'Nouvelle catégorie de vente' : "Nouvelle catégorie d'achat",
+      compte: '',
+      tva: 19,
+      docs: 0
+    });
     this.markDirty();
+  }
+
+  isValidCategoryAccount(value: string, type: 'vente' | 'achat'): boolean {
+    const expectedClass = type === 'vente' ? '7' : '6';
+    return new RegExp(`^${expectedClass}\\d{5}$`).test(String(value || '').trim());
   }
 
   removeCategory(type: 'vente' | 'achat', id: number) {
@@ -752,6 +838,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private nextTaxId = 100;
 
   addTaxe() {
+    this.syncNextIds();
     this.data.taxes.push({ id: this.nextTaxId++, label: 'Nouvelle taxe', type: 'TVA', taux: 0, base: 'HT', comptePcg: '', actif: true, systeme: false });
     this.markDirty();
   }
@@ -780,6 +867,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private nextRetId = 100;
 
   addRetenue() {
+    this.syncNextIds();
     this.data.retenues.push({ id: this.nextRetId++, label: 'Nouvelle retenue', taux: 0, applicable: 'les_deux', nature: 'autres', comptePcg: '', actif: true, systeme: false });
     this.markDirty();
   }
@@ -805,6 +893,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private nextFamilleId = 100;
 
   addUnite() {
+    this.syncNextIds();
     this.data.articles.unites.push({ id: this.nextUniteId++, label: 'Nouvelle unité', code: '' });
     this.markDirty();
   }
@@ -826,6 +915,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   addFamille() {
+    this.syncNextIds();
     const colors = ['#3B82F6','#22C55E','#EF4444','#8B5CF6','#F59E0B'];
     this.data.articles.familles.push({ id: this.nextFamilleId++, label: 'Nouvelle famille', color: colors[this.nextFamilleId % colors.length] });
     this.markDirty();
@@ -851,6 +941,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private nextModeId = 100;
 
   addModePaiement() {
+    this.syncNextIds();
     this.data.modesPaiement.push({ id: this.nextModeId++, label: 'Nouveau mode', code: '', icon: '', color: '#888888', delai: 0, plafond: null, comptePcg: '', actif: true, systeme: false });
     this.markDirty();
   }
@@ -875,6 +966,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private nextWebhookId = 1;
 
   addWebhook() {
+    this.syncNextIds();
     this.data.webhooks.push({ id: this.nextWebhookId++, url: '', events: [], lastCall: null, lastStatus: null, actif: true });
     this.markDirty();
   }
@@ -901,42 +993,119 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     this.markDirty();
   }
 
-  testWebhook(w: Webhook) {
+  async testWebhook(w: Webhook) {
+    const url = String(w.url || '').trim();
+    if (!url) {
+      this.toast.error('Ajoutez une URL de webhook avant de lancer le test.');
+      return;
+    }
+
+    try {
+      new URL(url);
+    } catch {
+      this.toast.error('URL webhook invalide.');
+      return;
+    }
+
     w.lastCall = new Date();
-    w.lastStatus = 200;
-    alert(`Test envoyé à ${w.url}`);
+    w.lastStatus = null;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'TuniFlow',
+          event: 'personnalisation.webhook.test',
+          sentAt: new Date().toISOString()
+        })
+      });
+      w.lastStatus = response.status;
+      if (response.ok) {
+        this.toast.success(`Webhook testé avec succès (${response.status}).`);
+      } else {
+        this.toast.error(`Webhook contacté, réponse ${response.status}.`);
+      }
+    } catch {
+      w.lastStatus = 0;
+      this.toast.error('Test webhook échoué : URL injoignable ou bloquée par le navigateur.');
+    }
+    this.markDirty();
   }
 
   // --- PDF METHODS ─────────────────────────────────────────────
-  setPdfTab(key: string) { this.pdfActiveTab.set(key); }
+  setPdfTab(key: string) {
+    this.pdfActiveTab.set(key);
+    if (key === 'signature' && this.sigMode() === 'draw') {
+      setTimeout(() => this.initCanvas());
+    }
+  }
 
   setModele(typeKey: string, modeleKey: string) {
     this.data.pdf.modeles[typeKey] = modeleKey;
+    this.selectedPreviewType.set(typeKey);
+    this.selectedPreviewModele.set(modeleKey);
     this.markDirty();
   }
 
   setModeleAllTypes(modeleKey: string) {
     this.pdfTypesDocuments.forEach(t => this.data.pdf.modeles[t.key] = modeleKey);
+    this.selectedPreviewModele.set(modeleKey);
     this.markDirty();
+  }
+
+  isAllTypesModele(modeleKey: string): boolean {
+    return this.pdfTypesDocuments.every(t => this.data.pdf.modeles[t.key] === modeleKey);
+  }
+
+  selectedPreviewDocumentLabel(): string {
+    return this.pdfTypesDocuments.find(t => t.key === this.selectedPreviewType())?.label ?? 'Facture';
+  }
+
+  previewTemplateFileName(): string {
+    return `${this.previewTemplateTypeSlug(this.selectedPreviewType())}-${this.selectedPreviewModele()}.html`;
+  }
+
+  private previewTemplateTypeSlug(typeKey: string): string {
+    const slugs: Record<string, string> = {
+      facture: 'facture',
+      devis: 'devis',
+      avoir: 'avoir',
+      bon_commande: 'bon-commande',
+      proforma: 'facture-proforma',
+      bon_livraison: 'bon-livraison',
+      bon_sortie: 'bon-sortie',
+      paiement_recu: 'paiement',
+      paiement_emis: 'paiement-emis',
+      ordre_fabrication: 'ordre-fabrication'
+    };
+    return slugs[typeKey] ?? 'facture';
   }
 
   triggerEnteteUpload() { this.enteteInput?.nativeElement.click(); }
   triggerSigImportUpload() { this.sigImportInput?.nativeElement.click(); }
+  triggerCachetUpload() { this.cachetInput?.nativeElement.click(); }
 
   onEnteteImageChange(ev: Event) {
-    const file = (ev.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => { this.data.pdf.enteteImageUrl = e.target?.result as string; this.markDirty(); };
-    reader.readAsDataURL(file);
+    this.readImageFile(ev, url => {
+      this.data.pdf.enteteImageUrl = url;
+      this.markDirty();
+    });
   }
 
   onSigImageChange(ev: Event) {
-    const file = (ev.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => { this.data.pdf.signatureUrl = e.target?.result as string; this.markDirty(); };
-    reader.readAsDataURL(file);
+    this.readImageFile(ev, url => {
+      this.data.pdf.signatureUrl = url;
+      this.data.pdf.sigImageUrl = url;
+      this.markDirty();
+    });
+  }
+
+  onCachetImageChange(ev: Event) {
+    this.readImageFile(ev, url => {
+      this.data.pdf.cachetUrl = url;
+      this.markDirty();
+    });
   }
 
   // Drag & drop colonnes
@@ -973,11 +1142,26 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     return col.key.startsWith('custom_');
   }
 
+  /** Met a jour le texte d'en-tete imprime sur les documents PDF. */
+  onEnteteTexteInput(event: Event) {
+    this.data.pdf.enteteTexte = (event.target as HTMLElement).innerText;
+    this.data.pdf.enteteText = this.data.pdf.enteteTexte;
+    this.markDirty();
+  }
+
+  /** Met a jour le texte de pied de page imprime sur les documents PDF. */
+  onPiedDePageTexteInput(event: Event) {
+    this.data.pdf.piedDePageTexte = (event.target as HTMLElement).innerText;
+    this.data.pdf.footerText = this.data.pdf.piedDePageTexte;
+    this.markDirty();
+  }
+
   // Variables insertion
   insererVariableEntete(v: PdfVariable) {
     const el = this.enteteRef?.nativeElement;
     if (!el) {
-      this.data.pdf.enteteTexte += v.token;
+      this.data.pdf.enteteTexte = (this.data.pdf.enteteTexte || '') + v.token;
+      this.data.pdf.enteteText = this.data.pdf.enteteTexte;
       this.markDirty();
       return;
     }
@@ -991,13 +1175,15 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       el.innerText = (el.innerText || '') + v.token;
     }
     this.data.pdf.enteteTexte = el.innerText;
+    this.data.pdf.enteteText = this.data.pdf.enteteTexte;
     this.markDirty();
   }
 
   insererVariablePied(v: PdfVariable) {
     const el = this.piedRef?.nativeElement;
     if (!el) {
-      this.data.pdf.piedDePageTexte += v.token;
+      this.data.pdf.piedDePageTexte = (this.data.pdf.piedDePageTexte || '') + v.token;
+      this.data.pdf.footerText = this.data.pdf.piedDePageTexte;
       this.markDirty();
       return;
     }
@@ -1011,6 +1197,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
       el.innerText = (el.innerText || '') + v.token;
     }
     this.data.pdf.piedDePageTexte = el.innerText;
+    this.data.pdf.footerText = this.data.pdf.piedDePageTexte;
     this.markDirty();
   }
 
@@ -1026,6 +1213,7 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
   private initCanvas() {
     const canvas = this.sigCanvas?.nativeElement;
     if (!canvas) return;
+    this.detachCanvasListeners();
     canvas.width  = canvas.offsetWidth  || 360;
     canvas.height = canvas.offsetHeight || 130;
     this.ctx = canvas.getContext('2d');
@@ -1050,7 +1238,9 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     };
     const stop = () => {
       this.drawing = false;
-      this.data.pdf.signatureUrl = canvas.toDataURL();
+      const url = canvas.toDataURL();
+      this.data.pdf.signatureUrl = url;
+      this.data.pdf.sigImageUrl = url;
       this.markDirty();
     };
 
@@ -1061,11 +1251,21 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     canvas.addEventListener('touchstart', start as any, { passive: false });
     canvas.addEventListener('touchmove',  move  as any, { passive: false });
     canvas.addEventListener('touchend',   stop);
+
+    this.removeCanvasListeners = () => {
+      canvas.removeEventListener('mousedown',  start as any);
+      canvas.removeEventListener('mousemove',  move  as any);
+      canvas.removeEventListener('mouseup',    stop);
+      canvas.removeEventListener('mouseleave', stop);
+      canvas.removeEventListener('touchstart', start as any);
+      canvas.removeEventListener('touchmove',  move  as any);
+      canvas.removeEventListener('touchend',   stop);
+    };
   }
 
   private getPos(canvas: HTMLCanvasElement, e: MouseEvent | TouchEvent): { x: number; y: number } {
     const rect = canvas.getBoundingClientRect();
-    if (e instanceof TouchEvent) {
+    if ('touches' in e && e.touches.length) {
       return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
     }
     return { x: (e as MouseEvent).clientX - rect.left, y: (e as MouseEvent).clientY - rect.top };
@@ -1076,12 +1276,16 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
     if (canvas && this.ctx) {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.data.pdf.signatureUrl = '';
+      this.data.pdf.sigImageUrl = '';
       this.markDirty();
     }
   }
 
   setSigMode(mode: 'draw' | 'type' | 'import') {
     this.sigMode.set(mode);
+    if (mode === 'draw') {
+      setTimeout(() => this.initCanvas());
+    }
   }
 
   setPdfLangue(l: string) {
@@ -1096,10 +1300,68 @@ export class PersonnalisationComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnInit() {
     this.defaultData = this.clone(this.data);
+    this.routeSub = this.route.queryParamMap.subscribe(params => {
+      const section = params.get('section');
+      if (section && this.hasSection(section)) {
+        this.activeSectionKey.set(section);
+      }
+    });
     this.load();
   }
 
   ngOnDestroy() {
-    // Cleanup if needed
+    this.routeSub?.unsubscribe();
+    this.detachCanvasListeners();
+  }
+
+  private detachCanvasListeners() {
+    this.removeCanvasListeners?.();
+    this.removeCanvasListeners = undefined;
+  }
+
+  private readImageFile(ev: Event, onLoaded: (dataUrl: string) => void) {
+    const input = ev.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    if (!this.allowedImageTypes.includes(file.type)) {
+      this.toast.error('Format non supporté. Utilisez une image PNG, JPG ou WebP.');
+      input.value = '';
+      return;
+    }
+
+    if (file.size > this.maxImageUploadSize) {
+      this.toast.error('Image trop volumineuse. Taille maximale : 2 Mo.');
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      const result = e.target?.result;
+      if (typeof result === 'string') onLoaded(result);
+    };
+    reader.onerror = () => this.toast.error('Impossible de lire cette image.');
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
+  private syncNextIds() {
+    this.nextCatId = this.nextIdFrom([...(this.data.categoriesVente ?? []), ...(this.data.categoriesAchat ?? [])], 100);
+    this.nextTaxId = this.nextIdFrom(this.data.taxes ?? [], 100);
+    this.nextRetId = this.nextIdFrom(this.data.retenues ?? [], 100);
+    this.nextUniteId = this.nextIdFrom(this.data.articles?.unites ?? [], 100);
+    this.nextFamilleId = this.nextIdFrom(this.data.articles?.familles ?? [], 100);
+    this.nextModeId = this.nextIdFrom(this.data.modesPaiement ?? [], 100);
+    this.nextWebhookId = this.nextIdFrom(this.data.webhooks ?? [], 1);
+  }
+
+  private nextIdFrom(rows: Array<{ id?: number }>, fallback: number): number {
+    const maxId = rows.reduce((max, row) => Math.max(max, Number(row?.id || 0)), 0);
+    return Math.max(fallback, maxId + 1);
+  }
+
+  private hasSection(key: string): boolean {
+    return this.navGroups.some(group => group.items.some(item => item.key === key));
   }
 }

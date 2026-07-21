@@ -4,8 +4,8 @@
   <header class="dash-topbar">
     <div class="dt-left">
       <div class="dt-title-block">
-        <h1 class="dt-title">{{ 'SCANNED_INVOICES.TITLE' | translate }}</h1>
-        <span class="dt-bc">{{ total() }} document(s) · {{ confirmedCount() }} confirmé(s)</span>
+        <h1 class="dt-title">{{ pageTitle() }}</h1>
+        <span class="dt-bc">{{ pageContext() }} · {{ total() }} document(s) · {{ confirmedCount() }} confirmé(s)</span>
       </div>
     </div>
     <div class="dt-right">
@@ -72,7 +72,7 @@
         </svg>
       </div>
       <div class="kpi-body">
-        <div class="kpi-title">Confiance OCR</div>
+        <div class="kpi-title">Confiance analyse</div>
         <div class="kpi-value">{{ averageConfidence() }}%</div>
         <div class="kpi-sub">Moyenne</div>
       </div>
@@ -96,7 +96,7 @@
         </button>
         @for (t of typeOptions(); track t) {
           <button class="filter-tab" [class.active]="typeFilter() === t" (click)="setTypeFilter(t)">
-            {{ t }}
+            {{ cleanLabel(t) }}
             <span class="filter-count">{{ getCountByType(t) }}</span>
           </button>
         }
@@ -124,48 +124,31 @@
         @for (t of visibleRows(); track t.id) {
           <div class="card-item">
             <!-- Preview -->
-            <div class="card-preview" (click)="openDocument(t)" [class.clickable]="!!t.documentLie?.url">
-              @if (t.documentLie?.url) {
-                @if (isImageDocument(t)) {
-                  <img class="preview-img" [src]="$any(t.documentLie).url" alt="document"/>
-                } @else if (isPdfDocument(t)) {
-                  <div class="preview-file">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                      <path d="M20 4v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    </svg>
-                    <span class="file-name">{{ t.documentLie?.fileName || 'document.pdf' }}</span>
-                  </div>
-                } @else {
-                  <div class="preview-file">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                      <path d="M20 4v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    </svg>
-                    <span class="file-name">{{ t.documentLie?.fileName || 'document' }}</span>
-                  </div>
-                }
-              } @else {
-                <div class="preview-empty">
+            <div class="card-preview clickable" (click)="openDocument(t)">
+              @if (isPdfDocument(t)) {
+                <div class="preview-file">
                   <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+                    <path d="M6 4h14l6 6v18H6V4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M20 4v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                   </svg>
-                  <span>{{ 'SCANNED_INVOICES.NO_FILE' | translate }}</span>
+                  <span class="file-name">{{ cleanLabel(t.documentLie?.fileName) || 'document.pdf' }}</span>
                 </div>
+              } @else {
+                <img class="preview-img" [src]="documentUrl(t)" alt="document" (error)="onPreviewError($event)"/>
               }
             </div>
 
             <!-- Body -->
             <div class="card-body">
               <div class="card-header">
-                <div class="card-type">{{ t.documentType || '—' }}</div>
-                <div class="card-confidence" [class.high]="(t.ocrOverallConfidence ?? 0) >= 0.8">
+                <div class="card-type">{{ cleanLabel(t.documentType) || '—' }}</div>
+                <div class="card-confidence" [class.high]="isHighConfidence(t)">
                   {{ formatConfidence(t.ocrOverallConfidence) }}
                 </div>
               </div>
 
               <div class="card-content">
-                <h3 class="card-title">{{ t.libelle }}</h3>
+                <h3 class="card-title">{{ cleanLabel(t.libelle) }}</h3>
                 @if (t.tiersNom) {
                   <p class="card-meta">{{ t.tiersNom }}</p>
                 }
@@ -182,7 +165,7 @@
               </div>
 
               <div class="card-actions">
-                <button class="btn-secondary" type="button" (click)="openDocument(t)" [disabled]="!t.documentLie?.url">
+                <button class="btn-secondary" type="button" (click)="openDocument(t)">
                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                     <path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>

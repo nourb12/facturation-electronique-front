@@ -1,4 +1,4 @@
-{
+﻿{
   "DASHBOARD": {
     "TITLE": "Tableau de bord",
     "TITLE_ENTREPRISE": "Dashboard entreprise",
@@ -17,7 +17,7 @@
       "REVENUE_MONTH": "Chiffre d'affaires",
       "PENDING": "En attente",
       "OVERDUE": "En retard",
-      "COMPLIANCE": "Conformité TEIF",
+      "COMPLIANCE": "Conformité fiscale",
       "CUMUL": "Cumul",
       "ALL_ROLES": "Tous rôles",
       "ACTIVE_PLATFORM": "Actives plateforme",
@@ -44,7 +44,7 @@
     },
     "FINANCIAL": {
       "COLLECTION_RATE": "Taux d'encaissement",
-      "COMPLIANCE_RATE": "Taux conformité TEIF",
+      "COMPLIANCE_RATE": "Taux de conformité fiscale",
       "OVERDUE_INVOICES": "Factures en retard",
       "TOTAL_ISSUED": "Total émis",
       "COLLECTED": "Encaissé",
@@ -80,4 +80,5 @@
     }
   }
 }
+
 

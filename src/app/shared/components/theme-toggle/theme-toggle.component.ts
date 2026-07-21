@@ -67,8 +67,8 @@ import { ThemeService } from '../../../core/services/theme.service';
   `,
   styles: [`
     .theme-toggle {
-      --track-w:    74px;
-      --track-h:    32px;
+      --track-w:    68px;
+      --track-h:    30px;
       --thumb-size: calc(var(--track-h) - 8px);
       --pad:        4px;
 
@@ -92,7 +92,7 @@ import { ThemeService } from '../../../core/services/theme.service';
       display:       flex;
       align-items:   center;
       justify-content: space-between;
-      padding:       0 10px;
+      padding:       0 9px;
       box-sizing:    border-box;
       transition:    background 220ms cubic-bezier(.16,1,.3,1),
                      border-color 220ms cubic-bezier(.16,1,.3,1);
@@ -103,16 +103,16 @@ import { ThemeService } from '../../../core/services/theme.service';
       display:         flex;
       align-items:     center;
       justify-content: center;
-      width:           14px;
-      height:          14px;
+      width:           13px;
+      height:          13px;
       flex-shrink:     0;
       z-index:         0;
       pointer-events:  none;
       transition:      color 200ms, opacity 200ms;
     }
     .icon svg {
-      width:        14px;
-      height:       14px;
+      width:        13px;
+      height:       13px;
       display:      block;
       stroke:       currentColor;
       stroke-width: 2;
@@ -148,8 +148,8 @@ import { ThemeService } from '../../../core/services/theme.service';
       transition:      opacity 180ms, transform 180ms;
     }
     .thumb-icon svg {
-      width:        14px;
-      height:       14px;
+      width:        13px;
+      height:       13px;
       stroke:       currentColor;
       stroke-width: 2;
       fill:         none;

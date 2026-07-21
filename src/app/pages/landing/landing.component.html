@@ -1,35 +1,48 @@
-<div class="cursor" [style.left.px]="cursorX" [style.top.px]="cursorY"></div>
-<div class="cursor-ring" [style.left.px]="ringX" [style.top.px]="ringY"></div>
-
 <nav class="navbar" [class.scrolled]="scrolled()">
   <div class="nav-inner">
     <a class="nav-logo" href="#accueil" (click)="scrollToSection($event, 'accueil')">
-      <span class="nav-name">TunisFlow</span>
+      <span class="nav-name">TuniFlow</span>
     </a>
 
-    <ul class="nav-links">
-      <li><a href="#accueil" (click)="scrollToSection($event, 'accueil')">{{ 'LANDING.NAV.HOME' | translate }}</a></li>
-      <li><a href="#chiffres" (click)="scrollToSection($event, 'chiffres')">{{ 'LANDING.NAV.KEY_NUMBERS' | translate }}</a></li>
-      <li><a href="#workflow" (click)="scrollToSection($event, 'workflow')">{{ 'LANDING.NAV.WORKFLOW' | translate }}</a></li>
-      <li><a href="#features" (click)="scrollToSection($event, 'features')">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
-      <li><a href="#conformite" (click)="scrollToSection($event, 'conformite')">{{ 'LANDING.NAV.COMPLIANCE' | translate }}</a></li>
-      <li><a href="#securite" (click)="scrollToSection($event, 'securite')">{{ 'LANDING.NAV.SECURITY' | translate }}</a></li>
-    </ul>
+    <button
+      type="button"
+      class="nav-toggle"
+      [class.open]="navOpen()"
+      [attr.aria-expanded]="navOpen()"
+      aria-controls="landing-nav-links"
+      aria-label="Ouvrir le menu"
+      (click)="toggleNavMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-    <ul class="nav-links nav-links--extended">
-      <li><a href="#pourquoi" (click)="scrollToSection($event, 'pourquoi')">{{ 'LANDING.NAV.WHY' | translate }}</a></li>
-      <li><a href="#pour-qui" (click)="scrollToSection($event, 'pour-qui')">{{ 'LANDING.NAV.AUDIENCE' | translate }}</a></li>
-      <li><a href="#mobile" (click)="scrollToSection($event, 'mobile')">{{ 'LANDING.NAV.MOBILE' | translate }}</a></li>
-      <li><a href="#tarifs" (click)="scrollToSection($event, 'tarifs')">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
-    </ul>
+    <div class="nav-center">
+      <ul class="nav-links" id="landing-nav-links" [class.open]="navOpen()">
+        <li><a href="#features" (click)="scrollToSection($event, 'features')">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+        <li><a href="#tarifs" (click)="scrollToSection($event, 'tarifs')">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
+        <li><a href="#conformite" (click)="scrollToSection($event, 'conformite')">{{ 'LANDING.NAV.COMPLIANCE' | translate }}</a></li>
+        <li><a href="#securite" (click)="scrollToSection($event, 'securite')">{{ 'LANDING.NAV.SECURITY' | translate }}</a></li>
+        <li><a href="#pourquoi" (click)="scrollToSection($event, 'pourquoi')">{{ 'LANDING.NAV.WHY' | translate }}</a></li>
+      </ul>
+    </div>
 
-    <div class="nav-actions">
-      <app-theme-toggle></app-theme-toggle>
-      <app-language-switcher></app-language-switcher>
-      <a routerLink="/login/entreprise" class="btn-ghost-sm">{{ 'LANDING.CTA.SIGN_IN' | translate }}</a>
-      <a routerLink="/demande-acces" class="btn-ey-sm">
-        {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }}
-      </a>
+    <div class="nav-side">
+      <div class="nav-tools">
+        <div class="nav-tool">
+          <app-theme-toggle></app-theme-toggle>
+        </div>
+        <div class="nav-tool">
+          <app-language-switcher></app-language-switcher>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a routerLink="/login/entreprise" class="btn-ghost-sm">{{ 'LANDING.CTA.SIGN_IN' | translate }}</a>
+        <a routerLink="/demande-acces" class="btn-ey-sm">
+          {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }}
+        </a>
+      </div>
     </div>
   </div>
 </nav>
@@ -39,7 +52,9 @@
 
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-badge">{{ 'LANDING.BADGE' | translate }}</div>
+      <div class="hero-badges">
+        <div class="hero-badge">{{ 'LANDING.BADGE' | translate }}</div>
+      </div>
 
       <h1 class="hero-title">
         <span class="hero-title-line">
@@ -57,48 +72,46 @@
       </h1>
 
       <p class="hero-desc">{{ 'LANDING.HERO.DESC' | translate }}</p>
+      <p class="hero-context">
+        Conforme au cadre
+        <app-term-tooltip
+          acronym="TEIF"
+          [fullName]="'LANDING.TERMS.TEIF.FULL' | translate"
+          [description]="'LANDING.TERMS.TEIF.DESC' | translate"
+          [source]="'LANDING.TERMS.TEIF.SOURCE' | translate">
+        </app-term-tooltip>,
+        au format
+        <app-term-tooltip
+          acronym="UBL 2.1"
+          [fullName]="'LANDING.TERMS.UBL.FULL' | translate"
+          [description]="'LANDING.TERMS.UBL.DESC' | translate"
+          [source]="'LANDING.TERMS.UBL.SOURCE' | translate">
+        </app-term-tooltip>
+        et à la transmission
+        <app-term-tooltip
+          acronym="TTN/e-Fatoora"
+          [fullName]="'LANDING.TERMS.TTN.FULL' | translate"
+          [description]="'LANDING.TERMS.TTN.DESC' | translate"
+          [source]="'LANDING.TERMS.TTN.SOURCE' | translate">
+        </app-term-tooltip>.
+      </p>
 
       <div class="hero-ctas">
-        <a routerLink="/demande-acces" class="btn-primary">
-          {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} <span class="btn-arrow">&#8594;</span>
+        <a routerLink="/demande-acces" class="btn-outline">
+          {{ 'LANDING.CTA.REQUEST_ACCESS' | translate }} <span class="btn-arrow">&#8599;</span>
         </a>
         <a routerLink="/demande-demo" class="btn-outline">
           {{ 'LANDING.CTA.SEE_DEMO' | translate }} <span class="btn-arrow">&#8594;</span>
         </a>
       </div>
 
-      <div class="hero-trust">
-        <div class="hero-trust-item">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <path d="M6.5 1L1 4v3.5C1 10.2 3.5 12.1 6.5 12.5c3-.4 5.5-2.3 5.5-5V4L6.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-            <path d="M4.5 6.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          {{ 'LANDING.TRUST.COMPLIANT' | translate }}
-        </div>
-        <div class="hero-trust-sep">·</div>
-        <div class="hero-trust-item">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <rect x="1" y="1" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M4 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          {{ 'LANDING.TRUST.UBL' | translate }}
-        </div>
-        <div class="hero-trust-sep">·</div>
-        <div class="hero-trust-item">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M6.5 4v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-          {{ 'LANDING.TRUST.DGI_LT_2S' | translate }}
-        </div>
-      </div>
     </div>
 
     <div class="hero-preview" aria-hidden="true">
       <div class="app-window">
         <div class="app-chrome">
           <div class="chrome-dots"><span></span><span></span><span></span></div>
-          <div class="chrome-url">TunisFlow.ey.tn/dashboard</div>
+          <div class="chrome-url">TuniFlow.ey.tn/dashboard</div>
         </div>
         <div class="app-body">
           <div class="preview-topbar">
@@ -137,15 +150,15 @@
             </div>
             <div class="pt-row">
               <span class="mono">FAC-0128</span><span>Alpha Systems</span>
-              <span class="mono">13 056 TND</span><span class="s-ok">{{ 'LANDING.PREVIEW.TABLE.STATUS_DGI' | translate }}</span>
+              <span class="num">13 056 TND</span><span class="s-ok">{{ 'LANDING.PREVIEW.TABLE.STATUS_DGI' | translate }}</span>
             </div>
             <div class="pt-row">
               <span class="mono">FAC-0127</span><span>Beta Industrie</span>
-              <span class="mono">8 250 TND</span><span class="s-warn">{{ 'LANDING.PREVIEW.TABLE.STATUS_VALIDATION' | translate }}</span>
+              <span class="num">8 250 TND</span><span class="s-warn">{{ 'LANDING.PREVIEW.TABLE.STATUS_VALIDATION' | translate }}</span>
             </div>
             <div class="pt-row">
               <span class="mono">FAC-0126</span><span>Gamma Corp</span>
-              <span class="mono">31 200 TND</span><span class="s-info">{{ 'LANDING.PREVIEW.TABLE.STATUS_UBL' | translate }}</span>
+              <span class="num">31 200 TND</span><span class="s-info">{{ 'LANDING.PREVIEW.TABLE.STATUS_UBL' | translate }}</span>
             </div>
           </div>
 
@@ -168,48 +181,48 @@
   </div>
 </section>
 
-<section class="stats-section" id="chiffres">
-  <div class="top-cards">
-    <div class="top-cards-grid container">
-      @for (card of topCards(); track card.labelKey; let i = $index) {
-        <div class="top-card reveal" [style.--reveal-delay]="(i * 60) + 'ms'">
-          <div class="tc-value">
-            <ng-container *ngIf="card.prefix; else normalVal">{{ card.prefix }} {{ card.display }}</ng-container>
-            <ng-template #normalVal>{{ card.display }}</ng-template>
-          </div>
-          <div class="tc-label">{{ card.label }}</div>
-        </div>
-      }
+<section class="trust-strip-section" id="chiffres">
+  <div class="container">
+    <div class="trust-strip reveal">
+      <div class="trust-strip-head">
+        <div class="section-eyebrow">{{ 'LANDING.TRUST_STRIP.EYEBROW' | translate }}</div>
+        <h2 class="trust-strip-title">{{ 'LANDING.TRUST_STRIP.TITLE' | translate }}</h2>
+      </div>
+
+      <div class="trust-strip-grid">
+        @for (stat of trustStats(); track stat.label; let i = $index) {
+          <article class="trust-stat-card reveal" [style.--reveal-delay]="(i * 70) + 'ms'">
+            <div class="trust-stat-value">{{ stat.value }}</div>
+            <div class="trust-stat-label">{{ stat.label | translate }}</div>
+            <div class="trust-stat-detail">{{ stat.detail | translate }}</div>
+          </article>
+        }
+      </div>
+
+      <blockquote class="trust-quote">
+        <p>{{ testimonial().quote | translate }}</p>
+      </blockquote>
     </div>
   </div>
-  <!-- secondary stats removed (merged into top-cards) -->
 </section>
 
 <section class="workflow-section" id="workflow">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">{{ 'LANDING.WORKFLOW.EYEBROW' | translate }}</div>
-      <h2 class="section-title">
-        {{ 'LANDING.WORKFLOW.TITLE_LINE1' | translate }}<br>
-        <span class="section-highlight">{{ 'LANDING.WORKFLOW.TITLE_HIGHLIGHT' | translate }}</span>
-        {{ 'LANDING.WORKFLOW.TITLE_LINE2' | translate }}
-      </h2>
-      <p class="section-desc">{{ 'LANDING.WORKFLOW.DESC' | translate }}</p>
+    <div class="workflow-header reveal">
+      <h2 class="workflow-title">{{ 'LANDING.WORKFLOW.TITLE_LINE1' | translate }}</h2>
+      <p class="workflow-desc">{{ 'LANDING.WORKFLOW.DESC' | translate }}</p>
     </div>
 
     <div class="workflow-timeline">
-      @for (step of workflowSteps(); track step.title; let i = $index) {
-        <div class="wf-step reveal" [style.--reveal-delay]="(i * 90) + 'ms'">
+      @for (step of workflowSteps(); track step.title; let i = $index; let last = $last) {
+        <div
+          class="wf-step reveal"
+          [class.wf-step--active]="last"
+          [style.--reveal-delay]="(i * 90) + 'ms'">
           <div class="wf-node">
-            <div class="wf-num">{{ step.num }}</div>
-            <div class="wf-connector" *ngIf="step.num < 5"></div>
-          </div>
-          <div class="wf-card">
             <div class="wf-icon" [innerHTML]="safeSvg(step.icon)"></div>
-            <h3 class="wf-title">{{ step.title | translate }}</h3>
-            <p class="wf-desc">{{ step.desc | translate }}</p>
-            <div class="wf-tag">{{ step.tag | translate }}</div>
           </div>
+          <h3 class="wf-title">{{ step.title | translate }}</h3>
         </div>
       }
     </div>
@@ -230,7 +243,10 @@
     <div class="features-grid">
       @for (feat of features(); track feat.title; let i = $index) {
         <div class="feature-card reveal" [style.--reveal-delay]="(i * 70) + 'ms'" (click)="openFeatureModal(feat)">
-          <div class="feat-tag">{{ feat.tag | translate }}</div>
+          <div class="feat-top">
+            <div class="feat-icon" [innerHTML]="safeSvg(feat.icon)"></div>
+            <div class="feat-tag">{{ feat.tag | translate }}</div>
+          </div>
           <h3 class="feat-title">{{ feat.title | translate }}</h3>
           <p class="feat-desc">{{ feat.desc | translate }}</p>
           <div class="feat-more">{{ 'LANDING.FEATURES.LEARN_MORE' | translate }} <span class="feat-more-arrow">&#8594;</span></div>
@@ -243,21 +259,14 @@
 @if (selectedFeature()) {
   <div class="modal-backdrop" (click)="closeFeatureModal()">
     <div class="modal" (click)="$event.stopPropagation()">
-      <div class="modal-topline"></div>
       <div class="modal-head">
         <div>
           <div class="modal-tag">{{ selectedFeature()!.tag | translate }}</div>
           <h3 class="modal-title">{{ selectedFeature()!.title | translate }}</h3>
         </div>
-        <button class="modal-close" (click)="closeFeatureModal()">&times;</button>
+        <button type="button" class="modal-close" aria-label="Fermer" (click)="closeFeatureModal()">&times;</button>
       </div>
       <div class="modal-body">{{ selectedFeature()!.detail | translate }}</div>
-      <div class="modal-footer">
-        <button class="btn-modal-ghost" (click)="closeFeatureModal()">{{ 'COMMON.CLOSE' | translate }}</button>
-        <a routerLink="/demande-acces" class="btn-modal-ey" (click)="closeFeatureModal()">
-          {{ 'LANDING.FEATURES.MODAL_REQUEST' | translate }} &#8594;
-        </a>
-      </div>
     </div>
   </div>
 }
@@ -287,10 +296,13 @@
           }
         </div>
         <div class="compliance-cta">
-          <a routerLink="/demande-acces" class="btn-primary">
-            {{ 'LANDING.CTA.REQUEST_ACCESS_LONG' | translate }} &#8594;
+          <a
+            href="https://jibaya.tn/blog/avis-aux-contribuables-concernes-par-la-facturation-electronique/"
+            class="link-text"
+            target="_blank"
+            rel="noopener noreferrer">
+            {{ 'LANDING.COMPLIANCE.DOC_LINK' | translate }}
           </a>
-          <a href="#" class="link-text">{{ 'LANDING.COMPLIANCE.DOC_LINK' | translate }}</a>
         </div>
       </div>
 
@@ -308,7 +320,7 @@
                 cy="80"
                 r="68"
                 fill="none"
-                stroke="var(--c-tuniflow)"
+                stroke="var(--ok)"
                 stroke-width="8"
                 stroke-linecap="round"
                 stroke-dasharray="427.3"
@@ -346,18 +358,27 @@
 <section class="diff-section" id="pourquoi">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-eyebrow">{{ 'LANDING.WHY.EYEBROW' | translate }}</div>
+      <div class="section-eyebrow">{{ whyCopy().eyebrow }}</div>
       <h2 class="section-title">
-        {{ 'LANDING.WHY.TITLE_LINE1' | translate }}<br>
-        <em>{{ 'LANDING.WHY.TITLE_EM' | translate }}</em>
+        {{ whyCopy().titleLine1 }}<br>
+        <em>{{ whyCopy().titleEm }}</em>
       </h2>
+      <p class="section-desc">{{ whyCopy().desc }}</p>
     </div>
     <div class="diff-grid">
       @for (item of diffItems(); track item.title; let i = $index) {
         <div class="diff-card reveal" [style.--reveal-delay]="(i * 90) + 'ms'">
-          <div class="diff-icon" [innerHTML]="safeSvg(item.icon)"></div>
-          <h3 class="diff-title">{{ item.title | translate }}</h3>
-          <p class="diff-desc">{{ item.desc | translate }}</p>
+          <div class="diff-card-top">
+            <div class="diff-icon" [innerHTML]="safeSvg(item.icon)"></div>
+            <div class="diff-tag">{{ item.tag }}</div>
+          </div>
+          <h3 class="diff-title">{{ item.title }}</h3>
+          <p class="diff-desc">{{ item.desc }}</p>
+          <ul class="diff-points">
+            @for (point of item.points; track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
         </div>
       }
     </div>
@@ -372,6 +393,7 @@
         {{ 'LANDING.AUDIENCE.TITLE_LINE1' | translate }}<br>
         <em>{{ 'LANDING.AUDIENCE.TITLE_EM' | translate }}</em>
       </h2>
+      <p class="section-desc">{{ 'LANDING.AUDIENCE.DESC' | translate }}</p>
     </div>
     <div class="audience-grid">
       @for (aud of audiences(); track aud.title; let i = $index) {
@@ -399,7 +421,17 @@
           {{ 'LANDING.SECURITY.TITLE_LINE1' | translate }}<br>
           <em>{{ 'LANDING.SECURITY.TITLE_EM' | translate }}</em>
         </h2>
-        <p class="security-desc">{{ 'LANDING.SECURITY.DESC' | translate }}</p>
+        <p class="security-desc">
+          {{ 'LANDING.SECURITY.DESC' | translate }}
+          Le chiffrement
+          <app-term-tooltip
+            acronym="AES"
+            [fullName]="'LANDING.TERMS.AES.FULL' | translate"
+            [description]="'LANDING.TERMS.AES.DESC' | translate"
+            [source]="'LANDING.TERMS.AES.SOURCE' | translate">
+          </app-term-tooltip>-256
+          protège les données sensibles au repos et en transit.
+        </p>
         <div class="security-items">
           @for (sec of securityItems(); track sec.label; let i = $index) {
             <div class="sec-item reveal" [style.--reveal-delay]="(i * 80) + 'ms'">
@@ -447,17 +479,17 @@
 <section class="biz-section" id="fonctionnalites">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-eyebrow">Fonctionnalités</div>
+      <div class="section-eyebrow">{{ 'LANDING.BIZ_SECTION.EYEBROW' | translate }}</div>
       <h2 class="section-title">
-        Facile, Rapide<br>
-        et <em>Complet</em>
+        {{ 'LANDING.BIZ_SECTION.TITLE_LINE1' | translate }}<br>
+        {{ 'LANDING.BIZ_SECTION.TITLE_LINE2' | translate }} <em>{{ 'LANDING.BIZ_SECTION.TITLE_EM' | translate }}</em>
       </h2>
       <p class="section-desc">
-        Un seul outil pour gérer efficacement votre facturation, votre comptabilité et vos paiements.
+        {{ 'LANDING.BIZ_SECTION.DESC' | translate }}
       </p>
     </div>
 
-    <div class="biz-grid">
+    <div class="biz-grid biz-grid--primary">
       <div class="biz-card reveal" style="--reveal-delay:0ms">
         <div class="biz-card-header">
           <div class="biz-icon">
@@ -466,13 +498,22 @@
               <path d="M5.5 5.5h7M5.5 9h7M5.5 12.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
             </svg>
           </div>
-          <h3 class="biz-title">Cycle de facturation complet</h3>
+          <h3 class="biz-title">{{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.TITLE' | translate }}</h3>
         </div>
-        <p class="biz-desc">Créez vos devis, factures, avoirs et bons de livraison. Convertissez un devis en facture en un clic. Workflow TEIF intégré.</p>
+        <p class="biz-desc">
+          {{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.DESC_BEFORE_TEIF' | translate }}
+          <app-term-tooltip
+            acronym="TEIF"
+            [fullName]="'LANDING.TERMS.TEIF.FULL' | translate"
+            [description]="'LANDING.TERMS.TEIF.DESC' | translate"
+            [source]="'LANDING.TERMS.TEIF.SOURCE' | translate">
+          </app-term-tooltip>
+          {{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.DESC_AFTER_TEIF' | translate }}
+        </p>
         <div class="biz-preview">
-          <div class="biz-stat"><span class="biz-num">128</span><span class="biz-lbl">Factures ce mois</span></div>
-          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">98%</span><span class="biz-lbl">Acceptées TTN</span></div>
-          <div class="biz-stat"><span class="biz-num">1.4s</span><span class="biz-lbl">Transmission</span></div>
+          <div class="biz-stat"><span class="biz-num">128</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.STATS.INVOICES' | translate }}</span></div>
+          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">98%</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.STATS.ACCEPTED_TTN' | translate }}</span></div>
+          <div class="biz-stat"><span class="biz-num">1.4s</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.INVOICE.STATS.TRANSMISSION' | translate }}</span></div>
         </div>
       </div>
 
@@ -483,14 +524,22 @@
               <path d="M2 9h14M9 2l3.5 3.5L9 9M9 9l3.5 3.5L9 16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3 class="biz-title">Suivi comptable automatisé</h3>
+          <h3 class="biz-title">{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.TITLE' | translate }}</h3>
         </div>
-        <p class="biz-desc">Journaux d'écritures, encaissements, décaissements et trésorerie synchronisés automatiquement à chaque facture ou paiement.</p>
+        <p class="biz-desc">
+          {{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.DESC_BEFORE_FODEC' | translate }}
+          <app-term-tooltip
+            acronym="FODEC"
+            [fullName]="'LANDING.TERMS.FODEC.FULL' | translate"
+            [description]="'LANDING.TERMS.FODEC.DESC' | translate"
+            [source]="'LANDING.TERMS.FODEC.SOURCE' | translate">
+          </app-term-tooltip>{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.DESC_AFTER_FODEC' | translate }}
+        </p>
         <div class="biz-tags">
-          <span class="biz-tag">Journaux</span>
-          <span class="biz-tag">TVA multi-taux</span>
-          <span class="biz-tag">FODEC</span>
-          <span class="biz-tag">Timbre fiscal</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.TAGS.JOURNALS' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.TAGS.VAT' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.TAGS.FODEC' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.ACCOUNTING.TAGS.STAMP' | translate }}</span>
         </div>
       </div>
 
@@ -502,17 +551,19 @@
               <path d="M9 5.5v3.5l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
             </svg>
           </div>
-          <h3 class="biz-title">Trésorerie en temps réel</h3>
+          <h3 class="biz-title">{{ 'LANDING.BIZ_SECTION.ITEMS.CASH.TITLE' | translate }}</h3>
         </div>
-        <p class="biz-desc">Paiements partiels ou totaux, relances automatiques email & SMS, suivi des retards et prévision des encaissements.</p>
+        <p class="biz-desc">{{ 'LANDING.BIZ_SECTION.ITEMS.CASH.DESC' | translate }}</p>
         <div class="biz-preview">
-          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">78%</span><span class="biz-lbl">Encaissé</span></div>
-          <div class="biz-stat"><span class="biz-num" style="color:var(--warn)">18%</span><span class="biz-lbl">En attente</span></div>
-          <div class="biz-stat"><span class="biz-num">4%</span><span class="biz-lbl">En retard</span></div>
+          <div class="biz-stat"><span class="biz-num" style="color:var(--ok)">78%</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.CASH.STATS.COLLECTED' | translate }}</span></div>
+          <div class="biz-stat"><span class="biz-num" style="color:var(--warn)">18%</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.CASH.STATS.PENDING' | translate }}</span></div>
+          <div class="biz-stat"><span class="biz-num">4%</span><span class="biz-lbl">{{ 'LANDING.BIZ_SECTION.ITEMS.CASH.STATS.LATE' | translate }}</span></div>
         </div>
       </div>
+    </div>
 
-      <div class="biz-card biz-card--wide reveal" style="--reveal-delay:240ms">
+    <div class="biz-grid biz-grid--secondary">
+      <div class="biz-card reveal" style="--reveal-delay:240ms">
         <div class="biz-card-header">
           <div class="biz-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -520,17 +571,33 @@
               <path d="M5 9l2.5 2.5L12 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3 class="biz-title">Onboarding digital</h3>
+          <h3 class="biz-title">{{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.TITLE' | translate }}</h3>
         </div>
-        <p class="biz-desc">Validation documentaire digitale (CIN, patente, RNE, RIB). Vérification de conformité avant tout accès à la plateforme.</p>
+        <p class="biz-desc">
+          {{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.DESC_BEFORE_RNE' | translate }}
+          <app-term-tooltip
+            acronym="RNE"
+            [fullName]="'LANDING.TERMS.RNE.FULL' | translate"
+            [description]="'LANDING.TERMS.RNE.DESC' | translate"
+            [source]="'LANDING.TERMS.RNE.SOURCE' | translate">
+          </app-term-tooltip>,
+          {{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.DESC_AFTER_RNE' | translate }}
+          <app-term-tooltip
+            acronym="KYC"
+            [fullName]="'LANDING.TERMS.KYC.FULL' | translate"
+            [description]="'LANDING.TERMS.KYC.DESC' | translate"
+            [source]="'LANDING.TERMS.KYC.SOURCE' | translate">
+          </app-term-tooltip>
+          {{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.DESC_AFTER_KYC' | translate }}
+        </p>
         <div class="biz-tags">
-          <span class="biz-tag biz-tag--ey">Score niveau client</span>
-          <span class="biz-tag biz-tag--ey">Validation admin</span>
-          <span class="biz-tag">Arabe · Français · Anglais</span>
+          <span class="biz-tag biz-tag--ey">{{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.TAGS.SCORE' | translate }}</span>
+          <span class="biz-tag biz-tag--ey">{{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.TAGS.ADMIN' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.ONBOARDING.TAGS.LANGUAGES' | translate }}</span>
         </div>
       </div>
 
-      <div class="biz-card biz-card--wide reveal" style="--reveal-delay:320ms">
+      <div class="biz-card reveal" style="--reveal-delay:320ms">
         <div class="biz-card-header">
           <div class="biz-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -538,14 +605,14 @@
               <rect x="1.5" y="1.5" width="15" height="15" rx="2.5" stroke="currentColor" stroke-width="1.3"/>
             </svg>
           </div>
-          <h3 class="biz-title">Rapports & Analytics</h3>
+          <h3 class="biz-title">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.TITLE' | translate }}</h3>
         </div>
-        <p class="biz-desc">Tableaux de bord multi-rôles, exports PDF & CSV, prédiction des retards de paiement et détection d'anomalies par intelligence artificielle.</p>
+        <p class="biz-desc">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.DESC' | translate }}</p>
         <div class="biz-tags">
-          <span class="biz-tag biz-tag--ai">IA Prédictive</span>
-          <span class="biz-tag biz-tag--ai">Détection anomalies</span>
-          <span class="biz-tag">Export PDF</span>
-          <span class="biz-tag">Export CSV</span>
+          <span class="biz-tag biz-tag--ai">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.TAGS.AI' | translate }}</span>
+          <span class="biz-tag biz-tag--ai">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.TAGS.ANOMALIES' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.TAGS.PDF' | translate }}</span>
+          <span class="biz-tag">{{ 'LANDING.BIZ_SECTION.ITEMS.REPORTS.TAGS.EXCEL' | translate }}</span>
         </div>
       </div>
     </div>
@@ -558,12 +625,13 @@
     <div class="mobile-inner">
 
       <div class="mobile-content reveal-left">
-        <div class="section-eyebrow">Application mobile</div>
+        <div class="section-eyebrow">{{ 'LANDING.MOBILE_SECTION.EYEBROW' | translate }}</div>
         <h2 class="section-title" style="text-align:left;max-width:420px">
-          TunisFlow<br>dans votre <em>poche</em>
+          {{ 'LANDING.MOBILE_SECTION.TITLE_LINE1' | translate }}<br>
+          {{ 'LANDING.MOBILE_SECTION.TITLE_LINE2' | translate }} <em>{{ 'LANDING.MOBILE_SECTION.TITLE_EM' | translate }}</em>
         </h2>
         <p class="mobile-desc">
-          Scannez vos documents papier depuis votre téléphone et envoyez-les à votre plateforme pour validation, traitement et attribution d'un statut légal. Assurez le suivi complet de votre activité comptable, où que vous soyez.
+          {{ 'LANDING.MOBILE_SECTION.DESC' | translate }}
         </p>
 
         <ul class="mobile-features">
@@ -571,8 +639,8 @@
             <li class="mobile-feat-item">
               <span class="mobile-feat-icon" [innerHTML]="safeSvg(feat.icon)"></span>
               <div>
-                <div class="mobile-feat-title">{{ feat.title }}</div>
-                <div class="mobile-feat-desc">{{ feat.desc }}</div>
+                <div class="mobile-feat-title">{{ feat.title | translate }}</div>
+                <div class="mobile-feat-desc">{{ feat.desc | translate }}</div>
               </div>
             </li>
           }
@@ -588,14 +656,14 @@
               <img
                 class="phone-img phone-img--dark"
                 src="assets/images/app-dark.jpg"
-                alt="TunisFlow mobile dark mode"
+                [alt]="'LANDING.MOBILE_SECTION.ALT_DARK' | translate"
                 loading="lazy"
               />
               <!-- Light mode image -->
               <img
                 class="phone-img phone-img--light"
                 src="assets/images/app-light.jpg"
-                alt="TunisFlow mobile light mode"
+                [alt]="'LANDING.MOBILE_SECTION.ALT_LIGHT' | translate"
                 loading="lazy"
               />
             </div>
@@ -603,15 +671,45 @@
           <!-- Floating badge -->
           <div class="phone-badge phone-badge--ocr">
             <span class="phone-badge-dot"></span>
-            <span>OCR extrait en 1.2s</span>
+            <span>{{ 'LANDING.MOBILE_SECTION.BADGES.OCR' | translate }}</span>
           </div>
           <div class="phone-badge phone-badge--status">
             <span>✓</span>
-            <span>Statut légal validé</span>
+            <span>{{ 'LANDING.MOBILE_SECTION.BADGES.STATUS' | translate }}</span>
           </div>
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">{{ 'LANDING.FAQ.EYEBROW' | translate }}</div>
+      <h2 class="section-title">{{ 'LANDING.FAQ.TITLE' | translate }}</h2>
+      <p class="section-desc">{{ 'LANDING.FAQ.DESC' | translate }}</p>
+    </div>
+
+    <div class="faq-list">
+      @for (item of faqItems(); track item.question; let i = $index) {
+        <article class="faq-item reveal" [style.--reveal-delay]="(i * 70) + 'ms'">
+          <button
+            type="button"
+            class="faq-trigger"
+            [class.open]="isFaqOpen(i)"
+            [attr.aria-expanded]="isFaqOpen(i)"
+            (click)="toggleFaq(i)">
+            <span>{{ item.question | translate }}</span>
+            <span class="faq-icon">{{ isFaqOpen(i) ? '−' : '+' }}</span>
+          </button>
+
+          <div class="faq-answer" *ngIf="isFaqOpen(i)">
+            <p>{{ item.answer | translate }}</p>
+          </div>
+        </article>
+      }
     </div>
   </div>
 </section>
@@ -621,25 +719,51 @@
   <div class="container">
     <!-- Header -->
     <div class="section-header reveal">
-      <div class="section-eyebrow">Tarifs transparents</div>
+      <div class="section-eyebrow">{{ 'LANDING.PRICING.EYEBROW' | translate }}</div>
       <h2 class="section-title">
-        Choisissez le plan<br>
-        adapté à votre <em>entreprise</em>
+        {{ 'LANDING.PRICING.TITLE_LINE1' | translate }}<br>
+        {{ 'LANDING.PRICING.TITLE_LINE2' | translate }} <em>{{ 'LANDING.PRICING.TITLE_EM' | translate }}</em>
       </h2>
       <p class="section-desc">
-        Tous les plans incluent la conformité TEIF, la signature électronique et la transmission TTN. Sans frais cachés, sans engagement.
+        {{ 'LANDING.PRICING.DESC_PREFIX' | translate }}
+        <app-term-tooltip
+          acronym="TEIF"
+          [fullName]="'LANDING.TERMS.TEIF.FULL' | translate"
+          [description]="'LANDING.TERMS.TEIF.DESC' | translate"
+          [source]="'LANDING.TERMS.TEIF.SOURCE' | translate">
+        </app-term-tooltip>,
+        {{ 'LANDING.PRICING.DESC_MIDDLE' | translate }}
+        <app-term-tooltip
+          acronym="TTN/e-Fatoora"
+          [fullName]="'LANDING.TERMS.TTN.FULL' | translate"
+          [description]="'LANDING.TERMS.TTN.DESC' | translate"
+          [source]="'LANDING.TERMS.TTN.SOURCE' | translate">
+        </app-term-tooltip>.
+        {{ 'LANDING.PRICING.DESC_SUFFIX' | translate }}
       </p>
       <!-- Billing toggle -->
-      <div class="billing-toggle">
-        <button class="toggle-btn"
-          [class.active]="billingType() === 'mensuel'"
-          (click)="billingType.set('mensuel')">Mensuel</button>
-        <button class="toggle-btn"
-          [class.active]="billingType() === 'annuel'"
-          (click)="billingType.set('annuel')">
-          Annuel &nbsp;<span class="save-badge">-20%</span>
-        </button>
+      <div class="pricing-controls">
+        <div class="billing-toggle" [attr.aria-label]="'LANDING.PRICING.BILLING_TOGGLE_LABEL' | translate">
+          <button class="toggle-btn"
+            [class.active]="billingType() === 'mensuel'"
+            (click)="billingType.set('mensuel')">{{ 'LANDING.PRICING.MONTHLY' | translate }}</button>
+          <button class="toggle-btn"
+            [class.active]="billingType() === 'annuel'"
+            (click)="billingType.set('annuel')">
+            {{ 'LANDING.PRICING.YEARLY' | translate }} &nbsp;<span class="save-badge">-20%</span>
+          </button>
+        </div>
+
+        <div class="tax-toggle" [attr.aria-label]="'LANDING.PRICING.TAX_TOGGLE_LABEL' | translate">
+          <button type="button" class="toggle-btn"
+            [class.active]="priceMode() === 'ht'"
+            (click)="priceMode.set('ht')">{{ 'LANDING.PRICING.HT' | translate }}</button>
+          <button type="button" class="toggle-btn"
+            [class.active]="priceMode() === 'ttc'"
+            (click)="priceMode.set('ttc')">{{ 'LANDING.PRICING.TTC' | translate }}</button>
+        </div>
       </div>
+      <p class="pricing-tax-note">{{ 'LANDING.PRICING.TAX_NOTE' | translate:{ rate: vatPercent } }}</p>
     </div>
 
     <!-- Plans grid -->
@@ -650,48 +774,38 @@
           [style.--reveal-delay]="(i * 100) + 'ms'">
 
           @if (plan.isPro) {
-            <div class="popular-badge">Le plus populaire</div>
+            <div class="plan-recommendation-badge">{{ 'LANDING.PRICING.RECOMMENDED_SME' | translate }}</div>
           }
 
           <div class="plan-header">
             <div class="plan-name">{{ plan.name }}</div>
             <div class="plan-price">
               @if (plan.priceMensuel === null) {
-                <span class="price-custom">Sur devis</span>
-              } @else if (plan.priceMensuel === 0) {
-                <span class="price-amount">0</span>
+                <span class="price-custom">{{ 'LANDING.PRICING.CUSTOM_PRICE' | translate }}</span>
               } @else {
-                <span class="price-currency">DT</span>
                 <span class="price-amount">{{ getCurrentPrice(plan) }}</span>
+                <span class="price-currency">DT</span>
               }
             </div>
-            @if (plan.priceMensuel !== null && plan.priceMensuel > 0) {
-              <div class="price-period">/ mois HT</div>
+            @if (plan.priceMensuel !== null) {
+              <div class="price-period">{{ 'LANDING.PRICING.PER_MONTH' | translate }}</div>
               @if (billingType() === 'annuel') {
-                <div class="price-annual">Au lieu de {{ plan.priceMensuel }} DT/mois</div>
+                <div class="price-annual">{{ 'LANDING.PRICING.ANNUAL_COMPARE' | translate:{ price: getMonthlyComparePrice(plan) } }}</div>
               }
-            } @else if (plan.priceMensuel === 0) {
-              <div class="price-period">/ mois · Gratuit pour démarrer</div>
             } @else {
-              <div class="price-period">Tarification personnalisée</div>
+              <div class="price-period">{{ 'LANDING.PRICING.CUSTOM_PRICING' | translate }}</div>
             }
-            <p class="plan-tagline">{{ plan.tagline }}</p>
+            <p class="plan-tagline">{{ plan.tagline | translate }}</p>
           </div>
 
-          <a [href]="plan.ctaLink" class="plan-cta"
+          <a [routerLink]="plan.ctaLink" class="plan-cta"
             [class.plan-cta--ey]="plan.ctaStyle === 'ey'"
             [class.plan-cta--ghost]="plan.ctaStyle === 'ghost'"
             [class.plan-cta--outline]="plan.ctaStyle === 'outline'">
-            {{ plan.ctaLabel }}
+            {{ plan.ctaLabel | translate }}
           </a>
 
-          @if (plan.id !== 'starter') {
-            <div class="plan-section-label">
-              {{ plan.id === 'pro' ? 'Tout Starter, plus :' : 'Tout Pro, plus :' }}
-            </div>
-          } @else {
-            <div class="plan-section-label">Inclus</div>
-          }
+          <div class="plan-section-label">{{ planSectionLabelKey(plan.id) | translate }}</div>
 
           <ul class="plan-features">
             @for (feat of plan.features; track feat.text) {
@@ -700,10 +814,10 @@
                   [class.ok]="feat.type === 'ok'"
                   [class.ey]="feat.type === 'ey'" 
                   [class.na]="feat.type === 'na'">
-                  {{ feat.type === 'na' ? '–' : (feat.type === 'ey' ? '★' : '✓') }}
+                  {{ feat.type === 'na' ? '-' : (feat.type === 'ey' ? '★' : '✓') }}
                 </span>
                 <span class="feat-text" 
-                  [innerHTML]="feat.text"
+                  [innerHTML]="feat.text | translate"
                   [style.opacity]="feat.type === 'na' ? '0.5' : '1'">
                 </span>
                 @if (feat.badge) {
@@ -711,7 +825,7 @@
                     [class.ai]="feat.badge === 'ai'"
                     [class.new]="feat.badge === 'new'"
                     [class.soon]="feat.badge === 'soon'">
-                    {{ feat.badge === 'ai' ? 'IA' : feat.badge === 'new' ? 'API' : 'Bientôt' }}
+                    {{ feat.badge === 'ai' ? ('LANDING.PRICING.BADGES.AI' | translate) : feat.badge === 'new' ? ('LANDING.PRICING.BADGES.API' | translate) : ('LANDING.PRICING.BADGES.SOON' | translate) }}
                   </span>
                 }
               </li>
@@ -721,7 +835,7 @@
           <div class="plan-limits">
             @for (limit of plan.limits; track limit.label) {
               <span class="limit-chip">
-                <span class="limit-val">{{ limit.val }}</span> {{ limit.label }}
+                <span class="limit-val">{{ limit.val }}</span> {{ limit.label | translate }}
               </span>
             }
           </div>
@@ -737,28 +851,28 @@
             stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
           <path d="M5.5 8l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
-        <span><strong>100% conforme</strong> TEIF & TTN</span>
+        <span [innerHTML]="'LANDING.PRICING.GUARANTEE.COMPLIANCE' | translate"></span>
       </div>
       <div class="guarantee-item">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
           <path d="M8 4.5v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
-        <span><strong>Accès immédiat</strong> après validation KYC</span>
+        <span [innerHTML]="'LANDING.PRICING.GUARANTEE.ACCESS' | translate"></span>
       </div>
       <div class="guarantee-item">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <rect x="1.5" y="1.5" width="13" height="13" rx="3" stroke="currentColor" stroke-width="1.3"/>
           <path d="M5 8l2.5 2.5 3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
-        <span><strong>Sans engagement</strong> — résiliable à tout moment</span>
+        <span [innerHTML]="'LANDING.PRICING.GUARANTEE.NO_COMMITMENT' | translate"></span>
       </div>
       <div class="guarantee-item">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M8 1.5l1.8 3.6 4 .6-2.9 2.8.7 4L8 10.4 4.4 12.5l.7-4L2.2 5.7l4-.6L8 1.5z"
             stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
         </svg>
-        <span>Données hébergées <strong>en Tunisie</strong></span>
+        <span [innerHTML]="'LANDING.PRICING.GUARANTEE.HOSTED' | translate"></span>
       </div>
     </div>
   </div>
@@ -768,7 +882,9 @@
   <div class="container">
     <div class="cta-inner reveal">
       <div class="cta-halo" aria-hidden="true"></div>
-      <div class="cta-eyebrow">{{ 'LANDING.CTA_SECTION.EYEBROW' | translate }}</div>
+      <div class="cta-eyebrow-group">
+        <div class="cta-eyebrow">{{ 'LANDING.CTA_SECTION.EYEBROW' | translate }}</div>
+      </div>
       <h2 class="cta-title">{{ 'LANDING.CTA_SECTION.TITLE' | translate }}</h2>
       <p class="cta-desc">{{ 'LANDING.CTA_SECTION.DESC' | translate }}</p>
 
@@ -839,7 +955,7 @@
       <div class="footer-brand">
         <div class="footer-logo">
           <div>
-            <div class="footer-name">TunisFlow</div>
+            <div class="footer-name">TuniFlow</div>
             <div class="footer-sub">{{ 'LANDING.FOOTER.SUBTITLE' | translate }}</div>
           </div>
         </div>

@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
 export interface LoginRequest {
   email: string;
   motDePasse: string;
+  adminConsole?: boolean;
 }
 
 export interface RegisterRequest {
@@ -32,6 +33,15 @@ export interface RegisterRequest {
   codePostal: string;
   siteWeb: string;
   devisePrincipale: string;
+}
+
+export interface BienvenueNotificationRequest {
+  email: string;
+  prenom: string;
+  nom: string;
+  nomEntreprise: string;
+  matriculeFiscal: string;
+  role: string;
 }
 
 export interface UtilisateurDto {
@@ -138,6 +148,18 @@ export class AuthService {
     ).pipe(tap(res => this.storeSession(res)));
   }
 
+  envoyerBienvenue(req: BienvenueNotificationRequest) {
+    return this.http.post<{ message: string }>(
+      `${this.api}/notifications/email/bienvenue`, req
+    );
+  }
+
+  envoyerSmsVerification(telephone: string, code: string) {
+    return this.http.post<{ message: string }>(
+      `${this.api}/notifications/sms/verification`, { telephone, code }
+    );
+  }
+
 
   logout() {
     const rt = this.refreshToken;
@@ -171,7 +193,7 @@ export class AuthService {
   
   refreshTokenEntreprise(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
-      `${this.api}/auth/refresh-token-entreprise`, {}
+      `${this.api}/auth/refresh/entreprise`, {}
     ).pipe(tap(res => this.storeSession(res)));
   }
 

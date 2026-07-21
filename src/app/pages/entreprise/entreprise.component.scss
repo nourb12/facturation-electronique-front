@@ -1,4 +1,4 @@
-$tuniflow: var(--c-tuniflow); $tuniflow-dim: rgba(var(--c-tuniflow-rgb), .08); $b-tuniflow: var(--b-tuniflow);
+﻿$tuniflow: var(--c-tuniflow); $tuniflow-dim: rgba(var(--c-tuniflow-rgb), .08); $b-tuniflow: var(--b-tuniflow);
 $void: var(--bg-void); $surf: var(--bg-surf); $card: var(--bg-card);
 $b0: var(--b0); $b1: var(--b1); $b2: var(--b2);
 $tp: var(--tp); $ts: var(--ts); $tt: var(--tt);
@@ -6,7 +6,7 @@ $ok: #22C55E; $ok2: rgba(34,197,94,.1);
 $warn: #F59E0B; $warn2: rgba(245,158,11,.1);
 $err: #EF4444; $err2: rgba(239,68,68,.1);
 $info: #3B82F6; $info2: rgba(59,130,246,.1);
-$fd: 'Playfair Display', Georgia, serif;
+$fd: 'DM Sans', sans-serif;
 $fb: 'DM Sans', sans-serif;
 $fm: 'JetBrains Mono', monospace;
 
@@ -32,7 +32,7 @@ $fm: 'JetBrains Mono', monospace;
   &::-webkit-scrollbar-thumb { background:rgba(var(--c-tuniflow-rgb),.2); border-radius:99px; }
 }
 
-// ── Topbar ─────────────────────────────────────────────────────────────────
+// â”€â”€ Topbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .topbar {
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
   padding:16px 20px; margin-bottom:20px;
@@ -48,11 +48,11 @@ $fm: 'JetBrains Mono', monospace;
   &:disabled { opacity:.4; cursor:not-allowed; transform:none; }
 }
 
-// ── Grid ───────────────────────────────────────────────────────────────────
+// â”€â”€ Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .profile-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:16px; align-items:start; }
 .form-panel { display:flex; flex-direction:column; gap:16px; }
 
-// ── Form head ──────────────────────────────────────────────────────────────
+// â”€â”€ Form head â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .form-head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; background:$surf; border:1px solid $b1; border-radius:14px; padding:16px 18px; }
 .step-kicker { font-size:11px; color:$tt; text-transform:uppercase; letter-spacing:.08em; }
 .step-title { font-size:1.2rem; font-weight:800; color:$tp; margin-top:4px; }
@@ -63,7 +63,7 @@ $fm: 'JetBrains Mono', monospace;
 .progress-fill { display:block; height:100%; background:$tuniflow; border-radius:999px; transition:width .4s ease; }
 .progress-value { font-size:11px; font-weight:700; color:$tp; }
 
-// ── Stepper ────────────────────────────────────────────────────────────────
+// â”€â”€ Stepper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .stepper { display:flex; gap:8px; flex-wrap:wrap; }
 .step-btn { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid $b1; background:$card; color:$ts; font-size:11px; font-weight:700; cursor:pointer; transition:all .15s;
   .step-dot { width:8px; height:8px; border-radius:50%; background:$b1; }
@@ -71,13 +71,13 @@ $fm: 'JetBrains Mono', monospace;
   &.done { background:rgba(34,197,94,.08); border-color:rgba(34,197,94,.25); color:$ok; .step-dot { background:$ok; } }
 }
 
-// ── Section cards ──────────────────────────────────────────────────────────
+// â”€â”€ Section cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .section-card { background:$surf; border:1px solid $b1; border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:14px; animation:fadeUp .35s ease both; }
 .section-head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; }
 .section-title { font-size:13px; font-weight:800; color:$tp; text-transform:uppercase; letter-spacing:.06em; }
 .section-hint { font-size:11.5px; color:$tt; }
 
-// ── Fields ─────────────────────────────────────────────────────────────────
+// â”€â”€ Fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .field { display:flex; flex-direction:column; gap:6px; }
 .field--critical .field-label { color:$tp; font-weight:800; }
@@ -97,7 +97,7 @@ $fm: 'JetBrains Mono', monospace;
 .field-msg--info { color:$info; }
 .code-inline { font-family:$fm; font-size:11px; background:$b0; padding:1px 5px; border-radius:4px; color:$tp; }
 
-// ── Buttons ────────────────────────────────────────────────────────────────
+// â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .btn-primary { padding:10px 18px; background:$tuniflow; border:none; border-radius:10px; font-family:$fb; font-size:13px; font-weight:700; color:var(--tuniflow-btn-text); cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:8px;
   &:hover { opacity:.88; box-shadow:0 4px 20px rgba(var(--c-tuniflow-rgb),.35); transform:translateY(-1px); }
   &:disabled { opacity:.4; cursor:not-allowed; transform:none; }
@@ -109,7 +109,7 @@ $fm: 'JetBrains Mono', monospace;
 }
 .form-actions { display:flex; justify-content:flex-end; align-items:center; gap:8px; }
 
-// ── TEIF Panel (aside) ─────────────────────────────────────────────────────
+// â”€â”€ TEIF Panel (aside) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .teif-panel { display:flex; flex-direction:column; gap:16px; }
 .teif-card { background:$surf; border:1px solid $b1; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:16px; transition:box-shadow .2s ease; position:relative; &.pulse { animation:pulse .35s ease; } }
 .teif-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
@@ -121,7 +121,7 @@ $fm: 'JetBrains Mono', monospace;
 .ring-track { fill:none; stroke:rgba(0,0,0,.08); stroke-width:8; }
 .ring-fill { fill:none; stroke-width:8; stroke-linecap:round; stroke-dasharray:201; transition:stroke-dashoffset .5s ease; }
 .score-inner { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-.score-val { font-size:20px; font-weight:800; font-family:$fm; }
+.score-val { font-size:20px; font-weight:800; font-family:var(--font-number); font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; }
 .score-meta { display:flex; flex-direction:column; gap:4px; }
 .score-label { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:$tt; }
 .score-bar { height:6px; background:$b0; border-radius:999px; overflow:hidden; span { display:block; height:100%; border-radius:999px; transition:width .5s ease; } }
@@ -133,9 +133,9 @@ $fm: 'JetBrains Mono', monospace;
 .teif-live-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:$ts; padding:8px 0; border-bottom:1px solid $b0; &:last-child { border-bottom:none; } &.is-ok { color:$tp; } }
 .status-pill { display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:700; &--ok { background:$ok2; color:$ok; } &--warn { background:$warn2; color:$warn; } }
 
-// ══════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TEIF ACCORDION (nouveau)
-// ══════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 .teif-accordion-card {
   background:$surf;
   border:1px solid $b1;
@@ -205,7 +205,7 @@ $fm: 'JetBrains Mono', monospace;
   overflow:hidden;
 }
 
-// ── Signature type selector ────────────────────────────────────────────────
+// â”€â”€ Signature type selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .sig-type-intro { margin:14px 0 10px; }
 .sig-type-intro-text { font-size:12.5px; color:$ts; line-height:1.6; }
 
@@ -250,7 +250,7 @@ $fm: 'JetBrains Mono', monospace;
   &--amber { background:rgba(245,158,11,.1);  color:#F59E0B; }
 }
 
-// ── Signature form block ───────────────────────────────────────────────────
+// â”€â”€ Signature form block â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .sig-form-block {
   background:$card;
   border:1px solid $b0;
@@ -297,7 +297,7 @@ $fm: 'JetBrains Mono', monospace;
   &--red   { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.18);  svg { color:#EF4444; flex-shrink:0; } }
 }
 
-// ── Upload zones ───────────────────────────────────────────────────────────
+// â”€â”€ Upload zones â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .upload-zone {
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
   border:1.5px dashed $b2; border-radius:12px;
@@ -323,7 +323,7 @@ $fm: 'JetBrains Mono', monospace;
 .cert-file-name   { font-size:13px; font-weight:600; color:$tp; }
 .cert-file-expiry { font-size:11px; color:$warn; margin-top:2px; }
 
-// ── Archivage info grid ────────────────────────────────────────────────────
+// â”€â”€ Archivage info grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .auto-feature-banner {
   display:flex; align-items:center; gap:8px;
   background:$ok2; border:1px solid rgba(34,197,94,.2); border-radius:10px;
@@ -342,7 +342,7 @@ $fm: 'JetBrains Mono', monospace;
 .archive-info-val { font-size:16px; font-weight:800; color:$tp; font-family:$fm; }
 .archive-info-key { font-size:11px; color:$tt; }
 
-// ── Sandbox ────────────────────────────────────────────────────────────────
+// â”€â”€ Sandbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .sandbox-intro { font-size:12.5px; color:$ts; line-height:1.6; margin:14px 0 12px; }
 
 .sandbox-prereq { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
@@ -370,7 +370,7 @@ $fm: 'JetBrains Mono', monospace;
 
 .spinner {
   width:14px; height:14px;
-  border:2px solid rgba(0,0,0,.2);
+  border:2px solid rgba(148,163,184,.35);
   border-top-color:#0a0a0a;
   border-radius:50%;
   animation:spin .7s linear infinite;
@@ -387,7 +387,7 @@ $fm: 'JetBrains Mono', monospace;
 .sandbox-log-line { display:flex; gap:8px; color:#8b949e; animation:fadeUp .2s ease both; }
 .sandbox-log-prompt { color:#FFE600; flex-shrink:0; }
 
-// ── Surveillance ───────────────────────────────────────────────────────────
+// â”€â”€ Surveillance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .alert-types-grid {
   display:flex; flex-direction:column; gap:8px; margin:12px 0;
 }
@@ -412,7 +412,7 @@ $fm: 'JetBrains Mono', monospace;
 .surv-active-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
 .surv-tag { font-size:11px; font-weight:600; padding:3px 10px; background:$ok2; color:$ok; border-radius:20px; border:1px solid rgba(34,197,94,.2); }
 
-// ── Toggle (gardé pour compatibilité éventuelle) ───────────────────────────
+// â”€â”€ Toggle (gardÃ© pour compatibilitÃ© Ã©ventuelle) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 .toggle { position:relative; display:inline-flex; align-items:center; }
 .toggle input { display:none; }
 .toggle-track { width:44px; height:24px; background:$b1; border-radius:999px; position:relative; transition:background .2s; }
@@ -420,7 +420,7 @@ $fm: 'JetBrains Mono', monospace;
 .toggle input:checked + .toggle-track { background:$tuniflow; }
 .toggle input:checked + .toggle-track .toggle-thumb { transform:translateX(20px); }
 
-// ── Responsive ─────────────────────────────────────────────────────────────
+// â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 @media (max-width:1100px) {
   .profile-grid { grid-template-columns:1fr; }
 }

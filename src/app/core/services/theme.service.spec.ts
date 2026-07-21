@@ -20,7 +20,7 @@ describe('ThemeService', () => {
 
   const getService = () => TestBed.inject(ThemeService);
 
-  it('prend le thème sauvegardé si présent', fakeAsync(() => {
+  it('prend le thÃ¨me sauvegardÃ© si prÃ©sent', fakeAsync(() => {
     localStorage.setItem('ey-theme', 'light');
     const service = getService();
     flush();
@@ -39,7 +39,7 @@ describe('ThemeService', () => {
     expect(setItemSpy).toHaveBeenCalledWith('ey-theme', service.theme());
   }));
 
-  it('set applique le thème donné', fakeAsync(() => {
+  it('set applique le thÃ¨me donnÃ©', fakeAsync(() => {
     const service = getService();
     service.set('dark');
     flush();
@@ -47,7 +47,7 @@ describe('ThemeService', () => {
     expect(document.documentElement.dataset['theme']).toBe('dark');
   }));
 
-  it('isDark reflète le signal', fakeAsync(() => {
+  it('isDark reflÃ¨te le signal', fakeAsync(() => {
     const service = getService();
     service.set('dark');
     flush();

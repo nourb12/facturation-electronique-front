@@ -1,0 +1,550 @@
+<section class="ia-page">
+
+  <header class="ia-topbar">
+    <div>
+      <p class="eyebrow">Analyse</p>
+      <h1>Analyse prédictive</h1>
+      <p class="subtitle">Prédiction retard · Détection fraude · Prévision trésorerie — mis à jour en temps réel</p>
+    </div>
+    <div class="top-actions">
+      <div class="ia-live-badge">
+        <span class="ia-pulse"></span>
+        <span>Analyse active · Dernière mise à jour il y a 2 min</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="ia-sections" aria-label="Navigation analyse">
+    @for (s of sections; track s.key) {
+      <button type="button" class="section-pill" [class.active]="activeSection() === s.key" (click)="go(s.key)">
+        <span><i [class]="'ti ' + s.icon"></i></span>
+        {{ s.label }}
+      </button>
+    }
+  </nav>
+
+  @if (activeSection() === 'dashboard') {
+    <div class="kpi-grid">
+      @for (k of kpis(); track k.label) {
+        <article class="kpi-card" [attr.data-tone]="k.tone">
+          <span class="kpi-icon"><i [class]="'ti ' + k.icon"></i></span>
+          <div>
+            <p>{{ k.label }}</p>
+            <strong>{{ k.value }}{{ k.unit }}</strong>
+            <small>{{ k.hint }}</small>
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel panel-wide">
+        <div class="panel-head">
+          <div>
+            <h2>Alertes actives</h2>
+            <p>Fraudes détectées, clients à risque et prévisions de trésorerie.</p>
+          </div>
+          <span>{{ alertesDashboard().length }} alertes</span>
+        </div>
+        <div class="alert-list">
+          @for (a of alertesDashboard(); track a.titre) {
+            <div class="alert-row" [attr.data-level]="a.level">
+              <i [class]="'ti ' + a.icon"></i>
+              <div>
+                <strong>{{ a.titre }}</strong>
+                <span>{{ a.detail }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head compact">
+          <h2>Scores de risque</h2>
+          <span>{{ clients().length }} clients</span>
+        </div>
+        <div class="risk-list">
+          @for (c of clients(); track c.id) {
+            <div class="risk-row">
+              <div class="risk-info">
+                <strong>{{ c.nom }}</strong>
+                <small>{{ c.secteur }} · {{ c.nbRetards }}/{{ c.nbFactures }} retards</small>
+              </div>
+              <div class="risk-bar-wrap">
+                <div class="risk-bar" [style.width.%]="c.score" [attr.data-level]="scoreColor(c.score)"></div>
+              </div>
+              <span class="risk-score" [attr.data-level]="scoreColor(c.score)">{{ c.score }}%</span>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <div class="split-grid">
+      <section class="panel">
+        <div class="panel-head compact">
+          <h2>Comment fonctionne l’analyse ?</h2>
+        </div>
+        <div class="how-list">
+          <div class="how-item">
+            <span class="how-num">01</span>
+            <div>
+              <strong>Collecte des données</strong>
+              <p>Chaque facture, paiement et client alimente l’historique utilisé pour calculer les risques.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <span class="how-num">02</span>
+            <div>
+              <strong>Calcul du score</strong>
+              <p>Le système calcule un score de risque basé sur l’historique, le montant et la période.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <span class="how-num">03</span>
+            <div>
+              <strong>Action automatique</strong>
+              <p>Relance programmée, blocage de facture ou alerte envoyée au responsable.</p>
+            </div>
+          </div>
+          <div class="how-item">
+            <span class="how-num">04</span>
+            <div>
+              <strong>Amélioration continue</strong>
+              <p>Chaque résultat réel améliore les règles de contrôle et rend les alertes plus pertinentes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head compact">
+          <h2>Prévision trésorerie J+30</h2>
+        </div>
+        <div class="treso-mini-grid">
+          <div class="treso-mini-card ok">
+            <span class="treso-mini-label">Optimiste</span>
+            <strong>{{ money(tresoOptimiste()) }}</strong>
+            <small>Tout le monde paie</small>
+          </div>
+          <div class="treso-mini-card warn">
+            <span class="treso-mini-label">Réaliste</span>
+            <strong>{{ money(tresoRealiste()) }}</strong>
+            <small>Selon scores clients</small>
+          </div>
+          <div class="treso-mini-card err">
+            <span class="treso-mini-label">Pessimiste</span>
+            <strong>{{ money(tresoPessimiste()) }}</strong>
+            <small>Aucun paiement</small>
+          </div>
+        </div>
+        <div class="ia-tip">
+          <i class="ti ti-bulb"></i>
+          <span>Relancer Ahmed Slim maintenant réduirait votre risque de <b>-1 190 TND</b> sur le scénario pessimiste.</span>
+        </div>
+      </section>
+    </div>
+  }
+
+  @if (activeSection() === 'retard') {
+    <div class="kpi-grid">
+      <article class="kpi-card" data-tone="err">
+        <span class="kpi-icon"><i class="ti ti-user-exclamation"></i></span>
+        <div><p>Clients critiques</p><strong>2</strong><small>Score > 70% — relance auto active</small></div>
+      </article>
+      <article class="kpi-card" data-tone="warn">
+        <span class="kpi-icon"><i class="ti ti-user-pause"></i></span>
+        <div><p>Clients modérés</p><strong>2</strong><small>Score 40–70% — surveillance active</small></div>
+      </article>
+      <article class="kpi-card" data-tone="ok">
+        <span class="kpi-icon"><i class="ti ti-user-check"></i></span>
+        <div><p>Clients fiables</p><strong>1</strong><small>Score < 40% — aucune action requise</small></div>
+      </article>
+      <article class="kpi-card" data-tone="info">
+        <span class="kpi-icon"><i class="ti ti-send"></i></span>
+        <div><p>Relances auto envoyées</p><strong>3</strong><small>Ce mois · 2 sans réponse</small></div>
+      </article>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Scores de risque — tous les clients</h2>
+          <p>Le score analyse le comportement passé de chaque client et estime le risque de paiement en retard.</p>
+        </div>
+        <div class="head-actions">
+          <span>{{ clients().length }} clients analysés</span>
+        </div>
+      </div>
+
+      <div class="ia-explain">
+        <i class="ti ti-info-circle"></i>
+        <div>
+          <strong>Comment le score est calculé ?</strong>
+          <p>Score de risque = retards passés (+40 pts) · nouveau client (+25 pts) · gros montant (+20 pts) · fin de mois (+15 pts) · bon historique (-30 pts). Plus le score est élevé, plus le risque de retard est important.</p>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Secteur</th>
+              <th>Retards / Factures</th>
+              <th>Montant moyen</th>
+              <th>Score de risque</th>
+              <th>Niveau</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of clients(); track c.id) {
+              <tr>
+                <td><strong>{{ c.nom }}</strong></td>
+                <td>{{ c.secteur }}</td>
+                <td>
+                  <span class="score-fraction">
+                    <b [attr.data-level]="c.nbRetards > 0 ? 'err' : 'ok'">{{ c.nbRetards }}</b> / {{ c.nbFactures }}
+                  </span>
+                </td>
+                <td class="money">{{ money(c.montantMoyen) }}</td>
+                <td>
+                  <div class="score-cell">
+                    <div class="score-bar-bg">
+                      <div class="score-bar-fill" [style.width.%]="c.score" [attr.data-level]="scoreColor(c.score)"></div>
+                    </div>
+                    <span class="score-val" [attr.data-level]="scoreColor(c.score)">{{ c.score }}%</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-level" [attr.data-level]="scoreColor(c.score)">{{ niveauLabel(c.niveau) }}</span>
+                </td>
+                <td>
+                  <span class="action-text" [attr.data-level]="scoreColor(c.score)">{{ c.action }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head compact">
+        <h2>Règles de calcul</h2>
+        <span>Règles métier</span>
+      </div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-head">
+            <i class="ti ti-clock-x"></i>
+            <span>Retards passés</span>
+          </div>
+          <strong class="rule-val err-text">+40 pts</strong>
+          <p>Chaque retard enregistré dans l'historique augmente fortement le score de risque.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-head">
+            <i class="ti ti-user-plus"></i>
+            <span>Nouveau client</span>
+          </div>
+          <strong class="rule-val warn-text">+25 pts</strong>
+          <p>Un client sans historique est par nature plus incertain — score prudent par défaut.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-head">
+            <i class="ti ti-trending-up"></i>
+            <span>Gros montant</span>
+          </div>
+          <strong class="rule-val warn-text">+20 pts</strong>
+          <p>Les factures de montant élevé présentent un risque de retard légèrement plus fort.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-head">
+            <i class="ti ti-calendar-month"></i>
+            <span>Fin de mois</span>
+          </div>
+          <strong class="rule-val info-text">+15 pts</strong>
+          <p>Les paiements en fin de mois subissent plus souvent des délais dus aux clôtures comptables.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-head">
+            <i class="ti ti-star"></i>
+            <span>Bon historique</span>
+          </div>
+          <strong class="rule-val ok-text">-30 pts</strong>
+          <p>Un client qui a toujours payé à temps bénéficie d'un bonus significatif sur son score.</p>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (activeSection() === 'fraude') {
+    <div class="kpi-grid">
+      <article class="kpi-card" data-tone="err">
+        <span class="kpi-icon"><i class="ti ti-shield-x"></i></span>
+        <div><p>Factures bloquées</p><strong>{{ fraudeStats().bloquees }}</strong><small>Validation manuelle requise</small></div>
+      </article>
+      <article class="kpi-card" data-tone="warn">
+        <span class="kpi-icon"><i class="ti ti-eye"></i></span>
+        <div><p>En attention</p><strong>{{ fraudeStats().attention }}</strong><small>Validation achat à compléter</small></div>
+      </article>
+      <article class="kpi-card" data-tone="ok">
+        <span class="kpi-icon"><i class="ti ti-shield-check"></i></span>
+        <div><p>Validées automatiquement</p><strong>{{ fraudeStats().validees }}</strong><small>Tous les contrôles passés</small></div>
+      </article>
+      <article class="kpi-card" data-tone="info">
+        <span class="kpi-icon"><i class="ti ti-list-check"></i></span>
+        <div><p>Signaux analysés</p><strong>6</strong><small>Fournisseur · IBAN · commande · séquence · fractionnement · horaire</small></div>
+      </article>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Factures analysées</h2>
+          <p>Nous vérifions automatiquement chaque facture avant comptabilisation.</p>
+        </div>
+      </div>
+
+      <div class="ia-explain">
+        <i class="ti ti-info-circle"></i>
+        <div>
+          <strong>Comment l’alerte est décidée ?</strong>
+          <p>Un montant identique seul n’est pas une fraude. L’alerte apparaît quand plusieurs signaux se combinent : fournisseur inhabituel, IBAN modifié, facture sans commande, séquence anormale, fractionnement de dépense ou création hors horaire.</p>
+        </div>
+      </div>
+
+      <div class="fraude-list">
+        @for (f of alertesFraude(); track f.id) {
+          <div class="fraude-row" [class.selected]="selectedFraudeId() === f.id" [attr.data-statut]="f.statut">
+            <div class="fraude-icon" [attr.data-statut]="f.statut">
+              <i [class]="'ti ' + fraudeIcon(f.type)"></i>
+            </div>
+            <div class="fraude-info">
+              <div class="fraude-ref">
+                <strong>{{ f.ref }}</strong>
+                <span class="fraude-date">{{ f.date }}</span>
+              </div>
+              <span class="fraude-fournisseur">{{ f.fournisseur }}</span>
+              <p class="fraude-detail">{{ f.detail }}</p>
+            </div>
+            <div class="fraude-right">
+              @if (f.montant > 0) {
+                <span class="fraude-montant">{{ money(f.montant) }}</span>
+              }
+              <span class="badge-level" [attr.data-level]="statutClass(f.statut)">{{ statutLabel(f.statut) }}</span>
+              @if (f.statut !== 'validee') {
+                <button type="button" class="ghost-action" (click)="verifierFraude(f)">Vérifier</button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (selectedFraude(); as selected) {
+        <div class="verification-card">
+          <div>
+            <strong>{{ selected.ref }} · {{ selected.fournisseur }}</strong>
+            <p>{{ selected.detail }}</p>
+          </div>
+          <div class="verification-steps">
+            <span><i class="ti ti-check"></i> Dossier achat, justificatifs et validation responsable vérifiés</span>
+            <span><i class="ti ti-check"></i> Coordonnées fournisseur et historique de paiement comparés</span>
+            <span><i class="ti ti-check"></i> Statut recommandé : {{ statutLabel(selected.statut) }}</span>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="panel">
+      <div class="panel-head compact">
+        <h2>Les 6 signaux de contrôle</h2>
+      </div>
+      <div class="controls-grid">
+        <div class="control-card">
+          <i class="ti ti-building-store"></i>
+          <h3>Fournisseur inhabituel</h3>
+          <p>Alerte si un fournisseur nouveau ou rarement utilisé reçoit une facture élevée avant validation complète du dossier.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+        <div class="control-card">
+          <i class="ti ti-credit-card"></i>
+          <h3>IBAN ou RIB modifié</h3>
+          <p>Une modification bancaire juste avant règlement bloque le paiement jusqu’à confirmation par un responsable.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+        <div class="control-card">
+          <i class="ti ti-file-invoice"></i>
+          <h3>Facture sans commande</h3>
+          <p>La facture est signalée si aucun bon de commande, réception ou validation achat ne justifie la dépense.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+        <div class="control-card">
+          <i class="ti ti-list-numbers"></i>
+          <h3>Séquence anormale</h3>
+          <p>Contrôle les numéros de factures manquants, inversés ou incohérents par rapport à l’historique du fournisseur.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+        <div class="control-card">
+          <i class="ti ti-arrows-split"></i>
+          <h3>Fractionnement de dépense</h3>
+          <p>Détecte plusieurs petites factures proches qui semblent contourner un seuil d’approbation interne.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+        <div class="control-card">
+          <i class="ti ti-clock-exclamation"></i>
+          <h3>Création hors horaire</h3>
+          <p>Surveille les factures créées tard le soir, le week-end ou juste avant une échéance de paiement sensible.</p>
+          <span class="control-status ok-text"><i class="ti ti-check"></i> Automatique</span>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (activeSection() === 'tresorerie') {
+    <div class="kpi-grid">
+      <article class="kpi-card" data-tone="ok">
+        <span class="kpi-icon"><i class="ti ti-currency-dollar"></i></span>
+        <div><p>Trésorerie actuelle</p><strong>{{ money(tresoActuelle()) }}</strong><small>Solde bancaire aujourd'hui</small></div>
+      </article>
+      <article class="kpi-card" data-tone="info">
+        <span class="kpi-icon"><i class="ti ti-chart-line"></i></span>
+        <div><p>Prévision réaliste J+30</p><strong>{{ money(tresoRealiste()) }}</strong><small>Selon le score du client</small></div>
+      </article>
+      <article class="kpi-card" data-tone="warn">
+        <span class="kpi-icon"><i class="ti ti-receipt"></i></span>
+        <div><p>Factures en cours</p><strong>{{ money(paiementsAttendus().reduce(sum, 0)) }}</strong><small>{{ paiementsAttendus().length }} paiements attendus</small></div>
+      </article>
+      <article class="kpi-card" data-tone="err">
+        <span class="kpi-icon"><i class="ti ti-minus"></i></span>
+        <div><p>Charges fixes du mois</p><strong>{{ money(chargesMois()) }}</strong><small>Loyer · Salaires · Charges</small></div>
+      </article>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Les 3 scénarios de trésorerie</h2>
+          <p>Nous simulons trois scénarios selon la probabilité de paiement de chaque client.</p>
+        </div>
+      </div>
+
+      <div class="ia-explain">
+        <i class="ti ti-info-circle"></i>
+        <div>
+          <strong>Comment la prévision est calculée ?</strong>
+          <p>Trésorerie J+30 = trésorerie actuelle + encaissements probables − charges fixes du mois. Le scénario réaliste ne prend pas 100% des factures : chaque facture est pondérée par sa probabilité de paiement.</p>
+        </div>
+      </div>
+
+      <div class="treso-scenarios">
+        <div class="treso-scenario ok-bg">
+          <div class="treso-scenario-head">
+            <i class="ti ti-mood-happy"></i>
+            <span class="treso-label">Scénario optimiste</span>
+          </div>
+          <strong class="treso-amount ok-text">{{ money(tresoOptimiste()) }}</strong>
+          <p>Tous les clients paient à temps. Probabilité appliquée : 100% sur toutes les factures en cours.</p>
+          <div class="treso-formula">
+            <span>{{ money(tresoActuelle()) }}</span>
+            <i class="ti ti-plus"></i>
+            <span>{{ money(paiementsAttendus().reduce(sum, 0)) }}</span>
+            <i class="ti ti-minus"></i>
+            <span>{{ money(chargesMois()) }}</span>
+            <i class="ti ti-equal"></i>
+            <span class="ok-text"><b>{{ money(tresoOptimiste()) }}</b></span>
+          </div>
+        </div>
+
+        <div class="treso-scenario yellow-bg">
+          <div class="treso-scenario-head">
+            <i class="ti ti-chart-dots"></i>
+            <span class="treso-label">Scénario réaliste</span>
+            <span class="treso-badge">Recommandé</span>
+          </div>
+          <strong class="treso-amount">{{ money(tresoRealiste()) }}</strong>
+          <p>Probabilité de paiement pondérée par le score de chaque client. C’est le scénario à utiliser pour piloter la trésorerie.</p>
+          <div class="treso-formula">
+            <span>{{ money(tresoActuelle()) }}</span>
+            <i class="ti ti-plus"></i>
+            <span>{{ money(encaissementsRealistes()) }} probables</span>
+            <i class="ti ti-minus"></i>
+            <span>{{ money(chargesMois()) }}</span>
+            <i class="ti ti-equal"></i>
+            <span><b>{{ money(tresoRealiste()) }}</b></span>
+          </div>
+        </div>
+
+        <div class="treso-scenario err-bg">
+          <div class="treso-scenario-head">
+            <i class="ti ti-mood-sad"></i>
+            <span class="treso-label">Scénario pessimiste</span>
+          </div>
+          <strong class="treso-amount err-text">{{ money(tresoPessimiste()) }}</strong>
+          <p>Aucun client ne paie. Seules les charges fixes sont déduites. Sert à identifier le risque maximal.</p>
+          <div class="treso-formula">
+            <span>{{ money(tresoActuelle()) }}</span>
+            <i class="ti ti-minus"></i>
+            <span>{{ money(chargesMois()) }}</span>
+            <i class="ti ti-equal"></i>
+            <span class="err-text"><b>{{ money(tresoPessimiste()) }}</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Paiements attendus — triés par probabilité</h2>
+          <p>Plus le score de risque est bas, plus la probabilité de paiement est élevée.</p>
+        </div>
+        <span>{{ paiementsAttendus().length }} paiements</span>
+      </div>
+      <div class="responsive-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Échéance</th>
+              <th>Montant</th>
+              <th>Score risque</th>
+              <th>Probabilité paiement</th>
+              <th>Contribution réaliste</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of paiementsAttendus(); track p.client) {
+              <tr>
+                <td><strong>{{ p.client }}</strong></td>
+                <td class="mono">{{ p.echeance }}</td>
+                <td class="money">{{ money(p.montant) }}</td>
+                <td>
+                  <span class="badge-level" [attr.data-level]="probaColor(p.probabilite)">{{ p.score }}%</span>
+                </td>
+                <td>
+                  <div class="score-cell">
+                    <div class="score-bar-bg">
+                      <div class="score-bar-fill" [style.width.%]="p.probabilite" [attr.data-level]="probaColor(p.probabilite)"></div>
+                    </div>
+                    <span class="score-val" [attr.data-level]="probaColor(p.probabilite)">{{ p.probabilite }}%</span>
+                  </div>
+                </td>
+                <td class="money">{{ money(Math.round(p.montant * p.probabilite / 100)) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ia-tip mt">
+        <i class="ti ti-bulb"></i>
+        <span>Relancer Ahmed Slim et TechnoSup maintenant pourrait récupérer jusqu'à <b>{{ money(4760) }}</b> supplémentaires dans le scénario réaliste.</span>
+      </div>
+    </section>
+  }
+
+</section>
